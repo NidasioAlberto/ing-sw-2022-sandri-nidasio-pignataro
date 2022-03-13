@@ -1,1 +1,8 @@
+# General operating system files
 .DS_Store
+
+# IntelliJ IDEA IDE
+.idea
+
+# Java compiled files
+*.class
