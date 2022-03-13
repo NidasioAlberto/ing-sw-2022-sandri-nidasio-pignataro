@@ -1,6 +1,6 @@
 # Eriantys
 
-<img align="right" width="100" height="100" src="github/Eriantys box.png">
+<img align="right" width="200" height="200" src="github/Eriantys box.png">
 
 Final test of **Software Engineering**, course of "Computer Science Engineering" held at Politecnico di Milano (2021/22).
 

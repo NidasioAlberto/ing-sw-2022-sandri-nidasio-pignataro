@@ -1,0 +1,127 @@
+@startuml
+
+class Island {
+    -tiles: List<IslandTiles>
+    +getStudents(): Student[]
+    +getStudentsNumByColor(color: SchoolColor): int
+    +addStudent(student: Student): void
+    +getTowers(): Tower[]
+    +addTower(tower: Tower): void
+    +removeTower(tower: Tower): void
+    +removeAllTowers(): void
+    +mergeIsland(island: Island): void
+}
+
+class IslandTile {
+    -students: List<Student>
+    -tower: Optional<Tower>
+    +getStudents(): Student[]
+    +getTowerColor(): Optional<TowerColor>
+    +addStudent(student: Student): void
+    +addTower(tower: Tower): void
+    +removeTower(): void
+    +removeTower(tower: Tower): void
+}
+
+class Student {
+    -color: SchoolColor
+    +getColor(): SchoolColor
+}
+
+class Tower {
+    -color: TowerColor
+    +getColor(): TowerColor
+}
+
+class Professor {
+    -color: SchoolColor
+    +getColor(): TowerColor
+}
+
+enum SchoolColor {
+    BLUE
+    GREEN
+    PINK
+    RED
+    YELLOW
+}
+
+enum TowerColor {
+    BLACK
+    GREY
+    WHITE
+}
+
+class CloudTile {
+    -students: List<Student>
+    -type: CloudTileType
+    +getStudents(): Student[]
+    +addStudent(student: Student): void
+    +addStudents(students: Student[]): void
+    +removeStudent(student: Student): void
+    +removeStudents(): void
+    +getType(): CloudTileType
+}
+
+enum CloudTileType {
+    TILE_2_4
+    TILE_3
+}
+
+class AssistantCard {
+    -wizard: Wizard
+    -value: int
+    -steps: int
+    +getWizard(): Wizard
+    +getValue(): int
+    +getSteps(): int
+}
+
+enum Wizard {
+    WIZARD_1
+    WIZARD_2
+    WIZARD_3
+    WIZARD_4
+}
+
+class SchoolBoard {
+    -entrance: List<Student>
+    -diningRoom: Map<SchoolColor,List<Student>>
+    -professorTable: List<Professor>
+    -towers: List<Tower>
+    +getProfessors(): Professor[]
+    +getStudentsNumByColor(color: SchoolColor): int
+    +getTowerNumber(): int
+    +addProfessor(professor: Professor): void
+    +removeProfessor(professor: Professor): void
+    +addTower(tower: Tower): void
+    +removeTower(tower: Tower): void
+    +moveStudentToDiningRoom(student: Student): void
+    +removeStudentFromEntrance(student: Student): void
+    -addStudentToDiningRoom(student: Student): void
+}
+
+Island "1" o-- "1..10" IslandTile
+note on link
+At most 10 tiles in an island
+due to the limit of 3 islands
+end note
+
+IslandTile "0..1" o-- "0..*" Student
+IslandTile "0..1" o-- "0..1" Tower
+Student "26" o-- "1" SchoolColor
+Professor "1" o-- "1" SchoolColor
+Tower "6..8" o-- "1" TowerColor
+CloudTile "0..1" o-- "0..4" Student
+CloudTile "2..4" o-- "1" CloudTileType
+AssistantCard "10" o-- "1" Wizard
+SchoolBoard "0..1" o-- "0..*" Student
+SchoolBoard "0..1" o-- "0..5" Professor
+SchoolBoard "0..1" o-- "0..8" Tower
+
+note as N1
+For Student, Tower and Professor the contructor
+shold possibly be accessible only the controller
+end note
+
+@enduml
