@@ -123,13 +123,22 @@ public class Island
      * Getters
      * TODO CHECK THE FUNCTIONAL
      */
+    //TODO ADD THIS METHOD TO THE UML
+    public List<Student> getStudentsList()
+    {
+        //Create the result list
+        List<Student> list = new ArrayList<Student>();
+
+        //Fill the list
+        tiles.stream().forEach((t -> list.addAll(t.getStudentsList())));
+
+        return list;
+    }
+
     public Student[] getStudents()
     {
         //Create the list where I put all the students
-        List<Student> list = new ArrayList<Student>();
-
-        //Foreach tile I add the students
-        tiles.stream().forEach(t -> list.addAll(t.getStudentsList()));
+        List<Student> list = getStudentsList();
 
         //Create the final array
         Student[] result = new Student[list.size()];

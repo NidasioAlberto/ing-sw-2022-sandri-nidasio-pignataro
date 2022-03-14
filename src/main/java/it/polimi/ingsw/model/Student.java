@@ -18,7 +18,7 @@ public class Student
      */
     public Student(SchoolColor color)
     {
-        this.color = color;
+        this.color = color == null ? SchoolColor.BLUE : color;
     }
 
     /**

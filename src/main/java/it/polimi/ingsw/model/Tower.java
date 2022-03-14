@@ -15,7 +15,10 @@ public class Tower
      * Constructor
      * @param color The tower color
      */
-    public Tower(TowerColor color) { this.color = color; }
+    public Tower(TowerColor color)
+    {
+        this.color = color == null ? TowerColor.BLACK : color;
+    }
 
     /**
      * Tower color getter
