@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 public enum CloudTileType
 {
-    TILE_2_4(2), TILE_3(3);
+    TILE_2_4(3), TILE_3(4);
 
     /**
      * Internal num based on the number of players

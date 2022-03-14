@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * This class represents the professor disc. It can be contended between the players
+ * This class represents the professor pawn. It can be contended between the players
  * inside their school boards. It is one of the three main elements of the game
  * with students and towers
  */
