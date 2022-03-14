@@ -12,7 +12,15 @@ import java.util.Map;
  */
 public class SchoolBoard
 {
-    public static final int MAX_TOWERS = 6;
+    public static final int MAX_TOWERS              = 8;
+
+    public static final int MAX_STUDENTS_PER_ROOM   = 10;
+
+    /**
+     * Dependent on the number of players
+     */
+    public final int MAX_STUDENTS_ENTRANCE;
+
     /**
      * The entrance zone
      */
@@ -36,8 +44,9 @@ public class SchoolBoard
     /**
      * Constructor
      */
-    public SchoolBoard()
+    public SchoolBoard(int maxStudents)
     {
+        this.MAX_STUDENTS_ENTRANCE = maxStudents > 0 ? maxStudents : 7;
         //Instantiate all the things
         entrance        = new ArrayList<Student>();
         diningRoom      = new HashMap<SchoolColor, List<Student>>();
@@ -79,7 +88,7 @@ public class SchoolBoard
     }
 
     /**
-     * Adds the tower to the list (with maximum of 6 towers)
+     * Adds the tower to the list (with maximum of 8 towers)
      * @param tower The tower to be added
      */
     public void addTower(Tower tower)
@@ -113,7 +122,7 @@ public class SchoolBoard
     public void addStudentToEntrance(Student student)
     {
         //Checks if the student is null or present already in the board
-        if(student == null || entrance.contains(student))
+        if(student == null || entrance.contains(student) || entrance.size() >= MAX_STUDENTS_ENTRANCE)
         {
             return;
         }
@@ -132,8 +141,9 @@ public class SchoolBoard
      */
     private void addStudentToDiningRoom(Student student)
     {
-        //Check if it is not already present and not null
-        if(student != null && !diningRoom.get(student.getColor()).contains(student))
+        //Check if it is not already present and not null and if the dining room is not full
+        if(student != null && !diningRoom.get(student.getColor()).contains(student) &&
+           diningRoom.get(student.getColor()).size() < MAX_STUDENTS_PER_ROOM)
         {
             //Add the student to the map
             diningRoom.get(student.getColor()).add(student);
@@ -155,7 +165,7 @@ public class SchoolBoard
 
     /**
      * Moves the student to the dining room from the entrance
-     * @param student
+     * @param student The student to be moved
      */
     public void moveStudentToDining(Student student)
     {
@@ -165,5 +175,48 @@ public class SchoolBoard
             removeStudentFromEntrance(student);
             addStudentToDiningRoom(student);
         }
+    }
+
+    /**
+     * Getters
+     */
+    public Professor[] getProfessors()
+    {
+        //Create the result array
+        Professor[] result = new Professor[professorTable.size()];
+
+        //Fill the result array
+        professorTable.toArray(result);
+
+        return result;
+    }
+
+    //TODO ADD THIS METHOD IN UML
+    public Student[] getStudentsInEntrance()
+    {
+        //Create the result array
+        Student[] result = new Student[entrance.size()];
+
+        //Fill the result array
+        entrance.toArray(result);
+
+        return result;
+    }
+
+    //TODO MODIFY THE UML
+    public Tower[] getTowers()
+    {
+        //Create the result array
+        Tower[] result = new Tower[towers.size()];
+
+        //Fill the result array
+        towers.toArray(result);
+
+        return result;
+    }
+
+    public int getMaxStudentsNumber(SchoolColor color)
+    {
+        return diningRoom.get(color).size();
     }
 }
