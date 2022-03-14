@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * This class represents the tower. Each player/team has 6 towers in total
+ * This class represents the tower. Each player/team has 6 or 8 towers in total
  * and the amount of the "island positioned" ones determines the winner of the match.
  */
 public class Tower

@@ -116,7 +116,6 @@ public class SchoolBoard
 
     /**
      * Adds the student in the entrance
-     * TODO ADD THIS METHOD TO UML
      * @param student The student to be added
      */
     public void addStudentToEntrance(Student student)
@@ -191,7 +190,6 @@ public class SchoolBoard
         return result;
     }
 
-    //TODO ADD THIS METHOD IN UML
     public Student[] getStudentsInEntrance()
     {
         //Create the result array
@@ -203,7 +201,6 @@ public class SchoolBoard
         return result;
     }
 
-    //TODO MODIFY THE UML
     public Tower[] getTowers()
     {
         //Create the result array
@@ -215,7 +212,7 @@ public class SchoolBoard
         return result;
     }
 
-    public int getMaxStudentsNumber(SchoolColor color)
+    public int getStudentsNumber(SchoolColor color)
     {
         return diningRoom.get(color).size();
     }

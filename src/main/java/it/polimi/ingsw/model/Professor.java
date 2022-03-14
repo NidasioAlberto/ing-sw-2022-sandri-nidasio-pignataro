@@ -8,13 +8,13 @@ package it.polimi.ingsw.model;
 public class Professor
 {
     /**
-     * The disc color (enum)
+     * The pawn color (enum)
      */
     private SchoolColor color;
 
     /**
      * Constructor
-     * @param color the disc color
+     * @param color the pawn color
      */
     public Professor(SchoolColor color)
     {
@@ -22,8 +22,8 @@ public class Professor
     }
 
     /**
-     * Disc color getter
-     * @return The SchoolColor of the disc
+     * Pawn color getter
+     * @return The SchoolColor of the pawn
      */
     public SchoolColor getColor() { return color; }
 }

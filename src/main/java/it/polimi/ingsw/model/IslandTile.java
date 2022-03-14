@@ -6,7 +6,7 @@ import java.util.Optional;
 
 /**
  * This class represents the physical island tile displayed in the game.
- * It is differs from the island because the last one can actually be the
+ * It differs from the island because the last one can actually be the
  * composition of more tiles.
  */
 public class IslandTile
@@ -76,7 +76,7 @@ public class IslandTile
     public void removeTower(Tower tower)
     {
         //Delete the tower only if they are the same object
-        if(this.tower.get().equals(tower))
+        if(this.tower.isPresent() && this.tower.get().equals(tower))
         {
             this.tower = Optional.empty();
         }
@@ -94,13 +94,11 @@ public class IslandTile
         return result;
     }
 
-    //TODO add to the UML and delete this TODO
     public List<Student> getStudentsList()
     {
         return new ArrayList<Student>(students);
     }
 
-    //TODO change in UML the return type
     public Optional<Tower> getTower()
     {
         return tower;

@@ -123,7 +123,6 @@ public class Island
      * Getters
      * TODO CHECK THE FUNCTIONAL
      */
-    //TODO ADD THIS METHOD TO THE UML
     public List<Student> getStudentsList()
     {
         //Create the result list

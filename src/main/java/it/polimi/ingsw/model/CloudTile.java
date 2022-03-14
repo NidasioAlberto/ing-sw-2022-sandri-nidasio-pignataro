@@ -10,7 +10,7 @@ import java.util.List;
 public class CloudTile
 {
     /**
-     * List of students discs on the tile
+     * List of student discs on the tile
      */
     private List<Student> students;
 
@@ -46,8 +46,6 @@ public class CloudTile
         }
     }
 
-    //TODO DELETE THE addStudents method from CloudTile (it is not useful because addStudent alone is plenty)
-
     /**
      * Method to remove a specific student from the cloud tile
      * @param student The student that has to be removed
@@ -74,10 +72,8 @@ public class CloudTile
      */
     public CloudTileType getType() { return type; }
 
-    //TODO ADD THIS METHOD TO THE UML
     public List<Student> getStudentsList() { return new ArrayList<Student>(students); }
 
-    //TODO ADD THIS METHOD TO THE UML
     public Student[] getStudents()
     {
         //Create an intermediate list
