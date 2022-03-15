@@ -39,6 +39,7 @@ public class CloudTileTest
 
         cloud.addStudent(student);
         assertEquals(cloud.getStudentsList().get(0), student);
+        assertEquals(cloud.getStudents()[0], student);
 
         cloud.addStudent(student);
         assertEquals(cloud.getStudentsList().size(), 1);
@@ -58,12 +59,15 @@ public class CloudTileTest
 
         cloud.addStudent(student1);
         assertEquals(cloud.getStudentsList().get(0), student1);
+        assertEquals(cloud.getStudents()[0], student1);
 
         cloud.addStudent(student2);
         assertEquals(cloud.getStudentsList().get(1), student2);
+        assertEquals(cloud.getStudents()[1], student2);
 
         cloud.addStudent(student3);
         assertEquals(cloud.getStudentsList().get(2), student3);
+        assertEquals(cloud.getStudents()[2], student3);
 
         cloud.addStudent(student4);
         assertEquals(cloud.getStudentsList().size(), 3);
@@ -102,20 +106,22 @@ public class CloudTileTest
         Student student1 = new Student(SchoolColor.GREEN);
         Student student2 = new Student(SchoolColor.BLUE);
 
+        cloud.removeStudents();
+        assertEquals(cloud.getStudentsList().size(), 0);
+
+        cloud.addStudent(student1);
+        assertEquals(cloud.getStudentsList().get(0), student1);
+        assertEquals(cloud.getStudents()[0], student1);
 
         cloud.removeStudents();
         assertEquals(cloud.getStudentsList().size(), 0);
 
         cloud.addStudent(student1);
         assertEquals(cloud.getStudentsList().get(0), student1);
-
-        cloud.removeStudents();
-        assertEquals(cloud.getStudentsList().size(), 0);
-
-        cloud.addStudent(student1);
-        assertEquals(cloud.getStudentsList().get(0), student1);
+        assertEquals(cloud.getStudents()[0], student1);
         cloud.addStudent(student2);
         assertEquals(cloud.getStudentsList().get(1), student2);
+        assertEquals(cloud.getStudents()[1], student2);
         cloud.removeStudents();
         assertEquals(cloud.getStudentsList().size(), 0);
     }
