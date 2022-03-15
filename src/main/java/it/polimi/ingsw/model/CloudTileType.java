@@ -1,21 +1,23 @@
 package it.polimi.ingsw.model;
+
+/**
+ * All cloud tiles share a specific students capacity determined by the player count. When playing
+ * with 2 or 4 players the cloud tiles hold 3 students whereas when playing with 3 players they hold
+ * 4 students.
+ */
 public enum CloudTileType
 {
     TILE_2_4(3), TILE_3(4);
 
-    /**
-     * Internal num based on the number of players
-     */
-    private int playerNum;
+    private int studentCapacity;
 
-    /**
-     * Constructor
-     * @param num The number of players
-     */
-    private CloudTileType(int num) { this.playerNum = num; }
+    private CloudTileType(int capacity)
+    {
+        this.studentCapacity = capacity;
+    }
 
-    /**
-     * Getter
-     */
-    public int getPlayerNum() { return playerNum; }
+    public int getStudentCapacity()
+    {
+        return studentCapacity;
+    }
 }
