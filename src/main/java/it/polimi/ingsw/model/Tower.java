@@ -1,28 +1,29 @@
 package it.polimi.ingsw.model;
 
 /**
- * This class represents the tower. Each player/team has 6 or 8 towers in total
- * and the amount of the "island positioned" ones determines the winner of the match.
+ * This class represents the tower object. Each player/team has 6 or 8 different colored towers in
+ * total and the amount of the "island positioned" ones determines the winner of the match.
  */
 public class Tower
 {
-    /**
-     * The tower color (enum)
-     */
     private TowerColor color;
 
     /**
-     * Constructor
-     * @param color The tower color
+     * Constructor.
+     * 
+     * @param color The tower color.
+     * @throws NullPointerException Thrown if the specified color is invalid.
      */
-    public Tower(TowerColor color)
+    public Tower(TowerColor color) throws NullPointerException
     {
-        this.color = color == null ? TowerColor.BLACK : color;
+        if (color == null)
+            throw new NullPointerException("A null color was provided");
+
+        this.color = color;
     }
 
-    /**
-     * Tower color getter
-     * @return The TowerColor
-     */
-    public TowerColor getColor() { return color; }
+    public TowerColor getColor()
+    {
+        return color;
+    }
 }
