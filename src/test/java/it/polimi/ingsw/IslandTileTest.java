@@ -28,6 +28,7 @@ public class IslandTileTest
 
         island.addStudent(student);
         assertEquals(island.getStudentsList().get(0), student);
+        assertEquals(island.getStudents()[0], student);
 
         island.addStudent(null);
         assertEquals(island.getStudentsList().size(), 1);
