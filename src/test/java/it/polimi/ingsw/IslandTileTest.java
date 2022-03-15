@@ -4,22 +4,21 @@ import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Class to test the IslandTile class
- */
 public class IslandTileTest
 {
     IslandTile island;
 
     @BeforeEach
-    public void init() { island = new IslandTile(); }
+    public void init()
+    {
+        island = new IslandTile();
+    }
 
     /**
-     * Test that a normal student is added
-     * instead if the student is already contained or it is null nothing changes
+     * Test that a normal student is added instead if the student is already contained or it is null
+     * nothing changes.
      */
     @Test
     public void addStudentTest()
@@ -38,8 +37,7 @@ public class IslandTileTest
     }
 
     /**
-     * Test that a tower is added only if it is not null
-     * and there is not another tower
+     * Test that a tower is added only if it is not null and there is not another tower.
      */
     @Test
     public void addTowerTest()
@@ -57,7 +55,7 @@ public class IslandTileTest
     }
 
     /**
-     * Test that after removeTower() is called there is no tower
+     * Test that after removeTower() is called there is no tower.
      */
     @Test
     public void removeTowerTest()
@@ -71,8 +69,8 @@ public class IslandTileTest
     }
 
     /**
-     * Test that removeTower(Tower tower) removes the tower in the island
-     * only if is equal to the parameter
+     * Test that removeTower(Tower tower) removes the tower in the island only if is equal to the
+     * parameter.
      */
     @Test
     public void removeTowerTest2()

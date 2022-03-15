@@ -4,5 +4,8 @@
 # IntelliJ IDEA IDE
 .idea
 
+# VSCode IDE
+.vscode
+
 # Java compiled files
 *.class

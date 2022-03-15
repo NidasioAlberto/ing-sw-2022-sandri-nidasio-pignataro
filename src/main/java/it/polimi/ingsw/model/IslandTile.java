@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This class represents the physical island tile displayed in the game.
- * It differs from the island because the last one can actually be the
- * composition of more tiles.
+ * This class represents the physical island tile displayed in the game. It differs from the island
+ * because the last one can actually be the composition of more tiles.
  */
 public class IslandTile
 {
@@ -26,22 +25,23 @@ public class IslandTile
      */
     public IslandTile()
     {
-        //Instantiate the internal state
+        // Instantiate the internal state
         students = new ArrayList<Student>();
 
-        //At first there is no tower on the tile
+        // At first there is no tower on the tile
         tower = Optional.empty();
     }
 
     /**
      * Method to add a new student to the tile (not null)
+     * 
      * @param student The student to be added
      */
     public void addStudent(Student student)
     {
-        //Check if the passed student is not null and if the list contains
-        //already that student
-        if(student != null && !students.contains(student))
+        // Check if the passed student is not null and if the list contains
+        // already that student
+        if (student != null && !students.contains(student))
         {
             students.add(student);
         }
@@ -49,12 +49,13 @@ public class IslandTile
 
     /**
      * Method to add a tower to the tile if not already present
+     * 
      * @param tower The tower (not null) to be added
      */
     public void addTower(Tower tower)
     {
-        //Check if the optional is empty and if the passed tower is not null
-        if(tower != null && this.tower.isEmpty())
+        // Check if the optional is empty and if the passed tower is not null
+        if (tower != null && this.tower.isEmpty())
         {
             this.tower = Optional.of(tower);
         }
@@ -69,14 +70,14 @@ public class IslandTile
     }
 
     /**
-     * Method to remove the tower passed via parameter. If not equal I don't
-     * remove the tower.
+     * Method to remove the tower passed via parameter. If not equal I don't remove the tower.
+     * 
      * @param tower The tower that has to be removed
      */
     public void removeTower(Tower tower)
     {
-        //Delete the tower only if they are the same object
-        if(this.tower.isPresent() && this.tower.get().equals(tower))
+        // Delete the tower only if they are the same object
+        if (this.tower.isPresent() && this.tower.get().equals(tower))
         {
             this.tower = Optional.empty();
         }
@@ -87,9 +88,9 @@ public class IslandTile
      */
     public Student[] getStudents()
     {
-        //Create the returned array
+        // Create the returned array
         Student[] result = new Student[students.size()];
-        //Put all the students inside
+        // Put all the students inside
         students.toArray(result);
         return result;
     }

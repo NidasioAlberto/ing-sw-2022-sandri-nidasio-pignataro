@@ -7,6 +7,7 @@ package it.polimi.ingsw.model;
 public class AssistantCard
 {
     public static final int MAX_TURN_ORDER = 10;
+
     public static final int MAX_STEPS = 5;
 
     /**
