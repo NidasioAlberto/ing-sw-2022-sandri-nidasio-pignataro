@@ -1,43 +1,66 @@
 package it.polimi.ingsw.model;
 
 /**
- * This class represents the assistant card. Every player has these cards, they
- * determine the turn order and the steps that mother nature can do.
+ * This class represents the assistant card. Each assistant card has a value, used to determine the
+ * turn order, and a number that specifies the maximum moves the player can make mother nature do.
  */
 public class AssistantCard
 {
+    public static final int MAX_TURN_ORDER = 10;
+    public static final int MAX_STEPS = 5;
+
     /**
-     * The wizard type
+     * The wizard type.
      */
     private Wizard wizard;
 
     /**
-     * The turn value to determine the order
+     * Assistant's card value used to determine the turn order.
      */
     private int turnOrder;
 
     /**
-     * The steps mother nature can do
+     * Maximum number of steps mother nature can do with this card.
      */
     private int steps;
 
     /**
-     * Constructor
-     * @param wizard The wizard type
-     * @param turn The number of turn
-     * @param steps The number of steps mother nature can do
+     * Constructor.
+     * 
+     * @param wizard The wizard type.
+     * @param turn The number of turn.
+     * @throws NullPointerException Thrown if the specified color is invalid.
+     * @throws IllegalArgumentException Thrown if turnOrder or steps are invalid.
      */
-    public AssistantCard(Wizard wizard, int turn, int steps)
+    public AssistantCard(Wizard wizard, int turnOrder, int steps)
+            throws NullPointerException, IllegalArgumentException
     {
-        this.wizard     = wizard == null    ? Wizard.WIZARD_1   : wizard;
-        this.turnOrder  = turn <= 0         ? 1                 : turn;
-        this.steps      = steps <= 0        ? 1                 : steps;
+        if (wizard == null)
+            throw new NullPointerException("A null value was given to the wizard parameter");
+
+        if (turnOrder <= 0 || turnOrder > MAX_TURN_ORDER)
+            throw new IllegalArgumentException("An invalid turn value was provided");
+
+        if (steps <= 0 || steps > MAX_STEPS)
+            throw new IllegalArgumentException("An invalid steps number was provided");
+
+        this.wizard = wizard;
+        this.turnOrder = turnOrder;
+        this.steps = steps;
     }
 
-    /**
-     * Getters
-     */
-    public Wizard getWizard() { return wizard; }
-    public int getTurnOrder() { return turnOrder; }
-    public int getSteps()     { return steps; }
+    public Wizard getWizard()
+    {
+        return wizard;
+    }
+
+    public int getTurnOrder()
+    {
+        return turnOrder;
+    }
+
+    public int getSteps()
+    {
+        return steps;
+    }
 }
