@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.CloudTileType;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.Student;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -74,8 +73,8 @@ public class CloudTileTest
     }
 
     /**
-     * Test that a contained student is removed
-     * instead if the student is not contained or it is null nothing changes
+     * Test that a contained student is removed instead if the student is not contained or it is
+     * null nothing changes
      */
     @Test
     public void removeStudentNull()
@@ -125,5 +124,14 @@ public class CloudTileTest
         cloud.removeStudents();
         assertEquals(cloud.getStudentsList().size(), 0);
     }
-}
 
+    /**
+     * The cloud tile constructor should throw NullPointerException if an invalid parameter is
+     * passed.
+     */
+    @Test
+    public void nullParameterTest()
+    {
+        assertThrows(NullPointerException.class, () -> new CloudTile(null));
+    }
+}
