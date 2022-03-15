@@ -69,7 +69,7 @@ public class IslandTileTest
     }
 
     /**
-     * Test that removeTower(Tower tower) removes the tower in the island only if is equal to the
+     * Test that removeTower(Tower tower) removes the tower on the island only if is equal to the
      * parameter.
      */
     @Test

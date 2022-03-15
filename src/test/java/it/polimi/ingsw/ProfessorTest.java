@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ProfessorTest
 {
     /**
-     * For each color, create a professor for that color and check it's color.
+     * For each color, create a professor for that color and check its color.
      */
     @Test
     public void checkProfessorColorTest()

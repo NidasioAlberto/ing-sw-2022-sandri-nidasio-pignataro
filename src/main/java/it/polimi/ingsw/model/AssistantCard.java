@@ -29,7 +29,8 @@ public class AssistantCard
      * Constructor.
      * 
      * @param wizard The wizard type.
-     * @param turn The number of turn.
+     * @param turnOrder The number of turn.
+     * @param steps The max number of steps that mother nature can do.
      * @throws NullPointerException Thrown if the specified color is invalid.
      * @throws IllegalArgumentException Thrown if turnOrder or steps are invalid.
      */

@@ -109,14 +109,16 @@ public class Island
      */
     public void mergeIsland(Island island)
     {
-        //I add the single tile if it is not already present in the list
-        island.tiles.stream().forEach(t ->
+        if(island != null)
         {
-            if(!this.tiles.contains(t))
+            //I add the single tile if it is not already present in the list
+            island.tiles.stream().forEach(t ->
             {
-                this.tiles.add(t);
-            }
-        });
+                if (!this.tiles.contains(t)) {
+                    this.tiles.add(t);
+                }
+            });
+        }
     }
 
     /**
@@ -169,4 +171,8 @@ public class Island
     {
         return (int)tiles.stream().flatMap(t -> t.getStudentsList().stream()).filter(s -> s.getColor().equals(color)).count();
     }
+
+    //TODO not in UML
+    public List<IslandTile> getIslands() { return new ArrayList<>(tiles); }
+
 }

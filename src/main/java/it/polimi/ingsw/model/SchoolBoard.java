@@ -14,14 +14,13 @@ import java.util.Map;
  */
 public class SchoolBoard
 {
-    public static final int MAX_TOWERS = 8;
-
     public static final int MAX_STUDENTS_PER_ROOM = 10;
 
     /**
      * Dependent on the number of players.
      */
     public final int MAX_STUDENTS_ENTRANCE;
+    public final int MAX_TOWERS;
 
     /**
      * The entrance zone.
@@ -45,7 +44,7 @@ public class SchoolBoard
 
     /**
      * Constructor.
-     * 
+     * @param maxStudents max number of students in the entrance (7 or 9)
      * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9.
      */
     public SchoolBoard(int maxStudents) throws IllegalArgumentException
@@ -54,6 +53,10 @@ public class SchoolBoard
             throw new IllegalArgumentException("Invalid max students parameter");
 
         this.MAX_STUDENTS_ENTRANCE = maxStudents;
+
+        //The max number of towers depends on the number of players
+        this.MAX_TOWERS = maxStudents == 7 ? 8 : 6;
+
         // Instantiate all the things
         entrance = new ArrayList<Student>();
         diningRoom = new HashMap<SchoolColor, List<Student>>();
@@ -70,6 +73,7 @@ public class SchoolBoard
 
     /**
      * Adds the professor to the professors table.
+     * @param professor the professor that has to be added
      */
     public void addProfessor(Professor professor)
     {
@@ -82,6 +86,7 @@ public class SchoolBoard
 
     /**
      * Removes the specified professor from the professors table.
+     * @param professor the professor that has to be removed
      */
     public void removeProfessor(Professor professor)
     {
@@ -93,7 +98,9 @@ public class SchoolBoard
     }
 
     /**
-     * Adds the tower to the list (with maximum of 8 towers).
+     * Adds the tower to the list,
+     * with maximum of 6 or 8 towers depending on the number of players.
+     * @param tower the tower that has to be added
      */
     public void addTower(Tower tower)
     {
@@ -107,6 +114,7 @@ public class SchoolBoard
 
     /**
      * Removes the tower from the list.
+     * @param tower the tower that has to be removed
      */
     public void removeTower(Tower tower)
     {
@@ -117,6 +125,10 @@ public class SchoolBoard
         }
     }
 
+    /**
+     * Adds the student to the entrance room
+     * @param student the student that has to be added to the entrance room
+     */
     public void addStudentToEntrance(Student student)
     {
         // Checks if the student is null or present already in the board
@@ -136,6 +148,7 @@ public class SchoolBoard
 
     /**
      * Adds the student to the dining room.
+     * @param student the student that has to be added to the dining room
      */
     private void addStudentToDiningRoom(Student student)
     {
@@ -150,6 +163,7 @@ public class SchoolBoard
 
     /**
      * Removes the student from the entrance.
+     * @param student the student that has to be removed from the entrance
      */
     public void removeStudentFromEntrance(Student student)
     {
@@ -162,6 +176,7 @@ public class SchoolBoard
 
     /**
      * Moves the student to the dining room from the entrance.
+     * @param student the student that has to be moved from entrance to dining room
      */
     public void moveStudentToDining(Student student)
     {
