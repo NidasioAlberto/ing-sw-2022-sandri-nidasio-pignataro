@@ -1,29 +1,30 @@
 package it.polimi.ingsw.model;
 
 /**
- * This class represents the professor pawn. It can be contended between the players
- * inside their school boards. It is one of the three main elements of the game
- * with students and towers
+ * This class represents the professor pawns. Each colored professor is contended between the
+ * players inside their school boards. It is one of the three main elements of the game along with
+ * students and towers.
  */
 public class Professor
 {
-    /**
-     * The pawn color (enum)
-     */
     private SchoolColor color;
 
     /**
-     * Constructor
-     * @param color the pawn color
+     * Constructor.
+     * 
+     * @param color The pawn color.
+     * @throws NullPointerException Thrown if the specified color is invalid.
      */
-    public Professor(SchoolColor color)
+    public Professor(SchoolColor color) throws NullPointerException
     {
-        this.color = color == null ? SchoolColor.BLUE : color;
+        if (color == null)
+            throw new NullPointerException("A null color was provided");
+
+        this.color = color;
     }
 
-    /**
-     * Pawn color getter
-     * @return The SchoolColor of the pawn
-     */
-    public SchoolColor getColor() { return color; }
+    public SchoolColor getColor()
+    {
+        return color;
+    }
 }
