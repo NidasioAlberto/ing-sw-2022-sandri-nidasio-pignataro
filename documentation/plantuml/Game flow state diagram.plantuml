@@ -1,0 +1,72 @@
+@startuml Game flow state diagram
+
+hide empty description
+state setup as "Setup phase" {
+    state step1 as "Island tiles\nplacement"
+    step1 : Around the table
+    step1 : in circle
+    state step2 as "Mother nature\nplacement" : On a random island
+    state step3 as "Place students"
+    step3 : 2 students for each color on all
+    step3 : island except the one where mother
+    step3 : nature is on and the opposite one
+    state step4 as "Select cloud tiles"
+    step4 : One for each player whith
+    step4 : the correct side facing up
+    state step5 as "Place professors"
+    state step6 as "Place school boards" : One for each player
+    state step7 as "Plate towers"
+    step7 : 8 tower for 2 players, 6 for 3 players,
+    step7 : 8 tower for one player in each team if
+    step7 : the players are 4
+    state step8 as "Assistant cards" : One deck for each player
+    state step9 as "First player seleciton"
+
+    [*] -right-> step1
+    step1 -right-> step2
+    step2 -right-> step3
+    step3 -right-> step4
+    step4 -right-> step5
+    step5 -down-> step6
+    step6 -left-> step7
+    step7 -left-> step8
+    step8 -left-> step9
+    step9 -left-> [*]
+}
+
+state gameplay as "Gameplay" {
+    state planning as "Planing phase" {
+        state cloudtiles as "Populate cloud tiles"
+        cloudtiles : The first player fills all the
+        cloudtiles : cloud tiles on the table
+
+        state playcard as "Play assistant cards"
+        playcard : Each player draws 1 assistant card starting from the first player,
+        playcard : proceeding clockwise. The card you play  will determine three thigs:
+        playcard : the turn order of the action phase, the first player next round,
+        playcard : the number of movements mother nature can perform.
+        playcard : - You must place your card faced up and onto your personal discrd pile
+        playcard : - You may not choose the same assistant card already played by
+        playcard : anotehr player in the same round. If you only have a matching card,
+        playcard : you must play it. However, you will play after the other player.
+
+        [*] -right-> cloudtiles
+        cloudtiles -right-> playcard
+        playcard -right-> [*]
+    }
+
+    state action as "Action phase" {
+
+    }
+
+    [*] --> planning
+    planning --> action
+    action --> [*]
+}
+gameplay : To win the game you must try to place all of your towers, or have the most towers when no more students remain in the bag.
+gameplay : The game is divided into a number of rounds. Each round is then divided into two phases: planning and action.
+
+[*] --> setup
+setup --> gameplay
+
+@enduml
