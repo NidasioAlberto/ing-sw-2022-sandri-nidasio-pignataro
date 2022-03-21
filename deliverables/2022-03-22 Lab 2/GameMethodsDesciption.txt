@@ -1,0 +1,6 @@
+ - getSortedPlayerList() restituisce la lista di player ordinata in base alle carte assistente giocate dai vari player. Quindi stabilisce l'ordine di turno
+ - getPlayerTableList() restituisce una copia della lista di player in Game, senza applicare nessun ordinamento (mantenendo l'ordine di tavolo)
+ - conquer() risolve la battaglia sull'isola in cui risiede madre natura
+ - action() fa evolvere lo stato interno della FSM nell'action phase PER OGNI PLAYER
+ - setupGame() imposta tutte le condizioni iniziali di gioco (chiamato all'inizio della partita)
+ - getStudentsToMove() restituisce il numero di studenti che ad ogni action phase vanno spostati a partire dall'entrance della board. (dipendente dal numero di giocatori)
