@@ -162,8 +162,7 @@ public class Player
      * Getters
      */
     public String getNickname() { return nickname; }
-
-    //TODO va clonata la board?
+    
     public SchoolBoard getBoard() { return board; }
 
     public AssistantCard getSelectedCard() { return selectedCard; }
@@ -171,7 +170,7 @@ public class Player
     public int getSelectedIsland() { return selectedIsland; }
 
     public SchoolColor getSelectedColor() { return selectedColor; }
-    
+
     public int getSelectedCloudTile() { return selectedCloudTile; }
 
     public List<AssistantCard> getCardsList() { return new ArrayList<AssistantCard>(cards); }
