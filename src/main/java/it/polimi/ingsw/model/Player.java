@@ -168,13 +168,10 @@ public class Player
 
     public AssistantCard getSelectedCard() { return selectedCard; }
 
-    //TODO not in UML
     public int getSelectedIsland() { return selectedIsland; }
 
-    //TODO not in UML
     public SchoolColor getSelectedColor() { return selectedColor; }
-
-    //TODO not in UML
+    
     public int getSelectedCloudTile() { return selectedCloudTile; }
 
     public List<AssistantCard> getCardsList() { return new ArrayList<AssistantCard>(cards); }
