@@ -37,8 +37,7 @@ public class Player
     /**
      * The assistant card selected by the player during the planning phase
      */
-    //TODO not in UML
-    private AssistantCard selectedCard;
+    private int selectedCard;
 
     /**
      * The island selected by the player during an action
@@ -103,11 +102,11 @@ public class Player
     //TODO si potrebbe mettere removeCard direttamente in selectCard
     public void selectCard(int turnOrder) throws IllegalArgumentException
     {
-        for(AssistantCard card : cards)
+        for(int i = 0; i < cards.size(); i++)
         {
-            if(card.getTurnOrder() == turnOrder)
+            if(cards.get(i).getTurnOrder() == turnOrder)
             {
-                selectedCard = card;
+                selectedCard = i;
                 return;
             }
         }
@@ -143,7 +142,6 @@ public class Player
      * @param color The color selected
      * @throws NullPointerException Thrown if the specified color is invalid
      */
-    //TODO modify UML
     public void selectColor(SchoolColor color) throws NullPointerException
     {
         if (color == null)
@@ -162,10 +160,10 @@ public class Player
      * Getters
      */
     public String getNickname() { return nickname; }
-    
+
     public SchoolBoard getBoard() { return board; }
 
-    public AssistantCard getSelectedCard() { return selectedCard; }
+    public int getSelectedCard() { return selectedCard; }
 
     public int getSelectedIsland() { return selectedIsland; }
 
