@@ -9,3 +9,6 @@
 
 # Java compiled files
 *.class
+
+# AstaUML lock file
+*.lock
