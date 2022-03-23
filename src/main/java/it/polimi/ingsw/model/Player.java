@@ -76,7 +76,7 @@ public class Player
     public void addCoins(int coins) throws IllegalArgumentException
     {
         if(coins < 0)
-            throw new IllegalArgumentException("The number of coins must be positive");
+            throw new IllegalArgumentException("[Player] The number of coins must be positive");
 
         this.coins += coins;
     }
@@ -89,7 +89,7 @@ public class Player
     public void removeCoins(int coins) throws IllegalArgumentException
     {
         if(this.coins < coins)
-            throw new IllegalArgumentException("There aren't enough coins");
+            throw new IllegalArgumentException("[Player] There aren't enough coins");
 
         this.coins -= coins;
     }
@@ -110,7 +110,7 @@ public class Player
                 return;
             }
         }
-        throw new IllegalArgumentException("There isn't a card with such turnOrder");
+        throw new IllegalArgumentException("[Player] There isn't a card with such turnOrder");
     }
 
     /**
@@ -128,7 +128,7 @@ public class Player
                 return;
             }
         }
-        throw new IllegalArgumentException("There isn't a card with such turnOrder");
+        throw new IllegalArgumentException("[Player] There isn't a card with such turnOrder");
     }
 
     /**
@@ -145,7 +145,7 @@ public class Player
     public void selectColor(SchoolColor color) throws NullPointerException
     {
         if (color == null)
-            throw new NullPointerException("A null color was provided");
+            throw new NullPointerException("[Player] A null color was provided");
 
         selectedColor = color;
     }
