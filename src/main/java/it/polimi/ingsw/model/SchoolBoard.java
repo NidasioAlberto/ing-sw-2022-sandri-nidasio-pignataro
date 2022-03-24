@@ -9,8 +9,6 @@ import java.util.Map;
  * This class represents the school board. Every player has one of these, it represents the internal
  * state of each single player and his capabilities to "beat" or not other players during professors
  * and islands exchanges.
- * 
- * TODO Specify the player's tower color and throw exceptions
  */
 public class SchoolBoard
 {
@@ -43,14 +41,22 @@ public class SchoolBoard
     private List<Tower> towers;
 
     /**
+     * The tower color that has to be followed for this SchoolBoard.
+     */
+    private TowerColor towerColor;
+
+    /**
      * Constructor.
      * @param maxStudents max number of students in the entrance (7 or 9)
      * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9.
+     * @throws NullPointerException Thrown if the color passed is null
      */
-    public SchoolBoard(int maxStudents) throws IllegalArgumentException
+    public SchoolBoard(int maxStudents, TowerColor color) throws IllegalArgumentException, NullPointerException
     {
         if (maxStudents != 7 && maxStudents != 9)
-            throw new IllegalArgumentException("Invalid max students parameter");
+            throw new IllegalArgumentException("[SchoolBoard] Invalid max students parameter");
+        if(color == null)
+            throw new NullPointerException("[SchoolBoard] Null tower color");
 
         this.MAX_STUDENTS_ENTRANCE = maxStudents;
 
@@ -106,7 +112,7 @@ public class SchoolBoard
     {
         // Check if the tower is not null, isn't already present
         // and the list doesn't exceed the limit
-        if (tower != null && !towers.contains(tower) && towers.size() < MAX_TOWERS)
+        if (tower != null && !towers.contains(tower) && towers.size() < MAX_TOWERS && tower.getColor() == towerColor)
         {
             towers.add(tower);
         }

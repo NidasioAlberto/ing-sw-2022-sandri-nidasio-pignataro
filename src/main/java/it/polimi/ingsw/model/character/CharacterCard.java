@@ -2,6 +2,11 @@ package it.polimi.ingsw.model.character;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.SchoolColor;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class defines the abstraction of a Character card. A Character card can be played by a player
@@ -57,7 +62,7 @@ public abstract class CharacterCard extends Game
      * @param action game action to be verified
      * @return the decision's result
      */
-    public abstract boolean isValidAction(GameAction action);
+    public abstract Optional<Game> isValidAction(GameAction action);
 
     /**
      * Method to activate the card effect (E.g. to prepare some pre-conditions)
@@ -76,4 +81,27 @@ public abstract class CharacterCard extends Game
      * @return the enumeration of the card type
      */
     public abstract CharacterCardType getCardType();
+
+    /**
+     * Override of all the Game methods
+     */
+    public void addPlayer(Player player) { instance.addPlayer(player); }
+    public void selectPlayer(int index) { instance.selectPlayer(index); }
+    public Player getSelectedPlayer() { return instance.getSelectedPlayer(); }
+    public void setupTiles() { instance.setupTiles(); }
+    public List<Player> getSortedPlayerList() { return instance.getSortedPlayerList(); }
+    public List<Player> getPlayerTableList() { return instance.getPlayerTableList(); }
+    public void moveStudentToIsland(SchoolColor color, int islandIndex) { instance.moveStudentToIsland(color, islandIndex); }
+    public void moveStudentToDining(SchoolColor color) { instance.moveStudentToDining(color); }
+    public void moveMotherNature(int steps) { instance.moveMotherNature(steps); }
+    //TODO TALK ABOUT WHAT THIS METHOD CAN AND SHOULD DO
+    public void conquer() { instance.conquer(); }
+    public void moveStudentsFromCloudTile(int tileIndex) { instance.moveStudentsFromCloudTile(tileIndex); }
+    //TODO TALK ABOUT WHAT THIS METHOD SHOULD DO
+    public void setupGame() { instance.setupGame(); }
+    //TODO WHAT DOES THIS METHOD DO?
+    //public int getStudentsToMove() { return instance.getStudentsToMove(); }
+
+    public GameAction getGameAction() { return instance.getGameAction(); }
+    public List<CharacterCard> getCharacterCards() { return instance.getCharacterCards(); }
 }

@@ -63,7 +63,7 @@ public class Game
     public void moveStudentsFromCloudTile(int tileIndex)
     {}
 
-    public Optional<Game> isValidAction()
+    public Optional<Game> isValidAction(GameAction action)
     {}
 
     public void setupGame()

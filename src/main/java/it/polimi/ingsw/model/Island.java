@@ -172,7 +172,6 @@ public class Island
         return (int)tiles.stream().flatMap(t -> t.getStudentsList().stream()).filter(s -> s.getColor().equals(color)).count();
     }
 
-    //TODO not in UML
     public List<IslandTile> getIslands() { return new ArrayList<>(tiles); }
 
 }

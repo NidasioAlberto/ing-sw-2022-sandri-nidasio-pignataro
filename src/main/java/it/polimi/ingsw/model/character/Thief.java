@@ -1,0 +1,58 @@
+package it.polimi.ingsw.model.character;
+
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.GameAction;
+
+import java.util.Optional;
+
+/**
+ * Character card Thief. Effect:
+ * Choose a type of Student; every player
+ * (including yourself) must return 3 Students of that type
+ * from their Dining Room to the bag. If any player has fewer
+ * than 3 Students of that type, return as many Students as they have.
+ */
+public class Thief extends CharacterCard
+{
+
+    /**
+     * Constructor
+     *
+     * @param game the game instance to be decorated
+     * @throws NullPointerException in case of a null decorated game instance
+     */
+    public Thief(Game game) throws NullPointerException
+    {
+        super(game);
+
+        //Thief's cost
+        this.cost = 3;
+    }
+
+    @Override
+    public boolean isPlayable()
+    {
+        return false;
+    }
+
+    @Override
+    public Optional<Game> isValidAction(GameAction action)
+    {
+        return Optional.empty();
+    }
+
+    @Override
+    public void activate()
+    {
+
+    }
+
+    @Override
+    public void deactivate()
+    {
+
+    }
+
+    @Override
+    public CharacterCardType getCardType() { return CharacterCardType.THIEF; }
+}

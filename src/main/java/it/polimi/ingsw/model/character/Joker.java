@@ -9,16 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Character card Monk. Effect:
- * Take 1 Student from this card and place it on an island
- * of your choice. Then, draw a new Student from the bag
- * and place it on this card
+ * Character card Joker. Effect:
+ * You may take up to 3 Students from this card
+ * and replace them with the same number of Students
+ * from your Entrance.
  */
-public class Monk extends CharacterCard
+public class Joker extends CharacterCard
 {
     /**
-     * Payload of this card is students that the player selects
-     * TODO DISCUSS THIS THING, BECAUSE WE NEED TO DEFINE HOW THE MOVE OF STUDENT IS DONE
+     * This class has a student list
      */
     private List<Student> students;
 
@@ -28,11 +27,11 @@ public class Monk extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Monk(Game game) throws NullPointerException
+    public Joker(Game game) throws NullPointerException
     {
         super(game);
 
-        //Monk's cost
+        //Joker's cost
         this.cost = 1;
 
         //Instance the list
@@ -64,5 +63,5 @@ public class Monk extends CharacterCard
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.MONK; }
+    public CharacterCardType getCardType() { return CharacterCardType.JOKER; }
 }
