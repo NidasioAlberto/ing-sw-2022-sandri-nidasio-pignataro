@@ -146,9 +146,6 @@ public class Player
             {
                 cards.remove(i);
                 return;
-            } else
-            {
-                ///
             }
         }
         throw new IllegalArgumentException("[Player] There isn't a card with such turnOrder");

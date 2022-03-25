@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,13 +63,12 @@ public abstract class CharacterCard extends Game
      * @param action game action to be verified
      * @return the decision's result
      */
-    public abstract Optional<Game> isValidAction(GameAction action);
+    public abstract boolean isValidAction(GameAction action);
 
     /**
-     * Method to deactivate the card effect (E.g. to draw a student from the bag to this card)
-     * TODO ADD IT TO THE UML AND DISCUSS (E.g. MONK)
+     * Method to apply the card action to the Game model
      */
-    public abstract void deactivate();
+    public abstract Game applyAction();
 
     /**
      * Method that vary based on the actual card.
@@ -79,9 +79,9 @@ public abstract class CharacterCard extends Game
     /**
      * Override of all the Game methods
      */
-    public void addPlayer(Player player) { instance.addPlayer(player); }
+    public void addPlayer(Player player) throws TooManyPlayersException { instance.addPlayer(player); }
     public void selectPlayer(int index) { instance.selectPlayer(index); }
-    public Player getSelectedPlayer() { return instance.getSelectedPlayer(); }
+    public Optional<Player> getSelectedPlayer() { return instance.getSelectedPlayer(); }
     public void setupTiles() { instance.setupTiles(); }
     public List<Player> getSortedPlayerList() { return instance.getSortedPlayerList(); }
     public List<Player> getPlayerTableList() { return instance.getPlayerTableList(); }

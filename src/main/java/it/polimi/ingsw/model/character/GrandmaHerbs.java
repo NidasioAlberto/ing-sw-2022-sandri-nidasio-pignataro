@@ -40,21 +40,15 @@ public class GrandmaHerbs extends CharacterCard
     }
 
     @Override
-    public Optional<Game> isValidAction(GameAction action)
+    public boolean isValidAction(GameAction action)
     {
-        return Optional.empty();
+        return false;
     }
 
     @Override
-    public void activate()
+    public Game applyAction()
     {
-
-    }
-
-    @Override
-    public void deactivate()
-    {
-
+        return this;
     }
 
     //TODO ADD THIS TO UML. THE METHOD CONQUER ALREADY VERIFIES IF THERE IS A NO ENTRY TILE

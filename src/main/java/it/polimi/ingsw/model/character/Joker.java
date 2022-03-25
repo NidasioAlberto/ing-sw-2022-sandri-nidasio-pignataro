@@ -45,21 +45,15 @@ public class Joker extends CharacterCard
     }
 
     @Override
-    public Optional<Game> isValidAction(GameAction action)
+    public boolean isValidAction(GameAction action)
     {
-        return Optional.empty();
+        return false;
     }
 
     @Override
-    public void activate()
+    public Game applyAction()
     {
-
-    }
-
-    @Override
-    public void deactivate()
-    {
-
+        return this;
     }
 
     @Override
