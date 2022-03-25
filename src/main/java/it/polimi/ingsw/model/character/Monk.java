@@ -28,7 +28,7 @@ public class Monk extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Monk(Game game) throws NullPointerException
+    Monk(Game game) throws NullPointerException
     {
         super(game);
 

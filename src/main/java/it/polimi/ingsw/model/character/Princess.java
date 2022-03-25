@@ -27,7 +27,7 @@ public class Princess extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Princess(Game game) throws NullPointerException
+    Princess(Game game) throws NullPointerException
     {
         super(game);
 

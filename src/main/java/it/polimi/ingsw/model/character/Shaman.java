@@ -19,7 +19,7 @@ public class Shaman extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Shaman(Game game) throws NullPointerException
+    Shaman(Game game) throws NullPointerException
     {
         super(game);
 

@@ -25,7 +25,7 @@ public class GrandmaHerbs extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public GrandmaHerbs(Game game) throws NullPointerException
+    GrandmaHerbs(Game game) throws NullPointerException
     {
         super(game);
 

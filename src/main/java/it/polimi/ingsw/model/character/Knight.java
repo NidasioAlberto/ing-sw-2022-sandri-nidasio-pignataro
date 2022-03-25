@@ -18,7 +18,7 @@ public class Knight extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Knight(Game game) throws NullPointerException
+    Knight(Game game) throws NullPointerException
     {
         super(game);
 

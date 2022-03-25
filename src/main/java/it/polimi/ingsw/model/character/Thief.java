@@ -21,7 +21,7 @@ public class Thief extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Thief(Game game) throws NullPointerException
+    Thief(Game game) throws NullPointerException
     {
         super(game);
 

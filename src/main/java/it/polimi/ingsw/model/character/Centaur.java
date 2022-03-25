@@ -18,7 +18,7 @@ public class Centaur extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Centaur(Game game) throws NullPointerException
+    Centaur(Game game) throws NullPointerException
     {
         super(game);
 

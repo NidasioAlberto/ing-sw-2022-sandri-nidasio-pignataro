@@ -18,7 +18,7 @@ public class MushroomMan extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public MushroomMan(Game game) throws NullPointerException
+    MushroomMan(Game game) throws NullPointerException
     {
         super(game);
 

@@ -38,7 +38,7 @@ public abstract class CharacterCard extends Game
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public CharacterCard(Game game) throws NullPointerException
+    protected CharacterCard(Game game) throws NullPointerException
     {
         if(game == null)
             throw new NullPointerException("[CharacterCard] null game instance");
@@ -98,4 +98,46 @@ public abstract class CharacterCard extends Game
 
     public GameAction getGameAction() { return instance.getGameAction(); }
     public List<CharacterCard> getCharacterCards() { return instance.getCharacterCards(); }
+
+    /**
+     * Factory Methods
+     */
+    public static CharacterCard createCharacterCard(CharacterCardType type, Game game) throws NullPointerException
+    {
+        //Check if the parameters are not null
+        if(type == null)
+            throw new NullPointerException("[CharacterCard] Null character card type");
+
+        if(game == null)
+            throw new NullPointerException("[CharacterCard] Null game instance");
+
+        //Depending on the type of Character card i return a different instance
+        switch(type)
+        {
+            case MONK:
+                return new Monk(game);
+            case SHAMAN:
+                return new Shaman(game);
+            case HERALD:
+                return new Herald(game);
+            case POSTMAN:
+                return new Postman(game);
+            case GRANDMA_HERBS:
+                return new GrandmaHerbs(game);
+            case JOKER:
+                return new Joker(game);
+            case KNIGHT:
+                return new Knight(game);
+            case MUSHROOM_MAN:
+                return new MushroomMan(game);
+            case MINSTREL:
+                return new Minstrel(game);
+            case PRINCESS:
+                return new Princess(game);
+            case THIEF:
+                return new Thief(game);
+            default:
+                return new Centaur(game);
+        }
+    }
 }

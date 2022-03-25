@@ -18,7 +18,7 @@ public class Minstrel extends CharacterCard
      * @param game the game instance to be decorated
      * @throws NullPointerException in case of a null decorated game instance
      */
-    public Minstrel(Game game) throws NullPointerException
+    Minstrel(Game game) throws NullPointerException
     {
         super(game);
 
