@@ -65,12 +65,6 @@ public abstract class CharacterCard extends Game
     public abstract Optional<Game> isValidAction(GameAction action);
 
     /**
-     * Method to activate the card effect (E.g. to prepare some pre-conditions)
-     * TODO ADD IT TO THE UML AND DISCUSS (E.g. MONK)
-     */
-    public abstract void activate();
-
-    /**
      * Method to deactivate the card effect (E.g. to draw a student from the bag to this card)
      * TODO ADD IT TO THE UML AND DISCUSS (E.g. MONK)
      */

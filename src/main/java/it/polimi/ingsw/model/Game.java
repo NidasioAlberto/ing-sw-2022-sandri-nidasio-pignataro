@@ -67,7 +67,7 @@ public class Game
             players.get(index);
         } catch (IndexOutOfBoundsException e)
         {
-            throw new IndexOutOfBoundsException("The specified player index is not valid");
+            throw new IndexOutOfBoundsException("[Game] The specified player index is not valid");
         }
 
         currentPlayerIndex = Optional.of(index);
@@ -127,7 +127,7 @@ public class Game
         } catch (NoSuchElementException e)
         {
             throw new NoSuchElementException(
-                    "There is not student in the bag with color " + color.toString());
+                    "[Game] There is not student in the bag with color " + color.toString());
         }
 
         // Move the student to the island
@@ -137,7 +137,7 @@ public class Game
             islands.get(islandIndex).addStudent(student);
         } catch (IndexOutOfBoundsException e)
         {
-            throw new NoSuchElementException("There is no island with index " + islandIndex);
+            throw new NoSuchElementException("[Game] There is no island with index " + islandIndex);
         }
     }
 

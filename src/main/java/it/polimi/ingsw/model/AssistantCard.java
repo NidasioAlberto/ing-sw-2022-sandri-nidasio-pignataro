@@ -38,13 +38,13 @@ public class AssistantCard
             throws NullPointerException, IllegalArgumentException
     {
         if (wizard == null)
-            throw new NullPointerException("A null value was given to the wizard parameter");
+            throw new NullPointerException("[AssistantCard] A null value was given to the wizard parameter");
 
         if (turnOrder <= 0 || turnOrder > MAX_TURN_ORDER)
-            throw new IllegalArgumentException("An invalid turn value was provided");
+            throw new IllegalArgumentException("[AssistantCard] An invalid turn value was provided");
 
         if (steps <= 0 || steps > MAX_STEPS)
-            throw new IllegalArgumentException("An invalid steps number was provided");
+            throw new IllegalArgumentException("[AssistantCard] An invalid steps number was provided");
 
         this.wizard = wizard;
         this.turnOrder = turnOrder;

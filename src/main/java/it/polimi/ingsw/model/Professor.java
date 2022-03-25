@@ -18,7 +18,7 @@ public class Professor
     public Professor(SchoolColor color) throws NullPointerException
     {
         if (color == null)
-            throw new NullPointerException("A null color was provided");
+            throw new NullPointerException("[Professor] A null color was provided");
 
         this.color = color;
     }

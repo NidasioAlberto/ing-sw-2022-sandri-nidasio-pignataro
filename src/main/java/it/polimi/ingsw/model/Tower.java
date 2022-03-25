@@ -17,7 +17,7 @@ public class Tower
     public Tower(TowerColor color) throws NullPointerException
     {
         if (color == null)
-            throw new NullPointerException("A null color was provided");
+            throw new NullPointerException("[Tower] A null color was provided");
 
         this.color = color;
     }

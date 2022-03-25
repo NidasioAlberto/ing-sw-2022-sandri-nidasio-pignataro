@@ -28,7 +28,7 @@ public class CloudTile
     public CloudTile(CloudTileType type) throws NullPointerException
     {
         if (type == null)
-            throw new NullPointerException();
+            throw new NullPointerException("[CloudTile] Null cloud tile type");
 
         students = new ArrayList<Student>();
         this.type = type;

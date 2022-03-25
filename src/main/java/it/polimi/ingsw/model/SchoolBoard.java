@@ -80,9 +80,13 @@ public class SchoolBoard
     /**
      * Adds the professor to the professors table.
      * @param professor the professor that has to be added
+     * @throws NullPointerException Thrown if the professor passed is null
      */
-    public void addProfessor(Professor professor)
+    public void addProfessor(Professor professor) throws NullPointerException
     {
+        if(professor == null)
+            throw new NullPointerException("[SchoolBoard] Null professor");
+
         // Check if it is not null and not already present
         if (professor != null && !professorTable.contains(professor))
         {
@@ -93,11 +97,15 @@ public class SchoolBoard
     /**
      * Removes the specified professor from the professors table.
      * @param professor the professor that has to be removed
+     * @throws NullPointerException Thrown if the professor passed is null
      */
-    public void removeProfessor(Professor professor)
+    public void removeProfessor(Professor professor) throws NullPointerException
     {
+        if(professor == null)
+            throw new NullPointerException("[SchoolBoard] Null professor");
+
         // Check if it is not null and present
-        if (professor != null && professorTable.contains(professor))
+        if (professorTable.contains(professor))
         {
             professorTable.remove(professor);
         }
@@ -107,12 +115,16 @@ public class SchoolBoard
      * Adds the tower to the list,
      * with maximum of 6 or 8 towers depending on the number of players.
      * @param tower the tower that has to be added
+     * @throws NullPointerException Thrown if the tower passed is null
      */
-    public void addTower(Tower tower)
+    public void addTower(Tower tower) throws NullPointerException
     {
+        if(tower == null)
+            throw new NullPointerException("[SchoolBoard] Null tower");
+
         // Check if the tower is not null, isn't already present
         // and the list doesn't exceed the limit
-        if (tower != null && !towers.contains(tower) && towers.size() < MAX_TOWERS && tower.getColor() == towerColor)
+        if (!towers.contains(tower) && towers.size() < MAX_TOWERS && tower.getColor() == towerColor)
         {
             towers.add(tower);
         }
@@ -134,12 +146,15 @@ public class SchoolBoard
     /**
      * Adds the student to the entrance room
      * @param student the student that has to be added to the entrance room
+     * @throws NullPointerException Thrown if the student passed is null
      */
-    public void addStudentToEntrance(Student student)
+    public void addStudentToEntrance(Student student) throws NullPointerException
     {
+        if(student == null)
+            throw new NullPointerException("[SchoolBoard] Null student");
+
         // Checks if the student is null or present already in the board
-        if (student == null || entrance.contains(student)
-                || entrance.size() >= MAX_STUDENTS_ENTRANCE)
+        if (entrance.contains(student) || entrance.size() >= MAX_STUDENTS_ENTRANCE)
         {
             return;
         }
@@ -155,11 +170,14 @@ public class SchoolBoard
     /**
      * Adds the student to the dining room.
      * @param student the student that has to be added to the dining room
+     * @throws NullPointerException Thrown if the student passed is null
      */
-    private void addStudentToDiningRoom(Student student)
+    private void addStudentToDiningRoom(Student student) throws NullPointerException
     {
+        if(student == null)
+            throw new NullPointerException("[SchoolBoard] Null student");
         // Check if it is not already present and not null and if the dining room is not full
-        if (student != null && !diningRoom.get(student.getColor()).contains(student)
+        if (!diningRoom.get(student.getColor()).contains(student)
                 && diningRoom.get(student.getColor()).size() < MAX_STUDENTS_PER_ROOM)
         {
             // Add the student to the map
@@ -183,11 +201,15 @@ public class SchoolBoard
     /**
      * Moves the student to the dining room from the entrance.
      * @param student the student that has to be moved from entrance to dining room
+     * @throws NullPointerException Thrown if the student passed is null
      */
-    public void moveStudentToDining(Student student)
+    public void moveStudentToDining(Student student) throws NullPointerException
     {
+        if(student == null)
+            throw new NullPointerException("[SchoolBoard] Null student");
+
         // Check if the student is not null and present in the entrance
-        if (student != null && entrance.contains(student))
+        if (entrance.contains(student))
         {
             removeStudentFromEntrance(student);
             addStudentToDiningRoom(student);

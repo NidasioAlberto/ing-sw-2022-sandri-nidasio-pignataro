@@ -36,12 +36,16 @@ public class IslandTile
      * Method to add a new student to the tile (not null)
      * 
      * @param student The student to be added
+     * @throws NullPointerException thrown if the student is null
      */
-    public void addStudent(Student student)
+    public void addStudent(Student student) throws NullPointerException
     {
+        if(student == null)
+            throw new NullPointerException("[IslandTile] Null student");
+
         // Check if the passed student is not null and if the list contains
         // already that student
-        if (student != null && !students.contains(student))
+        if (!students.contains(student))
         {
             students.add(student);
         }
@@ -52,8 +56,11 @@ public class IslandTile
      * 
      * @param tower The tower (not null) to be added
      */
-    public void addTower(Tower tower)
+    public void addTower(Tower tower) throws NullPointerException
     {
+        if(tower == null)
+            throw new NullPointerException("[IslandTile] Null tower");
+
         // Check if the optional is empty and if the passed tower is not null
         if (tower != null && this.tower.isEmpty())
         {
