@@ -57,9 +57,6 @@ public class Player
     /**
      * Constructor
      */
-    // TODO
-    // viene già passata la board?
-    // bisogna costruire in questo costruttore le 10 carte assistente? in tal caso serve lo wizard
     public Player(String nickname, SchoolBoard board)
     {
         this.nickname = nickname;
@@ -102,7 +99,6 @@ public class Player
      * @param turnOrder The number of turn of the card
      * @throws IllegalArgumentException Thrown if the player hasn't got the selected card
      */
-    // TODO si potrebbe mettere removeCard direttamente in selectCard
     public void selectCard(int turnOrder) throws IllegalArgumentException
     {
         for (int i = 0; i < cards.size(); i++)
@@ -114,6 +110,26 @@ public class Player
             }
         }
         throw new IllegalArgumentException("[Player] There isn't a card with such turnOrder");
+    }
+
+    /**
+     * Method to add an AssistantCard to the player
+     * @param card The card to be added
+     * @throws NullPointerException Thrown if the card is null
+     */
+    public void addCard(AssistantCard card) throws NullPointerException
+    {
+        if(card == null)
+            throw new NullPointerException("[Player] Null Assistant card");
+
+        if(cards.isEmpty())
+        {
+            cards.add(card);
+        }
+        else if(cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
+        {
+            cards.add(card);
+        }
     }
 
     /**
