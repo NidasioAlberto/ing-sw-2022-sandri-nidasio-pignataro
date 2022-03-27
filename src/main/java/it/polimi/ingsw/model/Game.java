@@ -35,7 +35,7 @@ public class Game
 
     protected Optional<Integer> currentCharacterCardIndex;
 
-    protected GameAction state;
+    protected GameAction previousAction;
 
 
     public Game()
@@ -92,7 +92,7 @@ public class Game
     /**
      * TODO: Cosa dovrebbe fare?
      */
-    public void setupTiles()
+    public void setupCloudTiles()
     {}
 
     /**

@@ -42,10 +42,8 @@ public class GrandmaHerbs extends CharacterCard
     }
 
     @Override
-    public Game applyAction()
-    {
-        return this;
-    }
+    public void applyAction()
+    {}
 
     // TODO ADD THIS TO UML. THE METHOD computeInfluence ALREADY VERIFIES IF THERE IS A NO ENTRY
     // TILE

@@ -33,6 +33,8 @@ public abstract class CharacterCard extends Game
      */
     protected Game instance;
 
+    protected boolean activated;
+
     /**
      * Constructor
      * 
@@ -44,8 +46,9 @@ public abstract class CharacterCard extends Game
         if (game == null)
             throw new NullPointerException("[CharacterCard] null game instance");
 
-        this.instance = game;
-        this.firstUsed = false;
+        this.instance   = game;
+        this.firstUsed  = false;
+        this.activated  = false;
     }
 
     /**
@@ -68,9 +71,27 @@ public abstract class CharacterCard extends Game
     public abstract boolean isValidAction(GameAction action);
 
     /**
-     * Method to apply the card action to the Game model
+     * Method to apply the card action to the Game model.
+     * IMPORTANT: This method has to be called after the corresponding action is thrown.
+     * It acts with the ALREADY selected objects in the player instance.
      */
-    public abstract Game applyAction();
+    public abstract void applyAction();
+
+    /**
+     * Method to activate the card effect. Activated => the methods are not pass through
+     */
+    public void activate()
+    {
+        this.activated = true;
+    }
+
+    /**
+     * Method to deactivate the card effect. Deactivated => the methods are pass through
+     */
+    private void deactivate()
+    {
+        this.activated = false;
+    }
 
     /**
      * Method that vary based on the actual card.
@@ -99,7 +120,7 @@ public abstract class CharacterCard extends Game
 
     public void setupTiles()
     {
-        instance.setupTiles();
+        instance.setupCloudTiles();
     }
 
     public List<Player> getSortedPlayerList()

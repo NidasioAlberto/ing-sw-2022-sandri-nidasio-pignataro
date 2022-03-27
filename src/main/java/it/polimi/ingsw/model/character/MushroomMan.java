@@ -36,10 +36,8 @@ public class MushroomMan extends CharacterCard
     }
 
     @Override
-    public Game applyAction()
-    {
-        return this;
-    }
+    public void applyAction()
+    {}
 
     @Override
     public void computeInfluence()

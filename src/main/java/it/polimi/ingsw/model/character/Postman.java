@@ -39,10 +39,8 @@ public class Postman extends CharacterCard
     }
 
     @Override
-    public Game applyAction()
-    {
-        return this;
-    }
+    public void applyAction()
+    {}
 
     @Override
     public void moveMotherNature(int steps)

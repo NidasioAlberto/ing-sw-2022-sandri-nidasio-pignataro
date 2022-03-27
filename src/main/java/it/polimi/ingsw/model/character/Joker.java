@@ -49,11 +49,8 @@ public class Joker extends CharacterCard
     }
 
     @Override
-    public Game applyAction()
-    {
-        return this;
-    }
-
+    public void applyAction()
+    {}
     @Override
     public CharacterCardType getCardType()
     {

@@ -35,7 +35,7 @@ public class Island
      * @param student The student that has to be added
      * @throws NullPointerException if the student is null
      */
-    public void addStudent(Student student)
+    public void addStudent(Student student) throws NullPointerException
     {
         // I check if the student is not already present inside one tile
         for (int i = 0; i < tiles.size(); i++)
@@ -68,8 +68,15 @@ public class Island
      * @param tower The tower that has to be added
      * @throws NullPointerException if the tower is null
      */
-    public void addTower(Tower tower)
+    public void addTower(Tower tower) throws NullPointerException
     {
+        //Check if there is already a different color tower on this island
+        if(tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
+                .filter(tile -> tile.getColor() != tower.getColor()).count() > 0)
+        {
+            return;
+        }
+
         // I check if the tower is already present
         for (int i = 0; i < tiles.size(); i++)
         {
