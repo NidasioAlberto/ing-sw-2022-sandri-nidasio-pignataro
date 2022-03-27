@@ -119,6 +119,7 @@ public class Game
     /**
      * Moves a student of the specified color from the bag to the specified island. If the student
      * or the island are not found, an exception is thrown.
+     * TODO: This method refers to moving an island from the current player SchoolBoard
      */
     public void moveStudentToIsland(SchoolColor color, int islandIndex)
             throws NoSuchElementException
@@ -197,7 +198,6 @@ public class Game
         List<Player> sortedPlayers = players.stream()
                 .sorted((p1, p2) -> computePlayerInfluence(p1) - computePlayerInfluence(p2))
                 .toList();
-        // TODO: Shouldn't we consider the actual current player instead of the best two players in influence?
         if (computePlayerInfluence(sortedPlayers.get(0)) > computePlayerInfluence(
                 sortedPlayers.get(1)))
         {
