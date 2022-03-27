@@ -3,12 +3,9 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Mushroom man. Effect:
- * Choose a color of Student; during the influence
- * calculation this turn, that color adds no influence.
+ * Character card Mushroom man. Effect: Choose a color of Student; during the influence calculation
+ * this turn, that color adds no influence.
  */
 public class MushroomMan extends CharacterCard
 {
@@ -22,7 +19,7 @@ public class MushroomMan extends CharacterCard
     {
         super(game);
 
-        //MushroomMan's cost
+        // MushroomMan's cost
         this.cost = 3;
     }
 
@@ -45,11 +42,14 @@ public class MushroomMan extends CharacterCard
     }
 
     @Override
-    public void conquer()
+    public void computeInfluence()
     {
 
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.MUSHROOM_MAN; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.MUSHROOM_MAN;
+    }
 }

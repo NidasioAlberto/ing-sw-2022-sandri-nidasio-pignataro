@@ -3,14 +3,10 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Thief. Effect:
- * Choose a type of Student; every player
- * (including yourself) must return 3 Students of that type
- * from their Dining Room to the bag. If any player has fewer
- * than 3 Students of that type, return as many Students as they have.
+ * Character card Thief. Effect: Choose a type of Student; every player (including yourself) must
+ * return 3 Students of that type from their Dining Room to the bag. If any player has fewer than 3
+ * Students of that type, return as many Students as they have.
  */
 public class Thief extends CharacterCard
 {
@@ -25,7 +21,7 @@ public class Thief extends CharacterCard
     {
         super(game);
 
-        //Thief's cost
+        // Thief's cost
         this.cost = 3;
     }
 
@@ -48,5 +44,8 @@ public class Thief extends CharacterCard
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.THIEF; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.THIEF;
+    }
 }

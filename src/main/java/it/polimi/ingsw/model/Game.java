@@ -1,49 +1,54 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.character.*;
-import it.polimi.ingsw.model.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 public class Game
 {
     public static final int MAX_PLAYERS = 4;
+    public static final int ISLAND_TILES_NUMBER = 12;
+    public static final int ASSISTANT_CARDS_DECK_SIZE = 10;
 
     /**
      * List of all the players in the game in table order (as they are added to the game).
      */
-    private List<Player> players;
+    protected List<Player> players;
 
-    private List<Island> islands;
+    protected List<Island> islands;
 
-    private List<CloudTile> cloudTiles;
+    protected List<CloudTile> cloudTiles;
 
-    private List<Student> studentBag;
+    protected List<Student> studentBag;
 
-    private List<CharacterCard> characterCards;
+    protected List<CharacterCard> characterCards;
 
-    private Optional<Integer> currentPlayerIndex;
+    protected List<Professor> professors;
 
-    private int motherNatureIndex;
+    protected Optional<Integer> currentPlayerIndex;
 
-    private GameAction state;
+    protected Optional<Integer> motherNatureIndex;
 
-    private int playerNumber;
+    protected Optional<Integer> currentCharacterCardIndex;
+
+    protected GameAction state;
 
 
     public Game()
     {
-        players = new ArrayList<Player>();
-        islands = new ArrayList<Island>();
-        cloudTiles = new ArrayList<CloudTile>();
-        studentBag = new ArrayList<Student>();
-        characterCards = new ArrayList<CharacterCard>();
+        players = new ArrayList<>();
+        islands = new ArrayList<>();
+        cloudTiles = new ArrayList<>();
+        studentBag = new ArrayList<>();
+        characterCards = new ArrayList<>();
+        professors = new ArrayList<>();
         currentPlayerIndex = Optional.of(null);
+        motherNatureIndex = Optional.of(null);
+        currentCharacterCardIndex = Optional.of(null);
     }
 
     /**
@@ -58,7 +63,7 @@ public class Game
     }
 
     /**
-     * Changes the selected player. If the index is invalid, and exception is thrown.
+     * Changes the selected player. If the index is invalid, an exception is thrown.
      */
     public void selectPlayer(Integer index) throws IndexOutOfBoundsException
     {
@@ -108,7 +113,7 @@ public class Game
      */
     public List<Player> getPlayerTableList()
     {
-        return players;
+        return new ArrayList<>(players);
     }
 
     /**
@@ -141,30 +146,236 @@ public class Game
         }
     }
 
+    /**
+     * Moves a student of the specified color from the current player's entrance to his dining room.
+     * If the player doesn't have a student with the specified color in his entrance, an exception
+     * is thrown.
+     */
     public void moveStudentToDining(SchoolColor color)
-    {}
+            throws NoSuchElementException, NullPointerException
+    {
+        Student student;
 
+        // Retrieve the current player's board
+        SchoolBoard board = getSelectedPlayer().map(p -> p.getBoard())
+                .orElseThrow(() -> new NoSuchElementException(
+                        "[Game] Unable to get the current player's board, is a player selected?"));
+
+        // Get the student from the current player's entrance
+        student = board.getStudentsInEntrance().stream().filter(s -> s.getColor().equals(color))
+                .findFirst().orElseThrow(() -> new NoSuchElementException(
+                        "[Game] No students of the specified color inside the current student's entrance"));
+
+        // Move the student
+        board.moveStudentToDining(student);
+    }
+
+    /**
+     * Moves mother nature for the specified number of steps.
+     */
     public void moveMotherNature(int steps)
-    {}
+    {
+        // Change mother nature index
+        int index = steps + motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                "[Game] Mother nature is not currently on the table, is the game set up?"));
+        index %= islands.size();
+        motherNatureIndex = Optional.of(index);
+    }
 
-    public void conquer()
-    {}
+    /**
+     * Computes the influence on the island where mother nature currently is. This implies probably
+     * moving towers.
+     */
+    public void computeInfluence()
+    {
+        Island currentIsland =
+                islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                        "[Game] Mother nature is not currently on the table, is the game set up?")));
 
+        // TODO: Use Pair
+
+        // Get the player with more influence, if there is any
+        List<Player> sortedPlayers = players.stream()
+                .sorted((p1, p2) -> computePlayerInfluence(p1) - computePlayerInfluence(p2))
+                .toList();
+
+        if (computePlayerInfluence(sortedPlayers.get(0)) > computePlayerInfluence(
+                sortedPlayers.get(1)))
+        {
+            // This player has more influence then all others
+            Player influencer = sortedPlayers.get(0);
+
+            // Remove all currently placed towers on the island
+            List<Tower> towersToRemove = currentIsland.getTowers();
+            currentIsland.removeAllTowers();
+
+            // Move every tower to its original player's board
+            towersToRemove.forEach(t -> {
+                // Find the tower's player and put the tower in his board
+                players.forEach(p -> {
+                    if (p.getColor().equals(t.getColor()))
+                        p.getBoard().addTower(t);
+                });
+
+
+            });
+
+            // Move the influencer's towers to the island
+            List<Tower> towersToAdd = influencer.getBoard().getTowers().subList(0,
+                    Integer.max(towersToRemove.size(), influencer.getBoard().getTowers().size()));
+
+            towersToAdd.forEach(t -> {
+                // Remove the tower from the player's board
+                influencer.getBoard().removeTower(t);
+
+                // Add the tower to the island
+                currentIsland.addTower(t);
+            });
+        }
+    }
+
+    /**
+     * Computes the given player influence for the island where mother nature currently is.
+     */
+    private int computePlayerInfluence(Player player)
+    {
+        Island currentIsland =
+                islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                        "[Game] Mother nature is not currently on the table, is the game set up?")));
+
+        // Compute the influence of this player from students
+        int influence = player.getBoard().getProfessors().stream()
+                .map(p -> currentIsland.getStudentsByColor(p.getColor())).reduce(0, Integer::sum);
+
+        // Add the influence from the towers
+        influence += currentIsland.getTowers().stream()
+                .filter(t -> t.getColor().equals(player.getColor())).count();
+
+        return influence;
+    }
+
+    /**
+     * Moves the students from the given cloud tile to the current player's entrance.
+     */
     public void moveStudentsFromCloudTile(int tileIndex)
-    {}
+    {
+        CloudTile cloudTile = cloudTiles.get(tileIndex);
 
+        // Remove the students from the cloud tile
+        List<Student> students = cloudTile.getStudentsList();
+        cloudTile.removeStudents();
+
+        // Put them in the current player's entrance
+        Player player = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException(
+                "[Game] Unable to get the current player, is a player selected?"));
+        students.forEach(s -> player.getBoard().addStudentToEntrance(s));
+    }
+
+    /**
+     * Tells whether the given action can be played in the current game status.
+     */
     public boolean isValidAction(GameAction action)
-    {}
+    {
+        return false;
+    }
 
+    /**
+     * Sets up all the game's components.
+     */
     public void setupGame()
-    {}
+    {
+        // 1. Place the islands
+        IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.add(new Island()));
 
-    public int getStudentsFromCloudTile(int tileIndex)
-    {}
+        // 2. Place mother nature on a random spot
+        motherNatureIndex = Optional.of(getRandomNumber(0, ISLAND_TILES_NUMBER));
 
+        // 3. Place students on the islands
+        studentBag.add(new Student(SchoolColor.BLUE));
+        studentBag.add(new Student(SchoolColor.BLUE));
+        studentBag.add(new Student(SchoolColor.GREEN));
+        studentBag.add(new Student(SchoolColor.GREEN));
+        studentBag.add(new Student(SchoolColor.PINK));
+        studentBag.add(new Student(SchoolColor.PINK));
+        studentBag.add(new Student(SchoolColor.RED));
+        studentBag.add(new Student(SchoolColor.RED));
+        studentBag.add(new Student(SchoolColor.YELLOW));
+        studentBag.add(new Student(SchoolColor.YELLOW));
+        IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.get(i)
+                .addStudent(studentBag.remove(getRandomNumber(0, studentBag.size()))));
+
+        // 4. Populate the bag with the remaining students
+        for (SchoolColor color : SchoolColor.values())
+            IntStream.range(0, 24).forEach(i -> studentBag.add(new Student(color)));
+
+        // 5. Place the cloud tiles
+        IntStream.range(0, players.size())
+                .forEach(i -> cloudTiles.add(new CloudTile(CloudTileType.TILE_2_4)));
+
+        // 6. Place the professors
+        for (SchoolColor color : SchoolColor.values())
+            professors.add(new Professor(color));
+
+        // 7. Each player takes a school board when they are added to the game
+
+        // 8. Each players takes 8 or 6 towers
+        players.forEach(p -> {
+            SchoolBoard board = p.getBoard();
+
+            IntStream.range(0, board.MAX_TOWERS)
+                    .forEach(i -> board.addTower(new Tower(p.getColor())));
+        });
+
+        // 9. Each player gets a deck of cards
+        // TODO: The wizard are assigned automatically!
+        players.forEach(p -> {
+            IntStream.range(0, ASSISTANT_CARDS_DECK_SIZE).forEach(i -> p.addCard(
+                    new AssistantCard(Wizard.values()[players.indexOf(p)], i + 1, i / 2 + 1)));
+        });
+
+        // 10. Each player gets 7 or 9 students in his entrance
+        players.forEach(p -> {
+            IntStream.range(0, players.size() != 3 ? 7 : 9).forEach(i -> {
+                p.getBoard().addStudentToEntrance(
+                        studentBag.get(getRandomNumber(0, studentBag.size())));
+            });
+        });
+    }
+
+    private int getRandomNumber(int startInclusive, int endExclusive)
+    {
+        return (int) Math.round(startInclusive + Math.random() * ISLAND_TILES_NUMBER - 0.5);
+    }
+
+    /**
+     * TODO!
+     */
     public GameAction getGameAction()
-    {}
+    {
+        return GameAction.MOVE_MOTHER_NATURE;
+    }
 
+    /**
+     * Return a list of the available character cards in the game.
+     */
     public List<CharacterCard> getCharacterCards()
-    {}
+    {
+        return new ArrayList<>(characterCards);
+    }
+
+    /**
+     * Returns the currently selected character card.
+     */
+    public Optional<CharacterCard> getCurrentCharacterCard()
+    {
+        try
+        {
+            return Optional.of(characterCards
+                    .get(currentCharacterCardIndex.orElseThrow(() -> new NoSuchElementException(
+                            "[Game] Mother nature is not currently on the table, is the game set up?"))));
+        } catch (IndexOutOfBoundsException e)
+        {
+            return Optional.empty();
+        }
+    }
 }

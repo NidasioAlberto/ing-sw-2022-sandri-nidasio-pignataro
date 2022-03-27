@@ -6,9 +6,8 @@ import it.polimi.ingsw.model.GameAction;
 import java.util.Optional;
 
 /**
- * Character card Postman. Effect:
- * You may move Mother Nature up to 2 additional Islands
- * than is indicated by the Assistant card you've played.
+ * Character card Postman. Effect: You may move Mother Nature up to 2 additional Islands than is
+ * indicated by the Assistant card you've played.
  */
 public class Postman extends CharacterCard
 {
@@ -23,7 +22,7 @@ public class Postman extends CharacterCard
     {
         super(game);
 
-        //Postman's cost
+        // Postman's cost
         this.cost = 1;
     }
 
@@ -52,5 +51,8 @@ public class Postman extends CharacterCard
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.POSTMAN; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.POSTMAN;
+    }
 }

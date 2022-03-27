@@ -3,12 +3,9 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Minstrel. Effect:
- * You may exchange up to 2 Students between your Entrance
- * and your Dining Room.
+ * Character card Minstrel. Effect: You may exchange up to 2 Students between your Entrance and your
+ * Dining Room.
  */
 public class Minstrel extends CharacterCard
 {
@@ -22,7 +19,7 @@ public class Minstrel extends CharacterCard
     {
         super(game);
 
-        //Minstrel's cost
+        // Minstrel's cost
         this.cost = 1;
     }
 
@@ -45,5 +42,8 @@ public class Minstrel extends CharacterCard
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.MINSTREL; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.MINSTREL;
+    }
 }

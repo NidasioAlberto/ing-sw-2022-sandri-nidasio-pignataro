@@ -6,13 +6,10 @@ import it.polimi.ingsw.model.Student;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Character card Princess. Effect:
- * Take 1 Student from this card and place it in
- * your Dining Room. Then, draw a new Student from the
- * Bag and place it on this card.
+ * Character card Princess. Effect: Take 1 Student from this card and place it in your Dining Room.
+ * Then, draw a new Student from the Bag and place it on this card.
  */
 public class Princess extends CharacterCard
 {
@@ -31,10 +28,10 @@ public class Princess extends CharacterCard
     {
         super(game);
 
-        //Princess' cost
+        // Princess' cost
         this.cost = 2;
 
-        //Instance the list
+        // Instance the list
         students = new ArrayList<Student>();
     }
 
@@ -57,5 +54,8 @@ public class Princess extends CharacterCard
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.PRINCESS; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.PRINCESS;
+    }
 }

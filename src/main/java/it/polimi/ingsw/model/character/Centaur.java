@@ -3,12 +3,9 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Centaur. Effect:
- * When resolving a Conquering on an Island,
- * Towers do not count towards influence.
+ * Character card Centaur. Effect: When resolving a computeInfluenceing on an Island, Towers do not
+ * count towards influence.
  */
 public class Centaur extends CharacterCard
 {
@@ -22,7 +19,7 @@ public class Centaur extends CharacterCard
     {
         super(game);
 
-        //Centaur's cost
+        // Centaur's cost
         this.cost = 3;
     }
 
@@ -45,11 +42,14 @@ public class Centaur extends CharacterCard
     }
 
     @Override
-    public void conquer()
+    public void computeInfluence()
     {
 
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.CENTAUR; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.CENTAUR;
+    }
 }

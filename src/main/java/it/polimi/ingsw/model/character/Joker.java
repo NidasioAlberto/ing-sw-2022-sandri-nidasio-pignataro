@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Character card Joker. Effect:
- * You may take up to 3 Students from this card
- * and replace them with the same number of Students
- * from your Entrance.
+ * Character card Joker. Effect: You may take up to 3 Students from this card and replace them with
+ * the same number of Students from your Entrance.
  */
 public class Joker extends CharacterCard
 {
@@ -31,10 +29,10 @@ public class Joker extends CharacterCard
     {
         super(game);
 
-        //Joker's cost
+        // Joker's cost
         this.cost = 1;
 
-        //Instance the list
+        // Instance the list
         students = new ArrayList<Student>();
     }
 
@@ -57,5 +55,8 @@ public class Joker extends CharacterCard
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.JOKER; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.JOKER;
+    }
 }

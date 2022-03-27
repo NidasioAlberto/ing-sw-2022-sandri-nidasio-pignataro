@@ -3,11 +3,12 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
- * This class represents the collection of island tiles (at least 1). At first
- * there is the relation 1 to 1 with islands and island tiles, but as the game keeps
- * going the island tiles accumulate into bigger islands.
+ * This class represents the collection of island tiles (at least 1). At first there is the relation
+ * 1 to 1 with islands and island tiles, but as the game keeps going the island tiles accumulate
+ * into bigger islands.
  */
 public class Island
 {
@@ -21,64 +22,66 @@ public class Island
      */
     public Island()
     {
-        //Instantiate the list
+        // Instantiate the list
         tiles = new ArrayList<IslandTile>();
 
-        //Add the first tile
+        // Add the first tile
         tiles.add(new IslandTile());
     }
 
     /**
      * Method to add a student to the island (group)
+     * 
      * @param student The student that has to be added
      */
     public void addStudent(Student student)
     {
-        //I check if the student is not already present inside one tile
-        for(int i = 0; i < tiles.size(); i++)
+        // I check if the student is not already present inside one tile
+        for (int i = 0; i < tiles.size(); i++)
         {
-            if(tiles.get(i).getStudentsList().contains(student))
+            if (tiles.get(i).getStudentsList().contains(student))
             {
                 return;
             }
         }
 
-        //If it is all right I can add the student in the tile with fewer students
+        // If it is all right I can add the student in the tile with fewer students
         int min = 0;
-        for(int i = 0; i < tiles.size(); i++)
+        for (int i = 0; i < tiles.size(); i++)
         {
-            if(tiles.get(i).getStudents().length < tiles.get(min).getStudents().length)
+            if (tiles.get(i).getStudents().length < tiles.get(min).getStudents().length)
             {
-                //I found an island with fewer students
+                // I found an island with fewer students
                 min = i;
             }
         }
 
-        //At the end I add the student (in case already added (or null) the addStudent will filter)
+        // At the end I add the student (in case already added (or null) the addStudent will filter)
         tiles.get(min).addStudent(student);
     }
 
     /**
-     * This method adds the tower passed via argument to one of the tiles
-     * (the first with tower free)
+     * This method adds the tower passed via argument to one of the tiles (the first with tower
+     * free)
+     * 
      * @param tower The tower that has to be added
      */
     public void addTower(Tower tower)
     {
-        //I check if the tower is already present
-        for(int i = 0; i < tiles.size(); i++)
+        // I check if the tower is already present
+        for (int i = 0; i < tiles.size(); i++)
         {
-            if(tiles.get(i).getTower().isPresent() && tiles.get(i).getTower().get().equals(tower))
+            if (tiles.get(i).getTower().isPresent() && tiles.get(i).getTower().get().equals(tower))
             {
                 return;
             }
         }
 
-        //Find the first free
-        for(int i = 0; i < tiles.size(); i++)
+        // Find the first free
+        for (int i = 0; i < tiles.size(); i++)
         {
-            //In case of an empty optional, I add the tower
-            if(tiles.get(i).getTower().isEmpty())
+            // In case of an empty optional, I add the tower
+            if (tiles.get(i).getTower().isEmpty())
             {
                 tiles.get(i).addTower(tower);
                 return;
@@ -87,7 +90,9 @@ public class Island
     }
 
     /**
-     * Method to remove a specific tower
+     * Method to remove a specific tower. Keep in ming that this method does not move the removed
+     * tower its player board!
+     * 
      * @param tower The tower that has to be removed
      */
     public void removeTower(Tower tower)
@@ -96,7 +101,8 @@ public class Island
     }
 
     /**
-     * Method to remove all the towers in the tiles
+     * Method to remove all the towers in the tiles. Keep in ming that this method does not move the
+     * removed towers their player board!
      */
     public void removeAllTowers()
     {
@@ -105,16 +111,17 @@ public class Island
 
     /**
      * Method to merge the island tiles in this island
+     * 
      * @param island The island to be merged
      */
     public void mergeIsland(Island island)
     {
-        if(island != null)
+        if (island != null)
         {
-            //I add the single tile if it is not already present in the list
-            island.tiles.stream().forEach(t ->
-            {
-                if (!this.tiles.contains(t)) {
+            // I add the single tile if it is not already present in the list
+            island.tiles.stream().forEach(t -> {
+                if (!this.tiles.contains(t))
+                {
                     this.tiles.add(t);
                 }
             });
@@ -122,15 +129,14 @@ public class Island
     }
 
     /**
-     * Getters
-     * TODO CHECK THE FUNCTIONAL
+     * Getters TODO CHECK THE FUNCTIONAL
      */
     public List<Student> getStudentsList()
     {
-        //Create the result list
+        // Create the result list
         List<Student> list = new ArrayList<Student>();
 
-        //Fill the list
+        // Fill the list
         tiles.stream().forEach((t -> list.addAll(t.getStudentsList())));
 
         return list;
@@ -138,40 +144,36 @@ public class Island
 
     public Student[] getStudents()
     {
-        //Create the list where I put all the students
+        // Create the list where I put all the students
         List<Student> list = getStudentsList();
 
-        //Create the final array
+        // Create the final array
         Student[] result = new Student[list.size()];
 
-        //Assign all the students
+        // Assign all the students
         list.toArray(result);
 
         return result;
     }
 
-    public Tower[] getTowers()
+    public List<Tower> getTowers()
     {
-        //Create the list where I put all the towers
-        List<Tower> list = new ArrayList<Tower>();
-
-        //Foreach tile I add the tower
-        tiles.stream().map(t -> t.getTower()).filter(Optional::isPresent).forEach(o -> list.add(o.get()));
-
-        //Create the final array
-        Tower[] result = new Tower[list.size()];
-
-        //Assign all the towers
-        list.toArray(result);
-
-        return result;
+        return tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Counts the number of students of the specified colors on all tiles.
+     */
     public int getStudentsByColor(SchoolColor color)
     {
-        return (int)tiles.stream().flatMap(t -> t.getStudentsList().stream()).filter(s -> s.getColor().equals(color)).count();
+        return (int) tiles.stream().flatMap(t -> t.getStudentsList().stream())
+                .filter(s -> s.getColor().equals(color)).count();
     }
 
-    public List<IslandTile> getIslands() { return new ArrayList<>(tiles); }
+    public List<IslandTile> getIslands()
+    {
+        return new ArrayList<>(tiles);
+    }
 
 }

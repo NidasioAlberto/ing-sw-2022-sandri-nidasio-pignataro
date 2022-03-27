@@ -3,12 +3,9 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Knight. Effect:
- * During the influence calculation this turn, you
- * count as having 2 more influence.
+ * Character card Knight. Effect: During the influence calculation this turn, you count as having 2
+ * more influence.
  */
 public class Knight extends CharacterCard
 {
@@ -22,7 +19,7 @@ public class Knight extends CharacterCard
     {
         super(game);
 
-        //Knight's cost
+        // Knight's cost
         this.cost = 2;
     }
 
@@ -45,11 +42,14 @@ public class Knight extends CharacterCard
     }
 
     @Override
-    public void conquer()
+    public void computeInfluence()
     {
 
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.KNIGHT; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.KNIGHT;
+    }
 }

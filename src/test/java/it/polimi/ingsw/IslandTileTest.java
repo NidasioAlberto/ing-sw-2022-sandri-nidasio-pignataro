@@ -29,7 +29,7 @@ public class IslandTileTest
         assertEquals(island.getStudentsList().get(0), student);
         assertEquals(island.getStudents()[0], student);
 
-        island.addStudent(null);
+        assertThrows(NullPointerException.class, () -> island.addStudent(null));
         assertEquals(island.getStudentsList().size(), 1);
 
         island.addStudent(student);
@@ -44,7 +44,7 @@ public class IslandTileTest
     {
         Tower tower = new Tower(TowerColor.WHITE);
 
-        island.addTower(null);
+        assertThrows(NullPointerException.class, () -> island.addTower(null));
         assertTrue(island.getTower().isEmpty());
 
         island.addTower(tower);

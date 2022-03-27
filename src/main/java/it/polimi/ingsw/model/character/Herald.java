@@ -3,13 +3,10 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
 /**
- * Character card Herald. Effect:
- * Choose an Island and resolve the Island as if
- * Mother Nature had ended her movement there.
- * Mother Nature will still move and the Island where she ends
- * her movement will also be resolved.
+ * Character card Herald. Effect: Choose an Island and resolve the Island as if Mother Nature had
+ * ended her movement there. Mother Nature will still move and the Island where she ends her
+ * movement will also be resolved.
  */
 public class Herald extends CharacterCard
 {
@@ -23,7 +20,7 @@ public class Herald extends CharacterCard
     {
         super(game);
 
-        //Herald's cost
+        // Herald's cost
         this.cost = 3;
     }
 

@@ -3,13 +3,9 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Shaman. Effect:
- * During this turn, you take control of any number of Professors
- * even if you have the same number of Students as the player
- * who currently controls them
+ * Character card Shaman. Effect: During this turn, you take control of any number of Professors
+ * even if you have the same number of Students as the player who currently controls them
  */
 public class Shaman extends CharacterCard
 {
@@ -23,7 +19,7 @@ public class Shaman extends CharacterCard
     {
         super(game);
 
-        //Shaman's cost
+        // Shaman's cost
         this.cost = 2;
     }
 
@@ -46,11 +42,14 @@ public class Shaman extends CharacterCard
     }
 
     @Override
-    public void conquer()
+    public void computeInfluence()
     {
 
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.SHAMAN; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.SHAMAN;
+    }
 }

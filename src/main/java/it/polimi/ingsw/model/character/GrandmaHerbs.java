@@ -3,14 +3,10 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
-import java.util.Optional;
-
 /**
- * Character card Grandma Herbs. Effect:
- * Place a No Entry tile on an Island of your choice.
- * The first time Mother Nature ends her movement
- * there, put the No Entry Tile back onto this card DO NOT
- * calculate influence on that Island, or place any Towers.
+ * Character card Grandma Herbs. Effect: Place a No Entry tile on an Island of your choice. The
+ * first time Mother Nature ends her movement there, put the No Entry Tile back onto this card DO
+ * NOT calculate influence on that Island, or place any Towers.
  */
 public class GrandmaHerbs extends CharacterCard
 {
@@ -29,7 +25,7 @@ public class GrandmaHerbs extends CharacterCard
     {
         super(game);
 
-        //GrandmaHerbs cost
+        // GrandmaHerbs cost
         this.cost = 2;
     }
 
@@ -51,14 +47,18 @@ public class GrandmaHerbs extends CharacterCard
         return this;
     }
 
-    //TODO ADD THIS TO UML. THE METHOD CONQUER ALREADY VERIFIES IF THERE IS A NO ENTRY TILE
-    //BUT THIS TILE HAS TO RETURN TO THE CARD ONCE USED, SO THE CARD HAS TO CHECK THAT OPTION
+    // TODO ADD THIS TO UML. THE METHOD computeInfluence ALREADY VERIFIES IF THERE IS A NO ENTRY
+    // TILE
+    // BUT THIS TILE HAS TO RETURN TO THE CARD ONCE USED, SO THE CARD HAS TO CHECK THAT OPTION
     @Override
-    public void conquer()
+    public void computeInfluence()
     {
 
     }
 
     @Override
-    public CharacterCardType getCardType() { return CharacterCardType.GRANDMA_HERBS; }
+    public CharacterCardType getCardType()
+    {
+        return CharacterCardType.GRANDMA_HERBS;
+    }
 }

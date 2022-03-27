@@ -40,7 +40,7 @@ public class IslandTile
      */
     public void addStudent(Student student) throws NullPointerException
     {
-        if(student == null)
+        if (student == null)
             throw new NullPointerException("[IslandTile] Null student");
 
         // Check if the passed student is not null and if the list contains
@@ -58,7 +58,7 @@ public class IslandTile
      */
     public void addTower(Tower tower) throws NullPointerException
     {
-        if(tower == null)
+        if (tower == null)
             throw new NullPointerException("[IslandTile] Null tower");
 
         // Check if the optional is empty and if the passed tower is not null
@@ -69,7 +69,8 @@ public class IslandTile
     }
 
     /**
-     * Method to remove the tower, no matter what tower it is
+     * Method to remove the tower, no matter what tower it is. Keep in ming that this method does
+     * not move the removed tower its player board!
      */
     public void removeTower()
     {
