@@ -55,14 +55,15 @@ public class IslandTile
      * Method to add a tower to the tile if not already present
      * 
      * @param tower The tower (not null) to be added
+     * @throws NullPointerException if the tower is null
      */
     public void addTower(Tower tower) throws NullPointerException
     {
         if (tower == null)
             throw new NullPointerException("[IslandTile] Null tower");
 
-        // Check if the optional is empty and if the passed tower is not null
-        if (tower != null && this.tower.isEmpty())
+        // Check if the optional is empty
+        if (this.tower.isEmpty())
         {
             this.tower = Optional.of(tower);
         }

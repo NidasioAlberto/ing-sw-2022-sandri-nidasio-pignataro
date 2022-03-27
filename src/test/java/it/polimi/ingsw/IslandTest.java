@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Class to test the Island class
@@ -28,21 +29,88 @@ public class IslandTest
     {
         Student student = new Student(SchoolColor.BLUE);
 
-        // add a normal student
+        //At the beginning there are no students
+        assertEquals(island.getStudentsList().size(), 0);
+
+        //Add a normal student
         island.addStudent(student);
         assertEquals(island.getStudentsList().get(0), student);
         assertEquals(island.getStudents()[0], student);
+        assertEquals(island.getStudentsList().size(), 1);
 
         // add the same studente as before
         island.addStudent(student);
         assertEquals(island.getStudentsList().size(), 1);
         assertEquals(island.getStudents().length, 1);
 
-        // add a null student
+        //Add a null student
         assertThrows(NullPointerException.class, () -> island.addStudent(null));
+        assertEquals(island.getStudentsList().get(0), student);
         assertEquals(island.getStudentsList().size(), 1);
         assertEquals(island.getStudents().length, 1);
     }
+
+    /**
+     * Test that students are added on the tile with fewer students
+     */
+    @Test
+    public void addStudentOnCorrectIslandTest()
+    {
+
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void addTowerTest()
+    {
+        //TODO problema se il colore delle torri è diverso
+        island.mergeIsland(new Island());
+        Tower tower = new Tower(TowerColor.BLACK);
+        Tower tower1 = new Tower(TowerColor.BLACK);
+        Tower tower2 = new Tower(TowerColor.BLACK);
+
+        //At the beginning there is no tower on the islands
+        assertTrue(island.getIslands().get(0).getTower().isEmpty());
+        assertTrue(island.getIslands().get(1).getTower().isEmpty());
+
+        //Add a tower
+        island.addTower(tower);
+        assertEquals(island.getIslands().get(0).getTower().get(), tower);
+        assertTrue(island.getIslands().get(1).getTower().isEmpty());
+        assertEquals(island.getTowers().get(0), tower);
+        assertEquals(island.getTowers().size(), 1);
+
+        //Add a duplicate tower
+        island.addTower(tower);
+        assertEquals(island.getIslands().get(0).getTower().get(), tower);
+        assertTrue(island.getIslands().get(1).getTower().isEmpty());
+        assertEquals(island.getTowers().get(0), tower);
+        assertEquals(island.getTowers().size(), 1);
+
+        //Add a null tower
+        assertThrows(NullPointerException.class, () -> island.addTower(null));
+        assertEquals(island.getTowers().get(0), tower);
+        assertEquals(island.getTowers().size(), 1);
+
+        //Add another tower
+        island.addTower(tower1);
+        assertEquals(island.getIslands().get(0).getTower().get(), tower);
+        assertEquals(island.getIslands().get(1).getTower().get(), tower1);
+        assertEquals(island.getTowers().get(0), tower);
+        assertEquals(island.getTowers().get(1), tower1);
+        assertEquals(island.getTowers().size(), 2);
+
+        //Add another tower, but there are no free tiles
+        island.addTower(tower1);
+        assertEquals(island.getIslands().get(0).getTower().get(), tower);
+        assertEquals(island.getIslands().get(1).getTower().get(), tower1);
+        assertEquals(island.getTowers().get(0), tower);
+        assertEquals(island.getTowers().get(1), tower1);
+        assertEquals(island.getTowers().size(), 2);
+    }
+
 
     /**
      * Test that if the island is already contained or is null is not added Test that an island is

@@ -1,6 +1,8 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.Tower;
+import it.polimi.ingsw.model.TowerColor;
 import it.polimi.ingsw.model.Wizard;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +20,19 @@ public class AssistantCardTest
         assertAll(() -> assertEquals(card.getWizard(), Wizard.WIZARD_1),
                 () -> assertEquals(card.getTurnOrder(), 10),
                 () -> assertEquals(card.getSteps(), 5));
+    }
+
+    /**
+     * For each wizard, create an AssistantCard with that wizard and check it.
+     */
+    @Test
+    public void checkWizardTest()
+    {
+        for (Wizard wizard : Wizard.values())
+        {
+            AssistantCard card = new AssistantCard(wizard, 8, 4);
+            assertEquals(card.getWizard(), wizard);
+        }
     }
 
     /**

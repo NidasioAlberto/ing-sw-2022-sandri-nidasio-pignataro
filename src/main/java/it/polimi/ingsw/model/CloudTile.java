@@ -38,13 +38,17 @@ public class CloudTile
      * Method to add the student on the tile.
      * 
      * @param student The student to be added.
+     * @throws NullPointerException if the student is null
      */
-    public void addStudent(Student student)
+    public void addStudent(Student student) throws NullPointerException
     {
-        // Check if the student is not null, not contained already and that the maximum
-        // dimension is not exceeded
-        if (student != null && !students.contains(student)
-                && students.size() < type.getStudentCapacity())
+        // Check if the student is not null
+        if (student == null)
+            throw new NullPointerException("[CloudTile] Tried to add a null student");
+
+        // Check if the student is not already contained and
+        // that the maximum dimension is not exceeded
+        if (!students.contains(student) && students.size() < type.getStudentCapacity())
         {
             students.add(student);
         }
@@ -54,11 +58,16 @@ public class CloudTile
      * Method to remove a specific student from the cloud tile.
      * 
      * @param student The student that has to be removed.
+     * @throws NullPointerException if the student is null
      */
-    public void removeStudent(Student student)
+    public void removeStudent(Student student) throws NullPointerException
     {
-        // Check if the student is not null and is contained inside the list
-        if (student != null && students.contains(student))
+        // Check if the student is not null
+        if (student == null)
+            throw new NullPointerException("[CloudTile] Tried to remove a null student");
+
+        // Check if the student is contained inside the list
+        if (students.contains(student))
         {
             students.remove(student);
         }

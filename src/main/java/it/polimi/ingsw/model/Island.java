@@ -31,11 +31,16 @@ public class Island
 
     /**
      * Method to add a student to the island (group)
-     * 
+     *
      * @param student The student that has to be added
+     * @throws NullPointerException if the student is null
      */
-    public void addStudent(Student student)
+    public void addStudent(Student student) throws NullPointerException
     {
+        // Check the student is not null
+        if (student == null)
+            throw new NullPointerException("[Island] Null student");
+
         // I check if the student is not already present inside one tile
         for (int i = 0; i < tiles.size(); i++)
         {
@@ -63,11 +68,16 @@ public class Island
     /**
      * This method adds the tower passed via argument to one of the tiles (the first with tower
      * free)
-     * 
+     *
      * @param tower The tower that has to be added
+     * @throws NullPointerException if the tower is null
      */
-    public void addTower(Tower tower)
+    public void addTower(Tower tower) throws NullPointerException
     {
+        // Check the tower is not null
+        if (tower == null)
+            throw new NullPointerException("[Island] Null tower");
+
         // I check if the tower is already present
         for (int i = 0; i < tiles.size(); i++)
         {
@@ -92,7 +102,7 @@ public class Island
     /**
      * Method to remove a specific tower. Keep in ming that this method does not move the removed
      * tower its player board!
-     * 
+     *
      * @param tower The tower that has to be removed
      */
     public void removeTower(Tower tower)
@@ -111,7 +121,7 @@ public class Island
 
     /**
      * Method to merge the island tiles in this island
-     * 
+     *
      * @param island The island to be merged
      */
     public void mergeIsland(Island island)
