@@ -193,12 +193,11 @@ public class Game
                         "[Game] Mother nature is not currently on the table, is the game set up?")));
 
         // TODO: Use Pair
-
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream()
                 .sorted((p1, p2) -> computePlayerInfluence(p1) - computePlayerInfluence(p2))
                 .toList();
-
+        // TODO: Shouldn't we consider the actual current player instead of the best two players in influence?
         if (computePlayerInfluence(sortedPlayers.get(0)) > computePlayerInfluence(
                 sortedPlayers.get(1)))
         {
@@ -216,8 +215,6 @@ public class Game
                     if (p.getColor().equals(t.getColor()))
                         p.getBoard().addTower(t);
                 });
-
-
             });
 
             // Move the influencer's towers to the island
@@ -301,6 +298,8 @@ public class Game
         studentBag.add(new Student(SchoolColor.RED));
         studentBag.add(new Student(SchoolColor.YELLOW));
         studentBag.add(new Student(SchoolColor.YELLOW));
+
+        //TODO: Check if mother nature is there or in the opposite island
         IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.get(i)
                 .addStudent(studentBag.remove(getRandomNumber(0, studentBag.size()))));
 
@@ -317,6 +316,7 @@ public class Game
             professors.add(new Professor(color));
 
         // 7. Each player takes a school board when they are added to the game
+        //TODO: We suppose that at this method call the players are already populated
 
         // 8. Each players takes 8 or 6 towers
         players.forEach(p -> {
