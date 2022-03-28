@@ -45,7 +45,7 @@ public class GrandmaHerbs extends CharacterCard
     public void applyAction()
     {}
 
-    // TODO ADD THIS TO UML. THE METHOD computeInfluence ALREADY VERIFIES IF THERE IS A NO ENTRY
+    // TODO THE METHOD computeInfluence ALREADY VERIFIES IF THERE IS A NO ENTRY
     // TILE
     // BUT THIS TILE HAS TO RETURN TO THE CARD ONCE USED, SO THE CARD HAS TO CHECK THAT OPTION
     @Override

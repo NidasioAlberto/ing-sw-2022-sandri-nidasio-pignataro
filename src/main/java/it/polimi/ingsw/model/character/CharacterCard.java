@@ -13,7 +13,7 @@ import java.util.Optional;
  * This class defines the abstraction of a Character card. A Character card can be played by a
  * player in every moment of his turn paying a price (this price increases the first time the card
  * is played). The card affects the game flow, the game mechanics or both of them, so it is
- * implemented using a decorator patter of the Game class.
+ * implemented using a decorator pattern of the Game class.
  */
 public abstract class CharacterCard extends Game
 {
@@ -88,7 +88,7 @@ public abstract class CharacterCard extends Game
     /**
      * Method to deactivate the card effect. Deactivated => the methods are pass through
      */
-    private void deactivate()
+    protected void deactivate()
     {
         this.activated = false;
     }

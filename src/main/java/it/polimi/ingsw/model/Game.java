@@ -422,6 +422,14 @@ public class Game
     }
 
     /**
+     * TODO
+     */
+    public Student getStudentFromBag() {
+        //deve anche rimuoverlo
+    }
+    public void addStudentToBag(Student student){}
+
+    /**
      * TODO!
      */
     public Optional<GameAction> getGameAction()

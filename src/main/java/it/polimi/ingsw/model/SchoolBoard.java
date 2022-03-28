@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class represents the school board. Every player has one of these, it represents the internal
@@ -179,7 +180,7 @@ public class SchoolBoard
      * @param student the student that has to be added to the dining room
      * @throws NullPointerException Thrown if the student passed is null
      */
-    private void addStudentToDiningRoom(Student student) throws NullPointerException
+    public void addStudentToDiningRoom(Student student) throws NullPointerException
     {
         if (student == null)
             throw new NullPointerException("[SchoolBoard] Null student");
@@ -203,6 +204,25 @@ public class SchoolBoard
         if (student != null && entrance.contains(student))
         {
             entrance.remove(student);
+        }
+    }
+
+    /**
+     * Removes the student from the dining room.
+     *
+     * @param color the color of the student that has to be removed from the dining room
+     * @return the student removed
+     */
+    public Optional<Student> removeStudentFromDining(SchoolColor color)
+    {
+        // Checks if not null and there is at least one student of that color in dining
+        if (color != null && diningRoom.get(color) != null && diningRoom.get(color).size() > 0)
+        {
+            return Optional.of(diningRoom.get(color).remove(diningRoom.get(color).size()-1));
+        }
+        else
+        {
+            return Optional.empty();
         }
     }
 

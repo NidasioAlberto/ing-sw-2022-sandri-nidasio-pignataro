@@ -18,6 +18,11 @@ public class Island
     private List<IslandTile> tiles;
 
     /**
+     * Number of no entry tiles on this island
+     */
+    private int noEntryTiles;
+
+    /**
      * Constructor
      */
     public Island()
@@ -27,6 +32,8 @@ public class Island
 
         // Add the first tile
         tiles.add(new IslandTile());
+
+        noEntryTiles = 0;
     }
 
     /**

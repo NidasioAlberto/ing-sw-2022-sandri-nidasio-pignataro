@@ -28,7 +28,6 @@ public class Player
     /**
      * The player's color is associated with the color of the towers in his school board.
      */
-    // TODO: volendo si può ricavare dalla schoolBoard chiamando getTowers e poi getColor
     private TowerColor color;
 
     /**
@@ -47,9 +46,9 @@ public class Player
     private int selectedIsland;
 
     /**
-     * The student color selected by the player during an action.
+     * The student colors selected by the player during an action.
      */
-    private SchoolColor selectedColor;
+    private List<SchoolColor> selectedColors;
 
     /**
      * The cloud tile selected by the player at the end of the action phase.
@@ -62,6 +61,7 @@ public class Player
         coins = 0;
         this.board = board;
         cards = new ArrayList<AssistantCard>();
+        selectedColors = new ArrayList<SchoolColor>();
     }
 
     /**
@@ -182,7 +182,15 @@ public class Player
         if (color == null)
             throw new NullPointerException("[Player] A null color was provided");
 
-        selectedColor = color;
+        selectedColors.add(color);
+    }
+
+    /**
+     * Method to remove all the colors the player has selected.
+     */
+    public void clearSelectedColors()
+    {
+        selectedColors.clear();
     }
 
     /**
@@ -215,9 +223,9 @@ public class Player
         return selectedIsland;
     }
 
-    public SchoolColor getSelectedColor()
+    public List<SchoolColor> getSelectedColors()
     {
-        return selectedColor;
+        return new ArrayList<>(selectedColors);
     }
 
     public int getSelectedCloudTile()
