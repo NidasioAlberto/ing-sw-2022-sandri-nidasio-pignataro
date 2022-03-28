@@ -35,8 +35,7 @@ public class Game
 
     protected Optional<Integer> currentCharacterCardIndex;
 
-    protected GameAction previousAction;
-
+    protected Optional<GameAction> previousAction;
 
     public Game()
     {
@@ -49,6 +48,7 @@ public class Game
         currentPlayerIndex = Optional.of(null);
         motherNatureIndex = Optional.of(null);
         currentCharacterCardIndex = Optional.of(null);
+        previousAction = Optional.of(null);
     }
 
     /**
@@ -81,8 +81,8 @@ public class Game
     /**
      * Returns the currently selected player, if any.
      * 
-     * TODO: forse non è il caso di esporre il player direttamente, e una copia non mi sembra il
-     * caso. Forse dobbiamo ritornare il nickname?
+     * TODO: Forse non è il caso di esporre il player direttamente, e una copia non mi sembra il
+     * caso. Magari dobbiamo ritornare il nickname?
      */
     public Optional<Player> getSelectedPlayer()
     {
@@ -99,12 +99,19 @@ public class Game
      * Return the players list sorted by their turn order based on the played assistant cards. TODO:
      * Ci deve essere un modo più bello per fare il sort e ritornare una nuova lista.
      */
-    public List<Player> getSortedPlayerList()
+    public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
         List<Player> sortedList = new ArrayList<>(players);
 
-        sortedList.sort((a, b) -> a.getCardsList().get(a.getSelectedCard()).getTurnOrder()
-                - b.getCardsList().get(b.getSelectedCard()).getTurnOrder());
+        try
+        {
+            sortedList.sort((a, b) -> a.getCardsList().get(a.getSelectedCard().orElseThrow())
+                    .getTurnOrder()
+                    - b.getCardsList().get(b.getSelectedCard().orElseThrow()).getTurnOrder());
+        } catch (NoSuchElementException e)
+        {
+            throw new NoSuchElementException("[Game] One of the players have not selected a card");
+        }
         return sortedList;
     }
 
@@ -118,8 +125,8 @@ public class Game
 
     /**
      * Moves a student of the specified color from the bag to the specified island. If the student
-     * or the island are not found, an exception is thrown.
-     * TODO: This method refers to moving an island from the current player SchoolBoard
+     * or the island are not found, an exception is thrown. TODO: This method refers to moving an
+     * island from the current player SchoolBoard
      */
     public void moveStudentToIsland(SchoolColor color, int islandIndex)
             throws NoSuchElementException
@@ -273,7 +280,73 @@ public class Game
      */
     public boolean isValidAction(GameAction action)
     {
-        return false;
+        // A player must be selected all al cases
+        Optional<Player> currentPlayer = getSelectedPlayer();
+        if (currentPlayer.isEmpty())
+            return false;
+
+        switch (action)
+        {
+            case PLAY_ASSISTANT_CARD:
+            {
+                // To play an assistant card no previous action has to be played
+                if (previousAction.isPresent())
+                    return false;
+
+                // The player must have not already selected a assistant card
+                return currentPlayer.get().getSelectedCard().isEmpty();
+            }
+            case MOVE_STUDENT_FROM_ENTRANCE_TO_DINING:
+            case MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND:
+            {
+                // An action must have already been played
+                if (previousAction.isEmpty())
+                    return false;
+
+                // The previous action must be one of the 3 following action
+                GameAction prevAction = previousAction.get();
+                if (!prevAction.equals(GameAction.PLAY_ASSISTANT_CARD)
+                        && !prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
+                        && !prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
+                    return false;
+
+                // The player must not already have moved all the allowed students
+                SchoolBoard currentBoard = currentPlayer.get().getBoard();
+                return currentBoard.getRemainingMovableStudentsInEntrance() != 0;
+            }
+            case MOVE_MOTHER_NATURE:
+            {
+                // An action must have already been played
+                if (previousAction.isEmpty())
+                    return false;
+
+                // The previous action must be one of the 2 following action
+                GameAction prevAction = previousAction.get();
+                if (!prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
+                        && !prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
+                    return false;
+
+                // The player must have moved all of its students
+                SchoolBoard currentBoard = currentPlayer.get().getBoard();
+                return currentBoard.getRemainingMovableStudentsInEntrance() == 0;
+            }
+            case SELECT_CLOUD_TILE:
+            {
+                // An action must have already been played
+                if (previousAction.isEmpty())
+                    return false;
+
+                // The previous must be MOVE_MOTHER_NATURE
+                GameAction prevAction = previousAction.get();
+                return prevAction.equals(GameAction.MOVE_MOTHER_NATURE);
+            }
+            case PLAY_CHARACTER_CARD:
+                // A character card only needs a player to be selected
+                // TODO: Is it true?
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -299,7 +372,7 @@ public class Game
         studentBag.add(new Student(SchoolColor.YELLOW));
         studentBag.add(new Student(SchoolColor.YELLOW));
 
-        //TODO: Check if mother nature is there or in the opposite island
+        // TODO: Check if mother nature is there or in the opposite island
         IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.get(i)
                 .addStudent(studentBag.remove(getRandomNumber(0, studentBag.size()))));
 
@@ -316,7 +389,7 @@ public class Game
             professors.add(new Professor(color));
 
         // 7. Each player takes a school board when they are added to the game
-        //TODO: We suppose that at this method call the players are already populated
+        // TODO: We suppose that at this method call the players are already populated
 
         // 8. Each players takes 8 or 6 towers
         players.forEach(p -> {
@@ -327,7 +400,7 @@ public class Game
         });
 
         // 9. Each player gets a deck of cards
-        // TODO: The wizard are assigned automatically!
+        // TODO: The wizard are assigned automatically! Is it correct?
         players.forEach(p -> {
             IntStream.range(0, ASSISTANT_CARDS_DECK_SIZE).forEach(i -> p.addCard(
                     new AssistantCard(Wizard.values()[players.indexOf(p)], i + 1, i / 2 + 1)));

@@ -1,62 +1,61 @@
 package it.polimi.ingsw.model;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.ArrayList;
 
 /**
- * This class represent one of the game's player
+ * This class represent one of the game's player.
  */
 public class Player
 {
     /**
-     * The nickname of the player
+     * The nickname of the player.
      */
     private String nickname;
 
     /**
-     * The school board of the player
+     * The school board of the player.
      */
     private SchoolBoard board;
 
     /**
-     * The list of assistant card that the player can still play
+     * The list of assistant card that the player can still play.
      */
     private List<AssistantCard> cards;
 
     /**
-     * The player's color is associated with the color of the towers in his school board
+     * The player's color is associated with the color of the towers in his school board.
      */
-    // volendo si può ricavare dalla schoolBoard chiamando getTowers e poi getColor
+    // TODO: volendo si può ricavare dalla schoolBoard chiamando getTowers e poi getColor
     private TowerColor color;
 
     /**
-     * The number of coins that player has in order to play character cards
+     * The number of coins that player has in order to play character cards.
      */
     private int coins;
 
     /**
-     * The assistant card selected by the player during the planning phase
+     * The assistant card selected by the player during the planning phase.
      */
-    private int selectedCard;
+    private Optional<Integer> selectedCard;
 
     /**
-     * The island selected by the player during an action
+     * The island selected by the player during an action.
      */
     private int selectedIsland;
 
     /**
-     * The student color selected by the player during an action
+     * The student color selected by the player during an action.
      */
     private SchoolColor selectedColor;
 
     /**
-     * The cloud tile selected by the player at the end of the action phase
+     * The cloud tile selected by the player at the end of the action phase.
      */
     private int selectedCloudTile;
 
-    /**
-     * Constructor
-     */
     public Player(String nickname, SchoolBoard board)
     {
         this.nickname = nickname;
@@ -66,10 +65,10 @@ public class Player
     }
 
     /**
-     * Method to add coins
+     * Method to add coins to the player.
      * 
-     * @param coins The number of coins to be added
-     * @throws IllegalArgumentException Thrown if the parameter is negative
+     * @param coins The number of coins to be added.
+     * @throws IllegalArgumentException Thrown if the parameter is negative.
      */
     public void addCoins(int coins) throws IllegalArgumentException
     {
@@ -80,10 +79,10 @@ public class Player
     }
 
     /**
-     * Method to remove coins
+     * Method to remove coins from the player.
      * 
-     * @param coins The number of coins to remove
-     * @throws IllegalArgumentException Thrown if the parameter is higher than the player's coins
+     * @param coins The number of coins to remove.
+     * @throws IllegalArgumentException Thrown if the parameter is higher than the player's coins.
      */
     public void removeCoins(int coins) throws IllegalArgumentException
     {
@@ -94,18 +93,18 @@ public class Player
     }
 
     /**
-     * Method to select an AssistantCard during the planning phase
+     * Method to select an AssistantCard during the planning phase.
      * 
-     * @param turnOrder The number of turn of the card
-     * @throws IllegalArgumentException Thrown if the player hasn't got the selected card
+     * @param turnOrder The number of turn of the card.
+     * @throws IllegalArgumentException Thrown if the player hasn't got the selected card.
      */
-    public void selectCard(int turnOrder) throws IllegalArgumentException
+    public void selectCard(Integer turnOrder) throws IllegalArgumentException
     {
         for (int i = 0; i < cards.size(); i++)
         {
             if (cards.get(i).getTurnOrder() == turnOrder)
             {
-                selectedCard = i;
+                selectedCard = Optional.of(i);
                 return;
             }
         }
@@ -113,30 +112,30 @@ public class Player
     }
 
     /**
-     * Method to add an AssistantCard to the player
-     * @param card The card to be added
-     * @throws NullPointerException Thrown if the card is null
+     * Method to add an AssistantCard to the player.
+     * 
+     * @param card The card to be added.
+     * @throws NullPointerException Thrown if the card is null.
      */
     public void addCard(AssistantCard card) throws NullPointerException
     {
-        if(card == null)
+        if (card == null)
             throw new NullPointerException("[Player] Null Assistant card");
 
-        if(cards.isEmpty())
+        if (cards.isEmpty())
         {
             cards.add(card);
-        }
-        else if(cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
+        } else if (cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
         {
             cards.add(card);
         }
     }
 
     /**
-     * Method to remove an AssistantCard from the player's list of cards
+     * Method to remove an AssistantCard from the player's list of cards.
      * 
-     * @param turnOrder The number of turn of the card
-     * @throws IllegalArgumentException Thrown if the player hasn't got the selected card
+     * @param turnOrder The number of turn of the card.
+     * @throws IllegalArgumentException Thrown if the player doesn't have the selected card.
      */
     public void removeCard(int turnOrder) throws IllegalArgumentException
     {
@@ -152,9 +151,20 @@ public class Player
     }
 
     /**
-     * Method to select an island
+     * Removes the currently selected card or throws an error.
+     */
+    public void removeSelectedCard() throws NoSuchElementException
+    {
+        Integer cardTurnOrder = selectedCard.orElseThrow(() -> new NoSuchElementException(
+                "[Player] The player currently doesn't have a selected card"));
+
+        removeCard(cardTurnOrder);
+    }
+
+    /**
+     * Method to select an island.
      * 
-     * @param island The index of the island
+     * @param island The index of the island.
      */
     public void selectIsland(int island)
     {
@@ -162,10 +172,10 @@ public class Player
     }
 
     /**
-     * Method to select a color among SchoolColor
+     * Method to select a color among SchoolColor.
      * 
-     * @param color The color selected
-     * @throws NullPointerException Thrown if the specified color is invalid
+     * @param color The color selected.
+     * @throws NullPointerException Thrown if the specified color is invalid.
      */
     public void selectColor(SchoolColor color) throws NullPointerException
     {
@@ -176,18 +186,15 @@ public class Player
     }
 
     /**
-     * Method to select a CloudTile during the last phase of the action phase
+     * Method to select a CloudTile during the last phase of the action phase.
      * 
-     * @param tile The index of the CloudTile
+     * @param tile The index of the CloudTile.
      */
     public void selectCloudTile(int tile)
     {
         selectedCloudTile = tile;
     }
 
-    /**
-     * Getters
-     */
     public String getNickname()
     {
         return nickname;
@@ -198,7 +205,7 @@ public class Player
         return board;
     }
 
-    public int getSelectedCard()
+    public Optional<Integer> getSelectedCard()
     {
         return selectedCard;
     }

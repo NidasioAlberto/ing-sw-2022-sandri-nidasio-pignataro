@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.exceptions;
 
-/**
- * The TooManyPlayersException
- */
 public class TooManyPlayersException extends Exception
 {
     private int currentPlayersNumber;

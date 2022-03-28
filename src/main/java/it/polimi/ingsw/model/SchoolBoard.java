@@ -244,4 +244,10 @@ public class SchoolBoard
     {
         return diningRoom.get(color).size();
     }
+
+    public int getRemainingMovableStudentsInEntrance()
+    {
+        int movableStudents = MAX_STUDENTS_ENTRANCE == 7 ? 3 : 4;
+        return movableStudents - (MAX_STUDENTS_ENTRANCE - entrance.size());
+    }
 }
