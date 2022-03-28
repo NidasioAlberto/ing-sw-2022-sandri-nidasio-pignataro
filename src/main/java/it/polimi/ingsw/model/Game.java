@@ -417,7 +417,8 @@ public class Game
 
     private int getRandomNumber(int startInclusive, int endExclusive)
     {
-        return (int) Math.round(startInclusive + Math.random() * ISLAND_TILES_NUMBER - 0.5);
+        return (int) Math
+                .round(startInclusive + Math.random() * (startInclusive - endExclusive) - 0.5);
     }
 
     /**
