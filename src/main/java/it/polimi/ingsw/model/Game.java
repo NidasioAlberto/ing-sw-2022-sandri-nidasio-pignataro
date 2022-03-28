@@ -424,9 +424,9 @@ public class Game
     /**
      * TODO!
      */
-    public GameAction getGameAction()
+    public Optional<GameAction> getGameAction()
     {
-        return GameAction.MOVE_MOTHER_NATURE;
+        return previousAction;
     }
 
     /**
