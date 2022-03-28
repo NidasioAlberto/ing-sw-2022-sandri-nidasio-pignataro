@@ -124,43 +124,10 @@ public class Game
     }
 
     /**
-     * Moves a student of the specified color from the bag to the specified island. If the student
-     * or the island are not found, an exception is thrown. TODO: This method refers to moving an
-     * island from the current player SchoolBoard
+     * Moves a student of the color selected by the current player from his entrance
+     * to the selected island. If the student or the island are not found, an exception is thrown.
      */
-    public void moveStudentToIsland(SchoolColor color, int islandIndex)
-            throws NoSuchElementException
-    {
-        Student student;
-
-        // Extract a student with the specified color from the bag
-        try
-        {
-            student = studentBag.stream().filter(s -> s.getColor().equals(color)).findFirst().get();
-        } catch (NoSuchElementException e)
-        {
-            throw new NoSuchElementException(
-                    "[Game] There is not student in the bag with color " + color.toString());
-        }
-
-        // Move the student to the island
-        try
-        {
-
-            islands.get(islandIndex).addStudent(student);
-        } catch (IndexOutOfBoundsException e)
-        {
-            throw new NoSuchElementException("[Game] There is no island with index " + islandIndex);
-        }
-    }
-
-    /**
-     * Moves a student of the specified color from the current player's entrance to his dining room.
-     * If the player doesn't have a student with the specified color in his entrance, an exception
-     * is thrown.
-     */
-    public void moveStudentToDining(SchoolColor color)
-            throws NoSuchElementException, NullPointerException
+    public void moveStudentToIsland() throws NoSuchElementException
     {
         Student student;
 
@@ -169,10 +136,44 @@ public class Game
                 .orElseThrow(() -> new NoSuchElementException(
                         "[Game] Unable to get the current player's board, is a player selected?"));
 
-        // Get the student from the current player's entrance
-        student = board.getStudentsInEntrance().stream().filter(s -> s.getColor().equals(color))
+        // Get the selected student from the current player's entrance
+        student = board.getStudentsInEntrance().stream().filter(s -> s.getColor().equals(getSelectedPlayer()
+                        .get().getSelectedColors().get(0)))
                 .findFirst().orElseThrow(() -> new NoSuchElementException(
-                        "[Game] No students of the specified color inside the current student's entrance"));
+                        "[Game] No students of the specified color inside the current player's entrance"));
+
+        board.removeStudentFromEntrance(student);
+
+        // Move the student to the island
+        try
+        {
+            islands.get(getSelectedPlayer().get().getSelectedIsland()).addStudent(student);
+        } catch (IndexOutOfBoundsException e)
+        {
+            throw new NoSuchElementException("[Game] There is no island with the selected index");
+        }
+    }
+
+    /**
+     * Moves a student of the color selected by the current player from his entrance to his dining room.
+     * If the player doesn't have a student with the specified color in his entrance, an exception is thrown.
+     */
+    public void moveStudentToDining() throws NoSuchElementException, NullPointerException
+    {
+        Student student;
+
+        // Retrieve the current player's board
+        SchoolBoard board = getSelectedPlayer().map(p -> p.getBoard())
+                .orElseThrow(() -> new NoSuchElementException(
+                        "[Game] Unable to get the current player's board, is a player selected?"));
+
+        // Get the selected student from the current player's entrance
+        student = board.getStudentsInEntrance().stream().filter(s -> s.getColor().equals(getSelectedPlayer()
+                        .get().getSelectedColors().get(0)))
+                .findFirst().orElseThrow(() -> new NoSuchElementException(
+                        "[Game] No students of the specified color inside the current player's entrance"));
+
+        board.removeStudentFromEntrance(student);
 
         // Move the student
         board.moveStudentToDining(student);
@@ -259,20 +260,19 @@ public class Game
     }
 
     /**
-     * Moves the students from the given cloud tile to the current player's entrance.
+     * Moves the students from the cloud tile selected by the current player to his entrance.
      */
-    public void moveStudentsFromCloudTile(int tileIndex)
+    public void moveStudentsFromCloudTile()
     {
-        CloudTile cloudTile = cloudTiles.get(tileIndex);
+        CloudTile cloudTile = cloudTiles.get(getSelectedPlayer().orElseThrow(() -> new NoSuchElementException(
+                "[Game] Unable to get the current player, is a player selected?")).getSelectedCloudTile());
 
         // Remove the students from the cloud tile
         List<Student> students = cloudTile.getStudentsList();
         cloudTile.removeStudents();
 
         // Put them in the current player's entrance
-        Player player = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException(
-                "[Game] Unable to get the current player, is a player selected?"));
-        students.forEach(s -> player.getBoard().addStudentToEntrance(s));
+        students.forEach(s -> getSelectedPlayer().get().getBoard().addStudentToEntrance(s));
     }
 
     /**

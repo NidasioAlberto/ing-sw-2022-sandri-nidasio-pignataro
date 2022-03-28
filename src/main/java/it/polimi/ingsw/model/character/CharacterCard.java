@@ -133,14 +133,14 @@ public abstract class CharacterCard extends Game
         return instance.getPlayerTableList();
     }
 
-    public void moveStudentToIsland(SchoolColor color, int islandIndex)
+    public void moveStudentToIsland()
     {
-        instance.moveStudentToIsland(color, islandIndex);
+        instance.moveStudentToIsland();
     }
 
-    public void moveStudentToDining(SchoolColor color)
+    public void moveStudentToDining()
     {
-        instance.moveStudentToDining(color);
+        instance.moveStudentToDining();
     }
 
     public void moveMotherNature(int steps)
@@ -154,9 +154,9 @@ public abstract class CharacterCard extends Game
         instance.computeInfluence();
     }
 
-    public void moveStudentsFromCloudTile(int tileIndex)
+    public void moveStudentsFromCloudTile()
     {
-        instance.moveStudentsFromCloudTile(tileIndex);
+        instance.moveStudentsFromCloudTile();
     }
 
     // TODO TALK ABOUT WHAT THIS METHOD SHOULD DO
