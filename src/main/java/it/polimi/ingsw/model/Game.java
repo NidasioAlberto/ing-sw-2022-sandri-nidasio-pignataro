@@ -374,11 +374,11 @@ public class Game
 
         // TODO: Check if mother nature is there or in the opposite island
         IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.get(i)
-                .addStudent(studentBag.remove(getRandomNumber(0, studentBag.size()))));
+                .addStudent(getStudentFromBag()));
 
         // 4. Populate the bag with the remaining students
         for (SchoolColor color : SchoolColor.values())
-            IntStream.range(0, 24).forEach(i -> studentBag.add(new Student(color)));
+            IntStream.range(0, 24).forEach(i -> addStudentToBag(new Student(color)));
 
         // 5. Place the cloud tiles
         IntStream.range(0, players.size())
@@ -409,8 +409,7 @@ public class Game
         // 10. Each player gets 7 or 9 students in his entrance
         players.forEach(p -> {
             IntStream.range(0, players.size() != 3 ? 7 : 9).forEach(i -> {
-                p.getBoard().addStudentToEntrance(
-                        studentBag.get(getRandomNumber(0, studentBag.size())));
+                p.getBoard().addStudentToEntrance(getStudentFromBag());
             });
         });
     }
@@ -421,13 +420,27 @@ public class Game
                 .round(startInclusive + Math.random() * (startInclusive - endExclusive) - 0.5);
     }
 
+    //TODO forse dovrebbe lanciare una eccezione quando sono finiti gli studenti
+    // così si sa che la partita deve terminare
     /**
-     * TODO
+     * Returns a random student from the bag.
+     *
+     * @return the student extracted from the bag.
      */
-    public Student getStudentFromBag() {
-        //deve anche rimuoverlo
+    public Student getStudentFromBag()
+    {
+        return studentBag.remove(getRandomNumber(0, studentBag.size()));
     }
-    public void addStudentToBag(Student student){}
+
+    /**
+     * Add a student to the bag.
+     *
+     * @param student to be added to the bag.
+     */
+    public void addStudentToBag(Student student)
+    {
+        studentBag.add(student);
+    }
 
     /**
      * TODO!
