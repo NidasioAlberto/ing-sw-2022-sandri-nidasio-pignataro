@@ -124,30 +124,22 @@ public class Game
     }
 
     /**
-     * Moves a student of the color selected by the current player from his entrance
-     * to the selected island. If the student or the island are not found, an exception is thrown.
+     * Puts the student passed via parameter inside the selected island.
+     * If the student or the island are not found, an exception is thrown.
+     * @param student The student to be added to the Entrance
+     * @throws NoSuchElementException if a player or an island is not selected
      */
-    public void moveStudentToIsland() throws NoSuchElementException
+    public void putStudentToIsland(Student student) throws NoSuchElementException
     {
-        Student student;
-
-        // Retrieve the current player's board
-        SchoolBoard board = getSelectedPlayer().map(p -> p.getBoard())
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[Game] Unable to get the current player's board, is a player selected?"));
-
-        // Get the selected student from the current player's entrance
-        student = board.getStudentsInEntrance().stream().filter(s -> s.getColor().equals(getSelectedPlayer()
-                        .get().getSelectedColors().get(0)))
-                .findFirst().orElseThrow(() -> new NoSuchElementException(
-                        "[Game] No students of the specified color inside the current player's entrance"));
-
-        board.removeStudentFromEntrance(student);
-
         // Move the student to the island
         try
         {
-            islands.get(getSelectedPlayer().get().getSelectedIsland()).addStudent(student);
+            islands.get(getSelectedPlayer().orElseThrow(
+                    () -> new NoSuchElementException("[Game] No selected player"))
+                    .getSelectedIsland()
+                    .orElseThrow(
+                            () -> new NoSuchElementException("[Game] No selected island")))
+                    .addStudent(student);
         } catch (IndexOutOfBoundsException e)
         {
             throw new NoSuchElementException("[Game] There is no island with the selected index");
@@ -155,28 +147,44 @@ public class Game
     }
 
     /**
-     * Moves a student of the color selected by the current player from his entrance to his dining room.
-     * If the player doesn't have a student with the specified color in his entrance, an exception is thrown.
+     * Puts the student passed via parameter inside the dining room.
+     * If the student or the island are not found, an exception is thrown.
+     * @param student The student to be added to the Dining room
+     * @throws NoSuchElementException if a player or an island is not selected
      */
-    public void moveStudentToDining() throws NoSuchElementException, NullPointerException
+    public void putStudentToDining(Student student) throws NoSuchElementException, NullPointerException
     {
-        Student student;
-
-        // Retrieve the current player's board
-        SchoolBoard board = getSelectedPlayer().map(p -> p.getBoard())
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[Game] Unable to get the current player's board, is a player selected?"));
-
-        // Get the selected student from the current player's entrance
-        student = board.getStudentsInEntrance().stream().filter(s -> s.getColor().equals(getSelectedPlayer()
-                        .get().getSelectedColors().get(0)))
-                .findFirst().orElseThrow(() -> new NoSuchElementException(
-                        "[Game] No students of the specified color inside the current player's entrance"));
-
-        board.removeStudentFromEntrance(student);
-
         // Move the student
-        board.moveStudentToDining(student);
+        getSelectedPlayer().orElseThrow(
+                () -> new NoSuchElementException("[Game] No selected player")
+        ).getBoard().addStudentToDiningRoom(student);
+    }
+
+    /**
+     * Takes the student from the selected player's entrance and removes it
+     * @return The student of the selected color
+     */
+    public Student pickStudentFromEntrance() throws NoSuchElementException
+    {
+        //Get the player selected color
+        SchoolColor selectedColor = getSelectedPlayer().orElseThrow(
+                () -> new NoSuchElementException("[Game] No selected player")
+                ).getSelectedColors().stream().findFirst().orElseThrow(
+                () -> new NoSuchElementException("[Game] No selected color")
+        );
+
+        //Get the student instance to be removed and returned
+        Student result = getSelectedPlayer().get()
+                .getBoard().getStudentsInEntrance().stream()
+                .filter(s -> s.getColor() == selectedColor)
+                .findFirst().orElseThrow(
+                () -> new NoSuchElementException("[Game] No selected student in entrance")
+        );
+
+        //Remove the instance from the entrance
+        getSelectedPlayer().get().getBoard().removeStudentFromEntrance(result);
+
+        return result;
     }
 
     /**
@@ -261,11 +269,16 @@ public class Game
 
     /**
      * Moves the students from the cloud tile selected by the current player to his entrance.
+     * @throws NoSuchElementException Thrown if the player or the cloud tile is not selected
      */
-    public void moveStudentsFromCloudTile()
+    public void moveStudentsFromCloudTile() throws NoSuchElementException
     {
-        CloudTile cloudTile = cloudTiles.get(getSelectedPlayer().orElseThrow(() -> new NoSuchElementException(
-                "[Game] Unable to get the current player, is a player selected?")).getSelectedCloudTile());
+        CloudTile cloudTile = cloudTiles.get(getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException(
+                "[Game] Unable to get the current player, is a player selected?"))
+                .getSelectedCloudTile().orElseThrow(
+                        () -> new NoSuchElementException("[Game] No Cloud Tile selected")
+                ));
 
         // Remove the students from the cloud tile
         List<Student> students = cloudTile.getStudentsList();
@@ -341,9 +354,11 @@ public class Game
                 return prevAction.equals(GameAction.MOVE_MOTHER_NATURE);
             }
             case PLAY_CHARACTER_CARD:
-                // A character card only needs a player to be selected
-                // TODO: Is it true?
-                return true;
+                //TODO REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
+                if(currentCharacterCardIndex.isEmpty())
+                    return true;
+                else
+                    return false;
             default:
                 return false;
         }

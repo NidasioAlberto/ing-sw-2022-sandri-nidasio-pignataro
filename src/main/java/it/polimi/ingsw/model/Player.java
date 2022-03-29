@@ -43,7 +43,7 @@ public class Player
     /**
      * The island selected by the player during an action.
      */
-    private int selectedIsland;
+    private Optional<Integer> selectedIsland;
 
     /**
      * The student colors selected by the player during an action.
@@ -53,7 +53,7 @@ public class Player
     /**
      * The cloud tile selected by the player at the end of the action phase.
      */
-    private int selectedCloudTile;
+    private Optional<Integer> selectedCloudTile;
 
     public Player(String nickname, SchoolBoard board)
     {
@@ -168,7 +168,7 @@ public class Player
      */
     public void selectIsland(int island)
     {
-        selectedIsland = island;
+        selectedIsland = Optional.of(island);
     }
 
     /**
@@ -200,7 +200,7 @@ public class Player
      */
     public void selectCloudTile(int tile)
     {
-        selectedCloudTile = tile;
+        selectedCloudTile = Optional.of(tile);
     }
 
     public String getNickname()
@@ -218,7 +218,7 @@ public class Player
         return selectedCard;
     }
 
-    public int getSelectedIsland()
+    public Optional<Integer> getSelectedIsland()
     {
         return selectedIsland;
     }
@@ -228,7 +228,7 @@ public class Player
         return new ArrayList<>(selectedColors);
     }
 
-    public int getSelectedCloudTile()
+    public Optional<Integer> getSelectedCloudTile()
     {
         return selectedCloudTile;
     }

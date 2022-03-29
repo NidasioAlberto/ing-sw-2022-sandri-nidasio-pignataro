@@ -1,12 +1,10 @@
 package it.polimi.ingsw.model.character;
 
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.GameAction;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -75,7 +73,7 @@ public abstract class CharacterCard extends Game
      * IMPORTANT: This method has to be called after the corresponding action is thrown.
      * It acts with the ALREADY selected objects in the player instance.
      */
-    public abstract void applyAction();
+    public abstract void applyAction() throws NoSuchElementException;
 
     /**
      * Method to activate the card effect. Activated => the methods are not pass through
@@ -83,6 +81,8 @@ public abstract class CharacterCard extends Game
     public void activate()
     {
         this.activated = true;
+        //Clear the prev action
+        this.previousAction = Optional.empty();
     }
 
     /**
@@ -133,14 +133,15 @@ public abstract class CharacterCard extends Game
         return instance.getPlayerTableList();
     }
 
-    public void moveStudentToIsland()
+    public Student pickStudentFromEntrance() { return instance.pickStudentFromEntrance(); }
+    public void putStudentToIsland(Student student)
     {
-        instance.moveStudentToIsland();
+        instance.putStudentToIsland(student);
     }
 
-    public void moveStudentToDining()
+    public void putStudentToDining(Student student)
     {
-        instance.moveStudentToDining();
+        instance.putStudentToDining(student);
     }
 
     public void moveMotherNature(int steps)
@@ -167,7 +168,7 @@ public abstract class CharacterCard extends Game
     // TODO WHAT DOES THIS METHOD DO?
     // public int getStudentsToMove() { return instance.getStudentsToMove(); }
 
-    public GameAction getGameAction()
+    public Optional<GameAction> getGameAction()
     {
         return instance.getGameAction();
     }
