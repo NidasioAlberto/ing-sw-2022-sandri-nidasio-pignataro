@@ -488,4 +488,9 @@ public class Game
             return Optional.empty();
         }
     }
+
+    public Optional<GameAction> getPreviousAction()
+    {
+        return previousAction;
+    }
 }

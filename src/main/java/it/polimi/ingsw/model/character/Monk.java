@@ -79,7 +79,7 @@ public class Monk extends CharacterCard
         Student selectedStudent = students.stream()
                 .filter(s -> s.getColor() == selectedColor)
                 .findFirst().orElseThrow(
-                        () -> new NoSuchElementException("[Monk] No suck student on card")
+                        () -> new NoSuchElementException("[Monk] No such student on card")
                 );
 
         //Put the student to the island

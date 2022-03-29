@@ -55,7 +55,7 @@ public abstract class CharacterCard extends Game
      * 
      * @return boolean that indicates the result
      */
-    public abstract boolean isPlayable();
+    public abstract boolean isPlayable() throws NoSuchElementException;
 
     /**
      * This is a critical method for the entire game. Based on the actual game state it decides

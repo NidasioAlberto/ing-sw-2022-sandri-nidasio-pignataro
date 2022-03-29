@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.character;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 
+import java.util.NoSuchElementException;
+
 /**
  * Character card Knight. Effect: During the influence calculation this turn, you count as having 2
  * more influence.
@@ -24,20 +26,30 @@ public class Knight extends CharacterCard
     }
 
     @Override
-    public boolean isPlayable()
+    public boolean isPlayable() throws NoSuchElementException
     {
-        return false;
+        GameAction previousAction = instance.getGameAction().orElseThrow(
+                () -> new NoSuchElementException("[Knight] There is no previous action")
+        );
+
+        // This card must be played before the action MOVE_MOTHER_NATURE
+        return previousAction == GameAction.PLAY_ASSISTANT_CARD ||
+                previousAction == GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING ||
+                previousAction == GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND;
     }
 
     @Override
     public boolean isValidAction(GameAction action)
     {
-        return false;
+        // This card doesn't have a connected action
+        return instance.isValidAction(action);
     }
 
     @Override
     public void applyAction()
-    {}
+    {
+        //TODO problema perchè potrebbe essere giocata prima del calcolo dell'influenza
+    }
 
     @Override
     public void computeInfluence()
