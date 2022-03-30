@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.character;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.Island;
+import it.polimi.ingsw.model.Player;
 
 import java.util.NoSuchElementException;
 
@@ -45,16 +47,54 @@ public class Knight extends CharacterCard
         return instance.isValidAction(action);
     }
 
+    //TODO problema perchè potrebbe essere giocata prima del calcolo dell'influenza
     @Override
     public void applyAction()
     {
-        //TODO problema perchè potrebbe essere giocata prima del calcolo dell'influenza
+        GameAction previousAction = instance.getGameAction().orElseThrow(
+                () -> new NoSuchElementException("[Knight] There is no previous action")
+        );
+
+        if(previousAction != GameAction.MOVE_MOTHER_NATURE)
+            return;
+
+        //TODO non so se funziona correttamente chiamando così
+        instance.computeInfluence();
+
+        if (!firstUsed)
+        {
+            cost += 1;
+            firstUsed = true;
+        }
+
+        this.deactivate();
     }
 
+    //TODO problema perchè le varie chiamate non fanno riferimento a instance
     @Override
-    public void computeInfluence()
+    protected int computePlayerInfluence(Player player) throws NoSuchElementException
     {
+        Island currentIsland =
+                islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                        "[Knight] Mother nature is not currently on the table, is the game set up?")));
 
+        // Compute the influence of this player from students
+        int influence = player.getBoard().getProfessors().stream()
+                .map(p -> currentIsland.getStudentsByColor(p.getColor())).reduce(0, Integer::sum);
+
+        // Add the influence from the towers
+        influence += currentIsland.getTowers().stream()
+                .filter(t -> t.getColor().equals(player.getColor())).count();
+
+        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(
+                () -> new NoSuchElementException("[Knight] No selected player")
+        );
+
+        // Effect of the card: the current player gets 2 more influence points
+        if(player == currentPlayer)
+            influence += 2;
+
+        return influence;
     }
 
     @Override

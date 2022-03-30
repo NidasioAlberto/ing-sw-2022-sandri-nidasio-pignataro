@@ -250,7 +250,7 @@ public class Game
     /**
      * Computes the given player influence for the island where mother nature currently is.
      */
-    private int computePlayerInfluence(Player player)
+    protected int computePlayerInfluence(Player player) throws NoSuchElementException
     {
         Island currentIsland =
                 islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
