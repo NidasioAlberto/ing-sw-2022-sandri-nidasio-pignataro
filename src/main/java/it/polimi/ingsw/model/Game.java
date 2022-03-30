@@ -193,7 +193,49 @@ public class Game
      */
     public void conquerProfessors()
     {
+        //Check for every professor if there is a player that has at least a student of the same
+        //color. If the professor is still in this instance it means that no one has a student
+        //of the expected color except from that player
+        for(int i = 0; i < professors.size(); i++)
+        {
+            for(int j = 0; j < players.size(); j++)
+            {
+                //If the player has at least one student of the same color i can assign
+                //the professor to that student
+                if(players.get(j).getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
+                {
+                    players.get(j).getBoard().addProfessor(professors.remove(i));
+                }
+            }
+        }
 
+        //Now I can check who is the player with the most students for every color and the assign the professor
+        for(int i = 0; i < SchoolColor.values().length; i++)
+        {
+            int finalI = i;
+            //Look for the player that has that professor
+            Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
+            //Look for the player with more students for that color
+            Player bestColor   = players.stream().sorted(
+                    (p1, p2) -> p2.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) -
+                    p1.getBoard().getStudentsNumber(SchoolColor.values()[finalI]))
+                    .findFirst().get();
+
+            //If the players differ and don't have the same number of students I move the professor
+            if(currentKing != bestColor && bestColor.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) >
+                currentKing.getBoard().getStudentsNumber(SchoolColor.values()[finalI]))
+            {
+                Professor prof;
+                //I take the instance of the professor to be moved
+                prof = currentKing.getBoard().getProfessors().stream().filter(p -> p.getColor() == SchoolColor.values()[finalI]).findFirst().get();
+
+                //Remove the professor from the king
+                currentKing.getBoard().removeProfessor(prof);
+
+                //Add the professor to the new king
+                bestColor.getBoard().addProfessor(prof);
+            }
+        }
     }
 
     /**

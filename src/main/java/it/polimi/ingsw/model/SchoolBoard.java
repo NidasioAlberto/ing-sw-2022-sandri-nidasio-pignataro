@@ -117,6 +117,17 @@ public class SchoolBoard
     }
 
     /**
+     * Tells if the board has that professor color
+     *
+     * @param color the color to be checked
+     * @return boolean that represents whether there is the professor
+     */
+    public boolean hasProfessor(SchoolColor color)
+    {
+        return !professorTable.stream().filter(p -> p.getColor() == color).findFirst().isEmpty();
+    }
+
+    /**
      * Adds the tower to the list, with maximum of 6 or 8 towers depending on the number of players.
      * 
      * @param tower the tower that has to be added
