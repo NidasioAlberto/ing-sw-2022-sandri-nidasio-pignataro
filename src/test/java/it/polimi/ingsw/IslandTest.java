@@ -56,7 +56,10 @@ public class IslandTest
     @Test
     public void addStudentOnCorrectIslandTest()
     {
-        island.mergeIsland(new Island());
+        island.addTower(new Tower(TowerColor.WHITE));
+        Island island2 = new Island();
+        island2.addTower(new Tower(TowerColor.WHITE));
+        island.mergeIsland(island2);
         Student student = new Student(SchoolColor.BLUE);
         Student student1 = new Student(SchoolColor.GREEN);
         Student student2 = new Student(SchoolColor.PINK);
@@ -97,7 +100,11 @@ public class IslandTest
     @Test
     public void addTowerTest()
     {
-        island.mergeIsland(new Island());
+        island.addTower(new Tower(TowerColor.WHITE));
+        Island island2 = new Island();
+        island2.addTower(new Tower(TowerColor.WHITE));
+        island.mergeIsland(island2);
+        island.removeAllTowers();
         Tower tower = new Tower(TowerColor.BLACK);
         Tower tower1 = new Tower(TowerColor.BLACK);
         Tower tower2 = new Tower(TowerColor.BLACK);
@@ -129,7 +136,7 @@ public class IslandTest
         assertEquals(1, island.getTowers().size());
 
         // Add a tower of different color from the one already present
-        island.addTower(new Tower(TowerColor.WHITE));
+        assertThrows(IllegalArgumentException.class, () -> island.addTower(new Tower(TowerColor.WHITE)));
         assertEquals(tower, island.getIslands().get(0).getTower().get());
         assertTrue(island.getIslands().get(1).getTower().isEmpty());
         assertEquals(tower, island.getTowers().get(0));
@@ -160,13 +167,14 @@ public class IslandTest
     @Test
     public void removeTowerTest()
     {
-        island.mergeIsland(new Island());
         Tower tower = new Tower(TowerColor.BLACK);
         Tower tower1 = new Tower(TowerColor.BLACK);
-
-        // Add two towers
         island.addTower(tower);
-        island.addTower(tower1);
+        Island island2 = new Island();
+        island2.addTower(tower1);
+        island.mergeIsland(island2);
+
+        // At the beginning there are two towers
         assertEquals(tower, island.getIslands().get(0).getTower().get());
         assertEquals(tower1, island.getIslands().get(1).getTower().get());
         assertEquals(tower, island.getTowers().get(0));
@@ -207,7 +215,10 @@ public class IslandTest
     @Test
     public void removeAllTowersTest()
     {
-        island.mergeIsland(new Island());
+        island.addTower(new Tower(TowerColor.WHITE));
+        Island island2 = new Island();
+        island2.addTower(new Tower(TowerColor.WHITE));
+        island.mergeIsland(island2);
         Tower tower = new Tower(TowerColor.BLACK);
         Tower tower1 = new Tower(TowerColor.BLACK);
 
@@ -243,6 +254,8 @@ public class IslandTest
     @Test
     public void mergeIslandTest()
     {
+        island.addTower(new Tower(TowerColor.WHITE));
+
         // At the beginning there is only one island
         assertEquals(1, island.getIslands().size());
 
@@ -256,33 +269,38 @@ public class IslandTest
 
         // Merge with another normal island
         Island island1 = new Island();
+        island1.addTower(new Tower(TowerColor.WHITE));
         island.mergeIsland(island1);
         assertEquals(2, island.getIslands().size());
         assertEquals(island1.getIslands().get(0), island.getIslands().get(1));
 
         // Merge with another island that contains two islandTiles
         Island island2 = new Island();
-        island2.mergeIsland(new Island());
+        island2.addTower(new Tower(TowerColor.WHITE));
+        Island island3 = new Island();
+        island3.addTower(new Tower(TowerColor.WHITE));
+        island2.mergeIsland(island3);
         island.mergeIsland(island2);
         assertEquals(4, island.getIslands().size());
         assertEquals(island2.getIslands().get(0), island.getIslands().get(2));
         assertEquals(island2.getIslands().get(1), island.getIslands().get(3));
 
         // Merge with another island that contains islandTiles already contained in island
-        Island island3 = new Island();
-        island3.mergeIsland(island2);
-        assertEquals(3, island3.getIslands().size());
-        island.mergeIsland(island3);
+        Island island4 = new Island();
+        island4.addTower(new Tower(TowerColor.WHITE));
+        island4.mergeIsland(island2);
+        assertEquals(3, island4.getIslands().size());
+        island.mergeIsland(island4);
         assertEquals(5, island.getIslands().size());
         assertEquals(island2.getIslands().get(0), island.getIslands().get(2));
         assertEquals(island2.getIslands().get(1), island.getIslands().get(3));
-        assertEquals(island3.getIslands().get(0), island.getIslands().get(4));
+        assertEquals(island4.getIslands().get(0), island.getIslands().get(4));
     }
 
     /**
      * Test that when merging islands, towers and students are merged accurately
+     * and that exceptions are thrown in the correct way
      */
-    //TODO merge con torri diverse
     @Test
     public void mergeIslandTest2()
     {
@@ -305,6 +323,7 @@ public class IslandTest
         assertEquals(1, island1.getTowers().size());
         assertEquals(tower1, island1.getTowers().get(0));
 
+        // Merge of two normal islands
         island.mergeIsland(island1);
         assertEquals(2, island.getStudentsList().size());
         assertEquals(1, island.getIslands().get(0).getStudentsList().size());
@@ -315,6 +334,16 @@ public class IslandTest
         assertEquals(tower, island.getTowers().get(0));
         assertEquals(tower1, island.getTowers().get(1));
 
+        // Merge with an island without a tower is not possible
+        assertThrows(IllegalArgumentException.class, () -> island.mergeIsland(new Island()));
+
+        // An island without a tower can't merge
+        Island island2 = new Island();
+        assertThrows(IllegalArgumentException.class, () -> island2.mergeIsland(island));
+
+        // Island with different tower colors can't merge
+        island2.addTower(new Tower(TowerColor.WHITE));
+        assertThrows(IllegalArgumentException.class, () -> island.mergeIsland(island2));
     }
 
 
@@ -336,7 +365,10 @@ public class IslandTest
         island.addStudent(student);
         assertEquals(1, island.getStudentsByColor(SchoolColor.BLUE));
 
-        island.mergeIsland(new Island());
+        island.addTower(new Tower(TowerColor.WHITE));
+        Island island2 = new Island();
+        island2.addTower(new Tower(TowerColor.WHITE));
+        island.mergeIsland(island2);
         Student student1 = new Student(SchoolColor.GREEN);
         Student student2 = new Student(SchoolColor.GREEN);
         island.addStudent(student1);
@@ -345,5 +377,4 @@ public class IslandTest
         // Two students of this color on the island
         assertEquals(2, island.getStudentsByColor(SchoolColor.GREEN));
     }
-
 }

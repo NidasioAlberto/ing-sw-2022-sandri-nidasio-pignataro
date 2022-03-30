@@ -76,13 +76,13 @@ public class Island
      * @param tower The tower that has to be added
      * @throws NullPointerException if the tower is null
      */
-    public void addTower(Tower tower) throws NullPointerException
+    public void addTower(Tower tower) throws NullPointerException, IllegalArgumentException
     {
-        //Check if there is already a different color tower on this island
+        // Check if there is already a different color tower on this island
         if(tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
-                .filter(tile -> tile.getColor() != tower.getColor()).count() > 0)
+                .filter(t -> t.getColor() != tower.getColor()).count() > 0)
         {
-            return;
+            throw new IllegalArgumentException("[Island] The tower color is not correct");
         }
 
         // I check if the tower is already present
@@ -132,9 +132,23 @@ public class Island
      * @param island The island to be merged
      * @throws NullPointerException If the  island is null
      */
-    public void mergeIsland(Island island) throws NullPointerException
+    public void mergeIsland(Island island) throws NullPointerException, IllegalArgumentException
     {
-        if (island != null)
+
+        if (island == null)
+        {
+            throw new NullPointerException("[Island] A null island was provided");
+        }
+        else if(island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0 ||
+                this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0 ||
+                island.tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
+                    .filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor()).count() > 0)
+        {
+            // There is at least one tile without a tower in one of the two merging islands
+            // or the color of towers is different on the tiles
+            throw new IllegalArgumentException("[Island] Not possible to merge islands, towers are not correct");
+        }
+        else
         {
             // I add the single tile if it is not already present in the list
             island.tiles.stream().forEach(t -> {
@@ -144,7 +158,6 @@ public class Island
                 }
             });
         }
-        else throw new NullPointerException("[Island] A null island was provided");
     }
 
     /**

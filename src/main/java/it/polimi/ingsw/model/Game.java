@@ -203,6 +203,7 @@ public class Game
      * Computes the influence on the island where mother nature currently is. This implies probably
      * moving towers.
      */
+    //TODO manca il merge delle isole quando possibile
     public void computeInfluence()
     {
         Island currentIsland =
