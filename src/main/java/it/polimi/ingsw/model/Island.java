@@ -21,6 +21,7 @@ public class Island
      * Number of no entry tiles on this island
      */
     private int noEntryTiles;
+    //TODO manca la gestione delle noEntryTiles
 
     /**
      * Constructor
@@ -129,8 +130,9 @@ public class Island
      * Method to merge the island tiles in this island
      *
      * @param island The island to be merged
+     * @throws NullPointerException If the  island is null
      */
-    public void mergeIsland(Island island)
+    public void mergeIsland(Island island) throws NullPointerException
     {
         if (island != null)
         {
@@ -142,10 +144,11 @@ public class Island
                 }
             });
         }
+        else throw new NullPointerException("[Island] A null island was provided");
     }
 
     /**
-     * Getters TODO CHECK THE FUNCTIONAL
+     * Getters
      */
     public List<Student> getStudentsList()
     {

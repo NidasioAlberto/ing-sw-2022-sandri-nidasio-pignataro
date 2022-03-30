@@ -17,9 +17,9 @@ public class AssistantCardTest
     public void Constructor()
     {
         AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 10, 5);
-        assertAll(() -> assertEquals(card.getWizard(), Wizard.WIZARD_1),
-                () -> assertEquals(card.getTurnOrder(), 10),
-                () -> assertEquals(card.getSteps(), 5));
+        assertAll(() -> assertEquals(Wizard.WIZARD_1, card.getWizard()),
+                () -> assertEquals(10, card.getTurnOrder()),
+                () -> assertEquals(5, card.getSteps()));
     }
 
     /**
@@ -31,7 +31,7 @@ public class AssistantCardTest
         for (Wizard wizard : Wizard.values())
         {
             AssistantCard card = new AssistantCard(wizard, 8, 4);
-            assertEquals(card.getWizard(), wizard);
+            assertEquals(wizard, card.getWizard());
         }
     }
 

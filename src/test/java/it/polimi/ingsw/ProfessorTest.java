@@ -16,7 +16,7 @@ public class ProfessorTest
         for (SchoolColor color : SchoolColor.values())
         {
             Professor s = new Professor(color);
-            assertEquals(s.getColor(), color);
+            assertEquals(color, s.getColor());
         }
     }
 

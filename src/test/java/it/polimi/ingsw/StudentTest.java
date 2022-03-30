@@ -16,7 +16,7 @@ public class StudentTest
         for (SchoolColor color : SchoolColor.values())
         {
             Student s = new Student(color);
-            assertEquals(s.getColor(), color);
+            assertEquals(color, s.getColor());
         }
     }
 
