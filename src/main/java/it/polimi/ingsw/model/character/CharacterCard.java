@@ -80,9 +80,18 @@ public abstract class CharacterCard extends Game
      */
     public void activate()
     {
-        this.activated = true;
-        //Clear the prev action
-        this.previousAction = Optional.empty();
+        //When we activate the card we subtract the coins cost
+        if(instance.getSelectedPlayer().isEmpty())
+            throw new NoSuchElementException("[CharacterCard] No player selected");
+
+        //I subtract the coins only if the player can pay
+        if(instance.getSelectedPlayer().get().getCoins() >= cost)
+        {
+            instance.getSelectedPlayer().get().removeCoins(cost);
+            this.activated = true;
+            //Clear the prev action
+            this.previousAction = Optional.empty();
+        }
     }
 
     /**
@@ -143,6 +152,8 @@ public abstract class CharacterCard extends Game
     {
         instance.putStudentToDining(student);
     }
+
+    public void conquerProfessors() { instance.conquerProfessors(); }
 
     public void moveMotherNature(int steps)
     {

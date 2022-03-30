@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 /**
  * Enumeration of the all possible game actions in the game. Includes also
  * the character cards.
+ * IMPORTANT: THIS ACTIONS MUST BE ORDERED LIKE THE GAME FLOW
  */
 public enum GameAction
 {

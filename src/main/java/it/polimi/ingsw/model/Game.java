@@ -188,6 +188,15 @@ public class Game
     }
 
     /**
+     * This method regulates the conquer of professor and should be called when a player
+     * moves some student into his dining room.
+     */
+    public void conquerProfessors()
+    {
+
+    }
+
+    /**
      * Moves mother nature for the specified number of steps.
      */
     public void moveMotherNature(int steps)
