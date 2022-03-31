@@ -21,7 +21,6 @@ public class Island
      * Number of no entry tiles on this island
      */
     private int noEntryTiles;
-    //TODO manca la gestione delle noEntryTiles
 
     /**
      * Constructor
@@ -201,6 +200,21 @@ public class Island
     {
         return (int) tiles.stream().flatMap(t -> t.getStudentsList().stream())
                 .filter(s -> s.getColor().equals(color)).count();
+    }
+
+    public int getNoEntryTiles()
+    {
+        return noEntryTiles;
+    }
+
+    public void addNoEntryTile()
+    {
+        noEntryTiles++;
+    }
+
+    public void removeNoEntryTile()
+    {
+        noEntryTiles = noEntryTiles > 0 ? noEntryTiles - 1 : 0;
     }
 
     public List<IslandTile> getIslands()

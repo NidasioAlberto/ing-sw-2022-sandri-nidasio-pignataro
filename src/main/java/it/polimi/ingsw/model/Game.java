@@ -282,6 +282,13 @@ public class Game
         Island currentIsland =
                 islands.get(island);
 
+        //If the island has a no entry tile I remove it and don't calculate the influence
+        if(currentIsland.getNoEntryTiles() > 0)
+        {
+            currentIsland.removeNoEntryTile();
+            return;
+        }
+
         // TODO: Use Pair
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream()
@@ -570,6 +577,12 @@ public class Game
         {
             return Optional.empty();
         }
+    }
+
+    //TODO IT IS NOT SO GOOD, BUT FOR GRANDMA HERBS WE HAVE NO CHOICE
+    public List<Island> getIslands()
+    {
+        return new ArrayList<Island>(islands);
     }
 
     /**

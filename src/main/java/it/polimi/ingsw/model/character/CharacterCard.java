@@ -170,6 +170,8 @@ public abstract class CharacterCard extends Game
         instance.computeInfluence();
     }
 
+    public void computeInfluence(int island) { instance.computeInfluence(island); }
+
     public void moveStudentsFromCloudTile()
     {
         instance.moveStudentsFromCloudTile();
