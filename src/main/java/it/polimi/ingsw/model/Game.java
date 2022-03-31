@@ -190,22 +190,23 @@ public class Game
     /**
      * This method regulates the conquer of professor and should be called when a player
      * moves some student into his dining room.
+     * @throws NoSuchElementException When no player is selected
      */
-    public void conquerProfessors()
+    public void conquerProfessors() throws NoSuchElementException
     {
-        //Check for every professor if there is a player that has at least a student of the same
+        //Current selected player
+        Player currentPlayer = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+
+        //Check for every professor if the selected player has at least a student of the same
         //color. If the professor is still in this instance it means that no one has a student
         //of the expected color except from that player
         for(int i = 0; i < professors.size(); i++)
         {
-            for(int j = 0; j < players.size(); j++)
+            //If the player has at least one student of the same color i can assign
+            //the professor to that player
+            if(currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
             {
-                //If the player has at least one student of the same color i can assign
-                //the professor to that student
-                if(players.get(j).getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
-                {
-                    players.get(j).getBoard().addProfessor(professors.remove(i));
-                }
+                currentPlayer.getBoard().addProfessor(professors.remove(i));
             }
         }
 
@@ -215,14 +216,9 @@ public class Game
             int finalI = i;
             //Look for the player that has that professor
             Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
-            //Look for the player with more students for that color
-            Player bestColor   = players.stream().sorted(
-                    (p1, p2) -> p2.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) -
-                    p1.getBoard().getStudentsNumber(SchoolColor.values()[finalI]))
-                    .findFirst().get();
 
             //If the players differ and don't have the same number of students I move the professor
-            if(currentKing != bestColor && bestColor.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) >
+            if(currentKing != currentPlayer && currentPlayer.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) >
                 currentKing.getBoard().getStudentsNumber(SchoolColor.values()[finalI]))
             {
                 Professor prof;
@@ -233,7 +229,7 @@ public class Game
                 currentKing.getBoard().removeProfessor(prof);
 
                 //Add the professor to the new king
-                bestColor.getBoard().addProfessor(prof);
+                currentPlayer.getBoard().addProfessor(prof);
             }
         }
     }
