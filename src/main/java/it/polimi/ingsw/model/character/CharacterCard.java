@@ -162,6 +162,8 @@ public abstract class CharacterCard extends Game
         instance.moveMotherNature(steps);
     }
 
+    public boolean isValidMotherNatureMovement(int steps) { return instance.isValidMotherNatureMovement(steps); }
+
     // TODO TALK ABOUT WHAT THIS METHOD CAN AND SHOULD DO
     public void computeInfluence()
     {

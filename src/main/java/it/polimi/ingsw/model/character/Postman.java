@@ -1,8 +1,11 @@
 package it.polimi.ingsw.model.character;
 
+import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.Player;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -29,13 +32,35 @@ public class Postman extends CharacterCard
     @Override
     public boolean isPlayable()
     {
-        return false;
+        //This card is playable if the previous action is before the movement of mother nature
+        //or if the previous action is empty
+        if(instance.getGameAction().isEmpty())
+            return true;
+
+        //It is the index of the game action enumeration indexing the previous action
+        int indexPrevAction;
+        //It is the index of the game action enumeration indexing the move mother nature action
+        int indexMotherAction;
+
+        //Take the indexes
+        for(indexPrevAction = 0; GameAction.values()[indexPrevAction] != instance.getGameAction().get(); indexPrevAction++);
+        for(indexMotherAction = 0; GameAction.values()[indexMotherAction] != GameAction.MOVE_MOTHER_NATURE; indexMotherAction++);
+
+        //If we are before the mother nature movement then we can call the card
+        return indexPrevAction < indexMotherAction;
     }
 
     @Override
     public boolean isValidAction(GameAction action)
     {
-        return false;
+        //If it is activated and we occur to move mother nature movement, then I deactivate the card
+        if(activated && action == GameAction.MOVE_MOTHER_NATURE)
+        {
+            deactivate();
+        }
+
+        //I don't have to intercept any action
+        return instance.isValidAction(action);
     }
 
     @Override
@@ -43,9 +68,21 @@ public class Postman extends CharacterCard
     {}
 
     @Override
-    public void moveMotherNature(int steps)
+    public boolean isValidMotherNatureMovement(int steps)
     {
+        if(!activated)
+            return instance.isValidMotherNatureMovement(steps);
 
+        //I have to check if the current player can do this movement
+        Player currentPlayer        = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+        AssistantCard selectedCard  = currentPlayer
+                .getCardsList()
+                .get(currentPlayer
+                        .getSelectedCard()
+                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card")));
+
+        //Here occurs the modification
+        return selectedCard.getSteps() + 2 >= steps;
     }
 
     @Override

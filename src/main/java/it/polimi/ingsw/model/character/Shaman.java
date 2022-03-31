@@ -32,7 +32,7 @@ public class Shaman extends CharacterCard
         if(instance.getGameAction().isEmpty())
             return true;
 
-        //It is the index of the game action enumeration indexing the previous aciton
+        //It is the index of the game action enumeration indexing the previous action
         int indexPrevAction;
         //It is the index of the game action enumeration indexing the move mother nature action
         int indexMotherAction;

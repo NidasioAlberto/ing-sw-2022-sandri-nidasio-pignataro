@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.character.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -245,6 +246,26 @@ public class Game
         index %= islands.size();
         motherNatureIndex = Optional.of(index);
     }
+
+    /**
+     * Method that tells the controller if the number of steps
+     * can be achieved by the selected player
+     * @param steps the number of steps that needs to be checked
+     * @return the validity of the operation
+     */
+    public boolean isValidMotherNatureMovement(int steps)
+    {
+        //I have to check if the current player can do this movement
+        Player currentPlayer        = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+        AssistantCard selectedCard  = currentPlayer
+                .getCardsList()
+                .get(currentPlayer
+                        .getSelectedCard()
+                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card")));
+
+        return selectedCard.getSteps() >= steps;
+    }
+
 
     /**
      * Computes the influence on the island where the passed index points. This implies probably
