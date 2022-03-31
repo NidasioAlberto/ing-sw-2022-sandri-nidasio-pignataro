@@ -247,15 +247,19 @@ public class Game
     }
 
     /**
-     * Computes the influence on the island where mother nature currently is. This implies probably
+     * Computes the influence on the island where the passed index points. This implies probably
      * moving towers.
+     * @param island the island index where we compute the influence
+     * @throws IndexOutOfBoundsException thrown when the island index is out of bounds
      */
     //TODO manca il merge delle isole quando possibile
-    public void computeInfluence()
+    public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
+        if(island < 0 || island > islands.size())
+            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+
         Island currentIsland =
-                islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                        "[Game] Mother nature is not currently on the table, is the game set up?")));
+                islands.get(island);
 
         // TODO: Use Pair
         // Get the player with more influence, if there is any
@@ -293,6 +297,16 @@ public class Game
                 currentIsland.addTower(t);
             });
         }
+    }
+
+    /**
+     * Calculates the influence where mother nature currently is
+     * @throws NoSuchElementException when mother nature is not set already
+     */
+    public void computeInfluence() throws NoSuchElementException
+    {
+        computeInfluence(motherNatureIndex.orElseThrow(
+                () -> new NoSuchElementException("[Game] No mother nature index, is the game initialized?")));
     }
 
     /**
@@ -530,11 +544,32 @@ public class Game
         {
             return Optional.of(characterCards
                     .get(currentCharacterCardIndex.orElseThrow(() -> new NoSuchElementException(
-                            "[Game] Mother nature is not currently on the table, is the game set up?"))));
+                            "[Game] Character card not selected"))));
         } catch (IndexOutOfBoundsException e)
         {
             return Optional.empty();
         }
+    }
+
+    /**
+     * @return a copy of the current professors array
+     */
+    public List<Professor> getProfessors()
+    {
+        return new ArrayList<Professor>(professors);
+    }
+
+    /**
+     * Removes a professor from the list
+     * @param index the professor to be removed
+     * @return the removed professor
+     * @throws IndexOutOfBoundsException thrown if the index is out of bounds
+     */
+    public Professor removeProfessor(int index) throws IndexOutOfBoundsException
+    {
+        if(index < 0 || index >= professors.size())
+            throw new IndexOutOfBoundsException("[Game] professor index out of bounds");
+        return professors.remove(index);
     }
 
     public Optional<GameAction> getPreviousAction()

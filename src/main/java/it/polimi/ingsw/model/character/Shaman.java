@@ -48,6 +48,12 @@ public class Shaman extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
+        //If the card is deactivated i return the instance isValidAction
+        if(!activated)
+        {
+            return instance.isValidAction(action);
+        }
+
         //What the game instance says about that action.
         //This card doesn't introduce different actions, so we have to accept
         //all the actions that the game instance accepts.
@@ -68,19 +74,26 @@ public class Shaman extends CharacterCard
     @Override
     public void conquerProfessors()
     {
+        //If the card is not activated I skip this method
+        if(!activated)
+        {
+            instance.conquerProfessors();
+            return;
+        }
+
         //Current selected player
         Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
 
         //Check for every professor if the selected player has at least a student of the same
         //color. If the professor is still in this instance it means that no one has a student
         //of the expected color except from that player
-        for(int i = 0; i < professors.size(); i++)
+        for(int i = 0; i < instance.getProfessors().size(); i++)
         {
             //If the player has at least one student of the same color i can assign
             //the professor to that player
-            if(currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
+            if(currentPlayer.getBoard().getStudentsNumber(instance.getProfessors().get(i).getColor()) > 0)
             {
-                currentPlayer.getBoard().addProfessor(professors.remove(i));
+                currentPlayer.getBoard().addProfessor(instance.removeProfessor(i));
             }
         }
 
@@ -89,7 +102,7 @@ public class Shaman extends CharacterCard
         {
             int finalI = i;
             //Look for the player that has that professor
-            Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
+            Player currentKing = instance.getPlayerTableList().stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
 
             //If the players differ and don't have the same number of students I move the professor
             //THE ONLY DIFFERENCE IS THE >= SIGN
