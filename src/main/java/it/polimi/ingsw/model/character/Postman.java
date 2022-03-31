@@ -53,8 +53,8 @@ public class Postman extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        //If it is activated and we occur to move mother nature movement, then I deactivate the card
-        if(activated && action == GameAction.MOVE_MOTHER_NATURE)
+        //If it is activated we receive a select cloud tile action, then I deactivate the card
+        if(activated && action == GameAction.SELECT_CLOUD_TILE)
         {
             deactivate();
         }

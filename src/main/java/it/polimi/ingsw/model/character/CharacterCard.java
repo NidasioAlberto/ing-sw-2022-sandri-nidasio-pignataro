@@ -93,6 +93,13 @@ public abstract class CharacterCard extends Game
             this.activated = true;
             //Clear the prev action
             this.previousAction = Optional.empty();
+            //Set the card to first used
+            if(!firstUsed)
+            {
+                //If used for the first time i set it already used and increment the cost
+                this.firstUsed = true;
+                this.cost++;
+            }
         }
     }
 
@@ -171,6 +178,8 @@ public abstract class CharacterCard extends Game
     }
 
     public void computeInfluence(int island) { instance.computeInfluence(island); }
+
+    public int computePlayerInfluence(Player player, int island) {return instance.computePlayerInfluence(player, island); }
 
     public void moveStudentsFromCloudTile()
     {

@@ -279,8 +279,7 @@ public class Game
         if(island < 0 || island > islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
-        Island currentIsland =
-                islands.get(island);
+        Island currentIsland = islands.get(island);
 
         //If the island has a no entry tile I remove it and don't calculate the influence
         if(currentIsland.getNoEntryTiles() > 0)
@@ -292,10 +291,10 @@ public class Game
         // TODO: Use Pair
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream()
-                .sorted((p1, p2) -> computePlayerInfluence(p1) - computePlayerInfluence(p2))
+                .sorted((p1, p2) -> computePlayerInfluence(p1, island) - computePlayerInfluence(p2, island))
                 .toList();
-        if (computePlayerInfluence(sortedPlayers.get(0)) > computePlayerInfluence(
-                sortedPlayers.get(1)))
+        if (computePlayerInfluence(sortedPlayers.get(0), island) > computePlayerInfluence(
+                sortedPlayers.get(1), island))
         {
             // This player has more influence then all others
             Player influencer = sortedPlayers.get(0);
@@ -340,11 +339,15 @@ public class Game
     /**
      * Computes the given player influence for the island where mother nature currently is.
      */
-    protected int computePlayerInfluence(Player player) throws NoSuchElementException
+    public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException
     {
-        Island currentIsland =
-                islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                        "[Game] Mother nature is not currently on the table, is the game set up?")));
+        if(island < 0 || island > islands.size())
+            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+
+        if(player == null)
+            throw new NullPointerException("[Game] player null");
+
+        Island currentIsland = islands.get(island);
 
         // Compute the influence of this player from students
         int influence = player.getBoard().getProfessors().stream()

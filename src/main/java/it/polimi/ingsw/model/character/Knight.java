@@ -72,11 +72,15 @@ public class Knight extends CharacterCard
 
     //TODO problema perchè le varie chiamate non fanno riferimento a instance
     @Override
-    protected int computePlayerInfluence(Player player) throws NoSuchElementException
+    public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
-        Island currentIsland =
-                islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                        "[Knight] Mother nature is not currently on the table, is the game set up?")));
+        if(island < 0 || island > instance.getIslands().size())
+            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+
+        if(player == null)
+            throw new NullPointerException("[Game] player null");
+
+        Island currentIsland = instance.getIslands().get(island);
 
         // Compute the influence of this player from students
         int influence = player.getBoard().getProfessors().stream()
