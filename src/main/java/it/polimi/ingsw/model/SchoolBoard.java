@@ -1,10 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class represents the school board. Every player has one of these, it represents the internal
@@ -219,6 +215,27 @@ public class SchoolBoard
     }
 
     /**
+     * Removes the student from the entrance
+     * @param color the student color to be removed
+     * @return the removed student
+     */
+    public Optional<Student> removeStudentFromEntrance(SchoolColor color) throws NullPointerException
+    {
+        if(color == null)
+            throw new NullPointerException("[SchoolBoard] Null color");
+
+        //Find the student with that color
+        int index = -1;
+        for(int i = 0; i < entrance.size(); i++) { index = color == entrance.get(i).getColor() ? i : index; }
+
+        //If I found it I return the object removed
+        if(index != -1)
+            return Optional.of(entrance.remove(index));
+        else
+            return Optional.empty();
+    }
+
+    /**
      * Removes the student from the dining room.
      *
      * @param color the color of the student that has to be removed from the dining room
@@ -254,6 +271,22 @@ public class SchoolBoard
             removeStudentFromEntrance(student);
             addStudentToDiningRoom(student);
         }
+    }
+
+    /**
+     * Same as the moveStudentToDining(Student student) but with the SchoolColor parameter
+     * @param color the color of the student to be moved
+     */
+    public void moveStudentToDining(SchoolColor color) throws NullPointerException, NoSuchElementException
+    {
+        if (color == null)
+            throw new NullPointerException("[SchoolBoard] Null color");
+
+        //Save the student instance
+        Student removed = removeStudentFromEntrance(color)
+                .orElseThrow(() -> new NoSuchElementException("[SchoolBoard] No student in Entrance with the specified color"));
+
+        addStudentToDiningRoom(removed);
     }
 
     public List<Professor> getProfessors()
