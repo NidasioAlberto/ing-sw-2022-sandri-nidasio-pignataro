@@ -88,7 +88,8 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null professor");
 
         // Check if it is not null and not already present
-        if (professor != null && !professorTable.contains(professor))
+        if (professor != null && !professorTable.contains(professor) &&
+                professorTable.stream().filter(p -> p.getColor() == professor.getColor()).findFirst().isEmpty())
         {
             professorTable.add(professor);
         }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Game
@@ -291,8 +292,7 @@ public class Game
         // TODO: Use Pair
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream()
-                .sorted((p1, p2) -> computePlayerInfluence(p1, island) - computePlayerInfluence(p2, island))
-                .toList();
+                .sorted((p1, p2) -> computePlayerInfluence(p1, island) - computePlayerInfluence(p2, island)).collect(Collectors.toList());
         if (computePlayerInfluence(sortedPlayers.get(0), island) > computePlayerInfluence(
                 sortedPlayers.get(1), island))
         {
