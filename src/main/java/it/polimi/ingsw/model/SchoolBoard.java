@@ -58,10 +58,12 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null tower color");
 
         this.MAX_STUDENTS_ENTRANCE = maxStudents;
-        towerColor = color;
 
         // The max number of towers depends on the number of players
         this.MAX_TOWERS = maxStudents == 7 ? 8 : 6;
+
+        //Assign the tower color
+        this.towerColor = color;
 
         // Instantiate all the things
         entrance = new ArrayList<Student>();
@@ -151,11 +153,28 @@ public class SchoolBoard
      */
     public void removeTower(Tower tower)
     {
+        if(tower == null)
+            throw new NullPointerException("[SchoolBoard] Null tower");
+
         // Checks if the tower is not null and present
-        if (tower != null && towers.contains(tower))
+        if (towers.contains(tower))
         {
             towers.remove(tower);
         }
+    }
+
+    /**
+     * Same as removeTower(Tower) but removes a tower of that color
+     * @param color the color of the removed tower
+     */
+    public void removeTower(TowerColor color)
+    {
+        if(color == null)
+            throw new NullPointerException("[SchoolBoard] Null color");
+
+        removeTower(towers.stream().filter(t -> t.getColor() == color)
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("[SchoolBoard] No tower of that color")));
     }
 
     /**
@@ -209,8 +228,11 @@ public class SchoolBoard
      */
     public void removeStudentFromEntrance(Student student)
     {
+        if(student == null)
+            throw new NullPointerException("[SchoolBoard] Null student");
+
         // Checks if not null and present in entrance
-        if (student != null && entrance.contains(student))
+        if (entrance.contains(student))
         {
             entrance.remove(student);
         }
@@ -245,8 +267,11 @@ public class SchoolBoard
      */
     public Optional<Student> removeStudentFromDining(SchoolColor color)
     {
+        if(color == null)
+            throw new NullPointerException("[SchoolBoard] Null color");
+
         // Checks if not null and there is at least one student of that color in dining
-        if (color != null && diningRoom.get(color) != null && diningRoom.get(color).size() > 0)
+        if (diningRoom.get(color) != null && diningRoom.get(color).size() > 0)
         {
             return Optional.of(diningRoom.get(color).remove(diningRoom.get(color).size()-1));
         }
@@ -272,6 +297,10 @@ public class SchoolBoard
         {
             removeStudentFromEntrance(student);
             addStudentToDiningRoom(student);
+        }
+        else
+        {
+            throw new NoSuchElementException("[SchoolBoard] No such student in Entrance");
         }
     }
 

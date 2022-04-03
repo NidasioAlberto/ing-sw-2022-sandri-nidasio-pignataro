@@ -1,11 +1,13 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.Professor;
-import it.polimi.ingsw.model.SchoolBoard;
-import it.polimi.ingsw.model.SchoolColor;
-import it.polimi.ingsw.model.TowerColor;
+import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -170,5 +172,308 @@ public class SchoolBoardTest
         assertEquals(0, board.getProfessors().size());
         assertEquals(false, board.hasProfessor(firstProfessor.getColor()));
         assertEquals(false, board.hasProfessor(secondProfessor.getColor()));
+    }
+
+    @Test
+    public void addTowerTest()
+    {
+        //Null add
+        assertThrows(NullPointerException.class, () -> board.addTower(null));
+        assertEquals(0, board.getTowers().size());
+
+        //Towers to be added
+        Tower firstTower = new Tower(TowerColor.BLACK);
+        Tower secondTower = new Tower(TowerColor.BLACK);
+
+        //Add different color tower
+        board.addTower(new Tower(TowerColor.WHITE));
+        assertEquals(0, board.getTowers().size());
+
+        //Add legit towers
+        board.addTower(firstTower);
+        assertEquals(1, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(firstTower));
+
+        //Add the first tower again
+        board.addTower(firstTower);
+        assertEquals(1, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(firstTower));
+
+        //Add second legit tower
+        board.addTower(secondTower);
+        assertEquals(2, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(firstTower));
+        assertEquals(true, board.getTowers().contains(secondTower));
+
+        //Add a lot of towers to see if the maximum number is 7
+        for(int i = 0; i < 10; i++)
+            board.addTower(new Tower(TowerColor.BLACK));
+
+        assertEquals(8, board.getTowers().size());
+    }
+
+    @Test
+    public void removeTowersTest()
+    {
+        //Setup the test
+        Tower firstTower = new Tower(TowerColor.BLACK);
+        Tower secondTower = new Tower(TowerColor.BLACK);
+        board.addTower(firstTower);
+        board.addTower(secondTower);
+
+        //Remove null object
+        assertThrows(NullPointerException.class, () -> board.removeTower((Tower)null));
+        assertThrows(NullPointerException.class, () -> board.removeTower((TowerColor) null));
+
+        //Remove object that doesn't exist
+        assertThrows(NoSuchElementException.class, () -> board.removeTower(TowerColor.WHITE));
+        assertEquals(2, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(firstTower));
+        assertEquals(true, board.getTowers().contains(secondTower));
+
+        //Remove a different instance
+        board.removeTower(new Tower(TowerColor.BLACK));
+        assertEquals(2, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(firstTower));
+        assertEquals(true, board.getTowers().contains(secondTower));
+
+        //Remove the actual tower
+        board.removeTower(firstTower);
+        assertEquals(1, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(secondTower));
+        assertEquals(false, board.getTowers().contains(firstTower));
+
+        //Remove the second tower
+        board.removeTower(secondTower.getColor());
+        assertEquals(0, board.getTowers().size());
+    }
+
+    @Test
+    public void addStudentToEntranceTest()
+    {
+        //Add the null element
+        assertThrows(NullPointerException.class, () -> board.addStudentToEntrance(null));
+        assertEquals(0, board.getStudentsInEntrance().size());
+
+        //Students to be added
+        Student firstStudent = new Student(SchoolColor.RED);
+        Student secondStudent = new Student(SchoolColor.GREEN);
+
+        //Add the first student
+        board.addStudentToEntrance(firstStudent);
+        assertEquals(1, board.getStudentsInEntrance().size());
+        assertEquals(true, board.getStudentsInEntrance().contains(firstStudent));
+
+        //Add the first student again
+        board.addStudentToEntrance(firstStudent);
+        assertEquals(1, board.getStudentsInEntrance().size());
+        assertEquals(true, board.getStudentsInEntrance().contains(firstStudent));
+
+        //Add the second student
+        board.addStudentToEntrance(secondStudent);
+        assertEquals(2, board.getStudentsInEntrance().size());
+        assertEquals(true, board.getStudentsInEntrance().contains(firstStudent));
+        assertEquals(true, board.getStudentsInEntrance().contains(firstStudent));
+    }
+
+    @Test
+    public void addStudentToDiningTest()
+    {
+        //Add null object
+        assertThrows(NullPointerException.class, () -> board.addStudentToDiningRoom(null));
+
+        //for all the colors the hasStudent() must be 0
+        for(SchoolColor color : SchoolColor.values())
+            assertEquals(0, board.getStudentsNumber(color));
+
+        //Create a list of colors to be added
+        List<Student> students = new ArrayList<Student>();
+
+        //Populate the list
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.RED));
+        students.add(new Student(SchoolColor.BLUE));
+        students.add(new Student(SchoolColor.PINK));
+        students.add(new Student(SchoolColor.YELLOW));
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.RED));
+        students.add(new Student(SchoolColor.BLUE));
+        students.add(new Student(SchoolColor.YELLOW));
+
+        //Memorize the number of students added
+        int previousNumber[] = new int[]{0, 0, 0, 0, 0};
+
+        for(int i = 0; i < students.size(); i++)
+        {
+            //I add the current student twice to see if avoids multiple equal instances
+            board.addStudentToDiningRoom(students.get(i));
+            board.addStudentToDiningRoom(students.get(i));
+
+            //Check that all the number of students are right
+            for(int color = 0; color < SchoolColor.values().length; color++)
+            {
+                if(SchoolColor.values()[color] == students.get(i).getColor())
+                {
+                    //Check if the actual increment is 1
+                    assertEquals(previousNumber[color] + 1, board.getStudentsNumber(SchoolColor.values()[color]));
+
+                    //Increment the previous number
+                    previousNumber[color]++;
+                }
+                else
+                {
+                    //Else check that the number isn't different
+                    assertEquals(previousNumber[color], board.getStudentsNumber(SchoolColor.values()[color]));
+                }
+            }
+        }
+
+        //Override one color to see if the maximum number of student is respected
+        for(int i = 0; i < 20; i++)
+        {
+            board.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        }
+
+        //Check that the maximum number is 10
+        assertEquals(10, board.getStudentsNumber(SchoolColor.GREEN));
+    }
+
+    @Test
+    public void removeStudentFromEntranceTest()
+    {
+        //Prepare the test
+        Student firstStudent = new Student(SchoolColor.YELLOW);
+        Student secondStudent = new Student(SchoolColor.RED);
+        board.addStudentToEntrance(firstStudent);
+        board.addStudentToEntrance(secondStudent);
+
+        //Remove null object
+        assertThrows(NullPointerException.class, () -> board.removeStudentFromEntrance((Student)null));
+        assertThrows(NullPointerException.class, () -> board.removeStudentFromEntrance((SchoolColor) null));
+
+        //Remove a non present object
+        board.removeStudentFromEntrance(new Student(SchoolColor.YELLOW));
+        assertEquals(2, board.getStudentsInEntrance().size());
+        assertEquals(true, board.getStudentsInEntrance().contains(firstStudent));
+        assertEquals(true, board.getStudentsInEntrance().contains(secondStudent));
+
+        //Remove the actual first object
+        board.removeStudentFromEntrance(firstStudent);
+        assertEquals(1, board.getStudentsInEntrance().size());
+        assertEquals(false, board.getStudentsInEntrance().contains(firstStudent));
+        assertEquals(true, board.getStudentsInEntrance().contains(secondStudent));
+
+        //Remove the second object by color
+        assertEquals(secondStudent, board.removeStudentFromEntrance(SchoolColor.RED).get());
+        assertEquals(0, board.getStudentsInEntrance().size());
+    }
+
+    @Test
+    public void removeStudentFromDining()
+    {
+        //Prepare the test
+        List<Student> students = new ArrayList<Student>();
+        int previousNumber[] = new int[]{0, 0, 0, 0, 0};
+
+        //Populate the list
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.RED));
+        students.add(new Student(SchoolColor.BLUE));
+        students.add(new Student(SchoolColor.PINK));
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.RED));
+        students.add(new Student(SchoolColor.BLUE));
+
+        //Add all the students on the list to the dining room
+        for(Student student : students)
+            board.addStudentToDiningRoom(student);
+
+        //Populate the number of colors
+        for(int color = 0; color < SchoolColor.values().length; color++)
+            previousNumber[color] = board.getStudentsNumber(SchoolColor.values()[color]);
+
+        //Remove a null object
+        assertThrows(NullPointerException.class, () -> board.removeStudentFromDining(null));
+
+        //Remove a student that is not present
+        assertEquals(Optional.empty(), board.removeStudentFromDining(SchoolColor.YELLOW));
+        for(int color = 0; color < SchoolColor.values().length; color++)
+            assertEquals(previousNumber[color], board.getStudentsNumber(SchoolColor.values()[color]));
+
+        //Remove all the students and compare them
+        for(Student student : students)
+        {
+            Student removedStudent = board.removeStudentFromDining(student.getColor())
+                    .orElseThrow(() -> new NoSuchElementException("[SchoolBoardTest] No student with that color"));
+
+            //I expect the remove student to be contained into the list, if so i remove it
+            assertEquals(true, students.contains(removedStudent));
+        }
+    }
+
+    @Test
+    public void moveStudentToDiningTest()
+    {
+        //Prepare the test
+        List<Student> students = new ArrayList<Student>();
+
+        //Populate the list
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.RED));
+        students.add(new Student(SchoolColor.BLUE));
+        students.add(new Student(SchoolColor.PINK));
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.GREEN));
+        students.add(new Student(SchoolColor.RED));
+
+        //Add the students to the entrance
+        for(Student student : students)
+            board.addStudentToEntrance(student);
+
+        //Move a null student
+        assertThrows(NullPointerException.class, () -> board.moveStudentToDining((Student)null));
+        assertThrows(NullPointerException.class, () -> board.moveStudentToDining((SchoolColor) null));
+        for(SchoolColor color : SchoolColor.values())
+            assertEquals(0, board.getStudentsNumber(color));
+
+        //Move a student that doesn't exist in entrance
+        assertThrows(NoSuchElementException.class, () -> board.moveStudentToDining(new Student(SchoolColor.GREEN)));
+        assertThrows(NoSuchElementException.class, () -> board.moveStudentToDining(SchoolColor.YELLOW));
+        for(SchoolColor color : SchoolColor.values())
+            assertEquals(0, board.getStudentsNumber(color));
+
+        //Move all of them
+        for(Student student : students)
+            board.moveStudentToDining(student);
+
+        //I check if the entrance is void
+        assertEquals(0, board.getStudentsInEntrance().size());
+
+        //At the end I should have the same number of colors
+        for(SchoolColor color : SchoolColor.values())
+        {
+            assertEquals(board.getStudentsNumber(color), students.stream().filter(s -> s.getColor() == color).count());
+        }
+
+        //Now the same but I use the color method (I RESET ALL FIRST)
+        board = new SchoolBoard(7, TowerColor.BLACK);
+
+        //Add the students to the entrance
+        for(Student student : students)
+            board.addStudentToEntrance(student);
+
+        for(Student student : students)
+            board.moveStudentToDining(student.getColor());
+
+        //I check if the entrance is void
+        assertEquals(0, board.getStudentsInEntrance().size());
+
+        //At the end I should have the same number of colors
+        for(SchoolColor color : SchoolColor.values())
+        {
+            assertEquals(board.getStudentsNumber(color), students.stream().filter(s -> s.getColor() == color).count());
+        }
     }
 }
