@@ -125,8 +125,9 @@ public class Game
     }
 
     /**
-     * Puts the student passed via parameter inside the selected island.
-     * If the student or the island are not found, an exception is thrown.
+     * Puts the student passed via parameter inside the selected island. If the student or the
+     * island are not found, an exception is thrown.
+     * 
      * @param student The student to be added to the Entrance
      * @throws NoSuchElementException if a player or an island is not selected
      */
@@ -135,11 +136,10 @@ public class Game
         // Move the student to the island
         try
         {
-            islands.get(getSelectedPlayer().orElseThrow(
-                    () -> new NoSuchElementException("[Game] No selected player"))
+            islands.get(getSelectedPlayer()
+                    .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
                     .getSelectedIsland()
-                    .orElseThrow(
-                            () -> new NoSuchElementException("[Game] No selected island")))
+                    .orElseThrow(() -> new NoSuchElementException("[Game] No selected island")))
                     .addStudent(student);
         } catch (IndexOutOfBoundsException e)
         {
@@ -148,88 +148,95 @@ public class Game
     }
 
     /**
-     * Puts the student passed via parameter inside the dining room.
-     * If the student or the island are not found, an exception is thrown.
+     * Puts the student passed via parameter inside the dining room. If the student or the island
+     * are not found, an exception is thrown.
+     * 
      * @param student The student to be added to the Dining room
      * @throws NoSuchElementException if a player or an island is not selected
      */
-    public void putStudentToDining(Student student) throws NoSuchElementException, NullPointerException
+    public void putStudentToDining(Student student)
+            throws NoSuchElementException, NullPointerException
     {
         // Move the student
-        getSelectedPlayer().orElseThrow(
-                () -> new NoSuchElementException("[Game] No selected player")
-        ).getBoard().addStudentToDiningRoom(student);
+        getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
+                .getBoard().addStudentToDiningRoom(student);
     }
 
     /**
      * Takes the student from the selected player's entrance and removes it
+     * 
      * @return The student of the selected color
      */
     public Student pickStudentFromEntrance() throws NoSuchElementException
     {
-        //Get the player selected color
-        SchoolColor selectedColor = getSelectedPlayer().orElseThrow(
-                () -> new NoSuchElementException("[Game] No selected player")
-                ).getSelectedColors().stream().findFirst().orElseThrow(
-                () -> new NoSuchElementException("[Game] No selected color")
-        );
+        // Get the player selected color
+        SchoolColor selectedColor = getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
+                .getSelectedColors().stream().findFirst()
+                .orElseThrow(() -> new NoSuchElementException("[Game] No selected color"));
 
-        //Get the student instance to be removed and returned
-        Student result = getSelectedPlayer().get()
-                .getBoard().getStudentsInEntrance().stream()
-                .filter(s -> s.getColor() == selectedColor)
-                .findFirst().orElseThrow(
-                () -> new NoSuchElementException("[Game] No selected student in entrance")
-        );
+        // Get the student instance to be removed and returned
+        Student result = getSelectedPlayer().get().getBoard().getStudentsInEntrance().stream()
+                .filter(s -> s.getColor() == selectedColor).findFirst().orElseThrow(
+                        () -> new NoSuchElementException("[Game] No selected student in entrance"));
 
-        //Remove the instance from the entrance
+        // Remove the instance from the entrance
         getSelectedPlayer().get().getBoard().removeStudentFromEntrance(result);
 
         return result;
     }
 
     /**
-     * This method regulates the conquer of professor and should be called when a player
-     * moves some student into his dining room.
+     * This method regulates the conquer of professor and should be called when a player moves some
+     * student into his dining room.
+     * 
      * @throws NoSuchElementException When no player is selected
      */
     public void conquerProfessors() throws NoSuchElementException
     {
-        //Current selected player
-        Player currentPlayer = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+        // Current selected player
+        Player currentPlayer = getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
 
-        //Check for every professor if the selected player has at least a student of the same
-        //color. If the professor is still in this instance it means that no one has a student
-        //of the expected color except from that player
-        for(int i = 0; i < professors.size(); i++)
+        // Check for every professor if the selected player has at least a student of the same
+        // color. If the professor is still in this instance it means that no one has a student
+        // of the expected color except from that player
+        for (int i = 0; i < professors.size(); i++)
         {
-            //If the player has at least one student of the same color i can assign
-            //the professor to that player
-            if(currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
+            // If the player has at least one student of the same color i can assign
+            // the professor to that player
+            if (currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
             {
                 currentPlayer.getBoard().addProfessor(professors.remove(i));
             }
         }
 
-        //Now I can check who is the player with the most students for every color and the assign the professor
-        for(int i = 0; i < SchoolColor.values().length; i++)
+        // Now I can check who is the player with the most students for every color and the assign
+        // the professor
+        for (int i = 0; i < SchoolColor.values().length; i++)
         {
             int finalI = i;
-            //Look for the player that has that professor
-            Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
+            // Look for the player that has that professor
+            Player currentKing = players.stream()
+                    .filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI]))
+                    .findFirst().get();
 
-            //If the players differ and don't have the same number of students I move the professor
-            if(currentKing != currentPlayer && currentPlayer.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) >
-                currentKing.getBoard().getStudentsNumber(SchoolColor.values()[finalI]))
+            // If the players differ and don't have the same number of students I move the professor
+            if (currentKing != currentPlayer && currentPlayer.getBoard()
+                    .getStudentsNumber(SchoolColor.values()[finalI]) > currentKing.getBoard()
+                            .getStudentsNumber(SchoolColor.values()[finalI]))
             {
                 Professor prof;
-                //I take the instance of the professor to be moved
-                prof = currentKing.getBoard().getProfessors().stream().filter(p -> p.getColor() == SchoolColor.values()[finalI]).findFirst().get();
+                // I take the instance of the professor to be moved
+                prof = currentKing.getBoard().getProfessors().stream()
+                        .filter(p -> p.getColor() == SchoolColor.values()[finalI]).findFirst()
+                        .get();
 
-                //Remove the professor from the king
+                // Remove the professor from the king
                 currentKing.getBoard().removeProfessor(prof);
 
-                //Add the professor to the new king
+                // Add the professor to the new king
                 currentPlayer.getBoard().addProfessor(prof);
             }
         }
@@ -248,17 +255,19 @@ public class Game
     }
 
     /**
-     * Method that tells the controller if the number of steps
-     * can be achieved by the selected player
+     * Method that tells the controller if the number of steps can be achieved by the selected
+     * player
+     * 
      * @param steps the number of steps that needs to be checked
      * @return the validity of the operation
      */
     public boolean isValidMotherNatureMovement(int steps)
     {
-        //I have to check if the current player can do this movement
-        Player currentPlayer        = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
-        AssistantCard selectedCard  = currentPlayer.getSelectedCard()
-                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card"));
+        // I have to check if the current player can do this movement
+        Player currentPlayer = getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+        AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(
+                () -> new NoSuchElementException("[Game] Player didn't select assistant card"));
 
         return selectedCard.getSteps() >= steps;
     }
@@ -267,19 +276,20 @@ public class Game
     /**
      * Computes the influence on the island where the passed index points. This implies probably
      * moving towers.
+     * 
      * @param island the island index where we compute the influence
      * @throws IndexOutOfBoundsException thrown when the island index is out of bounds
      */
-    //TODO manca il merge delle isole quando possibile
+    // TODO manca il merge delle isole quando possibile
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
-        if(island < 0 || island > islands.size())
+        if (island < 0 || island > islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
         Island currentIsland = islands.get(island);
 
-        //If the island has a no entry tile I remove it and don't calculate the influence
-        if(currentIsland.getNoEntryTiles() > 0)
+        // If the island has a no entry tile I remove it and don't calculate the influence
+        if (currentIsland.getNoEntryTiles() > 0)
         {
             currentIsland.removeNoEntryTile();
             return;
@@ -287,10 +297,11 @@ public class Game
 
         // TODO: Use Pair
         // Get the player with more influence, if there is any
-        List<Player> sortedPlayers = players.stream()
-                .sorted((p1, p2) -> computePlayerInfluence(p1, island) - computePlayerInfluence(p2, island)).collect(Collectors.toList());
-        if (computePlayerInfluence(sortedPlayers.get(0), island) > computePlayerInfluence(
-                sortedPlayers.get(1), island))
+        List<Player> sortedPlayers = players.stream().sorted(
+                (p1, p2) -> computePlayerInfluence(p1, island) - computePlayerInfluence(p2, island))
+                .collect(Collectors.toList());
+        if (computePlayerInfluence(sortedPlayers.get(0),
+                island) > computePlayerInfluence(sortedPlayers.get(1), island))
         {
             // This player has more influence then all others
             Player influencer = sortedPlayers.get(0);
@@ -324,23 +335,25 @@ public class Game
 
     /**
      * Calculates the influence where mother nature currently is
+     * 
      * @throws NoSuchElementException when mother nature is not set already
      */
     public void computeInfluence() throws NoSuchElementException
     {
-        computeInfluence(motherNatureIndex.orElseThrow(
-                () -> new NoSuchElementException("[Game] No mother nature index, is the game initialized?")));
+        computeInfluence(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                "[Game] No mother nature index, is the game initialized?")));
     }
 
     /**
      * Computes the given player influence for the island where mother nature currently is.
      */
-    public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException
+    public int computePlayerInfluence(Player player, int island)
+            throws NoSuchElementException, IndexOutOfBoundsException
     {
-        if(island < 0 || island > islands.size())
+        if (island < 0 || island > islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
-        if(player == null)
+        if (player == null)
             throw new NullPointerException("[Game] player null");
 
         Island currentIsland = islands.get(island);
@@ -358,16 +371,16 @@ public class Game
 
     /**
      * Moves the students from the cloud tile selected by the current player to his entrance.
+     * 
      * @throws NoSuchElementException Thrown if the player or the cloud tile is not selected
      */
     public void moveStudentsFromCloudTile() throws NoSuchElementException
     {
         CloudTile cloudTile = cloudTiles.get(getSelectedPlayer()
                 .orElseThrow(() -> new NoSuchElementException(
-                "[Game] Unable to get the current player, is a player selected?"))
-                .getSelectedCloudTile().orElseThrow(
-                        () -> new NoSuchElementException("[Game] No Cloud Tile selected")
-                ));
+                        "[Game] Unable to get the current player, is a player selected?"))
+                .getSelectedCloudTile()
+                .orElseThrow(() -> new NoSuchElementException("[Game] No Cloud Tile selected")));
 
         // Remove the students from the cloud tile
         List<Student> students = cloudTile.getStudentsList();
@@ -443,8 +456,8 @@ public class Game
                 return prevAction.equals(GameAction.MOVE_MOTHER_NATURE);
             }
             case PLAY_CHARACTER_CARD:
-                //TODO REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
-                if(currentCharacterCardIndex.isEmpty())
+                // TODO REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
+                if (currentCharacterCardIndex.isEmpty())
                     return true;
                 else
                     return false;
@@ -477,8 +490,8 @@ public class Game
         studentBag.add(new Student(SchoolColor.YELLOW));
 
         // TODO: Check if mother nature is there or in the opposite island
-        IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.get(i)
-                .addStudent(getStudentFromBag()));
+        IntStream.range(0, ISLAND_TILES_NUMBER)
+                .forEach(i -> islands.get(i).addStudent(getStudentFromBag()));
 
         // 4. Populate the bag with the remaining students
         for (SchoolColor color : SchoolColor.values())
@@ -499,7 +512,7 @@ public class Game
         players.forEach(p -> {
             SchoolBoard board = p.getBoard();
 
-            IntStream.range(0, board.MAX_TOWERS)
+            IntStream.range(0, board.getMaxTowers())
                     .forEach(i -> board.addTower(new Tower(p.getColor())));
         });
 
@@ -524,7 +537,7 @@ public class Game
                 .round(startInclusive + Math.random() * (startInclusive - endExclusive) - 0.5);
     }
 
-    //TODO forse dovrebbe lanciare una eccezione quando sono finiti gli studenti
+    // TODO forse dovrebbe lanciare una eccezione quando sono finiti gli studenti
     // così si sa che la partita deve terminare
     /**
      * Returns a random student from the bag.
@@ -569,16 +582,15 @@ public class Game
     {
         try
         {
-            return Optional.of(characterCards
-                    .get(currentCharacterCardIndex.orElseThrow(() -> new NoSuchElementException(
-                            "[Game] Character card not selected"))));
+            return Optional.of(characterCards.get(currentCharacterCardIndex.orElseThrow(
+                    () -> new NoSuchElementException("[Game] Character card not selected"))));
         } catch (IndexOutOfBoundsException e)
         {
             return Optional.empty();
         }
     }
 
-    //TODO IT IS NOT SO GOOD, BUT FOR GRANDMA HERBS WE HAVE NO CHOICE
+    // TODO IT IS NOT SO GOOD, BUT FOR GRANDMA HERBS WE HAVE NO CHOICE
     public List<Island> getIslands()
     {
         return new ArrayList<Island>(islands);
@@ -594,13 +606,14 @@ public class Game
 
     /**
      * Removes a professor from the list
+     * 
      * @param index the professor to be removed
      * @return the removed professor
      * @throws IndexOutOfBoundsException thrown if the index is out of bounds
      */
     public Professor removeProfessor(int index) throws IndexOutOfBoundsException
     {
-        if(index < 0 || index >= professors.size())
+        if (index < 0 || index >= professors.size())
             throw new IndexOutOfBoundsException("[Game] professor index out of bounds");
         return professors.remove(index);
     }

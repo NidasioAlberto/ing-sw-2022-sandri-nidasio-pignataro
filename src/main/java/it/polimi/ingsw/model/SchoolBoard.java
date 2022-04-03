@@ -14,8 +14,8 @@ public class SchoolBoard
     /**
      * Dependent on the number of players.
      */
-    public final int MAX_STUDENTS_ENTRANCE;
-    public final int MAX_TOWERS;
+    private Integer maxStudentsInEntrance = null;
+    private Integer maxTowers = null;
 
     /**
      * The entrance zone.
@@ -49,21 +49,13 @@ public class SchoolBoard
      * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9.
      * @throws NullPointerException Thrown if the color passed is null
      */
-    public SchoolBoard(int maxStudents, TowerColor color)
-            throws IllegalArgumentException, NullPointerException
+    public SchoolBoard(TowerColor color) throws NullPointerException
     {
-        if (maxStudents != 7 && maxStudents != 9)
-            throw new IllegalArgumentException("[SchoolBoard] Invalid max students parameter");
         if (color == null)
             throw new NullPointerException("[SchoolBoard] Null tower color");
 
-        this.MAX_STUDENTS_ENTRANCE = maxStudents;
-
-        // The max number of towers depends on the number of players
-        this.MAX_TOWERS = maxStudents == 7 ? 8 : 6;
-
-        //Assign the tower color
-        this.towerColor = color;
+        // Assign the tower color
+        towerColor = color;
 
         // Instantiate all the things
         entrance = new ArrayList<Student>();
@@ -79,6 +71,29 @@ public class SchoolBoard
         diningRoom.put(SchoolColor.YELLOW, new ArrayList<Student>());
     }
 
+    public void setPlayersNumber(Integer playersNumber)
+            throws IllegalArgumentException, IllegalStateException
+    {
+        // The number of players must be between 2 and 4
+        if (playersNumber < 2 || playersNumber > 4)
+            throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
+
+        // The number of players must not be modifiable
+        if (maxStudentsInEntrance != null && maxTowers != null)
+            throw new IllegalStateException("[SchoolBoard] The number of players can't be changed");
+
+        // The max number of students and towers depends on the number of players
+        if (playersNumber == 3)
+        {
+            maxStudentsInEntrance = 9;
+            maxTowers = 6;
+        } else
+        {
+            maxStudentsInEntrance = 7;
+            maxTowers = 8;
+        }
+    }
+
     /**
      * Adds the professor to the professors table.
      * 
@@ -91,11 +106,9 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null professor");
 
         // Check if it is not null and not already present
-        if (professor != null && !professorTable.contains(professor) &&
-                professorTable.stream().filter(p -> p.getColor() == professor.getColor()).findFirst().isEmpty())
-        {
+        if (professor != null && !professorTable.contains(professor) && professorTable.stream()
+                .filter(p -> p.getColor() == professor.getColor()).findFirst().isEmpty())
             professorTable.add(professor);
-        }
     }
 
     /**
@@ -111,9 +124,7 @@ public class SchoolBoard
 
         // Check if it is not null and present
         if (professorTable.contains(professor))
-        {
             professorTable.remove(professor);
-        }
     }
 
     /**
@@ -137,13 +148,13 @@ public class SchoolBoard
     {
         if (tower == null)
             throw new NullPointerException("[SchoolBoard] Null tower");
+        if (maxTowers == null)
+            throw new NullPointerException("[SchoolBoard] Undefined max number of towers");
 
         // Check if the tower is not null, isn't already present
         // and the list doesn't exceed the limit
-        if (!towers.contains(tower) && towers.size() < MAX_TOWERS && tower.getColor() == towerColor)
-        {
+        if (!towers.contains(tower) && towers.size() < maxTowers && tower.getColor() == towerColor)
             towers.add(tower);
-        }
     }
 
     /**
@@ -153,28 +164,26 @@ public class SchoolBoard
      */
     public void removeTower(Tower tower)
     {
-        if(tower == null)
+        if (tower == null)
             throw new NullPointerException("[SchoolBoard] Null tower");
 
         // Checks if the tower is not null and present
         if (towers.contains(tower))
-        {
             towers.remove(tower);
-        }
     }
 
     /**
      * Same as removeTower(Tower) but removes a tower of that color
+     * 
      * @param color the color of the removed tower
      */
     public void removeTower(TowerColor color)
     {
-        if(color == null)
+        if (color == null)
             throw new NullPointerException("[SchoolBoard] Null color");
 
-        removeTower(towers.stream().filter(t -> t.getColor() == color)
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("[SchoolBoard] No tower of that color")));
+        removeTower(towers.stream().filter(t -> t.getColor() == color).findFirst().orElseThrow(
+                () -> new NoSuchElementException("[SchoolBoard] No tower of that color")));
     }
 
     /**
@@ -187,19 +196,17 @@ public class SchoolBoard
     {
         if (student == null)
             throw new NullPointerException("[SchoolBoard] Null student");
+        if (maxStudentsInEntrance == null)
+            throw new NullPointerException("[SchoolBoard] Undefined max number of students");
 
         // Checks if the student is null or present already in the board
-        if (entrance.contains(student) || entrance.size() >= MAX_STUDENTS_ENTRANCE)
-        {
+        if (entrance.contains(student) || entrance.size() >= maxStudentsInEntrance)
             return;
-        }
 
         // Check if the student is not present in the dining room
         if (!diningRoom.get(student.getColor()).contains(student))
-        {
             // Add the student to the entrance
             entrance.add(student);
-        }
     }
 
     /**
@@ -215,10 +222,8 @@ public class SchoolBoard
         // Check if it is not already present and not null and if the dining room is not full
         if (!diningRoom.get(student.getColor()).contains(student)
                 && diningRoom.get(student.getColor()).size() < MAX_STUDENTS_PER_ROOM)
-        {
             // Add the student to the map
             diningRoom.get(student.getColor()).add(student);
-        }
     }
 
     /**
@@ -228,32 +233,33 @@ public class SchoolBoard
      */
     public void removeStudentFromEntrance(Student student)
     {
-        if(student == null)
+        if (student == null)
             throw new NullPointerException("[SchoolBoard] Null student");
 
         // Checks if not null and present in entrance
         if (entrance.contains(student))
-        {
             entrance.remove(student);
-        }
     }
 
     /**
      * Removes the student from the entrance
+     * 
      * @param color the student color to be removed
      * @return the removed student
      */
-    public Optional<Student> removeStudentFromEntrance(SchoolColor color) throws NullPointerException
+    public Optional<Student> removeStudentFromEntrance(SchoolColor color)
+            throws NullPointerException
     {
-        if(color == null)
+        if (color == null)
             throw new NullPointerException("[SchoolBoard] Null color");
 
-        //Find the student with that color
+        // Find the student with that color
         int index = -1;
-        for(int i = 0; i < entrance.size(); i++) { index = color == entrance.get(i).getColor() ? i : index; }
+        for (int i = 0; i < entrance.size(); i++)
+            index = color == entrance.get(i).getColor() ? i : index;
 
-        //If I found it I return the object removed
-        if(index != -1)
+        // If I found it I return the object removed
+        if (index != -1)
             return Optional.of(entrance.remove(index));
         else
             return Optional.empty();
@@ -267,18 +273,14 @@ public class SchoolBoard
      */
     public Optional<Student> removeStudentFromDining(SchoolColor color)
     {
-        if(color == null)
+        if (color == null)
             throw new NullPointerException("[SchoolBoard] Null color");
 
         // Checks if not null and there is at least one student of that color in dining
         if (diningRoom.get(color) != null && diningRoom.get(color).size() > 0)
-        {
-            return Optional.of(diningRoom.get(color).remove(diningRoom.get(color).size()-1));
-        }
+            return Optional.of(diningRoom.get(color).remove(diningRoom.get(color).size() - 1));
         else
-        {
             return Optional.empty();
-        }
     }
 
     /**
@@ -297,8 +299,7 @@ public class SchoolBoard
         {
             removeStudentFromEntrance(student);
             addStudentToDiningRoom(student);
-        }
-        else
+        } else
         {
             throw new NoSuchElementException("[SchoolBoard] No such student in Entrance");
         }
@@ -306,16 +307,19 @@ public class SchoolBoard
 
     /**
      * Same as the moveStudentToDining(Student student) but with the SchoolColor parameter
+     * 
      * @param color the color of the student to be moved
      */
-    public void moveStudentToDining(SchoolColor color) throws NullPointerException, NoSuchElementException
+    public void moveStudentToDining(SchoolColor color)
+            throws NullPointerException, NoSuchElementException
     {
         if (color == null)
             throw new NullPointerException("[SchoolBoard] Null color");
 
-        //Save the student instance
-        Student removed = removeStudentFromEntrance(color)
-                .orElseThrow(() -> new NoSuchElementException("[SchoolBoard] No student in Entrance with the specified color"));
+        // Save the student instance
+        Student removed =
+                removeStudentFromEntrance(color).orElseThrow(() -> new NoSuchElementException(
+                        "[SchoolBoard] No student in Entrance with the specified color"));
 
         addStudentToDiningRoom(removed);
     }
@@ -340,9 +344,23 @@ public class SchoolBoard
         return diningRoom.get(color).size();
     }
 
-    public int getRemainingMovableStudentsInEntrance()
+    public int getRemainingMovableStudentsInEntrance() throws NullPointerException
     {
-        int movableStudents = MAX_STUDENTS_ENTRANCE == 7 ? 3 : 4;
-        return movableStudents - (MAX_STUDENTS_ENTRANCE - entrance.size());
+        if (maxStudentsInEntrance == null)
+            throw new NullPointerException("[SchoolBoard] Undefined number of students");
+
+        int movableStudents = maxStudentsInEntrance == 7 ? 3 : 4;
+        return movableStudents - (maxStudentsInEntrance - entrance.size());
     }
+
+    public int getMaxStudentsInEntrance()
+    {
+        return maxStudentsInEntrance;
+    }
+
+    public int getMaxTowers()
+    {
+        return maxTowers;
+    }
+
 }

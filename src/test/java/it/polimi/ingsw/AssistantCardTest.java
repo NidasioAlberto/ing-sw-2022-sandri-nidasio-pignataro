@@ -1,8 +1,6 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.AssistantCard;
-import it.polimi.ingsw.model.Tower;
-import it.polimi.ingsw.model.TowerColor;
 import it.polimi.ingsw.model.Wizard;
 import org.junit.jupiter.api.Test;
 
