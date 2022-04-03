@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Player
 {
-    /**
+     /**
      * The nickname of the player.
      */
     private String nickname;
@@ -38,7 +38,7 @@ public class Player
     /**
      * The assistant card selected by the player during the planning phase.
      */
-    private Optional<Integer> selectedCard;
+    private Optional<AssistantCard> selectedCard;
 
     /**
      * The island selected by the player during an action.
@@ -55,13 +55,21 @@ public class Player
      */
     private Optional<Integer> selectedCloudTile;
 
-    public Player(String nickname, SchoolBoard board)
+    public Player(String nickname, SchoolBoard board) throws NullPointerException
     {
+        if (nickname == null || board == null)
+            throw new NullPointerException("[Player] Nickname or board can't be null");
+
         this.nickname = nickname;
-        coins = 0;
         this.board = board;
         cards = new ArrayList<AssistantCard>();
+        //TODO assumo che quando viene creato un player gli venga passata una board già setuppata
+        color = board.getTowers().get(0).getColor();
+        coins = 0;
+        selectedCard = Optional.empty();
+        selectedIsland = Optional.empty();
         selectedColors = new ArrayList<SchoolColor>();
+        selectedCloudTile = Optional.empty();
     }
 
     /**
@@ -86,6 +94,9 @@ public class Player
      */
     public void removeCoins(int coins) throws IllegalArgumentException
     {
+        if (coins < 0)
+            throw new IllegalArgumentException("[Player] You can't remove a negative number of coins");
+
         if (this.coins < coins)
             throw new IllegalArgumentException("[Player] There aren't enough coins");
 
@@ -96,15 +107,19 @@ public class Player
      * Method to select an AssistantCard during the planning phase.
      * 
      * @param turnOrder The number of turn of the card.
-     * @throws IllegalArgumentException Thrown if the player hasn't got the selected card.
+     * @throws IllegalArgumentException if the player hasn't got the selected card.
+     * @throws NullPointerException if the parameter is null.
      */
-    public void selectCard(Integer turnOrder) throws IllegalArgumentException
+    public void selectCard(Integer turnOrder) throws IllegalArgumentException, NullPointerException
     {
+        if (turnOrder == null)
+            throw new NullPointerException("[Player] The turnOrder can't be null");
+
         for (int i = 0; i < cards.size(); i++)
         {
             if (cards.get(i).getTurnOrder() == turnOrder)
             {
-                selectedCard = Optional.of(i);
+                selectedCard = Optional.of(cards.get(i));
                 return;
             }
         }
@@ -125,8 +140,14 @@ public class Player
         if (cards.isEmpty())
         {
             cards.add(card);
-        } else if (cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
+        }
+        else if (cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
         {
+            for (AssistantCard assistantCard : cards)
+            {
+                if (assistantCard.getTurnOrder() == card.getTurnOrder())
+                    return;
+            }
             cards.add(card);
         }
     }
@@ -135,10 +156,14 @@ public class Player
      * Method to remove an AssistantCard from the player's list of cards.
      * 
      * @param turnOrder The number of turn of the card.
-     * @throws IllegalArgumentException Thrown if the player doesn't have the selected card.
+     * @throws IllegalArgumentException if the player doesn't have the selected card.
+     * @throws NullPointerException if the parameter is null
      */
-    public void removeCard(int turnOrder) throws IllegalArgumentException
+    public void removeCard(Integer turnOrder) throws IllegalArgumentException, NullPointerException
     {
+        if (turnOrder == null)
+            throw new NullPointerException("[Player] The parameter can't be null");
+
         for (int i = 0; i < cards.size(); i++)
         {
             if (cards.get(i).getTurnOrder() == turnOrder)
@@ -155,10 +180,12 @@ public class Player
      */
     public void removeSelectedCard() throws NoSuchElementException
     {
-        Integer cardTurnOrder = selectedCard.orElseThrow(() -> new NoSuchElementException(
+        AssistantCard card = selectedCard.orElseThrow(() -> new NoSuchElementException(
                 "[Player] The player currently doesn't have a selected card"));
 
-        removeCard(cardTurnOrder);
+        removeCard(card.getTurnOrder());
+
+        selectedCard = Optional.empty();
     }
 
     /**
@@ -186,14 +213,6 @@ public class Player
     }
 
     /**
-     * Method to remove all the colors the player has selected.
-     */
-    public void clearSelectedColors()
-    {
-        selectedColors.clear();
-    }
-
-    /**
      * Method to select a CloudTile during the last phase of the action phase.
      * 
      * @param tile The index of the CloudTile.
@@ -201,6 +220,17 @@ public class Player
     public void selectCloudTile(int tile)
     {
         selectedCloudTile = Optional.of(tile);
+    }
+
+    /**
+     * Method to call at the end of the player's turn to clear all the selections
+     */
+    public void clearSelections()
+    {
+        selectedCard = Optional.empty();
+        selectedIsland = Optional.empty();
+        selectedColors.clear();
+        selectedCloudTile = Optional.empty();
     }
 
     public String getNickname()
@@ -213,7 +243,7 @@ public class Player
         return board;
     }
 
-    public Optional<Integer> getSelectedCard()
+    public Optional<AssistantCard> getSelectedCard()
     {
         return selectedCard;
     }

@@ -107,9 +107,8 @@ public class Game
 
         try
         {
-            sortedList.sort((a, b) -> a.getCardsList().get(a.getSelectedCard().orElseThrow())
-                    .getTurnOrder()
-                    - b.getCardsList().get(b.getSelectedCard().orElseThrow()).getTurnOrder());
+            sortedList.sort((a, b) -> a.getSelectedCard().orElseThrow().getTurnOrder()
+                    - b.getSelectedCard().orElseThrow().getTurnOrder());
         } catch (NoSuchElementException e)
         {
             throw new NoSuchElementException("[Game] One of the players have not selected a card");
@@ -258,11 +257,8 @@ public class Game
     {
         //I have to check if the current player can do this movement
         Player currentPlayer        = getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
-        AssistantCard selectedCard  = currentPlayer
-                .getCardsList()
-                .get(currentPlayer
-                        .getSelectedCard()
-                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card")));
+        AssistantCard selectedCard  = currentPlayer.getSelectedCard()
+                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card"));
 
         return selectedCard.getSteps() >= steps;
     }

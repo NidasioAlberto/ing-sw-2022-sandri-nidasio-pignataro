@@ -58,6 +58,7 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null tower color");
 
         this.MAX_STUDENTS_ENTRANCE = maxStudents;
+        towerColor = color;
 
         // The max number of towers depends on the number of players
         this.MAX_TOWERS = maxStudents == 7 ? 8 : 6;

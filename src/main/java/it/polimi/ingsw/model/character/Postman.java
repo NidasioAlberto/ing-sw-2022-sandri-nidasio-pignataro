@@ -75,11 +75,8 @@ public class Postman extends CharacterCard
 
         //I have to check if the current player can do this movement
         Player currentPlayer        = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
-        AssistantCard selectedCard  = currentPlayer
-                .getCardsList()
-                .get(currentPlayer
-                        .getSelectedCard()
-                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card")));
+        AssistantCard selectedCard  = currentPlayer.getSelectedCard()
+                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card"));
 
         //Here occurs the modification
         return selectedCard.getSteps() + 2 >= steps;
