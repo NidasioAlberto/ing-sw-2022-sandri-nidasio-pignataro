@@ -23,7 +23,7 @@ public class PlayerTest
         board.setPlayersNumber(2);
         for (int i = 0; i < 8; i++)
             board.addTower(new Tower(TowerColor.WHITE));
-        player = new Player("Player1", board);
+        player = new Player("Player1", TowerColor.WHITE, board);
     }
 
     @Test
@@ -35,10 +35,15 @@ public class PlayerTest
     {
         // Nickname can't be null
         assertThrows(NullPointerException.class,
-                () -> new Player(null, new SchoolBoard(TowerColor.WHITE)));
+                () -> new Player(null, TowerColor.WHITE, new SchoolBoard(TowerColor.WHITE)));
+
+        // Color can't be null
+        assertThrows(NullPointerException.class,
+                () -> new Player("Player1", null, new SchoolBoard(TowerColor.WHITE)));
 
         // SchoolBoard can't be null
-        assertThrows(NullPointerException.class, () -> new Player("Player1", null));
+        assertThrows(NullPointerException.class,
+                () -> new Player("Player1", TowerColor.WHITE, null));
 
         // Check the initialization values
         assertEquals("Player1", player.getNickname());

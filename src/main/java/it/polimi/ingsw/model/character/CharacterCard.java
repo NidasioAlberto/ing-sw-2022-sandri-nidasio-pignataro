@@ -44,9 +44,9 @@ public abstract class CharacterCard extends Game
         if (game == null)
             throw new NullPointerException("[CharacterCard] null game instance");
 
-        this.instance   = game;
-        this.firstUsed  = false;
-        this.activated  = false;
+        this.instance = game;
+        this.firstUsed = false;
+        this.activated = false;
     }
 
     /**
@@ -69,11 +69,10 @@ public abstract class CharacterCard extends Game
     public abstract boolean isValidAction(GameAction action);
 
     /**
-     * Method to apply the card action to the Game model.
-     * IMPORTANT: This method has to be called after the corresponding action is thrown.
-     * It acts with the ALREADY selected objects in the player instance.
-     * IMPORTANT2: THIS METHOD IS CALLED BY REFERENCING TO THE ARRAY OF CHARACTER CARDS
-     * AND NOT WITH THE GAME INSTANCE
+     * Method to apply the card action to the Game model. IMPORTANT: This method has to be called
+     * after the corresponding action is thrown. It acts with the ALREADY selected objects in the
+     * player instance. IMPORTANT2: THIS METHOD IS CALLED BY REFERENCING TO THE ARRAY OF CHARACTER
+     * CARDS AND NOT WITH THE GAME INSTANCE
      */
     public abstract void applyAction() throws NoSuchElementException;
 
@@ -82,21 +81,21 @@ public abstract class CharacterCard extends Game
      */
     public void activate()
     {
-        //When we activate the card we subtract the coins cost
-        if(instance.getSelectedPlayer().isEmpty())
+        // When we activate the card we subtract the coins cost
+        if (instance.getSelectedPlayer().isEmpty())
             throw new NoSuchElementException("[CharacterCard] No player selected");
 
-        //I subtract the coins only if the player can pay
-        if(instance.getSelectedPlayer().get().getCoins() >= cost)
+        // I subtract the coins only if the player can pay
+        if (instance.getSelectedPlayer().get().getCoins() >= cost)
         {
             instance.getSelectedPlayer().get().removeCoins(cost);
             this.activated = true;
-            //Clear the prev action
+            // Clear the prev action
             this.previousAction = Optional.empty();
-            //Set the card to first used
-            if(!firstUsed)
+            // Set the card to first used
+            if (!firstUsed)
             {
-                //If used for the first time i set it already used and increment the cost
+                // If used for the first time i set it already used and increment the cost
                 this.firstUsed = true;
                 this.cost++;
             }
@@ -136,11 +135,6 @@ public abstract class CharacterCard extends Game
         return instance.getSelectedPlayer();
     }
 
-    public void setupTiles()
-    {
-        instance.setupCloudTiles();
-    }
-
     public List<Player> getSortedPlayerList()
     {
         return instance.getSortedPlayerList();
@@ -151,7 +145,11 @@ public abstract class CharacterCard extends Game
         return instance.getPlayerTableList();
     }
 
-    public Student pickStudentFromEntrance() { return instance.pickStudentFromEntrance(); }
+    public Student pickStudentFromEntrance()
+    {
+        return instance.pickStudentFromEntrance();
+    }
+
     public void putStudentToIsland(Student student)
     {
         instance.putStudentToIsland(student);
@@ -162,14 +160,20 @@ public abstract class CharacterCard extends Game
         instance.putStudentToDining(student);
     }
 
-    public void conquerProfessors() { instance.conquerProfessors(); }
+    public void conquerProfessors()
+    {
+        instance.conquerProfessors();
+    }
 
     public void moveMotherNature(int steps)
     {
         instance.moveMotherNature(steps);
     }
 
-    public boolean isValidMotherNatureMovement(int steps) { return instance.isValidMotherNatureMovement(steps); }
+    public boolean isValidMotherNatureMovement(int steps)
+    {
+        return instance.isValidMotherNatureMovement(steps);
+    }
 
     // TODO TALK ABOUT WHAT THIS METHOD CAN AND SHOULD DO
     public void computeInfluence()
@@ -177,9 +181,15 @@ public abstract class CharacterCard extends Game
         instance.computeInfluence();
     }
 
-    public void computeInfluence(int island) { instance.computeInfluence(island); }
+    public void computeInfluence(int island)
+    {
+        instance.computeInfluence(island);
+    }
 
-    public int computePlayerInfluence(Player player, int island) {return instance.computePlayerInfluence(player, island); }
+    public int computePlayerInfluence(Player player, int island)
+    {
+        return instance.computePlayerInfluence(player, island);
+    }
 
     public void moveStudentsFromCloudTile()
     {

@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.character.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,7 +12,6 @@ import java.util.stream.IntStream;
 
 public class Game
 {
-    public static final int MAX_PLAYERS = 4;
     public static final int ISLAND_TILES_NUMBER = 12;
     public static final int ASSISTANT_CARDS_DECK_SIZE = 10;
 
@@ -20,6 +19,11 @@ public class Game
      * List of all the players in the game in table order (as they are added to the game).
      */
     protected List<Player> players;
+
+    /**
+     * Number of players needed for the game.
+     */
+    private Integer playersNumber;
 
     protected List<Island> islands;
 
@@ -39,27 +43,45 @@ public class Game
 
     protected Optional<GameAction> previousAction;
 
-    public Game()
+    public Game() throws NullPointerException
     {
+        this(2);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param playersNumber Number of players for the game
+     * @throws NullPointerException Thrown if the number of players passed is null
+     */
+    public Game(Integer playersNumber) throws NullPointerException
+    {
+        if (playersNumber == null)
+            throw new NullPointerException("[SchoolBoard] Null players number");
+        if (playersNumber < 2 || playersNumber > 4)
+            throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
+
         players = new ArrayList<>();
+        this.playersNumber = playersNumber;
         islands = new ArrayList<>();
         cloudTiles = new ArrayList<>();
         studentBag = new ArrayList<>();
         characterCards = new ArrayList<>();
         professors = new ArrayList<>();
-        currentPlayerIndex = Optional.of(null);
-        motherNatureIndex = Optional.of(null);
-        currentCharacterCardIndex = Optional.of(null);
-        previousAction = Optional.of(null);
+        currentPlayerIndex = Optional.empty();
+        motherNatureIndex = Optional.empty();
+        currentCharacterCardIndex = Optional.empty();
+        previousAction = Optional.empty();
     }
 
     /**
      * Adds a player to the current game. If the game already contains the maximum number of players
      * possible, an exception is thrown.
      */
+    // TODO: Check the player's color against other players
     public void addPlayer(Player player) throws TooManyPlayersException
     {
-        if (players.size() > MAX_PLAYERS)
+        if (players.size() >= playersNumber)
             throw new TooManyPlayersException(players.size());
         players.add(player);
     }
@@ -92,15 +114,9 @@ public class Game
     }
 
     /**
-     * TODO: Cosa dovrebbe fare?
+     * Return the players list sorted by their turn order based on the played assistant cards.
      */
-    public void setupCloudTiles()
-    {}
-
-    /**
-     * Return the players list sorted by their turn order based on the played assistant cards. TODO:
-     * Ci deve essere un modo più bello per fare il sort e ritornare una nuova lista.
-     */
+    // TODO: Ci deve essere un modo più bello per fare il sort e ritornare una nuova lista.
     public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
         List<Player> sortedList = new ArrayList<>(players);
@@ -271,7 +287,6 @@ public class Game
 
         return selectedCard.getSteps() >= steps;
     }
-
 
     /**
      * Computes the influence on the island where the passed index points. This implies probably
@@ -456,7 +471,7 @@ public class Game
                 return prevAction.equals(GameAction.MOVE_MOTHER_NATURE);
             }
             case PLAY_CHARACTER_CARD:
-                // TODO REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
+                // TODO: REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
                 if (currentCharacterCardIndex.isEmpty())
                     return true;
                 else
@@ -469,8 +484,12 @@ public class Game
     /**
      * Sets up all the game's components.
      */
-    public void setupGame()
+    public void setupGame() throws IllegalStateException
     {
+        // 0. Check if all the expected players have been added to the game
+        if (players.size() != playersNumber)
+            throw new IllegalStateException("[Game] Not enough players to setup the game");
+
         // 1. Place the islands
         IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.add(new Island()));
 
@@ -488,10 +507,12 @@ public class Game
         studentBag.add(new Student(SchoolColor.RED));
         studentBag.add(new Student(SchoolColor.YELLOW));
         studentBag.add(new Student(SchoolColor.YELLOW));
-
-        // TODO: Check if mother nature is there or in the opposite island
-        IntStream.range(0, ISLAND_TILES_NUMBER)
-                .forEach(i -> islands.get(i).addStudent(getStudentFromBag()));
+        IntStream.range(0, ISLAND_TILES_NUMBER).forEach((i) -> {
+            if (i != motherNatureIndex.get()
+                    && i != (motherNatureIndex.get() + ISLAND_TILES_NUMBER / 2)
+                    && i != (motherNatureIndex.get() - ISLAND_TILES_NUMBER / 2))
+                islands.get(i).addStudent(getStudentFromBag());
+        });
 
         // 4. Populate the bag with the remaining students
         for (SchoolColor color : SchoolColor.values())
@@ -506,7 +527,7 @@ public class Game
             professors.add(new Professor(color));
 
         // 7. Each player takes a school board when they are added to the game
-        // TODO: We suppose that at this method call the players are already populated
+        // When setupGame is called, all the players must be in the game with their board
 
         // 8. Each players takes 8 or 6 towers
         players.forEach(p -> {
@@ -525,7 +546,7 @@ public class Game
 
         // 10. Each player gets 7 or 9 students in his entrance
         players.forEach(p -> {
-            IntStream.range(0, players.size() != 3 ? 7 : 9).forEach(i -> {
+            IntStream.range(0, playersNumber != 3 ? 7 : 9).forEach(i -> {
                 p.getBoard().addStudentToEntrance(getStudentFromBag());
             });
         });
@@ -534,7 +555,7 @@ public class Game
     private int getRandomNumber(int startInclusive, int endExclusive)
     {
         return (int) Math
-                .round(startInclusive + Math.random() * (startInclusive - endExclusive) - 0.5);
+                .round(startInclusive + Math.random() * (endExclusive - startInclusive) - 0.5);
     }
 
     // TODO forse dovrebbe lanciare una eccezione quando sono finiti gli studenti
@@ -546,7 +567,7 @@ public class Game
      */
     public Student getStudentFromBag()
     {
-        return studentBag.remove(getRandomNumber(0, studentBag.size()));
+        return studentBag.remove(0);// getRandomNumber(0, studentBag.size()));
     }
 
     /**

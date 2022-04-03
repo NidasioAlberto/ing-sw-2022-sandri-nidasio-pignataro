@@ -46,7 +46,7 @@ public class SchoolBoard
      * Constructor.
      * 
      * @param maxStudents max number of students in the entrance (7 or 9)
-     * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9.
+     * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9
      * @throws NullPointerException Thrown if the color passed is null
      */
     public SchoolBoard(TowerColor color) throws NullPointerException

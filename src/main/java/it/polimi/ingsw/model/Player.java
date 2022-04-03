@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Player
 {
-     /**
+    /**
      * The nickname of the player.
      */
     private String nickname;
@@ -55,16 +55,19 @@ public class Player
      */
     private Optional<Integer> selectedCloudTile;
 
-    public Player(String nickname, SchoolBoard board) throws NullPointerException
+    public Player(String nickname, TowerColor color, SchoolBoard board) throws NullPointerException
     {
-        if (nickname == null || board == null)
-            throw new NullPointerException("[Player] Nickname or board can't be null");
+        if (nickname == null)
+            throw new NullPointerException("[Player] The player's nickname can't be null");
+        if (color == null)
+            throw new NullPointerException("[Player] The player's color can't be null");
+        if (board == null)
+            throw new NullPointerException("[Player] The player's board can't be null");
 
         this.nickname = nickname;
+        this.color = color;
         this.board = board;
         cards = new ArrayList<AssistantCard>();
-        //TODO assumo che quando viene creato un player gli venga passata una board già setuppata
-        color = board.getTowers().get(0).getColor();
         coins = 0;
         selectedCard = Optional.empty();
         selectedIsland = Optional.empty();
@@ -95,7 +98,8 @@ public class Player
     public void removeCoins(int coins) throws IllegalArgumentException
     {
         if (coins < 0)
-            throw new IllegalArgumentException("[Player] You can't remove a negative number of coins");
+            throw new IllegalArgumentException(
+                    "[Player] You can't remove a negative number of coins");
 
         if (this.coins < coins)
             throw new IllegalArgumentException("[Player] There aren't enough coins");
@@ -140,8 +144,7 @@ public class Player
         if (cards.isEmpty())
         {
             cards.add(card);
-        }
-        else if (cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
+        } else if (cards.get(0).getWizard() == card.getWizard() && !cards.contains(card))
         {
             for (AssistantCard assistantCard : cards)
             {
