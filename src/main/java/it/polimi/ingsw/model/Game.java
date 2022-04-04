@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.character.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -164,8 +163,8 @@ public class Game
     }
 
     /**
-     * Puts the student passed via parameter inside the dining room. If the student or the island
-     * are not found, an exception is thrown.
+     * Puts the student passed via parameter inside the dining room. If the student is null, an
+     * exception is thrown.
      * 
      * @param student The student to be added to the Dining room
      * @throws NoSuchElementException if a player or an island is not selected
@@ -180,7 +179,7 @@ public class Game
     }
 
     /**
-     * Takes the student from the selected player's entrance and removes it
+     * Takes the student from the selected player's entrance and removes it.
      * 
      * @return The student of the selected color
      */
@@ -219,14 +218,10 @@ public class Game
         // color. If the professor is still in this instance it means that no one has a student
         // of the expected color except from that player
         for (int i = 0; i < professors.size(); i++)
-        {
             // If the player has at least one student of the same color i can assign
             // the professor to that player
             if (currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
-            {
                 currentPlayer.getBoard().addProfessor(professors.remove(i));
-            }
-        }
 
         // Now I can check who is the player with the most students for every color and the assign
         // the professor
@@ -272,7 +267,7 @@ public class Game
 
     /**
      * Method that tells the controller if the number of steps can be achieved by the selected
-     * player
+     * player.
      * 
      * @param steps the number of steps that needs to be checked
      * @return the validity of the operation
@@ -285,7 +280,7 @@ public class Game
         AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(
                 () -> new NoSuchElementException("[Game] Player didn't select assistant card"));
 
-        return selectedCard.getSteps() >= steps;
+        return selectedCard.getSteps() >= steps && steps >= 1;
     }
 
     /**
@@ -527,7 +522,9 @@ public class Game
             professors.add(new Professor(color));
 
         // 7. Each player takes a school board when they are added to the game
-        // When setupGame is called, all the players must be in the game with their board
+        // When setupGame is called, all the players must already have a board
+        for (Player player : players)
+            player.getBoard().setPlayersNumber(playersNumber);
 
         // 8. Each players takes 8 or 6 towers
         players.forEach(p -> {
@@ -540,8 +537,9 @@ public class Game
         // 9. Each player gets a deck of cards
         // TODO: The wizard are assigned automatically! Is it correct?
         players.forEach(p -> {
-            IntStream.range(0, ASSISTANT_CARDS_DECK_SIZE).forEach(i -> p.addCard(
-                    new AssistantCard(Wizard.values()[players.indexOf(p)], i + 1, i / 2 + 1)));
+            IntStream.range(0, ASSISTANT_CARDS_DECK_SIZE).forEach(i -> {
+                p.addCard(new AssistantCard(Wizard.values()[players.indexOf(p)], i + 1, i / 2 + 1));
+            });
         });
 
         // 10. Each player gets 7 or 9 students in his entrance

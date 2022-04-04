@@ -339,6 +339,11 @@ public class SchoolBoard
         return new ArrayList<>(towers);
     }
 
+    /**
+     * Returns the number of students with the specified color inside the dining room.
+     * 
+     * @param color Color of the students
+     */
     public int getStudentsNumber(SchoolColor color)
     {
         return diningRoom.get(color).size();
