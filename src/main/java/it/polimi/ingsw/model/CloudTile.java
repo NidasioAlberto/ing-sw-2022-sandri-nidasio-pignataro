@@ -86,22 +86,8 @@ public class CloudTile
         return type;
     }
 
-    public List<Student> getStudentsList()
+    public List<Student> getStudents()
     {
         return new ArrayList<Student>(students);
-    }
-
-    public Student[] getStudents()
-    {
-        // Create an intermediate list
-        List<Student> list = getStudentsList();
-
-        // Create the result array
-        Student[] result = new Student[list.size()];
-
-        // Fill the array
-        list.toArray(result);
-
-        return result;
     }
 }

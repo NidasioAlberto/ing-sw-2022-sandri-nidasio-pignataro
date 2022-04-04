@@ -271,17 +271,9 @@ public class Player
         return selectedCloudTile;
     }
 
-    public List<AssistantCard> getCardsList()
+    public List<AssistantCard> getCards()
     {
         return new ArrayList<AssistantCard>(cards);
-    }
-
-    public AssistantCard[] getCards()
-    {
-        List<AssistantCard> list = getCardsList();
-        AssistantCard[] result = new AssistantCard[list.size()];
-        list.toArray(result);
-        return result;
     }
 
     public TowerColor getColor()

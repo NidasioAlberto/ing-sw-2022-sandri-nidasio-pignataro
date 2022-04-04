@@ -32,12 +32,12 @@ public class CloudTileTest
 
         // Add a normal student
         cloud.addStudent(new Student(SchoolColor.GREEN));
-        assertEquals(SchoolColor.GREEN ,cloud.getStudentsList().get(0).getColor());
+        assertEquals(SchoolColor.GREEN ,cloud.getStudents().get(0).getColor());
 
         // Add a null student
         assertThrows(NullPointerException.class, () ->  cloud.addStudent(null));
-        assertEquals(SchoolColor.GREEN, cloud.getStudentsList().get(0).getColor());
-        assertEquals(1, cloud.getStudentsList().size());
+        assertEquals(SchoolColor.GREEN, cloud.getStudents().get(0).getColor());
+        assertEquals(1, cloud.getStudents().size());
     }
 
     /**
@@ -51,14 +51,12 @@ public class CloudTileTest
 
         // Add a normal student
         cloud.addStudent(student);
-        assertEquals(student, cloud.getStudentsList().get(0));
-        assertEquals(student, cloud.getStudents()[0]);
+        assertEquals(student, cloud.getStudents().get(0));
 
         // Add a duplicate student
         cloud.addStudent(student);
-        assertEquals(student, cloud.getStudentsList().get(0));
-        assertEquals(student, cloud.getStudents()[0]);
-        assertEquals(1, cloud.getStudentsList().size());
+        assertEquals(student, cloud.getStudents().get(0));
+        assertEquals(1, cloud.getStudents().size());
     }
 
     /**
@@ -77,55 +75,48 @@ public class CloudTileTest
 
         // A CloudTile of type TILE_2_4 must have 3 students max
         cloud_2_4.addStudent(student1);
-        assertEquals(student1, cloud_2_4.getStudentsList().get(0));
-        assertEquals(student1, cloud_2_4.getStudents()[0]);
+        assertEquals(student1, cloud_2_4.getStudents().get(0));
 
         cloud_2_4.addStudent(student2);
-        assertEquals(student1, cloud_2_4.getStudentsList().get(0));
-        assertEquals(student2, cloud_2_4.getStudentsList().get(1));
-        assertEquals(student2, cloud_2_4.getStudents()[1]);
+        assertEquals(student1, cloud_2_4.getStudents().get(0));
+        assertEquals(student2, cloud_2_4.getStudents().get(1));
 
         cloud_2_4.addStudent(student3);
-        assertEquals(student1, cloud_2_4.getStudentsList().get(0));
-        assertEquals(student2, cloud_2_4.getStudentsList().get(1));
-        assertEquals(student3, cloud_2_4.getStudentsList().get(2));
-        assertEquals(student3, cloud_2_4.getStudents()[2]);
+        assertEquals(student1, cloud_2_4.getStudents().get(0));
+        assertEquals(student2, cloud_2_4.getStudents().get(1));
+        assertEquals(student3, cloud_2_4.getStudents().get(2));
 
         cloud_2_4.addStudent(student4);
-        assertEquals(student1, cloud_2_4.getStudentsList().get(0));
-        assertEquals(student2, cloud_2_4.getStudentsList().get(1));
-        assertEquals(student3, cloud_2_4.getStudentsList().get(2));
-        assertEquals(3, cloud_2_4.getStudentsList().size());
+        assertEquals(student1, cloud_2_4.getStudents().get(0));
+        assertEquals(student2, cloud_2_4.getStudents().get(1));
+        assertEquals(student3, cloud_2_4.getStudents().get(2));
+        assertEquals(3, cloud_2_4.getStudents().size());
 
         // A CloudTile of type TILE_3 must have 4 students max
         cloud_3.addStudent(student1);
-        assertEquals(student1, cloud_3.getStudentsList().get(0));
-        assertEquals(student1, cloud_3.getStudents()[0]);
+        assertEquals(student1, cloud_3.getStudents().get(0));
 
         cloud_3.addStudent(student2);
-        assertEquals(student1, cloud_3.getStudentsList().get(0));
-        assertEquals(student2, cloud_3.getStudentsList().get(1));
-        assertEquals(student2, cloud_3.getStudents()[1]);
+        assertEquals(student1, cloud_3.getStudents().get(0));
+        assertEquals(student2, cloud_3.getStudents().get(1));
 
         cloud_3.addStudent(student3);
-        assertEquals(student1, cloud_3.getStudentsList().get(0));
-        assertEquals(student2, cloud_3.getStudentsList().get(1));
-        assertEquals(student3, cloud_3.getStudentsList().get(2));
-        assertEquals(student3, cloud_3.getStudents()[2]);
+        assertEquals(student1, cloud_3.getStudents().get(0));
+        assertEquals(student2, cloud_3.getStudents().get(1));
+        assertEquals(student3, cloud_3.getStudents().get(2));
 
         cloud_3.addStudent(student4);
-        assertEquals(student1, cloud_3.getStudentsList().get(0));
-        assertEquals(student2, cloud_3.getStudentsList().get(1));
-        assertEquals(student3, cloud_3.getStudentsList().get(2));
-        assertEquals(student4, cloud_3.getStudentsList().get(3));
-        assertEquals(student4, cloud_3.getStudents()[3]);
+        assertEquals(student1, cloud_3.getStudents().get(0));
+        assertEquals(student2, cloud_3.getStudents().get(1));
+        assertEquals(student3, cloud_3.getStudents().get(2));
+        assertEquals(student4, cloud_3.getStudents().get(3));
 
         cloud_3.addStudent(student5);
-        assertEquals(student1, cloud_3.getStudentsList().get(0));
-        assertEquals(student2, cloud_3.getStudentsList().get(1));
-        assertEquals(student3, cloud_3.getStudentsList().get(2));
-        assertEquals(student4, cloud_3.getStudentsList().get(3));
-        assertEquals(4, cloud_3.getStudentsList().size());
+        assertEquals(student1, cloud_3.getStudents().get(0));
+        assertEquals(student2, cloud_3.getStudents().get(1));
+        assertEquals(student3, cloud_3.getStudents().get(2));
+        assertEquals(student4, cloud_3.getStudents().get(3));
+        assertEquals(4, cloud_3.getStudents().size());
     }
 
     /**
@@ -140,21 +131,21 @@ public class CloudTileTest
 
         // Add a normal student
         cloud.addStudent(student);
-        assertEquals(student, cloud.getStudentsList().get(0));
+        assertEquals(student, cloud.getStudents().get(0));
 
         // Remove a null student
         assertThrows(NullPointerException.class, () ->  cloud.removeStudent(null));
-        assertEquals(student, cloud.getStudentsList().get(0));
-        assertEquals(1, cloud.getStudentsList().size());
+        assertEquals(student, cloud.getStudents().get(0));
+        assertEquals(1, cloud.getStudents().size());
 
         // Remove a not contained student
         cloud.removeStudent(new Student(SchoolColor.YELLOW));
-        assertEquals(student, cloud.getStudentsList().get(0));
-        assertEquals(1, cloud.getStudentsList().size());
+        assertEquals(student, cloud.getStudents().get(0));
+        assertEquals(1, cloud.getStudents().size());
 
         // Remove a contained student
         cloud.removeStudent(student);
-        assertEquals(0, cloud.getStudentsList().size());
+        assertEquals(0, cloud.getStudents().size());
     }
 
     /**
@@ -168,23 +159,20 @@ public class CloudTileTest
         Student student2 = new Student(SchoolColor.BLUE);
 
         cloud.removeStudents();
-        assertEquals(0, cloud.getStudentsList().size());
+        assertEquals(0, cloud.getStudents().size());
 
         cloud.addStudent(student1);
-        assertEquals(student1, cloud.getStudentsList().get(0));
-        assertEquals(student1, cloud.getStudents()[0]);
+        assertEquals(student1, cloud.getStudents().get(0));
 
         cloud.removeStudents();
-        assertEquals(0, cloud.getStudentsList().size());
+        assertEquals(0, cloud.getStudents().size());
 
         cloud.addStudent(student1);
-        assertEquals(student1, cloud.getStudentsList().get(0));
-        assertEquals(student1, cloud.getStudents()[0]);
+        assertEquals(student1, cloud.getStudents().get(0));
         cloud.addStudent(student2);
-        assertEquals(student2, cloud.getStudentsList().get(1));
-        assertEquals(student2, cloud.getStudents()[1]);
+        assertEquals(student2, cloud.getStudents().get(1));
         cloud.removeStudents();
-        assertEquals(0, cloud.getStudentsList().size());
+        assertEquals(0, cloud.getStudents().size());
     }
 
     /**

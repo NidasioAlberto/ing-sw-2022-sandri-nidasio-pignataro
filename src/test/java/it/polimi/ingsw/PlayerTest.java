@@ -28,7 +28,7 @@ public class PlayerTest
 
     @Test
     /**
-     * Test that Constructor throws NullPointerException when one of the two parameter is null and
+     * Test that Constructor throws NullPointerException when one of the three parameter is null and
      * test the initialization of the object
      */
     public void constructorTest()
@@ -52,10 +52,35 @@ public class PlayerTest
         assertTrue(player.getSelectedIsland().isEmpty());
         assertTrue(player.getSelectedColors().isEmpty());
         assertTrue(player.getSelectedCloudTile().isEmpty());
-        assertTrue(player.getCardsList().isEmpty());
-        assertEquals(0, player.getCards().length);
+        assertTrue(player.getCards().isEmpty());
         assertEquals(TowerColor.WHITE, player.getColor());
         assertEquals(0, player.getCoins());
+    }
+
+    @Test
+    /**
+     * Test that Constructor that has 2 parameters
+     */
+    public void constructorTest2()
+    {
+        // Nickname can't be null
+        assertThrows(NullPointerException.class,
+                () -> new Player(null, TowerColor.WHITE));
+
+        // Color can't be null
+        assertThrows(NullPointerException.class,
+                () -> new Player("Player1", null));
+
+        // Check the initialization values
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        assertEquals("Player1", player1.getNickname());
+        assertTrue(player1.getSelectedCard().isEmpty());
+        assertTrue(player1.getSelectedIsland().isEmpty());
+        assertTrue(player1.getSelectedColors().isEmpty());
+        assertTrue(player1.getSelectedCloudTile().isEmpty());
+        assertTrue(player1.getCards().isEmpty());
+        assertEquals(TowerColor.BLACK, player1.getColor());
+        assertEquals(0, player1.getCoins());
     }
 
     @Test
@@ -130,30 +155,25 @@ public class PlayerTest
         assertThrows(NullPointerException.class, () -> player.addCard(null));
 
         // At the beginning player has no cards
-        assertTrue(player.getCardsList().isEmpty());
-        assertEquals(0, player.getCards().length);
+        assertTrue(player.getCards().isEmpty());
 
         // Add a correct card
         AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 1, 1);
         player.addCard(card);
-        assertEquals(card, player.getCardsList().get(0));
-        assertEquals(1, player.getCardsList().size());
-        assertEquals(card, player.getCards()[0]);
-        assertEquals(1, player.getCards().length);
+        assertEquals(card, player.getCards().get(0));
+        assertEquals(1, player.getCards().size());
 
         // A card of a different wizard can't be added
         player.addCard(new AssistantCard(Wizard.WIZARD_2, 1, 1));
-        assertEquals(1, player.getCardsList().size());
-        assertEquals(1, player.getCards().length);
+        assertEquals(1, player.getCards().size());
 
         // A card already present can't be added
         player.addCard(card);
-        assertEquals(1, player.getCardsList().size());
-        assertEquals(1, player.getCards().length);
+        assertEquals(1, player.getCards().size());
 
         // A card with the same turOrder of one already present can't be added
         player.addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
-        assertEquals(1, player.getCardsList().size());
+        assertEquals(1, player.getCards().size());
     }
 
     @Test
@@ -169,18 +189,15 @@ public class PlayerTest
         // Add a correct card
         AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 1, 1);
         player.addCard(card);
-        assertEquals(card, player.getCardsList().get(0));
-        assertEquals(1, player.getCardsList().size());
-        assertEquals(card, player.getCards()[0]);
-        assertEquals(1, player.getCards().length);
+        assertEquals(card, player.getCards().get(0));
+        assertEquals(1, player.getCards().size());
 
         // Remove a card the player doesn't have
         assertThrows(IllegalArgumentException.class, () -> player.removeCard(2));
 
         // Remove a card the player has
         player.removeCard(1);
-        assertEquals(0, player.getCardsList().size());
-        assertEquals(0, player.getCards().length);
+        assertEquals(0, player.getCards().size());
     }
 
     @Test
@@ -197,14 +214,12 @@ public class PlayerTest
         player.addCard(card);
         player.selectCard(1);
         assertEquals(card, player.getSelectedCard().get());
-        assertEquals(card, player.getCardsList().get(0));
-        assertEquals(card, player.getCards()[0]);
+        assertEquals(card, player.getCards().get(0));
 
         // Remove the selected card
         player.removeSelectedCard();
         assertTrue(player.getSelectedCard().isEmpty());
-        assertTrue(player.getCardsList().isEmpty());
-        assertEquals(0, player.getCards().length);
+        assertTrue(player.getCards().isEmpty());
     }
 
     @Test

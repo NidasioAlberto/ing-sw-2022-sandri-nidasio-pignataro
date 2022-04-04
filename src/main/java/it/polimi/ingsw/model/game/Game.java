@@ -395,7 +395,7 @@ public class Game
                 .orElseThrow(() -> new NoSuchElementException("[Game] No Cloud Tile selected")));
 
         // Remove the students from the cloud tile
-        List<Student> students = cloudTile.getStudentsList();
+        List<Student> students = cloudTile.getStudents();
         cloudTile.removeStudents();
 
         // Put them in the current player's entrance
