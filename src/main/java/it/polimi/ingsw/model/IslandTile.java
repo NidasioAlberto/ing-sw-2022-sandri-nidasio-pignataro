@@ -92,19 +92,7 @@ public class IslandTile
         }
     }
 
-    /**
-     * Getters
-     */
-    public Student[] getStudents()
-    {
-        // Create the returned array
-        Student[] result = new Student[students.size()];
-        // Put all the students inside
-        students.toArray(result);
-        return result;
-    }
-
-    public List<Student> getStudentsList()
+    public List<Student> getStudents()
     {
         return new ArrayList<Student>(students);
     }

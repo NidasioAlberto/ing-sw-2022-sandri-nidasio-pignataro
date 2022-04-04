@@ -30,24 +30,21 @@ public class IslandTest
         Student student = new Student(SchoolColor.BLUE);
 
         // At the beginning there are no students
-        assertEquals(0, island.getStudentsList().size());
+        assertEquals(0, island.getStudents().size());
 
         // Add a normal student
         island.addStudent(student);
-        assertEquals(student, island.getStudentsList().get(0));
-        assertEquals(student, island.getStudents()[0]);
-        assertEquals(1, island.getStudentsList().size());
+        assertEquals(student, island.getStudents().get(0));
+        assertEquals(1, island.getStudents().size());
 
         // Add the same studente as before
         island.addStudent(student);
-        assertEquals(1, island.getStudentsList().size());
-        assertEquals(1, island.getStudents().length);
+        assertEquals(1, island.getStudents().size());
 
         // Add a null student
         assertThrows(NullPointerException.class, () -> island.addStudent(null));
-        assertEquals(student, island.getStudentsList().get(0));
-        assertEquals(1, island.getStudentsList().size());
-        assertEquals(1, island.getStudents().length);
+        assertEquals(student, island.getStudents().get(0));
+        assertEquals(1, island.getStudents().size());
     }
 
     /**
@@ -65,37 +62,36 @@ public class IslandTest
         Student student2 = new Student(SchoolColor.PINK);
 
         // At the beginning there are no students on the island
-        assertEquals(0, island.getStudentsList().size());
+        assertEquals(0, island.getStudents().size());
 
         // The first student is added on the first islandTile
         island.addStudent(student);
-        assertEquals(1, island.getStudentsList().size());
-        assertEquals(1, island.getIslands().get(0).getStudentsList().size());
-        assertEquals(student, island.getIslands().get(0).getStudentsList().get(0));
-        assertEquals(0, island.getIslands().get(1).getStudentsList().size());
+        assertEquals(1, island.getStudents().size());
+        assertEquals(1, island.getIslands().get(0).getStudents().size());
+        assertEquals(student, island.getIslands().get(0).getStudents().get(0));
+        assertEquals(0, island.getIslands().get(1).getStudents().size());
 
         // The second student is added on the second islandTile
         island.addStudent(student1);
-        assertEquals(2, island.getStudentsList().size());
-        assertEquals(1, island.getIslands().get(0).getStudentsList().size());
-        assertEquals(student, island.getIslands().get(0).getStudentsList().get(0));
-        assertEquals(1, island.getIslands().get(1).getStudentsList().size());
-        assertEquals(student1, island.getIslands().get(1).getStudentsList().get(0));
+        assertEquals(2, island.getStudents().size());
+        assertEquals(1, island.getIslands().get(0).getStudents().size());
+        assertEquals(student, island.getIslands().get(0).getStudents().get(0));
+        assertEquals(1, island.getIslands().get(1).getStudents().size());
+        assertEquals(student1, island.getIslands().get(1).getStudents().get(0));
 
         // The third student is added on the first islandTile
         island.addStudent(student2);
-        assertEquals(3, island.getStudentsList().size());
-        assertEquals(2, island.getIslands().get(0).getStudentsList().size());
-        assertEquals(student, island.getIslands().get(0).getStudentsList().get(0));
-        assertEquals(student2, island.getIslands().get(0).getStudentsList().get(1));
-        assertEquals(1, island.getIslands().get(1).getStudentsList().size());
-        assertEquals(student1, island.getIslands().get(1).getStudentsList().get(0));
+        assertEquals(3, island.getStudents().size());
+        assertEquals(2, island.getIslands().get(0).getStudents().size());
+        assertEquals(student, island.getIslands().get(0).getStudents().get(0));
+        assertEquals(student2, island.getIslands().get(0).getStudents().get(1));
+        assertEquals(1, island.getIslands().get(1).getStudents().size());
+        assertEquals(student1, island.getIslands().get(1).getStudents().get(0));
     }
 
     /**
-     * Test that a normal tower is added on the first free tile,
-     * null or duplicates towers are not added,
-     * if there are no free tiles the tower is not added
+     * Test that a normal tower is added on the first free tile, null or duplicates towers are not
+     * added, if there are no free tiles the tower is not added
      */
     @Test
     public void addTowerTest()
@@ -136,7 +132,8 @@ public class IslandTest
         assertEquals(1, island.getTowers().size());
 
         // Add a tower of different color from the one already present
-        assertThrows(IllegalArgumentException.class, () -> island.addTower(new Tower(TowerColor.WHITE)));
+        assertThrows(IllegalArgumentException.class,
+                () -> island.addTower(new Tower(TowerColor.WHITE)));
         assertEquals(tower, island.getIslands().get(0).getTower().get());
         assertTrue(island.getIslands().get(1).getTower().isEmpty());
         assertEquals(tower, island.getTowers().get(0));
@@ -160,9 +157,8 @@ public class IslandTest
     }
 
     /**
-     * Test that a contained tower is removed accurately,
-     * if the tower to be removed is not contained, nothing changes and
-     * if a null tower is passed a NullPointerException is thrown
+     * Test that a contained tower is removed accurately, if the tower to be removed is not
+     * contained, nothing changes and if a null tower is passed a NullPointerException is thrown
      */
     @Test
     public void removeTowerTest()
@@ -248,8 +244,8 @@ public class IslandTest
     }
 
     /**
-     * Test that if the island is already contained or is null is not added
-     * Test that an island is added accurately
+     * Test that if the island is already contained or is null is not added Test that an island is
+     * added accurately
      */
     @Test
     public void mergeIslandTest()
@@ -298,8 +294,8 @@ public class IslandTest
     }
 
     /**
-     * Test that when merging islands, towers and students are merged accurately
-     * and that exceptions are thrown in the correct way
+     * Test that when merging islands, towers and students are merged accurately and that exceptions
+     * are thrown in the correct way
      */
     @Test
     public void mergeIslandTest2()
@@ -308,8 +304,8 @@ public class IslandTest
         Tower tower = new Tower(TowerColor.BLACK);
         island.addStudent(student);
         island.addTower(tower);
-        assertEquals(1, island.getStudentsList().size());
-        assertEquals(student, island.getStudentsList().get(0));
+        assertEquals(1, island.getStudents().size());
+        assertEquals(student, island.getStudents().get(0));
         assertEquals(1, island.getTowers().size());
         assertEquals(tower, island.getTowers().get(0));
 
@@ -318,18 +314,18 @@ public class IslandTest
         Tower tower1 = new Tower(TowerColor.BLACK);
         island1.addStudent(student1);
         island1.addTower(tower1);
-        assertEquals(1, island1.getStudentsList().size());
-        assertEquals(student1, island1.getStudentsList().get(0));
+        assertEquals(1, island1.getStudents().size());
+        assertEquals(student1, island1.getStudents().get(0));
         assertEquals(1, island1.getTowers().size());
         assertEquals(tower1, island1.getTowers().get(0));
 
         // Merge of two normal islands
         island.mergeIsland(island1);
-        assertEquals(2, island.getStudentsList().size());
-        assertEquals(1, island.getIslands().get(0).getStudentsList().size());
-        assertEquals(student, island.getIslands().get(0).getStudentsList().get(0));
-        assertEquals(1, island.getIslands().get(1).getStudentsList().size());
-        assertEquals(student1, island.getIslands().get(1).getStudentsList().get(0));
+        assertEquals(2, island.getStudents().size());
+        assertEquals(1, island.getIslands().get(0).getStudents().size());
+        assertEquals(student, island.getIslands().get(0).getStudents().get(0));
+        assertEquals(1, island.getIslands().get(1).getStudents().size());
+        assertEquals(student1, island.getIslands().get(1).getStudents().get(0));
         assertEquals(2, island.getTowers().size());
         assertEquals(tower, island.getTowers().get(0));
         assertEquals(tower1, island.getTowers().get(1));

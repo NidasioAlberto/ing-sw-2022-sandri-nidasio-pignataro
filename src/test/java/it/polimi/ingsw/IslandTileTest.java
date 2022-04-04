@@ -27,31 +27,26 @@ public class IslandTileTest
         Student student2 = new Student(SchoolColor.BLUE);
 
         // At the beginning there are no students on the island
-        assertEquals(0, island.getStudentsList().size());
+        assertEquals(0, island.getStudents().size());
 
         // Add a normal student
         island.addStudent(student);
-        assertEquals(student, island.getStudentsList().get(0));
-        assertEquals(student, island.getStudents()[0]);
+        assertEquals(student, island.getStudents().get(0));
 
         // Add a null student
         assertThrows(NullPointerException.class, () -> island.addStudent(null));
-        assertEquals(student, island.getStudentsList().get(0));
-        assertEquals(student, island.getStudents()[0]);
+        assertEquals(student, island.getStudents().get(0));
 
         // Add a duplicate student
         island.addStudent(student);
-        assertEquals(student, island.getStudentsList().get(0));
-        assertEquals(student, island.getStudents()[0]);
-        assertEquals(1, island.getStudentsList().size());
+        assertEquals(student, island.getStudents().get(0));
+        assertEquals(1, island.getStudents().size());
 
         // Add a second normal student
         island.addStudent(student2);
-        assertEquals(student, island.getStudentsList().get(0));
-        assertEquals(student, island.getStudents()[0]);
-        assertEquals(student2, island.getStudentsList().get(1));
-        assertEquals(student2, island.getStudents()[1]);
-        assertEquals(2, island.getStudentsList().size());
+        assertEquals(student, island.getStudents().get(0));
+        assertEquals(student2, island.getStudents().get(1));
+        assertEquals(2, island.getStudents().size());
     }
 
     /**

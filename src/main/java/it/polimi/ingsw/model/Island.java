@@ -47,7 +47,7 @@ public class Island
         // I check if the student is not already present inside one tile
         for (int i = 0; i < tiles.size(); i++)
         {
-            if (tiles.get(i).getStudentsList().contains(student))
+            if (tiles.get(i).getStudents().contains(student))
             {
                 return;
             }
@@ -57,7 +57,7 @@ public class Island
         int min = 0;
         for (int i = 0; i < tiles.size(); i++)
         {
-            if (tiles.get(i).getStudents().length < tiles.get(min).getStudents().length)
+            if (tiles.get(i).getStudents().size() < tiles.get(min).getStudents().size())
             {
                 // I found an island with fewer students
                 min = i;
@@ -78,7 +78,7 @@ public class Island
     public void addTower(Tower tower) throws NullPointerException, IllegalArgumentException
     {
         // Check if there is already a different color tower on this island
-        if(tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
+        if (tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
                 .filter(t -> t.getColor() != tower.getColor()).count() > 0)
         {
             throw new IllegalArgumentException("[Island] The tower color is not correct");
@@ -129,7 +129,7 @@ public class Island
      * Method to merge the island tiles in this island
      *
      * @param island The island to be merged
-     * @throws NullPointerException If the  island is null
+     * @throws NullPointerException If the island is null
      */
     public void mergeIsland(Island island) throws NullPointerException, IllegalArgumentException
     {
@@ -137,17 +137,17 @@ public class Island
         if (island == null)
         {
             throw new NullPointerException("[Island] A null island was provided");
-        }
-        else if(island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0 ||
-                this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0 ||
-                island.tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
-                    .filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor()).count() > 0)
+        } else if (island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0
+                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0
+                || island.tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
+                        .filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor())
+                        .count() > 0)
         {
             // There is at least one tile without a tower in one of the two merging islands
             // or the color of towers is different on the tiles
-            throw new IllegalArgumentException("[Island] Not possible to merge islands, towers are not correct");
-        }
-        else
+            throw new IllegalArgumentException(
+                    "[Island] Not possible to merge islands, towers are not correct");
+        } else
         {
             // I add the single tile if it is not already present in the list
             island.tiles.stream().forEach(t -> {
@@ -162,29 +162,15 @@ public class Island
     /**
      * Getters
      */
-    public List<Student> getStudentsList()
+    public List<Student> getStudents()
     {
         // Create the result list
         List<Student> list = new ArrayList<Student>();
 
         // Fill the list
-        tiles.stream().forEach((t -> list.addAll(t.getStudentsList())));
+        tiles.stream().forEach((t -> list.addAll(t.getStudents())));
 
         return list;
-    }
-
-    public Student[] getStudents()
-    {
-        // Create the list where I put all the students
-        List<Student> list = getStudentsList();
-
-        // Create the final array
-        Student[] result = new Student[list.size()];
-
-        // Assign all the students
-        list.toArray(result);
-
-        return result;
     }
 
     public List<Tower> getTowers()
@@ -198,7 +184,7 @@ public class Island
      */
     public int getStudentsByColor(SchoolColor color)
     {
-        return (int) tiles.stream().flatMap(t -> t.getStudentsList().stream())
+        return (int) tiles.stream().flatMap(t -> t.getStudents().stream())
                 .filter(s -> s.getColor().equals(color)).count();
     }
 
