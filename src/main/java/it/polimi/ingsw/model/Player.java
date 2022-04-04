@@ -55,6 +55,11 @@ public class Player
      */
     private Optional<Integer> selectedCloudTile;
 
+    public Player(String nickname, TowerColor color)
+    {
+        this(nickname, color, new SchoolBoard(color));
+    }
+
     public Player(String nickname, TowerColor color, SchoolBoard board) throws NullPointerException
     {
         if (nickname == null)
@@ -117,7 +122,7 @@ public class Player
     public void selectCard(Integer turnOrder) throws IllegalArgumentException, NullPointerException
     {
         if (turnOrder == null)
-            throw new NullPointerException("[Player] The turnOrder can't be null");
+            throw new NullPointerException("[Player] The turn order can't be null");
 
         for (int i = 0; i < cards.size(); i++)
         {
@@ -194,11 +199,11 @@ public class Player
     /**
      * Method to select an island.
      * 
-     * @param island The index of the island.
+     * @param islandIndex The index of the island.
      */
-    public void selectIsland(int island)
+    public void selectIsland(int islandIndex)
     {
-        selectedIsland = Optional.of(island);
+        selectedIsland = Optional.of(islandIndex);
     }
 
     /**
