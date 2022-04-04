@@ -1,6 +1,5 @@
-package it.polimi.ingsw.model.character;
+package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 import it.polimi.ingsw.model.Student;
 

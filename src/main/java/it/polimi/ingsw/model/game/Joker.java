@@ -1,6 +1,5 @@
-package it.polimi.ingsw.model.character;
+package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
@@ -8,7 +7,6 @@ import it.polimi.ingsw.model.Student;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * Character card Joker. Effect: You may take up to 3 Students from this card and replace them with

@@ -1,12 +1,10 @@
-package it.polimi.ingsw.model.character;
+package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.AssistantCard;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameAction;
 import it.polimi.ingsw.model.Player;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * Character card Postman. Effect: You may move Mother Nature up to 2 additional Islands than is

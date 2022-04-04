@@ -1,12 +1,10 @@
-package it.polimi.ingsw.model.character;
+package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * Character card Monk. Effect: Take 1 Student from this card and place it on an island of your

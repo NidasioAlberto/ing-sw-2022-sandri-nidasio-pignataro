@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.character;
+package it.polimi.ingsw.model.game;
 
 /**
  * Enumeration of the character cards type

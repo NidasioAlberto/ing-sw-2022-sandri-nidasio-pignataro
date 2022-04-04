@@ -1,7 +1,9 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.character.*;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.model.game.CharacterCard;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
