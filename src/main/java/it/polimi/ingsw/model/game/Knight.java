@@ -29,7 +29,7 @@ public class Knight extends CharacterCard
     @Override
     public boolean isPlayable() throws NoSuchElementException
     {
-        GameAction previousAction = instance.getPreviousAction().orElseThrow(
+        GameAction previousAction = instance.previousAction.orElseThrow(
                 () -> new NoSuchElementException("[Knight] There is no previous action")
         );
 
@@ -50,7 +50,7 @@ public class Knight extends CharacterCard
     @Override
     public void applyAction()
     {
-        GameAction previousAction = instance.getPreviousAction().orElseThrow(
+        GameAction previousAction = instance.previousAction.orElseThrow(
                 () -> new NoSuchElementException("[Knight] There is no previous action")
         );
 
@@ -73,13 +73,13 @@ public class Knight extends CharacterCard
     @Override
     public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
-        if(island < 0 || island > instance.getIslands().size())
+        if(island < 0 || island > instance.islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
         if(player == null)
             throw new NullPointerException("[Game] player null");
 
-        Island currentIsland = instance.getIslands().get(island);
+        Island currentIsland = instance.islands.get(island);
 
         // Compute the influence of this player from students
         int influence = player.getBoard().getProfessors().stream()

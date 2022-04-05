@@ -29,7 +29,7 @@ public class Shaman extends CharacterCard
     {
         //This card is playable if the previous action is before the movement of mother nature
         //or if the previous action is empty
-        if(instance.getPreviousAction().isEmpty())
+        if(instance.previousAction.isEmpty())
             return true;
 
         //It is the index of the game action enumeration indexing the previous action
@@ -38,7 +38,7 @@ public class Shaman extends CharacterCard
         int indexMotherAction;
 
         //Take the indexes
-        for(indexPrevAction = 0; GameAction.values()[indexPrevAction] != instance.getPreviousAction().get(); indexPrevAction++);
+        for(indexPrevAction = 0; GameAction.values()[indexPrevAction] != instance.previousAction.get(); indexPrevAction++);
         for(indexMotherAction = 0; GameAction.values()[indexMotherAction] != GameAction.MOVE_MOTHER_NATURE; indexMotherAction++);
 
         //If we are before the mother nature movement then we can call the card
@@ -87,11 +87,11 @@ public class Shaman extends CharacterCard
         //Check for every professor if the selected player has at least a student of the same
         //color. If the professor is still in this instance it means that no one has a student
         //of the expected color except from that player
-        for(int i = 0; i < instance.getProfessors().size(); i++)
+        for(int i = 0; i < instance.professors.size(); i++)
         {
             //If the player has at least one student of the same color i can assign
             //the professor to that player
-            if(currentPlayer.getBoard().getStudentsNumber(instance.getProfessors().get(i).getColor()) > 0)
+            if(currentPlayer.getBoard().getStudentsNumber(instance.professors.get(i).getColor()) > 0)
             {
                 currentPlayer.getBoard().addProfessor(instance.removeProfessor(i));
             }
@@ -102,7 +102,7 @@ public class Shaman extends CharacterCard
         {
             int finalI = i;
             //Look for the player that has that professor
-            Player currentKing = instance.getPlayerTableList().stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
+            Player currentKing = instance.players.stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
 
             //If the players differ and don't have the same number of students I move the professor
             //THE ONLY DIFFERENCE IS THE >= SIGN

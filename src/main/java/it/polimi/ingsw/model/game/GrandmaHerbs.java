@@ -61,7 +61,7 @@ public class GrandmaHerbs extends CharacterCard
         );
 
         //Add the noEntryTile to the selected island
-        instance.getIslands().get(island).addNoEntryTile();
+        instance.islands.get(island).addNoEntryTile();
 
         //Then disable the card
         deactivate();
@@ -71,12 +71,12 @@ public class GrandmaHerbs extends CharacterCard
     public void computeInfluence(int island)
     {
         //I check if the index is correct
-        if(island < 0 || island > islands.size())
+        if(island < 0 || island > instance.islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
         //I check if on the island there is a no entry tile
         //if so I return it back to the card
-        if(instance.getIslands().get(island).getNoEntryTiles() > 0)
+        if(instance.islands.get(island).getNoEntryTiles() > 0)
             noEntryTiles++;
 
         //Then I compute the normal influence

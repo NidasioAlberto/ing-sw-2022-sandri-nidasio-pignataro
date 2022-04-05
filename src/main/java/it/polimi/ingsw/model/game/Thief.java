@@ -56,7 +56,7 @@ public class Thief extends CharacterCard
     public void applyAction() throws NoSuchElementException
     {
         // Get the player's list
-        instance.getPlayerTableList().stream().forEach(p ->
+        instance.players.stream().forEach(p ->
         {
             // For each player remove max 3 students from the dining room
             IntStream.range(0, 4).forEach(i ->
