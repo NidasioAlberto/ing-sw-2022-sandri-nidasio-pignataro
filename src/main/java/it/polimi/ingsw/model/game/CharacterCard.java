@@ -204,11 +204,6 @@ public abstract class CharacterCard extends Game
     // TODO WHAT DOES THIS METHOD DO?
     // public int getStudentsToMove() { return instance.getStudentsToMove(); }
 
-    public Optional<GameAction> getGameAction()
-    {
-        return instance.getGameAction();
-    }
-
     public List<CharacterCard> getCharacterCards()
     {
         return instance.getCharacterCards();

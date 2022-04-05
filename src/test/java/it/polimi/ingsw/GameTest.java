@@ -21,15 +21,15 @@ public class GameTest
     @BeforeEach
     public void init()
     {
-        game = new Game(2);
+        game = new Game(2, GameMode.CLASSIC);
     }
 
     @Test
     public void constructorTest()
     {
-        assertThrows(NullPointerException.class, () -> game = new Game(null));
-        assertThrows(IllegalArgumentException.class, () -> game = new Game(1));
-        assertThrows(IllegalArgumentException.class, () -> game = new Game(5));
+        assertThrows(NullPointerException.class, () -> game = new Game(null, GameMode.CLASSIC));
+        assertThrows(IllegalArgumentException.class, () -> game = new Game(1, GameMode.CLASSIC));
+        assertThrows(IllegalArgumentException.class, () -> game = new Game(5, GameMode.CLASSIC));
     }
 
     @Test
@@ -43,20 +43,20 @@ public class GameTest
         Player player5 = new Player("Player5", TowerColor.GREY);
 
         // The game should accept 2 players
-        game = new Game(2);
+        game = new Game(2, GameMode.CLASSIC);
         assertDoesNotThrow(() -> game.addPlayer(player1));
         assertDoesNotThrow(() -> game.addPlayer(player2));
         assertThrows(TooManyPlayersException.class, () -> game.addPlayer(player3));
 
         // The game should accept 3 players
-        game = new Game(3);
+        game = new Game(3, GameMode.CLASSIC);
         assertDoesNotThrow(() -> game.addPlayer(player1));
         assertDoesNotThrow(() -> game.addPlayer(player2));
         assertDoesNotThrow(() -> game.addPlayer(player3));
         assertThrows(TooManyPlayersException.class, () -> game.addPlayer(player4));
 
         // The game should accept 4 players
-        game = new Game(4);
+        game = new Game(4, GameMode.CLASSIC);
         assertDoesNotThrow(() -> game.addPlayer(player1));
         assertDoesNotThrow(() -> game.addPlayer(player2));
         assertDoesNotThrow(() -> game.addPlayer(player4));

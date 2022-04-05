@@ -34,7 +34,7 @@ public class MushroomMan extends CharacterCard
     @Override
     public boolean isPlayable() throws NoSuchElementException
     {
-        GameAction previousAction = instance.getGameAction().orElseThrow(
+        GameAction previousAction = instance.getPreviousAction().orElseThrow(
                 () -> new NoSuchElementException("[MushroomMan] There is no previous action")
         );
 
@@ -73,7 +73,7 @@ public class MushroomMan extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
-        GameAction previousAction = instance.getGameAction().orElseThrow(
+        GameAction previousAction = instance.getPreviousAction().orElseThrow(
                 () -> new NoSuchElementException("[MushroomMan] There is no previous action")
         );
 

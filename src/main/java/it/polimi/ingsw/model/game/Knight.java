@@ -29,7 +29,7 @@ public class Knight extends CharacterCard
     @Override
     public boolean isPlayable() throws NoSuchElementException
     {
-        GameAction previousAction = instance.getGameAction().orElseThrow(
+        GameAction previousAction = instance.getPreviousAction().orElseThrow(
                 () -> new NoSuchElementException("[Knight] There is no previous action")
         );
 
@@ -50,7 +50,7 @@ public class Knight extends CharacterCard
     @Override
     public void applyAction()
     {
-        GameAction previousAction = instance.getGameAction().orElseThrow(
+        GameAction previousAction = instance.getPreviousAction().orElseThrow(
                 () -> new NoSuchElementException("[Knight] There is no previous action")
         );
 

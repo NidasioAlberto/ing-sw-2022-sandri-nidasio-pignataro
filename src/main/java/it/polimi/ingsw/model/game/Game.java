@@ -26,6 +26,8 @@ public class Game
      */
     private Integer playersNumber;
 
+    protected GameMode gameMode;
+
     protected List<Island> islands;
 
     protected List<CloudTile> cloudTiles;
@@ -46,7 +48,7 @@ public class Game
 
     public Game() throws NullPointerException
     {
-        this(2);
+        this(2, GameMode.CLASSIC);
     }
 
     /**
@@ -55,15 +57,17 @@ public class Game
      * @param playersNumber Number of players for the game
      * @throws NullPointerException Thrown if the number of players passed is null
      */
-    public Game(Integer playersNumber) throws NullPointerException
+    public Game(Integer playersNumber, GameMode gameMode) throws NullPointerException
     {
         if (playersNumber == null)
             throw new NullPointerException("[SchoolBoard] Null players number");
         if (playersNumber < 2 || playersNumber > 4)
             throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
 
+        
         players = new ArrayList<>();
         this.playersNumber = playersNumber;
+        this.gameMode = gameMode;
         islands = new ArrayList<>();
         cloudTiles = new ArrayList<>();
         studentBag = new ArrayList<>();
@@ -346,7 +350,7 @@ public class Game
     }
 
     /**
-     * Calculates the influence where mother nature currently is
+     * Calculates the influence where mother nature currently is.
      * 
      * @throws NoSuchElementException when mother nature is not set already
      */
@@ -581,14 +585,6 @@ public class Game
     }
 
     /**
-     * TODO!
-     */
-    public Optional<GameAction> getGameAction()
-    {
-        return previousAction;
-    }
-
-    /**
      * Return a list of the available character cards in the game.
      */
     public List<CharacterCard> getCharacterCards()
@@ -611,7 +607,7 @@ public class Game
         }
     }
 
-    // TODO IT IS NOT SO GOOD, BUT FOR GRANDMA HERBS WE HAVE NO CHOICE
+    // TODO: IT IS NOT SO GOOD, BUT FOR GRANDMA HERBS WE HAVE NO CHOICE
     public List<Island> getIslands()
     {
         return new ArrayList<Island>(islands);
