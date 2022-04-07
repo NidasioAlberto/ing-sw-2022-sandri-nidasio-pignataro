@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import it.polimi.ingsw.model.game.CharacterCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,6 @@ public class Game
         if (playersNumber < 2 || playersNumber > 4)
             throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
 
-        
         players = new ArrayList<>();
         this.playersNumber = playersNumber;
         this.gameMode = gameMode;
@@ -121,7 +119,8 @@ public class Game
     /**
      * Return the players list sorted by their turn order based on the played assistant cards.
      */
-    // TODO: Ci deve essere un modo più bello per fare il sort e ritornare una nuova lista.
+    // TODO: Ci deve essere un modo più bello per fare il sort e ritornare una nuova
+    // lista.
     public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
         List<Player> sortedList = new ArrayList<>(players);
@@ -220,8 +219,10 @@ public class Game
         Player currentPlayer = getSelectedPlayer()
                 .orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
 
-        // Check for every professor if the selected player has at least a student of the same
-        // color. If the professor is still in this instance it means that no one has a student
+        // Check for every professor if the selected player has at least a student of
+        // the same
+        // color. If the professor is still in this instance it means that no one has a
+        // student
         // of the expected color except from that player
         for (int i = 0; i < professors.size(); i++)
             // If the player has at least one student of the same color i can assign
@@ -229,7 +230,8 @@ public class Game
             if (currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
                 currentPlayer.getBoard().addProfessor(professors.remove(i));
 
-        // Now I can check who is the player with the most students for every color and the assign
+        // Now I can check who is the player with the most students for every color and
+        // the assign
         // the professor
         for (int i = 0; i < SchoolColor.values().length; i++)
         {
@@ -239,7 +241,8 @@ public class Game
                     .filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI]))
                     .findFirst().get();
 
-            // If the players differ and don't have the same number of students I move the professor
+            // If the players differ and don't have the same number of students I move the
+            // professor
             if (currentKing != currentPlayer && currentPlayer.getBoard()
                     .getStudentsNumber(SchoolColor.values()[finalI]) > currentKing.getBoard()
                             .getStudentsNumber(SchoolColor.values()[finalI]))
@@ -304,7 +307,8 @@ public class Game
 
         Island currentIsland = islands.get(island);
 
-        // If the island has a no entry tile I remove it and don't calculate the influence
+        // If the island has a no entry tile I remove it and don't calculate the
+        // influence
         if (currentIsland.getNoEntryTiles() > 0)
         {
             currentIsland.removeNoEntryTile();
@@ -362,9 +366,12 @@ public class Game
 
     /**
      * Computes the given player influence for the island where mother nature currently is.
+     * 
+     * @throws NullPointerException if the given player is null
+     * @throws IndexOutOfBoundsException thrown when the island index is out of bounds
      */
     public int computePlayerInfluence(Player player, int island)
-            throws NoSuchElementException, IndexOutOfBoundsException
+            throws NullPointerException, IndexOutOfBoundsException
     {
         if (island < 0 || island > islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
@@ -388,6 +395,7 @@ public class Game
     /**
      * Moves the students from the cloud tile selected by the current player to his entrance.
      * 
+     * @throws IndexOutOfBoundsException Thrown if a tile cannot be found
      * @throws NoSuchElementException Thrown if the player or the cloud tile is not selected
      */
     public void moveStudentsFromCloudTile() throws NoSuchElementException
@@ -585,6 +593,20 @@ public class Game
     }
 
     /**
+     * Removes a professor from the list
+     * 
+     * @param index the professor to be removed
+     * @return the removed professor
+     * @throws IndexOutOfBoundsException thrown if the index is out of bounds
+     */
+    public Professor removeProfessor(int index) throws IndexOutOfBoundsException
+    {
+        if (index < 0 || index >= professors.size())
+            throw new IndexOutOfBoundsException("[Game] professor index out of bounds");
+        return professors.remove(index);
+    }
+
+    /**
      * Return a list of the available character cards in the game.
      */
     public List<CharacterCard> getCharacterCards()
@@ -621,22 +643,18 @@ public class Game
         return new ArrayList<Professor>(professors);
     }
 
-    /**
-     * Removes a professor from the list
-     * 
-     * @param index the professor to be removed
-     * @return the removed professor
-     * @throws IndexOutOfBoundsException thrown if the index is out of bounds
-     */
-    public Professor removeProfessor(int index) throws IndexOutOfBoundsException
-    {
-        if (index < 0 || index >= professors.size())
-            throw new IndexOutOfBoundsException("[Game] professor index out of bounds");
-        return professors.remove(index);
-    }
-
     public Optional<GameAction> getPreviousAction()
     {
         return previousAction;
+    }
+
+    public List<CloudTile> getCloudTiles()
+    {
+        return new ArrayList<CloudTile>(cloudTiles);
+    }
+
+    public List<Student> getStudentBag()
+    {
+        return new ArrayList<Student>(studentBag);
     }
 }

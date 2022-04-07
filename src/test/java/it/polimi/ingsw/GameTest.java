@@ -137,7 +137,6 @@ public class GameTest
         assertDoesNotThrow(() -> game.addPlayer(player1));
         assertDoesNotThrow(() -> game.addPlayer(player2));
 
-
         // Now there is still not a selected player
         assertThrows(NoSuchElementException.class,
                 () -> game.putStudentToIsland(new Student(SchoolColor.GREEN)));
@@ -182,7 +181,6 @@ public class GameTest
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
         assertDoesNotThrow(() -> game.addPlayer(player2));
-
 
         // Now there is still not a selected player
         assertThrows(NoSuchElementException.class,
@@ -277,5 +275,104 @@ public class GameTest
         assertTrue(() -> game.isValidMotherNatureMovement(2));
         assertTrue(() -> game.isValidMotherNatureMovement(3));
         assertFalse(() -> game.isValidMotherNatureMovement(4));
+    }
+
+    @Test
+    public void computeInfluenceTest()
+    {
+        // This should not accept a null student
+        assertThrows(NullPointerException.class, () -> game.computePlayerInfluence(null, 0));
+
+        // The game is not set up, an exception should occur
+        assertThrows(NoSuchElementException.class, () -> game.computeInfluence());
+        assertThrows(IndexOutOfBoundsException.class, () -> game.computeInfluence(0));
+
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Setup the game
+        game.setupGame();
+
+        // The game set up and mother nature has been positioned
+        assertDoesNotThrow(() -> game.computeInfluence());
+    }
+
+    @Test
+    public void moveStudentsFromCloudTileTest()
+    {
+        // No player is selected, this should fail
+        assertThrows(NoSuchElementException.class, () -> game.moveStudentsFromCloudTile());
+
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // This should still fail because no player is still selected
+        assertThrows(NoSuchElementException.class, () -> game.moveStudentsFromCloudTile());
+
+        // Select a player
+        game.selectPlayer(1);
+
+        // This should still fail because the current player has not selected a cloud tile
+        assertThrows(NoSuchElementException.class, () -> game.moveStudentsFromCloudTile());
+
+        // Make the player select the second cloud tile
+        player2.selectCloudTile(1);
+
+        // This should still fail because the game is not set up and there are no cloud tiles
+        assertThrows(IndexOutOfBoundsException.class, () -> game.moveStudentsFromCloudTile());
+
+        // Setup the game
+        game.setupGame();
+
+        // Get the current status
+        List<Student> studentsOnTheCloudTile = game.getCloudTiles().get(1).getStudents();
+        List<Student> prevEntrance = player2.getBoard().getStudentsInEntrance();
+
+        // This should finally succeed
+        assertDoesNotThrow(() -> game.moveStudentsFromCloudTile());
+
+        // The second cloud tile should now be empty
+        assertEquals(0, game.getCloudTiles().get(1).getStudents().size());
+
+        // The student must have moved to the current player's entrance
+        assertEquals(prevEntrance.size() + studentsOnTheCloudTile.size(), player2.getBoard().getStudentsInEntrance().size());
+    }
+
+    @Test
+    public void addStudentToBagTest()
+    {
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Setup the game
+        game.setupGame();
+
+        // Save the current bag status
+        List<Student> prevBag = game.getStudentBag();
+
+        // Add a student to the bag
+        Student student = new Student(SchoolColor.GREEN);
+        game.addStudentToBag(student);
+
+        // Check if the student is in the new bag
+        assertDoesNotThrow(() -> game.getStudentBag().indexOf(student));
+
+        // All the other students should still be there
+        assertEquals(prevBag.size() + 1, game.getStudentBag().size());
     }
 }
