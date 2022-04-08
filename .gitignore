@@ -12,3 +12,6 @@
 
 # AstaUML lock file
 *.lock
+
+# Maven target directory
+target

@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,7 +11,6 @@ import java.util.NoSuchElementException;
 import it.polimi.ingsw.model.game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
 public class GameTest

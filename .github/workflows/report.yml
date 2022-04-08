@@ -31,6 +31,6 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.f62a08a2536c6574ba50a778e346f53ef7332e7d }}
-          SONAR_HOST_URL: ${{ secrets.http://planetlab2.elet.polimi.it:9000 }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ secrets.REPOSITORY_OWNER }}_${{ secrets.REPOSITORY_NAME }}
