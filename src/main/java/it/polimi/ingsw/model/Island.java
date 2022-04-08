@@ -156,6 +156,9 @@ public class Island
                     this.tiles.add(t);
                 }
             });
+
+            // I add the noEntryTiles
+            this.noEntryTiles += island.noEntryTiles;
         }
     }
 

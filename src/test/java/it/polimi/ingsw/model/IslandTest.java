@@ -251,8 +251,13 @@ public class IslandTest
     {
         island.addTower(new Tower(TowerColor.WHITE));
 
-        // At the beginning there is only one island
+        // At the beginning there is only one island and zero noEntryTiles
         assertEquals(1, island.getIslands().size());
+        assertEquals(0, island.getNoEntryTiles());
+
+        // Remove a NoEntryTile when there are zero of them
+        island.removeNoEntryTile();
+        assertEquals(0, island.getNoEntryTiles());
 
         // Merge island with an island already contained
         island.mergeIsland(island);
@@ -262,12 +267,20 @@ public class IslandTest
         assertThrows(NullPointerException.class, () -> island.mergeIsland(null));
         assertEquals(1, island.getIslands().size());
 
-        // Merge with another normal island
+        // Merge with another normal island that has 1 noEntryTile
         Island island1 = new Island();
         island1.addTower(new Tower(TowerColor.WHITE));
+        assertEquals(0, island1.getNoEntryTiles());
+        island1.addNoEntryTile();
+        assertEquals(1, island1.getNoEntryTiles());
         island.mergeIsland(island1);
         assertEquals(2, island.getIslands().size());
         assertEquals(island1.getIslands().get(0), island.getIslands().get(1));
+        assertEquals(1, island.getNoEntryTiles());
+
+        // Remove a NoEntryTile when there is at least one of it
+        island.removeNoEntryTile();
+        assertEquals(0, island.getNoEntryTiles());
 
         // Merge with another island that contains two islandTiles
         Island island2 = new Island();
