@@ -45,9 +45,6 @@ public class JokerTest
         }
         catch(Exception e){}
 
-        //Select the player
-        game.selectPlayer(0);
-
         //Setup the game
         game.setupGame();
 
@@ -82,6 +79,12 @@ public class JokerTest
     {
         //Check the type
         assertEquals(CharacterCardType.JOKER, joker.getCardType());
+
+        //If we don't select a player we expect noSuchElementException
+        assertThrows(NoSuchElementException.class, () -> joker.activate());
+
+        //Player selection and joker activation
+        game.selectPlayer(0);
 
         //If i activate the card with no coins i should get an error
         assertThrows(NotEnoughCoins.class, () -> joker.activate());
@@ -132,6 +135,9 @@ public class JokerTest
     @Test
     public void isValidActionTest()
     {
+        //Player selection
+        game.selectPlayer(0);
+
         //Check if null is rejected
         assertThrows(NullPointerException.class, () -> joker.isValidAction(null));
 
@@ -171,7 +177,7 @@ public class JokerTest
         for(int i = 0; i < 3; i++)
         {
             //Select the two students to be swapped
-            player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
+            player1.selectColor(player1.getBoard().getStudentsInEntrance().get(i).getColor());
             player1.selectColor(studentsOnCard.get(i).getColor());
             //Apply the card effect
             joker.applyAction();
@@ -181,5 +187,95 @@ public class JokerTest
 
         //After the 3 apply action the card should be deactivated
         assertEquals(false, joker.isValidAction(GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
+        assertEquals(false, joker.activated);
+    }
+
+    @Test
+    public void applyActionTest()
+    {
+        //Backup of contained students before any action
+        List<Student> previousStudentPlayer = player1.getBoard().getStudentsInEntrance();
+
+        //Select the first player
+        game.selectPlayer(0);
+
+        //So that i don't worry about that
+        player1.addCoins(100);
+
+        //Test with not activated card
+        player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
+        player1.selectColor(studentsOnCard.get(0).getColor());
+
+        //I "apply" the action
+        joker.applyAction();
+
+        //Verify that nothing happened
+        for(Student student : player1.getBoard().getStudentsInEntrance())
+        {
+            assertEquals(true, previousStudentPlayer.contains(student));
+        }
+
+        //Now i activate the joker but with no selected colors
+        player1.clearSelections();
+
+        //Activate the joker
+        try{ joker.activate();}
+        catch(Exception e){}
+
+        //Nothing selected
+        assertThrows(NoSuchElementException.class, () -> joker.applyAction());
+
+        //Select only one color
+        player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
+
+        //Only one color selected
+        assertThrows(NoSuchElementException.class, () -> joker.applyAction());
+
+        //Clear selections to create a new scenario
+        player1.clearSelections();
+
+        //Delete the color RED from the player entrance so that i can choose a non-present color in the entrance
+        while(player1.getBoard().removeStudentFromEntrance(SchoolColor.RED).isPresent())
+        {
+            //Fill the RED removed with a GREEN
+            player1.getBoard().addStudentToEntrance(new Student(SchoolColor.GREEN));
+        }
+
+        //Select the RED and the first color on the card
+        player1.selectColor(SchoolColor.RED);
+        player1.selectColor(studentsOnCard.get(0).getColor());
+
+        assertThrows(NoSuchElementException.class, () -> joker.applyAction());
+
+        //Now i select a color that doesn't exist on the card
+        //First i fill the card with all the player cards
+        //This for proves also the correct functioning of the swap
+        for(int i = 0; i < 6; i++)
+        {
+            player1.clearSelections();
+            player1.selectColor(player1.getBoard().getStudentsInEntrance().get(i).getColor());
+            player1.selectColor(studentsOnCard.get(i).getColor());
+
+            //Activate the card
+            try { joker.activate(); }
+            catch(Exception e){}
+
+            //Swap
+            joker.applyAction();
+
+            //Deactivate
+            joker.deactivate();
+        }
+
+        //Now i select a color that doesn't exist on the card at the moment
+        //Activate the card
+        try { joker.activate(); }
+        catch(Exception e){}
+
+        player1.clearSelections();
+        player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
+        player1.selectColor(SchoolColor.RED);
+
+        assertThrows(NoSuchElementException.class, () -> joker.applyAction());
     }
 }
