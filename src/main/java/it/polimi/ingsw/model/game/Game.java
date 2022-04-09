@@ -540,7 +540,7 @@ public class Game
         for (Player player : players)
             player.getBoard().setPlayersNumber(playersNumber);
 
-        // 8. Each players takes 8 or 6 towers
+        // 8. Each player takes 8 or 6 towers
         players.forEach(p -> {
             SchoolBoard board = p.getBoard();
 

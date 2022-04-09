@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoins;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
 import java.util.List;
@@ -79,11 +80,15 @@ public abstract class CharacterCard extends Game
     /**
      * Method to activate the card effect. Activated => the methods are not pass through
      */
-    public void activate()
+    public void activate() throws NotEnoughCoins
     {
         // When we activate the card we subtract the coins cost
         if (instance.getSelectedPlayer().isEmpty())
             throw new NoSuchElementException("[CharacterCard] No player selected");
+
+        //If already activated i don't have to activate it another time
+        if(activated)
+            return;
 
         // I subtract the coins only if the player can pay
         if (instance.getSelectedPlayer().get().getCoins() >= cost)
@@ -99,6 +104,10 @@ public abstract class CharacterCard extends Game
                 this.firstUsed = true;
                 this.cost++;
             }
+        }
+        else
+        {
+            throw new NotEnoughCoins("[CharacterCard] Selected player doesn't have enough coins to activate the card");
         }
     }
 

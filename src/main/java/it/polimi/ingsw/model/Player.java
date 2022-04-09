@@ -57,20 +57,18 @@ public class Player
 
     public Player(String nickname, TowerColor color)
     {
-        this(nickname, color, new SchoolBoard(color));
+        this(nickname, new SchoolBoard(color));
     }
 
-    public Player(String nickname, TowerColor color, SchoolBoard board) throws NullPointerException
+    public Player(String nickname, SchoolBoard board) throws NullPointerException
     {
         if (nickname == null)
             throw new NullPointerException("[Player] The player's nickname can't be null");
-        if (color == null)
-            throw new NullPointerException("[Player] The player's color can't be null");
         if (board == null)
             throw new NullPointerException("[Player] The player's board can't be null");
 
         this.nickname = nickname;
-        this.color = color;
+        this.color = board.getTowerColor();
         this.board = board;
         cards = new ArrayList<AssistantCard>();
         coins = 0;

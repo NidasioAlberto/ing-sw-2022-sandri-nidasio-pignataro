@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import com.sun.source.tree.Scope;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ public class PlayerTest
         board.setPlayersNumber(2);
         for (int i = 0; i < 8; i++)
             board.addTower(new Tower(TowerColor.WHITE));
-        player = new Player("Player1", TowerColor.WHITE, board);
+        player = new Player("Player1", board);
     }
 
     @Test
@@ -34,15 +35,15 @@ public class PlayerTest
     {
         // Nickname can't be null
         assertThrows(NullPointerException.class,
-                () -> new Player(null, TowerColor.WHITE, new SchoolBoard(TowerColor.WHITE)));
+                () -> new Player(null, new SchoolBoard(TowerColor.WHITE)));
 
         // Color can't be null
         assertThrows(NullPointerException.class,
-                () -> new Player("Player1", null, new SchoolBoard(TowerColor.WHITE)));
+                () -> new Player("Player1", (TowerColor) null));
 
         // SchoolBoard can't be null
         assertThrows(NullPointerException.class,
-                () -> new Player("Player1", TowerColor.WHITE, null));
+                () -> new Player("Player1", (SchoolBoard) null));
 
         // Check the initialization values
         assertEquals("Player1", player.getNickname());
@@ -68,7 +69,7 @@ public class PlayerTest
 
         // Color can't be null
         assertThrows(NullPointerException.class,
-                () -> new Player("Player1", null));
+                () -> new Player("Player1", (TowerColor) null));
 
         // Check the initialization values
         Player player1 = new Player("Player1", TowerColor.BLACK);

@@ -78,7 +78,10 @@ public class Joker extends CharacterCard
                 return instance.isValidAction(action);
             }
         }
-
+        else
+        {
+            this.deactivate();
+        }
         // If the player has already done 3 exchanges, the action isn't valid
         return false;
     }

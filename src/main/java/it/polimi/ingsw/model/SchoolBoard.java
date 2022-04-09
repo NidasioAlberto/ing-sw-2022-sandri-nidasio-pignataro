@@ -367,4 +367,6 @@ public class SchoolBoard
         return maxTowers;
     }
 
+    public TowerColor getTowerColor() { return towerColor; }
+
 }
