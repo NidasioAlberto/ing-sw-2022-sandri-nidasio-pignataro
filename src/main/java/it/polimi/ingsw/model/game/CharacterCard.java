@@ -184,7 +184,6 @@ public abstract class CharacterCard extends Game
         return instance.isValidMotherNatureMovement(steps);
     }
 
-    // TODO TALK ABOUT WHAT THIS METHOD CAN AND SHOULD DO
     public void computeInfluence()
     {
         instance.computeInfluence();
@@ -205,13 +204,10 @@ public abstract class CharacterCard extends Game
         instance.moveStudentsFromCloudTile();
     }
 
-    // TODO TALK ABOUT WHAT THIS METHOD SHOULD DO
     public void setupGame()
     {
         instance.setupGame();
     }
-    // TODO WHAT DOES THIS METHOD DO?
-    // public int getStudentsToMove() { return instance.getStudentsToMove(); }
 
     public List<CharacterCard> getCharacterCards()
     {

@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCoins;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,13 +20,15 @@ public class JokerTest
     Player player2;
     SchoolBoard board1;
     SchoolBoard board2;
+    List<Student> studentsOnCard;
 
     // Number of students before the character card decorator
-    int originalBagStudents;
+    List<Student> originalBagStudents;
 
     @BeforeEach
     public void init()
     {
+        studentsOnCard = new ArrayList<Student>();
         //I have to initialize a Game, a Player and a School Board to ensure
         //the character card can behave correctly
         board1 = new SchoolBoard(TowerColor.BLACK);
@@ -47,10 +51,17 @@ public class JokerTest
         //Setup the game
         game.setupGame();
 
-        originalBagStudents = game.getStudentBag().size();
+        originalBagStudents = game.getStudentBag();
 
         //Now i can instanciate the character card
         joker = CharacterCard.createCharacterCard(CharacterCardType.JOKER, game);
+
+        //I add the student to the students on card list if it is not present anymore
+        for(Student student : originalBagStudents)
+        {
+            if(!joker.getStudentBag().contains(student))
+                studentsOnCard.add(student);
+        }
     }
 
     @Test
@@ -60,7 +71,7 @@ public class JokerTest
         assertThrows(NullPointerException.class, () -> new Joker(null));
 
         //I need to verify if 6 students have been subtracted from game
-        assertEquals(originalBagStudents - 6, game.getStudentBag().size());
+        assertEquals(originalBagStudents.size() - 6, game.getStudentBag().size());
 
         //Verify the cost
         assertEquals(1, joker.cost);
@@ -124,8 +135,10 @@ public class JokerTest
         //Check if null is rejected
         assertThrows(NullPointerException.class, () -> joker.isValidAction(null));
 
-        //If i don't activate the card isValidAction should always be false
-        assertEquals(false, joker.isValidAction(GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
+        //If i don't activate the card isValidAction should always be the same as Game
+        //TODO delete this check when isValidAction will be removed
+        for(GameAction action : GameAction.values())
+            assertEquals(game.isValidAction(action), joker.isValidAction(action));
 
         //So that i don't have any problem with the card activation
         player1.addCoins(10);
@@ -138,5 +151,35 @@ public class JokerTest
         //card to entrance should be allowed
         for(int i = 0; i < 100; i++)
             assertEquals(true, joker.isValidAction(GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
+
+        //For all the other actions the answer should be the same as game
+        //TODO delete this check when isValidAction will be removed
+        for(GameAction action : GameAction.values())
+        {
+            if(action != GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
+                assertEquals(game.isValidAction(action), joker.isValidAction(action));
+        }
+
+        //After that move the card should be deactivated
+        assertEquals(false, joker.activated);
+
+        //I need to activate the card another time
+        try { joker.activate(); }
+        catch(Exception e){}
+
+        //When i apply the action 3 times the card should not accept anymore and deactivate
+        for(int i = 0; i < 3; i++)
+        {
+            //Select the two students to be swapped
+            player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
+            player1.selectColor(studentsOnCard.get(i).getColor());
+            //Apply the card effect
+            joker.applyAction();
+            //After the action i reset the selected colors
+            player1.clearSelections();
+        }
+
+        //After the 3 apply action the card should be deactivated
+        assertEquals(false, joker.isValidAction(GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
     }
 }

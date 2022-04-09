@@ -65,25 +65,16 @@ public class Joker extends CharacterCard
             return instance.isValidAction(action);
         }
 
-        if(exchangeCounter < 3)
+        if(action == GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
         {
             // If it is activated I accept the
             // SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE
-            if (action == GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
+            if(exchangeCounter < 3)
                 return true;
-            else
-            {
-                // The player doesn't want to do more exchanges
-                this.deactivate();
-                return instance.isValidAction(action);
-            }
         }
-        else
-        {
-            this.deactivate();
-        }
-        // If the player has already done 3 exchanges, the action isn't valid
-        return false;
+        // The player doesn't want to do more exchanges
+        this.deactivate();
+        return instance.isValidAction(action);
     }
 
     /**
@@ -93,6 +84,10 @@ public class Joker extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
+        //If the card is not currently activated i do nothing
+        if(!activated)
+            return;
+
         // Get the current player
         Player currentPlayer = instance.getSelectedPlayer().orElseThrow(
                 () -> new NoSuchElementException("[Joker] No selected player"));
@@ -122,6 +117,10 @@ public class Joker extends CharacterCard
         students.add(entranceStudent);
 
         exchangeCounter += 1;
+
+        //If we hit 3 swaps i deactivate the card
+        if(exchangeCounter >= 3)
+            deactivate();
     }
 
     @Override
