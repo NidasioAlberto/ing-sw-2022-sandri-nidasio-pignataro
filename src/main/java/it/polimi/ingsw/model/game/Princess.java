@@ -88,12 +88,6 @@ public class Princess extends CharacterCard
         // Add a new student on the card
         students.add(instance.getStudentFromBag());
 
-        if (!firstUsed)
-        {
-            cost += 1;
-            firstUsed = true;
-        }
-
         this.deactivate();
     }
 

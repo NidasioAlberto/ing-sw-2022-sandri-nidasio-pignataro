@@ -83,12 +83,6 @@ public class MushroomMan extends CharacterCard
         //TODO non so se funziona correttamente chiamando così
         instance.computeInfluence();
 
-        if (!firstUsed)
-        {
-            cost += 1;
-            firstUsed = true;
-        }
-
         this.deactivate();
     }
 

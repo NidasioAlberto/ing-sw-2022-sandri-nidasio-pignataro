@@ -73,12 +73,6 @@ public class Thief extends CharacterCard
             });
         });
 
-        if (!firstUsed)
-        {
-            cost += 1;
-            firstUsed = true;
-        }
-
         this.deactivate();
     }
 

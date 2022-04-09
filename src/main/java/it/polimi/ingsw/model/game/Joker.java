@@ -118,12 +118,6 @@ public class Joker extends CharacterCard
         // Add the entranceStudent to the card
         students.add(entranceStudent);
 
-        if (!firstUsed)
-        {
-            cost += 1;
-            firstUsed = true;
-        }
-
         exchangeCounter += 1;
     }
 

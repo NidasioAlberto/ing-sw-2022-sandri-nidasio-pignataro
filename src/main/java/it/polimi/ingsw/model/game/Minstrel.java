@@ -101,12 +101,6 @@ public class Minstrel extends CharacterCard
         // Add the student to the entrance
         currentPlayer.getBoard().addStudentToEntrance(student);
 
-        if (!firstUsed)
-        {
-            cost += 1;
-            firstUsed = true;
-        }
-
         exchangeCounter += 1;
     }
 
