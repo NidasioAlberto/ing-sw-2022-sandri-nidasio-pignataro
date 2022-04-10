@@ -66,6 +66,10 @@ public class Monk extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
+        // If the card is not currently activated I do nothing
+        if(!activated)
+            return;
+
         //Take the selected color
         SchoolColor selectedColor = instance.getSelectedPlayer()
                 .orElseThrow(
