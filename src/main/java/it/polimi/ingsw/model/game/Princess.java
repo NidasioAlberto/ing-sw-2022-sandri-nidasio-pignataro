@@ -85,6 +85,9 @@ public class Princess extends CharacterCard
         // Add the student to the current player's dining room
         instance.getSelectedPlayer().get().getBoard().addStudentToDiningRoom(student);
 
+        // Check if the player gain a professor
+        instance.conquerProfessors();
+
         // Add a new student on the card
         students.add(instance.getStudentFromBag());
 

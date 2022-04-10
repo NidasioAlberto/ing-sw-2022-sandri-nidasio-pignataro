@@ -37,7 +37,11 @@ public class GrandmaHerbs extends CharacterCard
     @Override
     public boolean isPlayable()
     {
-        //This card can be played every time
+        // If there aren't noEntryTiles the card isn't playable
+        if (noEntryTiles <= 0)
+            return false;
+
+        // Otherwise, this card can be played every time
         return true;
     }
 
@@ -53,6 +57,14 @@ public class GrandmaHerbs extends CharacterCard
     @Override
     public void applyAction()
     {
+        // If the card is not currently activated I do nothing
+        if(!activated)
+            return;
+
+        // If there aren't noEntryTiles an exception is thrown
+        if (noEntryTiles <= 0)
+            throw new NoSuchElementException("[GrandmaHerbs] There are no more noEntryTiles");
+
         //Put the no entry tile on the selected island
         int island = instance.getSelectedPlayer().orElseThrow(
                 () -> new NoSuchElementException("[GrandmaHerbs] No selected player")
@@ -63,6 +75,9 @@ public class GrandmaHerbs extends CharacterCard
         //Add the noEntryTile to the selected island
         instance.islands.get(island).addNoEntryTile();
 
+        //Remove the noEntryTile from the card
+        noEntryTiles--;
+
         //Then disable the card
         deactivate();
     }
@@ -71,13 +86,19 @@ public class GrandmaHerbs extends CharacterCard
     public void computeInfluence(int island)
     {
         //I check if the index is correct
-        if(island < 0 || island > instance.islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+        if(island < 0 || island >= instance.islands.size())
+            throw new IndexOutOfBoundsException("[GrandmaHerbs] island index out of bounds");
 
         //I check if on the island there is a no entry tile
-        //if so I return it back to the card
         if(instance.islands.get(island).getNoEntryTiles() > 0)
+        {
+            //If so I return it back to the card and remove it from the island
             noEntryTiles++;
+            instance.islands.get(island).removeNoEntryTile();
+
+            //The influence is not calculated
+            return;
+        }
 
         //Then I compute the normal influence
         instance.computeInfluence(island);
@@ -87,5 +108,10 @@ public class GrandmaHerbs extends CharacterCard
     public CharacterCardType getCardType()
     {
         return CharacterCardType.GRANDMA_HERBS;
+    }
+
+    public int getNoEntryTiles()
+    {
+        return noEntryTiles;
     }
 }

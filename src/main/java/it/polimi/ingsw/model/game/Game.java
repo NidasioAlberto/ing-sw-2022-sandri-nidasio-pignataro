@@ -181,6 +181,7 @@ public class Game
         getSelectedPlayer()
                 .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
                 .getBoard().addStudentToDiningRoom(student);
+        // TODO forse qui va chiamata la conquerProfessor
     }
 
     /**
@@ -302,10 +303,13 @@ public class Game
     // TODO manca il merge delle isole quando possibile
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
-        if (island < 0 || island > islands.size())
+        if (island < 0 || island >= islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
         Island currentIsland = islands.get(island);
+
+        //TODO non so se serva fare questo controllo perchè viene già fatto in grandmaHerbs,
+        // il cui metodo credo vada sempre chiamato se la carta viene estratta
 
         // If the island has a no entry tile I remove it and don't calculate the
         // influence

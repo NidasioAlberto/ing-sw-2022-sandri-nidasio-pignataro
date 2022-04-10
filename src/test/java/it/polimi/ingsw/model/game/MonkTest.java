@@ -89,6 +89,7 @@ public class MonkTest
             // Activate the card
             player1.addCoins(1);
             monk.activate();
+            assertEquals(0, player1.getCoins());
             for (GameAction action: GameAction.values())
             {
                 // When Monk is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
@@ -116,6 +117,7 @@ public class MonkTest
             // Activate the card
             player1.addCoins(2);
             monk.activate();
+            assertEquals(0, player1.getCoins());
         }
         catch (NotEnoughCoinsException e)
         {

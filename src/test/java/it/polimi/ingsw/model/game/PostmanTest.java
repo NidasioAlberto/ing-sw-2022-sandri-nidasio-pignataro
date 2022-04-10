@@ -89,6 +89,7 @@ public class PostmanTest
             // Activate the card
             player1.addCoins(1);
             postman.activate();
+            assertEquals(0, player1.getCoins());
             assertTrue(postman.activated);
             for (GameAction action: GameAction.values())
             {
@@ -116,6 +117,7 @@ public class PostmanTest
             // Activate the card
             player1.addCoins(2);
             postman.activate();
+            assertEquals(0, player1.getCoins());
         }
         catch (NotEnoughCoinsException e)
         {
@@ -135,6 +137,44 @@ public class PostmanTest
     @Test
     public void isValidMotherNatureMovementTest()
     {
-        //TODO
+        // Select a player
+        game.selectPlayer(0);
+
+        try
+        {
+            // Activate the card
+            player1.addCoins(1);
+            postman.activate();
+        }
+        catch (NotEnoughCoinsException e)
+        {
+            e.printStackTrace();
+        }
+
+        // An exception is thrown if the player hasn't selected a card
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class, () -> postman.isValidMotherNatureMovement(1));
+        assertEquals("[Postman] Player didn't select assistant card", e1.getMessage());
+
+        // Select a card
+        player1.selectCard(1);
+
+        // Mother natura can't do zero steps
+        assertFalse(postman.isValidMotherNatureMovement(0));
+
+        // Correct steps number
+        assertTrue(postman.isValidMotherNatureMovement(1));
+        assertTrue(postman.isValidMotherNatureMovement(2));
+        assertTrue(postman.isValidMotherNatureMovement(3));
+
+        // Wrong steps number
+        assertFalse(postman.isValidMotherNatureMovement(4));
+
+        // Deactivate the card
+        postman.deactivate();
+
+        // When the card is deactivated the instance's method is called
+        for( int i = 0; i < 5; i++)
+            assertEquals(game.isValidMotherNatureMovement(i), postman.isValidMotherNatureMovement(i));
+
     }
 }

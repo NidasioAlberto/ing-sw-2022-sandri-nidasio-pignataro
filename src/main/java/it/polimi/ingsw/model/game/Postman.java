@@ -73,12 +73,12 @@ public class Postman extends CharacterCard
             return instance.isValidMotherNatureMovement(steps);
 
         //I have to check if the current player can do this movement
-        Player currentPlayer        = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+        Player currentPlayer        = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Postman] No player selected"));
         AssistantCard selectedCard  = currentPlayer.getSelectedCard()
-                        .orElseThrow(() -> new NoSuchElementException("[Game] Player didn't select assistant card"));
+                        .orElseThrow(() -> new NoSuchElementException("[Postman] Player didn't select assistant card"));
 
         //Here occurs the modification
-        return selectedCard.getSteps() + 2 >= steps;
+        return selectedCard.getSteps() + 2 >= steps && steps >= 1;
     }
 
     @Override
