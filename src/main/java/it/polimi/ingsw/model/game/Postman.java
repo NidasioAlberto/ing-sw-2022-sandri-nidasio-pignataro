@@ -61,6 +61,7 @@ public class Postman extends CharacterCard
         return instance.isValidAction(action);
     }
 
+    // TODO capire come gestirla
     @Override
     public void applyAction()
     {}
