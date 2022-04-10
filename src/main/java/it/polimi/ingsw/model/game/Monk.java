@@ -94,9 +94,15 @@ public class Monk extends CharacterCard
         //Disable the card
         this.deactivate();
     }
+
     @Override
     public CharacterCardType getCardType()
     {
         return CharacterCardType.MONK;
+    }
+
+    public List<Student> getStudents()
+    {
+        return new ArrayList<>(students);
     }
 }

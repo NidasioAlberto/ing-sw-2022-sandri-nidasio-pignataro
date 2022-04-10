@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.NotEnoughCoins;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -87,7 +87,7 @@ public class JokerTest
         game.selectPlayer(0);
 
         //If i activate the card with no coins i should get an error
-        assertThrows(NotEnoughCoins.class, () -> joker.activate());
+        assertThrows(NotEnoughCoinsException.class, () -> joker.activate());
 
         //Add the coins to activate the card
         player1.addCoins(10);

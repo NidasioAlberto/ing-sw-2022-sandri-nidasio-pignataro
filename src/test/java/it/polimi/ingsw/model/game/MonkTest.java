@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.NotEnoughCoins;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class MonkTest
 {
+    // Setup
     CharacterCard monk;
     Game game;
     List<Student> studentsBag;
     Player player1 = new Player("Player1", TowerColor.WHITE);
     Player player2 = new Player("Player2", TowerColor.BLACK);
+
     @BeforeEach
     public void init()
     {
@@ -67,7 +69,12 @@ public class MonkTest
         // The card is always playable
         assertTrue(monk.isPlayable());
 
+        // A player must be selected to activate the card
+        assertThrows(NoSuchElementException.class, () -> monk.activate());
+
+        // Select a player
         game.selectPlayer(0);
+
         // The card is not active so the isValidAction return the instance validation
         for (GameAction action: GameAction.values())
         {
@@ -75,7 +82,7 @@ public class MonkTest
         }
 
         // If the player doesn't have enough coins an exception is thrown
-        assertThrows(NotEnoughCoins.class, () -> monk.activate());
+        assertThrows(NotEnoughCoinsException.class, () -> monk.activate());
 
         try
         {
@@ -90,7 +97,7 @@ public class MonkTest
                 else assertFalse(monk.isValidAction(action));
             }
         }
-        catch (NotEnoughCoins e)
+        catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -110,7 +117,7 @@ public class MonkTest
             player1.addCoins(2);
             monk.activate();
         }
-        catch (NotEnoughCoins e)
+        catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -124,6 +131,78 @@ public class MonkTest
     @Test
     public void applyActionTest()
     {
-        //assertThrows(NoSuchElementException.class, () -> monk.applyAction());
+        // Select a player
+        player1.addCoins(1);
+        game.selectPlayer(0);
+
+        // Get the students on the card
+        List<Student> students = ((Monk) monk).getStudents();
+
+        // The card isn't active so nothing happens
+        monk.applyAction();
+        for (Student student : students)
+        {
+            assertTrue(((Monk) monk).getStudents().contains(student));
+        }
+
+        // Activate the card
+        try {
+            monk.activate();
+        } catch (NotEnoughCoinsException e) {
+            e.printStackTrace();
+        }
+
+        // An exception is thrown if no colors are selected
+        NoSuchElementException e = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
+        assertEquals("[Monk] No selected color", e.getMessage());
+
+        // Search a student color not present on the card
+        int counter;
+        for (SchoolColor color : SchoolColor.values()) {
+            counter = 0;
+            for (Student student : ((Monk) monk).getStudents()) {
+                if (student.getColor() != color)
+                    counter++;
+            }
+            if (counter == ((Monk) monk).getStudents().size()) {
+                player1.selectColor(color);
+                break;
+            }
+        }
+
+        // An exception is thrown if the player selects a student color not present on the card
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
+        assertEquals("[Monk] No such student on card", e1.getMessage());
+
+        // Clear the selections to do another test
+        player1.clearSelections();
+
+        // Select a student color present on the card
+        Student selectedStudent = students.get(0);
+        player1.selectColor(selectedStudent.getColor());
+
+        // An exception is thrown if there isn't a selected island
+        NoSuchElementException e2 = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
+        assertEquals("[Game] No selected island", e2.getMessage());
+
+        // The player selects an island
+        player1.selectIsland(0);
+
+        // Check that the action is applied accurately
+        monk.applyAction();
+        // The selected student is on the selected island
+        assertEquals(selectedStudent, game.getIslands().get(0).getStudents().get(1));
+        // The selected student is no more on the card
+        assertFalse(((Monk) monk).getStudents().contains(selectedStudent));
+        // The non selected students are still on the card
+        for (Student student : students)
+        {
+            if (student != selectedStudent)
+                assertTrue(((Monk) monk).getStudents().contains(student));
+        }
+        // A new student is added on the card
+        assertEquals(4, ((Monk) monk).getStudents().size());
+        // At the end the card deactivates by itself
+        assertFalse(monk.activated);
     }
 }
