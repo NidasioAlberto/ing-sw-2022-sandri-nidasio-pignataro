@@ -36,10 +36,18 @@ public class Centaur extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        // If the card is activated and we pass the mother nature movement I can deactivate the card
-        if (activated && action == GameAction.SELECT_CLOUD_TILE)
-            deactivate();
-        return instance.isValidAction(action);
+        //TODO conviene far si che il controller alla fine del turno di ogni giocatore disattivi
+        // tutte le carte cosi non serve che le carte si disattivino da sole
+
+        // If the card is not activated the action isn't valid
+        if(!activated)
+        {
+            return false;
+        }
+
+        // I don't have to intercept any action
+        return true;
+
     }
 
     @Override

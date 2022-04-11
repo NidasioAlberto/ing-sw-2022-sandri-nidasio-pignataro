@@ -48,9 +48,13 @@ public class GrandmaHerbs extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        //If the card is not activated
+        // If the card is not activated the action isn't valid
         if(!activated)
-            return instance.isValidAction(action);
+        {
+            return false;
+        }
+
+        // If active I accept only MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND
         return action == GameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND;
     }
 

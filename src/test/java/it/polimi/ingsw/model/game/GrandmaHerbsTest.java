@@ -97,10 +97,10 @@ public class GrandmaHerbsTest
     @Test
     public void isValidActionTest()
     {
-        // The card is not active so the isValidAction return the instance validation
+        // The card is not active so the isValidAction return false
         for (GameAction action: GameAction.values())
         {
-            assertEquals(game.isValidAction(action), grandmaHerbs.isValidAction(action));
+            assertFalse(grandmaHerbs.isValidAction(action));
         }
 
         // A player must be selected to activate the card

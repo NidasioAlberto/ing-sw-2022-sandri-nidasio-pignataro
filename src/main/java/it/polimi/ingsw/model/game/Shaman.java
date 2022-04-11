@@ -34,23 +34,14 @@ public class Shaman extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        //If the card is deactivated i return the instance isValidAction
+        // If the card is not activated the action isn't valid
         if(!activated)
         {
-            return instance.isValidAction(action);
+            return false;
         }
 
-        //What the game instance says about that action.
-        //This card doesn't introduce different actions, so we have to accept
-        //all the actions that the game instance accepts.
-        //But if we have a mother nature movement, we disable the card.
-        boolean result = instance.isValidAction(action);
-
-        if(result && action == GameAction.MOVE_MOTHER_NATURE)
-        {
-            deactivate();
-        }
-        return result;
+        // I don't have to intercept any action
+        return true;
     }
 
     @Override

@@ -63,16 +63,25 @@ public class PostmanTest
     @Test
     public void isPlayableTest()
     {
-        //TODO
+        // This card is playable only before the movement of mother nature
+        // At the beginning mother nature hasn't moved
+        assertFalse(game.motherNatureMoved);
+        // So the card is playable
+        assertTrue(postman.isPlayable());
+
+        // Imagine mother nature moves
+        game.motherNatureMoved = true;
+        // So the card isn't playable
+        assertFalse(postman.isPlayable());
     }
 
     @Test
     public void isValidActionTest()
     {
-        // The card doesn't intercept any action
+        // The card is not active so the isValidAction return false
         for (GameAction action: GameAction.values())
         {
-            assertEquals(game.isValidAction(action), postman.isValidAction(action));
+            assertFalse(postman.isValidAction(action));
         }
 
         // A player must be selected to activate the card
@@ -91,16 +100,11 @@ public class PostmanTest
             postman.activate();
             assertEquals(0, player1.getCoins());
             assertTrue(postman.activated);
+
+            // The card doesn't intercept any action, so if active it returns true
             for (GameAction action: GameAction.values())
             {
-                // The card doesn't intercept any action
-                assertEquals(game.isValidAction(action), postman.isValidAction(action));
-
-                // The card deactivates itself when the action is SELECT_CLOUD_TILE
-                if (action == GameAction.SELECT_CLOUD_TILE)
-                {
-                    assertFalse(postman.activated);
-                }
+                assertTrue(postman.isValidAction(action));
             }
         }
         catch (NotEnoughCoinsException e)
@@ -111,6 +115,10 @@ public class PostmanTest
         // The card has been used the first time so its cost increases
         assertTrue(postman.firstUsed);
         assertEquals(2, postman.cost);
+
+        // Deactivate the card
+        postman.deactivate();
+        assertFalse(postman.activated);
 
         try
         {
@@ -128,10 +136,6 @@ public class PostmanTest
         assertTrue(postman.firstUsed);
         assertEquals(2, postman.cost);
         assertTrue(postman.activated);
-
-        // I deactivate the card
-        postman.deactivate();
-        assertFalse(postman.activated);
     }
 
     @Test

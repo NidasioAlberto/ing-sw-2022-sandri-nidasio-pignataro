@@ -75,10 +75,10 @@ public class MonkTest
         // Select a player
         game.selectPlayer(0);
 
-        // The card is not active so the isValidAction return the instance validation
+        // The card is not active so the isValidAction return false
         for (GameAction action: GameAction.values())
         {
-            assertEquals(game.isValidAction(action), monk.isValidAction(action));
+            assertFalse(monk.isValidAction(action));
         }
 
         // If the player doesn't have enough coins an exception is thrown

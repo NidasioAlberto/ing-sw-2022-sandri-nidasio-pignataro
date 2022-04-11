@@ -37,14 +37,14 @@ public class Postman extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        //If it is activated we receive a select cloud tile action, then I deactivate the card
-        if(activated && action == GameAction.SELECT_CLOUD_TILE)
+        // If the card is not activated the action isn't valid
+        if(!activated)
         {
-            deactivate();
+            return false;
         }
 
-        //I don't have to intercept any action
-        return instance.isValidAction(action);
+        // I don't have to intercept any action
+        return true;
     }
 
     // TODO capire come gestirla
