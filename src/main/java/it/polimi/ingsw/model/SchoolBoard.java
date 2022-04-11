@@ -77,7 +77,7 @@ public class SchoolBoard
         if (playersNumber < 2 || playersNumber > 4)
             throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
 
-        // The number of players must not be modifiable
+        // The number of players must be modifiable
         if (maxStudentsInEntrance != null && maxTowers != null)
             throw new IllegalStateException("[SchoolBoard] The number of players can't be changed");
 
@@ -115,15 +115,17 @@ public class SchoolBoard
      * 
      * @param professor the professor that has to be removed
      * @throws NullPointerException Thrown if the professor passed is null
+     * @throws NoSuchElementException Thrown if there is no such professor
      */
-    public void removeProfessor(Professor professor) throws NullPointerException
+    public void removeProfessor(Professor professor)
+            throws NullPointerException, NoSuchElementException
     {
         if (professor == null)
             throw new NullPointerException("[SchoolBoard] Null professor");
 
-        // Check if it is not null and present
-        if (professorTable.contains(professor))
-            professorTable.remove(professor);
+        // Check if there is such professor
+        if (!professorTable.remove(professor))
+            throw new NoSuchElementException("[SchoolBoard] There is no such professor");
     }
 
     /**
@@ -367,6 +369,9 @@ public class SchoolBoard
         return maxTowers;
     }
 
-    public TowerColor getTowerColor() { return towerColor; }
+    public TowerColor getTowerColor()
+    {
+        return towerColor;
+    }
 
 }

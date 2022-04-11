@@ -29,47 +29,51 @@ public class Centaur extends CharacterCard
     @Override
     public boolean isPlayable()
     {
-        //This card is playable if the previous action is before the movement of mother nature
-        //or if the previous action is empty
-        if(instance.previousAction.isEmpty())
+        // This card is playable if the previous action is before the movement of mother nature
+        // or if the previous action is empty
+        if (instance.previousAction.isEmpty())
             return true;
 
-        //It is the index of the game action enumeration indexing the previous action
+        // It is the index of the game action enumeration indexing the previous action
         int indexPrevAction;
-        //It is the index of the game action enumeration indexing the move mother nature action
+        // It is the index of the game action enumeration indexing the move mother nature action
         int indexMotherAction;
 
-        //Take the indexes
-        for(indexPrevAction = 0; GameAction.values()[indexPrevAction] != instance.previousAction.get(); indexPrevAction++);
-        for(indexMotherAction = 0; GameAction.values()[indexMotherAction] != GameAction.MOVE_MOTHER_NATURE; indexMotherAction++);
+        // Take the indexes
+        for (indexPrevAction = 0; GameAction.values()[indexPrevAction] != instance.previousAction
+                .get(); indexPrevAction++);
+        for (indexMotherAction = 0; GameAction
+                .values()[indexMotherAction] != GameAction.MOVE_MOTHER_NATURE; indexMotherAction++);
 
-        //If we are before the mother nature movement then we can call the card
+        // If we are before the mother nature movement then we can call the card
         return indexPrevAction < indexMotherAction;
     }
 
     @Override
     public boolean isValidAction(GameAction action)
     {
-        //If the card is activated and we pass the mother nature movement I can deactivate the card
-        if(activated && action == GameAction.SELECT_CLOUD_TILE)
+        // If the card is activated and we pass the mother nature movement I can deactivate the card
+        if (activated && action == GameAction.SELECT_CLOUD_TILE)
             deactivate();
         return instance.isValidAction(action);
     }
 
     @Override
-    public void applyAction() {}
+    public void applyAction()
+    {}
 
     @Override
-    public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException
+    public int computePlayerInfluence(Player player, int island)
+            throws NoSuchElementException, IndexOutOfBoundsException
     {
-        //If the card is activated i apply the effect of this method
-        if(!activated)
+        // If the card is activated i apply the effect of this method
+        if (!activated)
             return instance.computePlayerInfluence(player, island);
 
-        if(island < 0 || island > instance.islands.size())
+        if (island < 0 || island > instance.islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
-        if(player == null)
+        if (player == null)
             throw new NullPointerException("[Game] player null");
 
         Island currentIsland = instance.islands.get(island);

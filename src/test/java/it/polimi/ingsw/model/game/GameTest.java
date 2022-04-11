@@ -1,18 +1,11 @@
 package it.polimi.ingsw.model.game;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.game.Game;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 public class GameTest
 {
@@ -81,6 +74,10 @@ public class GameTest
         // Now there should not be any selected players
         assertTrue(() -> game.getSelectedPlayer().isEmpty());
 
+        // Invalid indexes should not be accepted
+        assertThrows(IndexOutOfBoundsException.class, () -> game.selectPlayer(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> game.selectPlayer(2));
+
         // Select the first player
         assertDoesNotThrow(() -> game.selectPlayer(0));
         assertDoesNotThrow(() -> game.getSelectedPlayer().get());
@@ -114,8 +111,13 @@ public class GameTest
         assertEquals(player1, tableList.get(0));
         assertEquals(player2, tableList.get(1));
 
-        // Select a card for each player
+        // Select a card only for one player
         player1.selectCard(10);
+
+        // This should fail
+        assertThrows(NoSuchElementException.class, () -> game.getSortedPlayerList());
+
+        // Select a card for other players
         player2.selectCard(1);
         List<Player> sortedList = game.getSortedPlayerList();
         assertEquals(player1, sortedList.get(1));
@@ -229,6 +231,53 @@ public class GameTest
     }
 
     @Test
+    public void conquerProfessorsTest()
+    {
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Setup the game
+        game.setupGame();
+
+        // Give a player a student and selected him
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.PINK));
+
+        // Now this should not throw
+        assertDoesNotThrow(() -> game.conquerProfessors());
+
+        // The player should have the professor in his board
+        assertEquals(1, player1.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.PINK, player1.getBoard().getProfessors().get(0).getColor());
+
+        // Now give the other player the same number of students
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.PINK));
+
+        // Now this should not throw
+        assertDoesNotThrow(() -> game.conquerProfessors());
+
+        // The professor should still be in the previous player
+        assertEquals(1, player1.getBoard().getProfessors().size());
+        assertEquals(0, player2.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.PINK, player1.getBoard().getProfessors().get(0).getColor());
+
+        // Now give the other player more students
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.PINK));
+
+        // Now this should not throw
+        assertDoesNotThrow(() -> game.conquerProfessors());
+
+        // The professor should have been moved
+        assertEquals(0, player1.getBoard().getProfessors().size());
+        assertEquals(1, player2.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.PINK, player2.getBoard().getProfessors().get(0).getColor());
+    }
+
+    @Test
     public void moveMotherNatureTest()
     {
         // The game is not set up, this should throw and error
@@ -266,9 +315,14 @@ public class GameTest
         // Setup the game
         game.setupGame();
 
-        // Select a card and the player
-        player1.selectCard(6); // Card number 6 with 3 movements
+        // Select the current player
         game.selectPlayer(0);
+
+        // This should fail because the current player has not selected any card
+        assertThrows(NoSuchElementException.class, () -> game.isValidMotherNatureMovement(2));
+
+        // Select a card for the current player
+        player1.selectCard(6); // Card number 6 with 3 movements
 
         assertFalse(() -> game.isValidMotherNatureMovement(0));
         assertTrue(() -> game.isValidMotherNatureMovement(1));
@@ -280,16 +334,21 @@ public class GameTest
     @Test
     public void computeInfluenceTest()
     {
-        // This should not accept a null student
-        assertThrows(NullPointerException.class, () -> game.computePlayerInfluence(null, 0));
-
-        // The game is not set up, an exception should occur
-        assertThrows(NoSuchElementException.class, () -> game.computeInfluence());
-        assertThrows(IndexOutOfBoundsException.class, () -> game.computeInfluence(0));
-
         // Create the players
         Player player1 = new Player("Player1", TowerColor.BLACK);
         Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // This should not accept a null student and invalid island indexes
+        assertThrows(NullPointerException.class, () -> game.computePlayerInfluence(null, 0));
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> game.computePlayerInfluence(player1, -1));
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> game.computePlayerInfluence(player2, 0));
+
+        // The game is not set up, an exception should occur
+        assertThrows(NoSuchElementException.class, () -> game.computeInfluence());
+        assertThrows(IndexOutOfBoundsException.class, () -> game.computeInfluence(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> game.computeInfluence(0));
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -298,8 +357,31 @@ public class GameTest
         // Setup the game
         game.setupGame();
 
-        // The game set up and mother nature has been positioned
+        Island island = game.getCurrentIsland();
+        int islandIndex = game.getIslands().indexOf(island);
+
+        // Save the current status
+        List<Tower> towers = island.getTowers();
+
+        // The game is set up and mother nature has been positioned
+        // Each player should have the same influence, hence no tower movement has to be performed
         assertDoesNotThrow(() -> game.computeInfluence());
+        for (int i = 0; i < towers.size(); i++)
+            assertEquals(towers.get(i), game.getCurrentIsland().getTowers().get(i));
+
+        // Now put a tower on the island
+        game.getCurrentIsland().addTower(new Tower(TowerColor.BLACK));
+        towers = island.getTowers();
+
+        // Check the influences
+        assertEquals(1, game.computePlayerInfluence(player1, islandIndex));
+        assertEquals(0, game.computePlayerInfluence(player2, islandIndex));
+
+        // The player should have more influence but still nothing should move
+        assertDoesNotThrow(() -> game.computeInfluence());
+        for (int i = 0; i < towers.size(); i++)
+            assertEquals(towers.get(i).getColor(),
+                    game.getCurrentIsland().getTowers().get(i).getColor());
     }
 
     @Test
@@ -345,12 +427,37 @@ public class GameTest
         assertEquals(0, game.getCloudTiles().get(1).getStudents().size());
 
         // The student must have moved to the current player's entrance
-        assertEquals(prevEntrance.size() + studentsOnTheCloudTile.size(), player2.getBoard().getStudentsInEntrance().size());
+        assertEquals(prevEntrance.size() + studentsOnTheCloudTile.size(),
+                player2.getBoard().getStudentsInEntrance().size());
+    }
+
+    @Test
+    public void getStudentFromBagTest()
+    {
+        // When the game is not set up this should fail, the bag is empty
+        assertThrows(NoSuchElementException.class, () -> game.getStudentFromBag());
+
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Now set up the game
+        game.setupGame();
+
+        // This should not fail
+        assertDoesNotThrow(() -> game.getStudentFromBag());
     }
 
     @Test
     public void addStudentToBagTest()
     {
+        // A null student should not be added to the bag
+        assertThrows(NullPointerException.class, () -> game.addStudentToBag(null));
+
         // Create the players
         Player player1 = new Player("Player1", TowerColor.BLACK);
         Player player2 = new Player("Player2", TowerColor.GREY);
@@ -374,5 +481,113 @@ public class GameTest
 
         // All the other students should still be there
         assertEquals(prevBag.size() + 1, game.getStudentBag().size());
+    }
+
+    @Test
+    public void removeProfessorTest()
+    {
+        // Invalid indexes should make the method fail
+        assertThrows(IndexOutOfBoundsException.class, () -> game.removeProfessor(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> game.removeProfessor(0));
+
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player2 = new Player("Player2", TowerColor.GREY);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Setup the game
+        game.setupGame();
+
+        // Save the current status
+        List<Professor> professors = game.getProfessors();
+
+        // Now removing a professor should succeed
+        assertDoesNotThrow(() -> game.removeProfessor(0));
+
+        // Check if the professor has been removed
+        assertEquals(professors.size() - 1, game.getProfessors().size());
+        for (int i = 0; i < game.getProfessors().size(); i++)
+            assertEquals(professors.get(1 + i), game.getProfessors().get(i));
+    }
+
+    @Test
+    public void getCharacterCardsTest()
+    {
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY)));
+
+        // Setup the game
+        game.setupGame();
+
+        // With a classic game the character cards should not be present
+        assertEquals(0, game.getCharacterCards().size());
+
+        // Setup an expert game
+        game = new Game(2, GameMode.EXPERT);
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY)));
+
+        // Setup the game
+        game.setupGame();
+
+        // Now the game should have 3 random character cards
+        List<CharacterCard> cards = game.getCharacterCards();
+        assertEquals(3, cards.size());
+        for (CharacterCard characterCard : cards)
+            assertNotNull(characterCard);
+        for (CharacterCard card1 : cards)
+            for (CharacterCard card2 : cards)
+                if (card1 != card2)
+                    assertNotEquals(card1.getCardType(), card2.getCardType());
+
+    }
+
+    @Test
+    public void getCurrentCharacterCardTest()
+    {
+        // Whit out the game set up this should return an empty optional
+        assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard());
+
+        // Setup an expert game
+        game = new Game(2, GameMode.EXPERT);
+
+        // This should still be true
+        assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard());
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY)));
+
+        // Setup the game
+        game.setupGame();
+
+        // Select the character card
+        game.setCurrentCharacterCard(1);
+
+        // Get the current card
+        Optional<CharacterCard> card = game.getCurrentCharacterCard();
+
+        // The card should be present and the expected one
+        assertTrue(card.isPresent());
+        assertEquals(game.getCharacterCards().get(1), card.get());
+
+        // Select an out of bound card
+        game.setCurrentCharacterCard(42);
+
+        // This should error out
+        assertTrue(game.getCurrentCharacterCard().isEmpty());
+    }
+
+    @Test
+    public void getCurrentIslandTest()
+    {
+        // When the game is not set up this should throw
+        assertThrows(NoSuchElementException.class, () -> game.getCurrentIsland());
     }
 }

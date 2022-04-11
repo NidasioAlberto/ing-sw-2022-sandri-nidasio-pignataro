@@ -2,13 +2,8 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
 public class Game
 {
@@ -209,56 +204,71 @@ public class Game
     }
 
     /**
-     * This method regulates the conquer of professor and should be called when a player moves some
+     * This method regulates the conquer of professors and should be called when a player moves some
      * student into his dining room.
      * 
      * @throws NoSuchElementException When no player is selected
      */
     public void conquerProfessors() throws NoSuchElementException
     {
-        // Current selected player
-        Player currentPlayer = getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
-
-        // Check for every professor if the selected player has at least a student of
-        // the same
-        // color. If the professor is still in this instance it means that no one has a
-        // student
-        // of the expected color except from that player
-        for (int i = 0; i < professors.size(); i++)
-            // If the player has at least one student of the same color i can assign
-            // the professor to that player
-            if (currentPlayer.getBoard().getStudentsNumber(professors.get(i).getColor()) > 0)
-                currentPlayer.getBoard().addProfessor(professors.remove(i));
-
-        // Now I can check who is the player with the most students for every color and
-        // the assign
-        // the professor
-        for (int i = 0; i < SchoolColor.values().length; i++)
+        // Check for every professor if there is a player who can have it
+        for (SchoolColor color : SchoolColor.values())
         {
-            int finalI = i;
-            // Look for the player that has that professor
-            Player currentKing = players.stream()
-                    .filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI]))
-                    .findFirst().get();
-
-            // If the players differ and don't have the same number of students I move the
-            // professor
-            if (currentKing != currentPlayer && currentPlayer.getBoard()
-                    .getStudentsNumber(SchoolColor.values()[finalI]) > currentKing.getBoard()
-                            .getStudentsNumber(SchoolColor.values()[finalI]))
+            // If the professor is still on the table, assign it to the player with the most
+            // students, if there is any
+            if (professors.stream().filter(p -> p.getColor().equals(color)).count() > 0)
             {
-                Professor prof;
-                // I take the instance of the professor to be moved
-                prof = currentKing.getBoard().getProfessors().stream()
-                        .filter(p -> p.getColor() == SchoolColor.values()[finalI]).findFirst()
-                        .get();
+                // Get the player with more students of the current color
+                List<Player> sortedPlayers = players.stream()
+                        .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color)
+                                - p1.getBoard().getStudentsNumber(color))
+                        .collect(Collectors.toList());
 
-                // Remove the professor from the king
-                currentKing.getBoard().removeProfessor(prof);
+                // The player gets the professor only if he has the majority
+                if (sortedPlayers.get(0).getBoard().getStudentsNumber(color) > sortedPlayers.get(1)
+                        .getBoard().getStudentsNumber(color))
+                {
+                    // Remove the professor from the table
+                    Professor toMove = professors.stream().filter(p -> p.getColor().equals(color))
+                            .findFirst().orElse(null);
+                    professors.remove(toMove);
 
-                // Add the professor to the new king
-                currentPlayer.getBoard().addProfessor(prof);
+                    // Add him to the player's board
+                    sortedPlayers.get(0).getBoard().addProfessor(toMove);
+                }
+            } else
+            {
+                // Look for the player that has that professor
+                Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(color))
+                        .findFirst().orElse(null);
+
+                // Get the player with more students of the current color
+                Player wannaBeKing =
+                        players.stream()
+                                .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color)
+                                        - p1.getBoard().getStudentsNumber(color))
+                                .findFirst().orElse(null);
+
+                // If they are the same player there's nothing to do
+                if (currentKing != wannaBeKing)
+                {
+                    // Move the student only if the wanna be king is not the current king and he has
+                    // more
+                    // students
+                    if (wannaBeKing.getBoard().getStudentsNumber(color) > currentKing.getBoard()
+                            .getStudentsNumber(color))
+                    {
+                        // I take the instance of the professor to be moved
+                        Professor professor = currentKing.getBoard().getProfessors().stream()
+                                .filter(p -> p.getColor().equals(color)).findFirst().get();
+
+                        // Remove the professor from the current king
+                        currentKing.getBoard().removeProfessor(professor);
+
+                        // Add the professor to the new king
+                        wannaBeKing.getBoard().addProfessor(professor);
+                    }
+                }
             }
         }
     }
@@ -287,8 +297,9 @@ public class Game
         // I have to check if the current player can do this movement
         Player currentPlayer = getSelectedPlayer()
                 .orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
-        AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(
-                () -> new NoSuchElementException("[Game] Player didn't select assistant card"));
+        AssistantCard selectedCard =
+                currentPlayer.getSelectedCard().orElseThrow(() -> new NoSuchElementException(
+                        "[Game] The currently selected player didn't select assistant card"));
 
         return selectedCard.getSteps() >= steps && steps >= 1;
     }
@@ -308,22 +319,13 @@ public class Game
 
         Island currentIsland = islands.get(island);
 
-        //TODO non so se serva fare questo controllo perchè viene già fatto in grandmaHerbs,
-        // il cui metodo credo vada sempre chiamato se la carta viene estratta
-
-        // If the island has a no entry tile I remove it and don't calculate the
-        // influence
-        if (currentIsland.getNoEntryTiles() > 0)
-        {
-            currentIsland.removeNoEntryTile();
-            return;
-        }
-
         // TODO: Use Pair
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream().sorted(
-                (p1, p2) -> computePlayerInfluence(p1, island) - computePlayerInfluence(p2, island))
+                (p1, p2) -> computePlayerInfluence(p2, island) - computePlayerInfluence(p1, island))
                 .collect(Collectors.toList());
+
+        // Check if the first player has more influence than the second one
         if (computePlayerInfluence(sortedPlayers.get(0),
                 island) > computePlayerInfluence(sortedPlayers.get(1), island))
         {
@@ -377,11 +379,11 @@ public class Game
     public int computePlayerInfluence(Player player, int island)
             throws NullPointerException, IndexOutOfBoundsException
     {
-        if (island < 0 || island > islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
-
         if (player == null)
             throw new NullPointerException("[Game] player null");
+
+        if (island < 0 || island >= islands.size())
+            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
         Island currentIsland = islands.get(island);
 
@@ -566,6 +568,18 @@ public class Game
                 p.getBoard().addStudentToEntrance(getStudentFromBag());
             });
         });
+
+        // If the game is in expert mode, create randomly 3 character cards
+        if (gameMode.equals(GameMode.EXPERT))
+        {
+            List<CharacterCardType> types =
+                    new ArrayList<>(Arrays.asList(CharacterCardType.values()));
+
+            // Choose 3 random cards
+            for (int j = 0; j < 3; j++)
+                characterCards.add(CharacterCard
+                        .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
+        }
     }
 
     private int getRandomNumber(int startInclusive, int endExclusive)
@@ -574,16 +588,19 @@ public class Game
                 .round(startInclusive + Math.random() * (endExclusive - startInclusive) - 0.5);
     }
 
-    // TODO forse dovrebbe lanciare una eccezione quando sono finiti gli studenti
-    // così si sa che la partita deve terminare
     /**
      * Returns a random student from the bag.
      *
      * @return the student extracted from the bag.
+     * @throws NoSuchElementException thrown if the student bag is empty
      */
-    public Student getStudentFromBag()
+    public Student getStudentFromBag() throws NoSuchElementException
     {
-        return studentBag.remove(0);// getRandomNumber(0, studentBag.size()));
+        if (studentBag.size() == 0)
+            throw new NoSuchElementException("[Game] Student bag empty");
+
+        // TODO: Change back!
+        return studentBag.remove(0); // getRandomNumber(0, studentBag.size()));
     }
 
     /**
@@ -591,8 +608,10 @@ public class Game
      *
      * @param student to be added to the bag.
      */
-    public void addStudentToBag(Student student)
+    public void addStudentToBag(Student student) throws NullPointerException
     {
+        if (student == null)
+            throw new NullPointerException("[Game] Can't add a null student to the bag");
         studentBag.add(student);
     }
 
@@ -619,9 +638,19 @@ public class Game
     }
 
     /**
-     * Returns the currently selected character card.
+     * Sets the current character card index.
      */
-    public Optional<CharacterCard> getCurrentCharacterCard()
+    public void setCurrentCharacterCard(Integer characterCardIndex)
+    {
+        currentCharacterCardIndex = Optional.of(characterCardIndex);
+    }
+
+    /**
+     * Returns the currently selected character card.
+     * 
+     * @throws NoSuchElementException thrown if there is no character card selected
+     */
+    public Optional<CharacterCard> getCurrentCharacterCard() throws NoSuchElementException
     {
         try
         {
@@ -640,16 +669,11 @@ public class Game
     }
 
     /**
-     * @return a copy of the current professors array
+     * @return A copy of the current professors list
      */
     public List<Professor> getProfessors()
     {
         return new ArrayList<Professor>(professors);
-    }
-
-    public Optional<GameAction> getPreviousAction()
-    {
-        return previousAction;
     }
 
     public List<CloudTile> getCloudTiles()
@@ -660,5 +684,11 @@ public class Game
     public List<Student> getStudentBag()
     {
         return new ArrayList<Student>(studentBag);
+    }
+
+    public Island getCurrentIsland() throws NoSuchElementException
+    {
+        return islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                "[Game] No mother nature index, is the game initialized?")));
     }
 }

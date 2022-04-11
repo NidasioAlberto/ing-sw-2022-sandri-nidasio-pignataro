@@ -129,7 +129,8 @@ public class SchoolBoardTest
         assertEquals(true, board.getProfessors().contains(secondProfessor));
 
         // Remove a different instance
-        board.removeProfessor(new Professor(SchoolColor.RED));
+        assertThrows(NoSuchElementException.class,
+                () -> board.removeProfessor(new Professor(SchoolColor.RED)));
         assertEquals(2, board.getProfessors().size());
         assertEquals(true, board.getProfessors().contains(firstProfessor));
         assertEquals(true, board.getProfessors().contains(secondProfessor));
@@ -168,7 +169,8 @@ public class SchoolBoardTest
         assertEquals(true, board.hasProfessor(secondProfessor.getColor()));
 
         // Remove a different instance
-        board.removeProfessor(new Professor(SchoolColor.RED));
+        assertThrows(NoSuchElementException.class,
+                () -> board.removeProfessor(new Professor(SchoolColor.RED)));
         assertEquals(2, board.getProfessors().size());
         assertEquals(true, board.hasProfessor(firstProfessor.getColor()));
         assertEquals(true, board.hasProfessor(secondProfessor.getColor()));
