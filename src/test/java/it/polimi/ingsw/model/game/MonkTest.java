@@ -187,13 +187,18 @@ public class MonkTest
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
         assertEquals("[Game] No selected island", e2.getMessage());
 
-        // The player selects an island
-        player1.selectIsland(0);
+        // The player selects an island where there is already a student
+        int islandIndex = 0;
+        if (game.getIslands().get(islandIndex).getStudents().size() == 0)
+            islandIndex++;
+        assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
+        player1.selectIsland(islandIndex);
 
         // Check that the action is applied accurately
         monk.applyAction();
         // The selected student is on the selected island
-        assertEquals(selectedStudent, game.getIslands().get(0).getStudents().get(1));
+        assertEquals(selectedStudent, game.getIslands().get(islandIndex).getStudents().get(1));
+        assertEquals(2, game.getIslands().get(islandIndex).getStudents().size());
         // The selected student is no more on the card
         assertFalse(((Monk) monk).getStudents().contains(selectedStudent));
         // The non selected students are still on the card

@@ -101,6 +101,9 @@ public class Minstrel extends CharacterCard
         // Add the student to the entrance
         currentPlayer.getBoard().addStudentToEntrance(student);
 
+        // Check if the player gain a professor
+        instance.conquerProfessors();
+
         exchangeCounter += 1;
     }
 

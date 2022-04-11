@@ -252,11 +252,14 @@ public class GrandmaHerbsTest
         player1.addCoins(2);
         game.selectPlayer(0);
 
-        // Select an island
-        player1.selectIsland(0);
+        // The player selects an island where there is already a student
+        int islandIndex = 0;
+        if (game.getIslands().get(islandIndex).getStudents().size() == 0)
+            islandIndex++;
+        player1.selectIsland(islandIndex);
 
         // Imagine the player1 owns the professor of the only student present on the selected island
-        player1.getBoard().addProfessor(new Professor(game.getIslands().get(0).getStudents().get(0).getColor()));
+        player1.getBoard().addProfessor(new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
 
         // Activate the card
         try
@@ -269,34 +272,33 @@ public class GrandmaHerbsTest
         }
 
         // Before the action
-        assertEquals(0, game.getIslands().get(0).getNoEntryTiles());
-        assertEquals(0, game.islands.get(0).getTowers().size());
-        assertEquals(1, game.islands.get(0).getStudents().size());
+        assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
+        assertEquals(0, game.getIslands().get(islandIndex).getTowers().size());
+        assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
 
         // Apply the action
         grandmaHerbs.applyAction();
-        assertEquals(1, game.getIslands().get(0).getNoEntryTiles());
+        assertEquals(1, game.getIslands().get(islandIndex).getNoEntryTiles());
         assertEquals(3, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
 
         // Compute the influence on the selected island that has 1 noEntryTile
-        grandmaHerbs.computeInfluence(0);
+        grandmaHerbs.computeInfluence(islandIndex);
         // The noEntryTile is removed from the island
-        assertEquals(0, game.getIslands().get(0).getNoEntryTiles());
+        assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
         // The noEntryTile returns to the card
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
         // The influence isn't calculated
-        assertEquals(0, game.islands.get(0).getTowers().size());
-        assertEquals(1, game.islands.get(0).getStudents().size());
+        assertEquals(0, game.getIslands().get(islandIndex).getTowers().size());
+        assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
 
         // Compute the influence on the selected island that has 0 noEntryTiles,
         // so the influence is computed normally
-        grandmaHerbs.computeInfluence(0);
-        assertEquals(0, game.getIslands().get(0).getNoEntryTiles());
+        grandmaHerbs.computeInfluence(islandIndex);
+        assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
-        //TODO togliere questi commenti quando computeInfluence è stato sistemato
-        //assertEquals(1, game.islands.get(0).getTowers().size());
-        //assertEquals(player1.getColor(), game.getIslands().get(0).getTowers().get(0).getColor());
-        assertEquals(1, game.islands.get(0).getStudents().size());
+        assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
+        assertEquals(player1.getColor(), game.getIslands().get(islandIndex).getTowers().get(0).getColor());
+        assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
     }
 }
