@@ -62,11 +62,11 @@ public class Centaur extends CharacterCard
         if (!activated)
             return instance.computePlayerInfluence(player, island);
 
-        if (island < 0 || island > instance.islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+        if (island < 0 || island >= instance.islands.size())
+            throw new IndexOutOfBoundsException("[Centaur] island index out of bounds");
 
         if (player == null)
-            throw new NullPointerException("[Game] player null");
+            throw new NullPointerException("[Centaur] player null");
 
         Island currentIsland = instance.islands.get(island);
 

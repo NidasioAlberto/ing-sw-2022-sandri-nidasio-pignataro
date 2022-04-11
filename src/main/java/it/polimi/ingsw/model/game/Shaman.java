@@ -59,7 +59,7 @@ public class Shaman extends CharacterCard
         }
 
         //Current selected player
-        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Shaman] No player selected"));
 
         //Check for every professor if the selected player has at least a student of the same
         //color. If the professor is still in this instance it means that no one has a student

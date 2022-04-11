@@ -86,7 +86,7 @@ public abstract class CharacterCard extends Game
         if (instance.getSelectedPlayer().isEmpty())
             throw new NoSuchElementException("[CharacterCard] No player selected");
 
-        //If already activated i don't have to activate it another time
+        //If already activated I don't have to activate it another time
         if(activated)
             return;
 
