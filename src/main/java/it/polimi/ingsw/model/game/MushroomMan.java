@@ -34,24 +34,8 @@ public class MushroomMan extends CharacterCard
     @Override
     public boolean isPlayable() throws NoSuchElementException
     {
-        GameAction previousAction = instance.previousAction.orElseThrow(
-                () -> new NoSuchElementException("[MushroomMan] There is no previous action")
-        );
-
-        // This card must be played before the action MOVE_MOTHER_NATURE
-        if(previousAction == GameAction.PLAY_ASSISTANT_CARD ||
-                previousAction == GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING ||
-                previousAction == GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND)
-        {
-            color = instance.getSelectedPlayer().orElseThrow(
-                    () -> new NoSuchElementException("[MushroomMan] No selected player")
-            ).getSelectedColors().stream().findFirst().orElseThrow(
-                    () -> new NoSuchElementException("[MushroomMan] No selected color")
-            );
-            return true;
-        }
-
-        return false;
+        // This card is playable only before the movement of mother nature
+        return !instance.motherNatureMoved;
     }
 
     @Override

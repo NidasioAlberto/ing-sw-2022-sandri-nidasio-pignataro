@@ -40,6 +40,8 @@ public class Game
 
     protected Optional<GameAction> previousAction;
 
+    protected boolean motherNatureMoved;
+
     public Game() throws NullPointerException
     {
         this(2, GameMode.CLASSIC);
@@ -70,6 +72,7 @@ public class Game
         motherNatureIndex = Optional.empty();
         currentCharacterCardIndex = Optional.empty();
         previousAction = Optional.empty();
+        motherNatureMoved = false;
     }
 
     /**
@@ -283,6 +286,9 @@ public class Game
                 "[Game] Mother nature is not currently on the table, is the game set up?"));
         index %= islands.size();
         motherNatureIndex = Optional.of(index);
+
+        // TODO va messo a false alla fine del turno
+        motherNatureMoved = true;
     }
 
     /**

@@ -27,22 +27,8 @@ public class Shaman extends CharacterCard
     @Override
     public boolean isPlayable()
     {
-        //This card is playable if the previous action is before the movement of mother nature
-        //or if the previous action is empty
-        if(instance.previousAction.isEmpty())
-            return true;
-
-        //It is the index of the game action enumeration indexing the previous action
-        int indexPrevAction;
-        //It is the index of the game action enumeration indexing the move mother nature action
-        int indexMotherAction;
-
-        //Take the indexes
-        for(indexPrevAction = 0; GameAction.values()[indexPrevAction] != instance.previousAction.get(); indexPrevAction++);
-        for(indexMotherAction = 0; GameAction.values()[indexMotherAction] != GameAction.MOVE_MOTHER_NATURE; indexMotherAction++);
-
-        //If we are before the mother nature movement then we can call the card
-        return indexPrevAction < indexMotherAction;
+        // This card is playable only before the movement of mother nature
+        return !instance.motherNatureMoved;
     }
 
     @Override

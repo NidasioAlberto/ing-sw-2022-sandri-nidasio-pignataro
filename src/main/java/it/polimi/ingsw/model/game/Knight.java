@@ -29,14 +29,8 @@ public class Knight extends CharacterCard
     @Override
     public boolean isPlayable() throws NoSuchElementException
     {
-        GameAction previousAction = instance.previousAction.orElseThrow(
-                () -> new NoSuchElementException("[Knight] There is no previous action")
-        );
-
-        // This card must be played before the action MOVE_MOTHER_NATURE
-        return previousAction == GameAction.PLAY_ASSISTANT_CARD ||
-                previousAction == GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING ||
-                previousAction == GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND;
+        // This card is playable only before the movement of mother nature
+        return !instance.motherNatureMoved;
     }
 
     @Override
