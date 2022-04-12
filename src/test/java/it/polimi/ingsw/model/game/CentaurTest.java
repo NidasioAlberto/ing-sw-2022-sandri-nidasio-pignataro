@@ -76,13 +76,7 @@ public class CentaurTest
     @Test
     public void isValidActionTest()
     {
-        // The card is not active so the isValidAction return false
-        for (GameAction action: GameAction.values())
-        {
-            assertFalse(centaur.isValidAction(action));
-        }
-
-        // A player must be selected to activate the card
+         // A player must be selected to activate the card
         assertThrows(NoSuchElementException.class, () -> centaur.activate());
 
         // Select a player
@@ -98,10 +92,12 @@ public class CentaurTest
             centaur.activate();
             assertEquals(0, player1.getCoins());
 
-            // The card doesn't intercept any action, so if active it returns true
-            for (GameAction action: GameAction.values())
+            // The card accepts only ACTION_BASE
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
-                assertTrue(centaur.isValidAction(action));
+                if (action == ExpertGameAction.ACTION_BASE)
+                    assertTrue(centaur.isValidAction(action));
+                else assertFalse(centaur.isValidAction(action));
             }
         }
         catch (NotEnoughCoinsException e)
@@ -134,6 +130,34 @@ public class CentaurTest
         assertTrue(centaur.firstUsed);
         assertEquals(4, centaur.cost);
         assertTrue(centaur.activated);
+    }
+
+    @Test
+    public void applyActionTest()
+    {
+        try
+        {
+            // Activate the card
+            game.selectPlayer(0);
+            player1.addCoins(3);
+            centaur.activate();
+            assertEquals(0, player1.getCoins());
+            assertTrue(centaur.activated);
+        }
+        catch (NotEnoughCoinsException e)
+        {
+            e.printStackTrace();
+        }
+
+        // Mother nature hasn't moved so the card remains active
+        game.motherNatureMoved = false;
+        centaur.applyAction();
+        assertTrue(centaur.activated);
+
+        // Mother nature has moved so the card deactivates itself
+        game.motherNatureMoved = true;
+        centaur.applyAction();
+        assertFalse(centaur.activated);
     }
 
     @Test

@@ -75,12 +75,6 @@ public class MonkTest
         // Select a player
         game.selectPlayer(0);
 
-        // The card is not active so the isValidAction return false
-        for (GameAction action: GameAction.values())
-        {
-            assertFalse(monk.isValidAction(action));
-        }
-
         // If the player doesn't have enough coins an exception is thrown
         assertThrows(NotEnoughCoinsException.class, () -> monk.activate());
 
@@ -90,10 +84,10 @@ public class MonkTest
             player1.addCoins(1);
             monk.activate();
             assertEquals(0, player1.getCoins());
-            for (GameAction action: GameAction.values())
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
                 // When Monk is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
-                if (action == GameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND)
+                if (action == ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND)
                     assertTrue(monk.isValidAction(action));
                 else assertFalse(monk.isValidAction(action));
             }

@@ -76,12 +76,6 @@ public class ShamanTest
     @Test
     public void isValidActionTest()
     {
-        // The card is not active so the isValidAction return false
-        for (GameAction action: GameAction.values())
-        {
-            assertFalse(shaman.isValidAction(action));
-        }
-
         // A player must be selected to activate the card
         assertThrows(NoSuchElementException.class, () -> shaman.activate());
 
@@ -99,7 +93,7 @@ public class ShamanTest
             assertEquals(0, player1.getCoins());
 
             // The card doesn't intercept any action, so if active it returns true
-            for (GameAction action: GameAction.values())
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
                 assertTrue(shaman.isValidAction(action));
             }

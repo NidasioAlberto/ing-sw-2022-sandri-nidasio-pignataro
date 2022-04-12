@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
@@ -78,12 +78,6 @@ public class PostmanTest
     @Test
     public void isValidActionTest()
     {
-        // The card is not active so the isValidAction return false
-        for (GameAction action: GameAction.values())
-        {
-            assertFalse(postman.isValidAction(action));
-        }
-
         // A player must be selected to activate the card
         assertThrows(NoSuchElementException.class, () -> postman.activate());
 
@@ -102,7 +96,7 @@ public class PostmanTest
             assertTrue(postman.activated);
 
             // The card doesn't intercept any action, so if active it returns true
-            for (GameAction action: GameAction.values())
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
                 assertTrue(postman.isValidAction(action));
             }
@@ -136,6 +130,34 @@ public class PostmanTest
         assertTrue(postman.firstUsed);
         assertEquals(2, postman.cost);
         assertTrue(postman.activated);
+    }
+
+    @Test
+    public void applyActionTest()
+    {
+        try
+        {
+            // Activate the card
+            game.selectPlayer(0);
+            player1.addCoins(1);
+            postman.activate();
+            assertEquals(0, player1.getCoins());
+            assertTrue(postman.activated);
+        }
+        catch (NotEnoughCoinsException e)
+        {
+            e.printStackTrace();
+        }
+
+        // Mother nature hasn't moved so the card remains active
+        game.motherNatureMoved = false;
+        postman.applyAction();
+        assertTrue(postman.activated);
+
+        // Mother nature has moved so the card deactivates itself
+        game.motherNatureMoved = true;
+        postman.applyAction();
+        assertFalse(postman.activated);
     }
 
     @Test

@@ -97,12 +97,6 @@ public class GrandmaHerbsTest
     @Test
     public void isValidActionTest()
     {
-        // The card is not active so the isValidAction return false
-        for (GameAction action: GameAction.values())
-        {
-            assertFalse(grandmaHerbs.isValidAction(action));
-        }
-
         // A player must be selected to activate the card
         assertThrows(NoSuchElementException.class, () -> grandmaHerbs.activate());
 
@@ -118,10 +112,10 @@ public class GrandmaHerbsTest
             player1.addCoins(2);
             grandmaHerbs.activate();
             assertEquals(0, player1.getCoins());
-            for (GameAction action: GameAction.values())
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
                 // When GrandmaHerbs is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
-                if (action == GameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND)
+                if (action == ExpertGameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND)
                     assertTrue(grandmaHerbs.isValidAction(action));
                 else assertFalse(grandmaHerbs.isValidAction(action));
             }

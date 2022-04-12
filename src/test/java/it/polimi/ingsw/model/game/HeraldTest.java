@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Professor;
 import it.polimi.ingsw.model.TowerColor;
@@ -67,12 +67,6 @@ public class HeraldTest
         // The card is always playable
         assertTrue(herald.isPlayable());
 
-        // The card is not active so the isValidAction return false
-        for (GameAction action: GameAction.values())
-        {
-            assertFalse(herald.isValidAction(action));
-        }
-
         // A player must be selected to activate the card
         assertThrows(NoSuchElementException.class, () -> herald.activate());
 
@@ -88,10 +82,10 @@ public class HeraldTest
             player1.addCoins(3);
             herald.activate();
             assertEquals(0, player1.getCoins());
-            for (GameAction action: GameAction.values())
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
                 // When Herald is active the only valid action is SELECT_ISLAND
-                if (action == GameAction.SELECT_ISLAND)
+                if (action == ExpertGameAction.SELECT_ISLAND)
                     assertTrue(herald.isValidAction(action));
                 else assertFalse(herald.isValidAction(action));
             }
@@ -131,12 +125,20 @@ public class HeraldTest
     @Test
     public void applyActionTest()
     {
-        // An exception is thrown if no player is selected
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, () -> herald.applyAction());
-        assertEquals("[Herald] No player selected", e.getMessage());
-
         // Select a player
         game.selectPlayer(0);
+
+        try
+        {
+            // Activate the card
+            player1.addCoins(3);
+            herald.activate();
+            assertEquals(0, player1.getCoins());
+        }
+        catch (NotEnoughCoinsException e)
+        {
+            e.printStackTrace();
+        }
 
         // An exception is thrown if no island is selected
         NoSuchElementException e1 = assertThrows(NoSuchElementException.class, () -> herald.applyAction());
