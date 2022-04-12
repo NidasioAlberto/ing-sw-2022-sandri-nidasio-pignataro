@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 
 import java.util.NoSuchElementException;
 
@@ -33,15 +33,19 @@ public class Herald extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
         // If active I accept only SELECT_ISLAND
-        return action == GameAction.SELECT_ISLAND;
+        return action == ExpertGameAction.SELECT_ISLAND;
     }
 
     @Override
     public void applyAction() throws NoSuchElementException
     {
+        // If the card is not currently activated I do nothing
+        if(!activated)
+            return;
+
         //Compute the influence in that island
         instance.computeInfluence(instance.getSelectedPlayer().orElseThrow(
                 () -> new NoSuchElementException("[Herald] No player selected"))

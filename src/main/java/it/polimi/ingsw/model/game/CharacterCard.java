@@ -67,7 +67,7 @@ public abstract class CharacterCard extends Game
      * @param action game action to be verified
      * @return the decision's result
      */
-    public abstract boolean isValidAction(GameAction action);
+    public abstract boolean isValidAction(ExpertGameAction action);
 
     /**
      * Method to apply the card action to the Game model. IMPORTANT: This method has to be called
@@ -97,8 +97,6 @@ public abstract class CharacterCard extends Game
         {
             instance.getSelectedPlayer().get().removeCoins(cost);
             this.activated = true;
-            // Clear the prev action
-            this.previousAction = Optional.empty();
             // Set the card to first used
             if (!firstUsed)
             {

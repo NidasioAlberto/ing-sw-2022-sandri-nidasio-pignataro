@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Player;
 
@@ -34,19 +34,10 @@ public class Centaur extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
-        //TODO conviene far si che il controller alla fine del turno di ogni giocatore disattivi
-        // tutte le carte cosi non serve che le carte si disattivino da sole
-
-        // If the card is not activated the action isn't valid
-        if(!activated)
-        {
-            return false;
-        }
-
-        // I don't have to intercept any action
-        return true;
+        //As long as the action is base action, for this card is ok
+        return action == ExpertGameAction.ACTION_BASE;
     }
 
     @Override

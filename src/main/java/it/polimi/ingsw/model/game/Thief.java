@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 
 import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
@@ -35,16 +35,10 @@ public class Thief extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
-        // If the card is not active I return the instance validation
-        if (!activated)
-        {
-            return instance.isValidAction(action);
-        }
-
         // If it is activated I accept only the SELECT_COLOR action
-        return action == GameAction.SELECT_COLOR;
+        return action == ExpertGameAction.SELECT_COLOR;
     }
 
     /**
@@ -55,6 +49,10 @@ public class Thief extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
+        //If the card is not currently activated i do nothing
+        if(!activated)
+            return;
+        
         // Get the player's list
         instance.players.stream().forEach(p ->
         {

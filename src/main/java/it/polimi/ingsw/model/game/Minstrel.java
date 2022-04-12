@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
 
@@ -41,31 +41,26 @@ public class Minstrel extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
-        // If the card is not active I return the instance validation
-        if (!activated)
+        if(action == ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_DINING)
         {
-            return instance.isValidAction(action);
-        }
-
-        if (exchangeCounter < 2)
-        {
-            // If it is activated I accept the
-            // SWAP_STUDENT_FROM_ENTRANCE_TO_DINING action
-            if (action == GameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_DINING)
+            if(exchangeCounter < 2)
+            {
                 return true;
+            }
             else
             {
-                // The player doesn't want to do more exchanges
                 this.deactivate();
-                return instance.isValidAction(action);
+                return false;
             }
-
         }
 
-        // If the player has already done 2 exchanges, the action isn't valid
-        return false;
+        //If he wants to do something different i can deactivate the card
+        this.deactivate();
+
+        //And accept if the action is a base action
+        return action == ExpertGameAction.ACTION_BASE;
     }
 
     /**
@@ -80,6 +75,10 @@ public class Minstrel extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
+        //If the card is not currently activated i do nothing
+        if(!activated)
+            return;
+
         // Get the current player
         Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException(
                 "[Minstrel] No selected player"));

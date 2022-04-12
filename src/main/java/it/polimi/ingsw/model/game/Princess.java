@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Student;
 
 import java.util.ArrayList;
@@ -47,17 +47,11 @@ public class Princess extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
-        // If the card is not active I return the instance validation
-        if (!activated)
-        {
-            return instance.isValidAction(action);
-        }
-
         // If it is activated I accept only the
         // MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING action
-        return action == GameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING;
+        return action == ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING;
     }
 
     /**
@@ -69,6 +63,10 @@ public class Princess extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
+        //If the card is not currently activated i do nothing
+        if(!activated)
+            return;
+
         // Take a student of the selected color from the card
         Student student = students.stream().filter(s -> s.getColor() == instance
                         .getSelectedPlayer().orElseThrow(

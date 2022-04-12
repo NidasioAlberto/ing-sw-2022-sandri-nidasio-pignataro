@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 
 import java.util.NoSuchElementException;
 
@@ -46,10 +46,10 @@ public class GrandmaHerbs extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
         // If active I accept only MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND
-        return action == GameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND;
+        return action == ExpertGameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND;
     }
 
     @Override

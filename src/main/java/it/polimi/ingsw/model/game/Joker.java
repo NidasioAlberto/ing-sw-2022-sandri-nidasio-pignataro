@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
 
@@ -57,15 +57,28 @@ public class Joker extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
-        if(action == GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
+        if(action == ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
         {
             // If it is activated I accept the
             // SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE
             if(exchangeCounter < 3)
+            {
                 return true;
+            }
+            else
+            {
+                this.deactivate();
+                return false;
+            }
         }
+
+        //If he wants to do something different i can deactivate the card
+        this.deactivate();
+
+        //And accept if the action is a base action
+        return action == ExpertGameAction.ACTION_BASE;
     }
 
     /**

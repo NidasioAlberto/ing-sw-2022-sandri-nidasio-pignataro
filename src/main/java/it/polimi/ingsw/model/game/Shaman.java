@@ -32,16 +32,23 @@ public class Shaman extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
         // I don't have to intercept any action
         return true;
     }
 
-    //TODO DEACTIVATE THE CARD
     @Override
     public void applyAction()
-    {}
+    {
+        //I have to check if mother nature has been moved.
+        //If so i can disable the card
+        if(!activated)
+            return;
+
+        if(instance.motherNatureMoved)
+            this.deactivate();
+    }
 
     @Override
     public void conquerProfessors()

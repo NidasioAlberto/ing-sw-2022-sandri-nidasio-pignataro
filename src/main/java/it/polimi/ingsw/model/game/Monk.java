@@ -50,10 +50,10 @@ public class Monk extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
         // If active I accept only MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
-        return action == GameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND;
+        return action == ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND;
     }
 
     @Override

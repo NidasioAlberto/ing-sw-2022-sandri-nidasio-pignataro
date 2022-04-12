@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Player;
 
@@ -34,19 +34,20 @@ public class Knight extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
         // This card doesn't have a connected action, so as long as the action is a non-expert one, it will be good
-
+        return action == ExpertGameAction.ACTION_BASE;
     }
 
     @Override
     public void applyAction()
     {
-        //This card deactivates when mother nature has already been moved
+        // If the card is not currently activated I do nothing
         if(!activated)
             return;
 
+        //This card deactivates when mother nature has already been moved
         if(instance.motherNatureMoved)
             this.deactivate();
     }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.AssistantCard;
-import it.polimi.ingsw.model.GameAction;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 
 import java.util.NoSuchElementException;
@@ -35,16 +35,23 @@ public class Postman extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
         // I don't have to intercept any action
         return true;
     }
 
-    // TODO capire come gestirla
     @Override
     public void applyAction()
-    {}
+    {
+        //I have to check if mother nature has been moved.
+        //If so i can disable the card
+        if(!activated)
+            return;
+
+        if(instance.motherNatureMoved)
+            this.deactivate();
+    }
 
     @Override
     public boolean isValidMotherNatureMovement(int steps)

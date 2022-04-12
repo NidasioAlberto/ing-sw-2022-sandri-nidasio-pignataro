@@ -39,41 +39,32 @@ public class MushroomMan extends CharacterCard
     }
 
     @Override
-    public boolean isValidAction(GameAction action)
+    public boolean isValidAction(ExpertGameAction action)
     {
-        // If the card is not active I return the instance validation
-        if (!activated)
-        {
-            return instance.isValidAction(action);
-        }
-
         // If it is activated I accept only the SELECT_COLOR action
-        return action == GameAction.SELECT_COLOR;
-        //TODO se la isValidAction torna false, forse bisogna disattivare la carta
+        return action == ExpertGameAction.SELECT_COLOR;
     }
 
-    //TODO viene chiamata dopo ogni azione applyAction della carta se è attiva?
-    //TODO problema perchè potrebbe essere giocata prima del calcolo dell'influenza
     @Override
     public void applyAction() throws NoSuchElementException
     {
-        GameAction previousAction = instance.previousAction.orElseThrow(
-                () -> new NoSuchElementException("[MushroomMan] There is no previous action")
-        );
-
-        if(previousAction != GameAction.MOVE_MOTHER_NATURE)
+        //I have to check if mother nature has been moved.
+        //If so i can disable the card
+        if(!activated)
             return;
 
-        //TODO non so se funziona correttamente chiamando così
-        instance.computeInfluence();
-
-        this.deactivate();
+        if(instance.motherNatureMoved)
+            this.deactivate();
     }
 
     //TODO problema perchè le varie chiamate non fanno riferimento a instance
     @Override
     public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
+        //If the card is not active i ask the instance
+        if(!activated)
+            return instance.computePlayerInfluence(player, island);
+
         if(island < 0 || island > instance.islands.size())
             throw new IndexOutOfBoundsException("[Game] island index out of bounds");
 
