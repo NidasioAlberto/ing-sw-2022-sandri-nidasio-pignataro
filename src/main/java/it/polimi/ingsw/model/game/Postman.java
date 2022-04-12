@@ -37,12 +37,6 @@ public class Postman extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        // If the card is not activated the action isn't valid
-        if(!activated)
-        {
-            return false;
-        }
-
         // I don't have to intercept any action
         return true;
     }

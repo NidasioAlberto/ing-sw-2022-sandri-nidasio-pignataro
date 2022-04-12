@@ -38,7 +38,7 @@ public class Game
 
     protected Optional<Integer> currentCharacterCardIndex;
 
-    protected Optional<GameAction> previousAction;
+    //protected Optional<ExpertGameAction> previousAction;
 
     protected boolean motherNatureMoved;
 
@@ -71,7 +71,7 @@ public class Game
         currentPlayerIndex = Optional.empty();
         motherNatureIndex = Optional.empty();
         currentCharacterCardIndex = Optional.empty();
-        previousAction = Optional.empty();
+        //previousAction = Optional.empty();
         motherNatureMoved = false;
     }
 
@@ -429,7 +429,7 @@ public class Game
     /**
      * Tells whether the given action can be played in the current game status.
      */
-    public boolean isValidAction(GameAction action)
+    /*public boolean isValidAction(ExpertGameAction action)
     {
         // A player must be selected all al cases
         Optional<Player> currentPlayer = getSelectedPlayer();
@@ -455,10 +455,10 @@ public class Game
                     return false;
 
                 // The previous action must be one of the 3 following action
-                GameAction prevAction = previousAction.get();
-                if (!prevAction.equals(GameAction.PLAY_ASSISTANT_CARD)
-                        && !prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
-                        && !prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
+                ExpertGameAction prevAction = previousAction.get();
+                if (!prevAction.equals(ExpertGameAction.PLAY_ASSISTANT_CARD)
+                        && !prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
+                        && !prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
                     return false;
 
                 // The player must not already have moved all the allowed students
@@ -472,9 +472,9 @@ public class Game
                     return false;
 
                 // The previous action must be one of the 2 following action
-                GameAction prevAction = previousAction.get();
-                if (!prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
-                        && !prevAction.equals(GameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
+                ExpertGameAction prevAction = previousAction.get();
+                if (!prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
+                        && !prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
                     return false;
 
                 // The player must have moved all of its students
@@ -488,8 +488,8 @@ public class Game
                     return false;
 
                 // The previous must be MOVE_MOTHER_NATURE
-                GameAction prevAction = previousAction.get();
-                return prevAction.equals(GameAction.MOVE_MOTHER_NATURE);
+                ExpertGameAction prevAction = previousAction.get();
+                return prevAction.equals(ExpertGameAction.MOVE_MOTHER_NATURE);
             }
             case PLAY_CHARACTER_CARD:
                 // TODO: REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
@@ -500,7 +500,7 @@ public class Game
             default:
                 return false;
         }
-    }
+    }*/
 
     /**
      * Sets up all the game's components.

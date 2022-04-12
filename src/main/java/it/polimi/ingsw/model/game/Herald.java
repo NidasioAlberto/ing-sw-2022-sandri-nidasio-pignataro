@@ -35,12 +35,6 @@ public class Herald extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        // If the card is not activated the action isn't valid
-        if(!activated)
-        {
-            return false;
-        }
-
         // If active I accept only SELECT_ISLAND
         return action == GameAction.SELECT_ISLAND;
     }

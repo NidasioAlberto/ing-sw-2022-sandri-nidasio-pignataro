@@ -5,16 +5,12 @@ package it.polimi.ingsw.model;
  * the character cards.
  * IMPORTANT: THIS ACTIONS MUST BE ORDERED LIKE THE GAME FLOW
  */
-public enum GameAction
+public enum ExpertGameAction
 {
     /**
-     * GAME SECTION
+     * BASE ACTION: Action that pretends to be something about a non-expert game
      */
-    PLAY_ASSISTANT_CARD,
-    MOVE_STUDENT_FROM_ENTRANCE_TO_DINING,
-    MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND,
-    MOVE_MOTHER_NATURE,
-    SELECT_CLOUD_TILE,
+    ACTION_BASE,
 
     /**
      * CHARACTER CARDS SECTION

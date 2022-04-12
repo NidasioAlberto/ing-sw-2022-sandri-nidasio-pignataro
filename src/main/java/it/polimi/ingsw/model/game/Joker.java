@@ -59,12 +59,6 @@ public class Joker extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        // If the card is not active I return the instance validation
-        if (!activated)
-        {
-            return instance.isValidAction(action);
-        }
-
         if(action == GameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
         {
             // If it is activated I accept the
@@ -72,9 +66,6 @@ public class Joker extends CharacterCard
             if(exchangeCounter < 3)
                 return true;
         }
-        // The player doesn't want to do more exchanges
-        this.deactivate();
-        return instance.isValidAction(action);
     }
 
     /**

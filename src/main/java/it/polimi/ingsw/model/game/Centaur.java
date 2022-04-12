@@ -47,12 +47,19 @@ public class Centaur extends CharacterCard
 
         // I don't have to intercept any action
         return true;
-
     }
 
     @Override
     public void applyAction()
-    {}
+    {
+        //I have to check if mother nature has been moved.
+        //If so i can disable the card
+        if(!activated)
+            return;
+
+        if(instance.motherNatureMoved)
+            this.deactivate();
+    }
 
     @Override
     public int computePlayerInfluence(Player player, int island)

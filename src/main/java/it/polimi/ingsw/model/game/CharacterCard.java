@@ -73,7 +73,9 @@ public abstract class CharacterCard extends Game
      * Method to apply the card action to the Game model. IMPORTANT: This method has to be called
      * after the corresponding action is thrown. It acts with the ALREADY selected objects in the
      * player instance. IMPORTANT2: THIS METHOD IS CALLED BY REFERENCING TO THE ARRAY OF CHARACTER
-     * CARDS AND NOT WITH THE GAME INSTANCE
+     * CARDS AND NOT WITH THE GAME INSTANCE. IMPORTANT3: THIS METHOD (WITH THE CARD ACTIVE) SHOULD
+     * BE CALLED AT EVERY CONTROLLER OR GAME STEP, SO THAT THE CARD ITSELF DECIDES WERTHER
+     * DEACTIVATE ITSELF.
      */
     public abstract void applyAction() throws NoSuchElementException;
 

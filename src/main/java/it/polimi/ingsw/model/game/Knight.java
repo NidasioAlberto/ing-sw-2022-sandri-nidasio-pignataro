@@ -36,25 +36,19 @@ public class Knight extends CharacterCard
     @Override
     public boolean isValidAction(GameAction action)
     {
-        // This card doesn't have a connected action
-        return instance.isValidAction(action);
+        // This card doesn't have a connected action, so as long as the action is a non-expert one, it will be good
+
     }
 
-    //TODO problema perchè potrebbe essere giocata prima del calcolo dell'influenza
     @Override
     public void applyAction()
     {
-        GameAction previousAction = instance.previousAction.orElseThrow(
-                () -> new NoSuchElementException("[Knight] There is no previous action")
-        );
-
-        if(previousAction != GameAction.MOVE_MOTHER_NATURE)
+        //This card deactivates when mother nature has already been moved
+        if(!activated)
             return;
 
-        //TODO non so se funziona correttamente chiamando così
-        instance.computeInfluence();
-
-        this.deactivate();
+        if(instance.motherNatureMoved)
+            this.deactivate();
     }
 
     //TODO problema perchè le varie chiamate non fanno riferimento a instance
