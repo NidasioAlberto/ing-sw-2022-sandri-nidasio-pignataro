@@ -131,35 +131,13 @@ public class ShamanTest
     }
 
     @Test
-    public void conquerProfessorsTest()
+    public void applyActionTest()
     {
-        // Select a player
-        game.selectPlayer(0);
-        player1.addCoins(2);
-
-        // Player2 has the green professor and 2 green students
-        player2.getBoard().addProfessor(new Professor(SchoolColor.GREEN));
-        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
-        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
-        assertEquals(1, player2.getBoard().getProfessors().size());
-        assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
-        assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
-
-        // Player1 has 2 green students too
-        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
-        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
-        assertEquals(0, player1.getBoard().getProfessors().size());
-        assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
-
-        // The card isn't active so if I apply the action, nothing changes
-        shaman.applyAction();
-        assertEquals(1, player2.getBoard().getProfessors().size());
-        assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
-        assertEquals(0, player1.getBoard().getProfessors().size());
-
         try
         {
             // Activate the card
+            game.selectPlayer(0);
+            player1.addCoins(2);
             shaman.activate();
             assertEquals(0, player1.getCoins());
             assertTrue(shaman.activated);
@@ -169,13 +147,113 @@ public class ShamanTest
             e.printStackTrace();
         }
 
-        // TODO conquerprofessor da sistemare
-        /*
-        // The card is active so if I apply the action player gains the green professor
+        // Mother nature hasn't moved so the card remains active
+        game.motherNatureMoved = false;
         shaman.applyAction();
+        assertTrue(shaman.activated);
+
+        // Mother nature has moved so the card deactivates itself
+        game.motherNatureMoved = true;
+        shaman.applyAction();
+        assertFalse(shaman.activated);
+    }
+
+    @Test
+    public void conquerProfessorsTest() {
+        // Select a player
+        game.selectPlayer(0);
+        player1.addCoins(2);
+
+        // Player2 has 2 green students
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
+
+        // The card isn't active
+        shaman.conquerProfessors();
+        // The player2 gets the green professor
+        assertEquals(1, player2.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
+
+        // Player1 has 2 green students too
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(0, player1.getBoard().getProfessors().size());
+        assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
+
+        // The card isn't active so if I apply the action, nothing changes
+        shaman.conquerProfessors();
+        assertEquals(1, player2.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
+        assertEquals(0, player1.getBoard().getProfessors().size());
+
+        try {
+            // Activate the card
+            shaman.activate();
+            assertEquals(0, player1.getCoins());
+            assertTrue(shaman.activated);
+        } catch (NotEnoughCoinsException e) {
+            e.printStackTrace();
+        }
+
+        // Player1 adds a red student
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.RED));
+        assertEquals(0, player1.getBoard().getProfessors().size());
+        assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.RED));
+
+        // The card is active so if I apply the action player gets the green and red professors
+        shaman.conquerProfessors();
         assertEquals(0, player2.getBoard().getProfessors().size());
+        assertEquals(2, player1.getBoard().getProfessors().size());
+
+        // Deactivate the card
+        shaman.deactivate();
+        assertFalse(shaman.activated);
+
+        // Select Player2
+        game.selectPlayer(1);
+        player2.addCoins(3);
+
+        try {
+            // Activate the card
+            shaman.activate();
+            assertEquals(0, player2.getCoins());
+            assertTrue(shaman.activated);
+        } catch (NotEnoughCoinsException e) {
+            e.printStackTrace();
+        }
+
+        // Player2 gets back the green professor
+        shaman.conquerProfessors();
+        assertEquals(1, player2.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
         assertEquals(1, player1.getBoard().getProfessors().size());
-        assertEquals(SchoolColor.GREEN, player1.getBoard().getProfessors().get(0).getColor());
-        */
+        assertEquals(SchoolColor.RED, player1.getBoard().getProfessors().get(0).getColor());
+
+        // Deactivate the card
+        shaman.deactivate();
+        assertFalse(shaman.activated);
+
+        // Select Player1
+        game.selectPlayer(1);
+        player2.addCoins(3);
+
+        try {
+            // Activate the card
+            shaman.activate();
+            assertEquals(0, player1.getCoins());
+            assertTrue(shaman.activated);
+        } catch (NotEnoughCoinsException e) {
+            e.printStackTrace();
+        }
+
+        // Player1 adds a green student
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(3, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
+
+        // Player1 gets back the green professor
+        shaman.conquerProfessors();
+        assertEquals(0, player2.getBoard().getProfessors().size());
+        assertEquals(2, player1.getBoard().getProfessors().size());
     }
 }

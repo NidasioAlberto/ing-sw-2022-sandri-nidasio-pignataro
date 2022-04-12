@@ -2,7 +2,9 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * Character card Shaman. Effect: During this turn, you take control of any number of Professors
@@ -60,43 +62,81 @@ public class Shaman extends CharacterCard
             return;
         }
 
-        //Current selected player
-        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Shaman] No player selected"));
-
-        //Check for every professor if the selected player has at least a student of the same
-        //color. If the professor is still in this instance it means that no one has a student
-        //of the expected color except from that player
-        for(int i = 0; i < instance.professors.size(); i++)
+        // Check for every professor if there is a player who can have it
+        for (SchoolColor color : SchoolColor.values())
         {
-            //If the player has at least one student of the same color i can assign
-            //the professor to that player
-            if(currentPlayer.getBoard().getStudentsNumber(instance.professors.get(i).getColor()) > 0)
+            // If the professor is still on the table, assign it to the player with the most
+            // students, if there is any
+            if (instance.professors.stream().filter(p -> p.getColor().equals(color)).count() > 0)
             {
-                currentPlayer.getBoard().addProfessor(instance.removeProfessor(i));
-            }
-        }
+                // Get the player with more students of the current color
+                List<Player> sortedPlayers = instance.players.stream()
+                        .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color)
+                                - p1.getBoard().getStudentsNumber(color))
+                        .collect(Collectors.toList());
 
-        //Now I can check who is the player with the most students for every color and the assign the professor
-        for(int i = 0; i < SchoolColor.values().length; i++)
-        {
-            int finalI = i;
-            //Look for the player that has that professor
-            Player currentKing = instance.players.stream().filter(p -> p.getBoard().hasProfessor(SchoolColor.values()[finalI])).findFirst().get();
+                // The player gets the professor only if he has the majority
+                if (sortedPlayers.get(0).getBoard().getStudentsNumber(color) > sortedPlayers.get(1)
+                        .getBoard().getStudentsNumber(color))
+                {
+                    // Remove the professor from the table
+                    Professor toMove = instance.professors.stream().filter(p -> p.getColor().equals(color))
+                            .findFirst().orElse(null);
+                    instance.professors.remove(toMove);
 
-            //If the players differ and don't have the same number of students I move the professor
-            //THE ONLY DIFFERENCE IS THE >= SIGN
-            if(currentKing != currentPlayer && currentPlayer.getBoard().getStudentsNumber(SchoolColor.values()[finalI]) >=
-                    currentKing.getBoard().getStudentsNumber(SchoolColor.values()[finalI]))
+                    // Add him to the player's board
+                    sortedPlayers.get(0).getBoard().addProfessor(toMove);
+                }
+            } else
             {
-                Professor prof;
-                //I take the instance of the professor to be moved
-                prof = currentKing.getBoard().getProfessors().stream().filter(p -> p.getColor() == SchoolColor.values()[finalI]).findFirst().get();
+                // Look for the player that has that professor
+                Player currentKing = instance.players.stream().filter(p -> p.getBoard().hasProfessor(color))
+                        .findFirst().orElse(null);
 
-                //Remove the professor from the king
-                currentKing.getBoard().removeProfessor(prof);
+                // Get the player with more students of the current color
+                Player wannaBeKing =
+                        instance.players.stream()
+                                .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color)
+                                        - p1.getBoard().getStudentsNumber(color))
+                                .findFirst().orElse(null);
 
-                //Add the professor to the new king
-                currentPlayer.getBoard().addProfessor(prof);
+                // If they are the same player there's nothing to do
+                if (currentKing != wannaBeKing)
+                {
+                    // Move the professor if the wanna be king is not the current king and he has
+                    // more students
+                    if (wannaBeKing.getBoard().getStudentsNumber(color) > currentKing.getBoard()
+                            .getStudentsNumber(color))
+                    {
+                        // I take the instance of the professor to be moved
+                        Professor professor = currentKing.getBoard().getProfessors().stream()
+                                .filter(p -> p.getColor().equals(color)).findFirst().get();
+
+                        // Remove the professor from the current king
+                        currentKing.getBoard().removeProfessor(professor);
+
+                        // Add the professor to the new king
+                        wannaBeKing.getBoard().addProfessor(professor);
+                    }
+                }
+
+                // MOVE THE PROFESSOR IF THE CURRENT KING ISN'T THE PLAYER THAT HAS PLAYED THIS CARD
+                // AND THE PLAYER THAT HAS PLAYED THIS CARD HAS THE SAME STUDENTS NUMBER OF CURRENT KING
+                if (currentKing != instance.getSelectedPlayer().orElseThrow(
+                        () -> new NoSuchElementException("[Shaman] No selected player"))
+                        && instance.getSelectedPlayer().get().getBoard().getStudentsNumber(color) >=
+                        currentKing.getBoard().getStudentsNumber(color))
+                {
+                    // I take the instance of the professor to be moved
+                    Professor professor = currentKing.getBoard().getProfessors().stream()
+                            .filter(p -> p.getColor().equals(color)).findFirst().get();
+
+                    // Remove the professor from the current king
+                    currentKing.getBoard().removeProfessor(professor);
+
+                    // Add the professor to the new king
+                    instance.getSelectedPlayer().get().getBoard().addProfessor(professor);
+                }
             }
         }
     }
