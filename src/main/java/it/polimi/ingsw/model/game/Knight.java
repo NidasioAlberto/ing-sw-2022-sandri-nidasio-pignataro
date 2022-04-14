@@ -62,6 +62,10 @@ public class Knight extends CharacterCard
         if(player == null)
             throw new NullPointerException("[Game] player null");
 
+        // I compute the player influence only if the card is active
+        if(!activated)
+            return instance.computePlayerInfluence(player, island);
+
         Island currentIsland = instance.islands.get(island);
 
         // Compute the influence of this player from students

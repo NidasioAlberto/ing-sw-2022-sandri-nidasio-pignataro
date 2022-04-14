@@ -156,13 +156,6 @@ public class JokerTest
         // Check if null is rejected
         //assertThrows(NullPointerException.class, () -> joker.isValidAction(null));
 
-        /*
-        // If i don't activate the card isValidAction should always be the same as Game
-        // TODO delete this check when isValidAction will be removed
-        for (ExpertGameAction action : ExpertGameAction.values())
-            assertEquals(game.isValidAction(action), joker.isValidAction(action));
-        */
-
         // So that i don't have any problem with the card activation
         player1.addCoins(10);
 
@@ -180,19 +173,6 @@ public class JokerTest
             assertEquals(true,
                     joker.isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
 
-        /*
-        // For all the other actions the answer should be the same as game
-        // TODO delete this check when isValidAction will be removed
-        for (ExpertGameAction action : ExpertGameAction.values())
-        {
-            if (action != ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
-                assertEquals(game.isValidAction(action), joker.isValidAction(action));
-        }
-
-        // After that move the card should be deactivated
-        //assertEquals(false, joker.activated);
-        */
-
         // I need to activate the card another time
         try
         {
@@ -201,7 +181,7 @@ public class JokerTest
         {
         }
 
-        // When i apply the action 3 times the card should not accept anymore and deactivate
+        // When i apply the action 3 times the card should be deactivated
         for (int i = 0; i < 3; i++)
         {
             // Select the two students to be swapped
@@ -212,13 +192,21 @@ public class JokerTest
             // After the action i reset the selected colors
             player1.clearSelections();
         }
-        //TODO problema perchè quando viene chiamato deactivate in applyAction
-        // exchangeCounter viene riportato a 0 e quindi in isValidAction ritorna true invece che false
 
         // After the 3 apply action the card should be deactivated
-        // assertEquals(false,
-        //joker.isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
         assertEquals(false, joker.activated);
+
+        // I need to activate the card another time
+        try
+        {
+            joker.activate();
+        } catch (Exception e)
+        {
+        }
+
+        // When i ask for a normal action, the card should deactivate
+        assertEquals(true, joker.isValidAction(ExpertGameAction.ACTION_BASE));
+        assertEquals(false, joker.isActivated());
     }
 
     @Test

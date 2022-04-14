@@ -49,11 +49,6 @@ public class Minstrel extends CharacterCard
             {
                 return true;
             }
-            else
-            {
-                this.deactivate();
-                return false;
-            }
         }
 
         //If he wants to do something different i can deactivate the card
