@@ -38,7 +38,7 @@ public class Postman extends CharacterCard
     public boolean isValidAction(ExpertGameAction action)
     {
         // I don't have to intercept any action
-        return true;
+        return action == ExpertGameAction.ACTION_BASE;
     }
 
     @Override

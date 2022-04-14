@@ -126,6 +126,8 @@ public abstract class CharacterCard extends Game
      */
     public abstract CharacterCardType getCardType();
 
+    public boolean isActivated() { return activated; }
+
     /**
      * Override of all the Game methods
      */

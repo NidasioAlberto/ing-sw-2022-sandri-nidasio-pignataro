@@ -52,7 +52,7 @@ public class Thief extends CharacterCard
         //If the card is not currently activated i do nothing
         if(!activated)
             return;
-        
+
         // Get the player's list
         instance.players.stream().forEach(p ->
         {
