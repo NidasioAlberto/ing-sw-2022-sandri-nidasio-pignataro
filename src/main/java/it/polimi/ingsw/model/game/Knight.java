@@ -52,15 +52,14 @@ public class Knight extends CharacterCard
             this.deactivate();
     }
 
-    //TODO problema perchè le varie chiamate non fanno riferimento a instance
     @Override
     public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
         if(island < 0 || island > instance.islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+            throw new IndexOutOfBoundsException("[Knight] island index out of bounds");
 
         if(player == null)
-            throw new NullPointerException("[Game] player null");
+            throw new NullPointerException("[Knight] player null");
 
         // I compute the player influence only if the card is active
         if(!activated)

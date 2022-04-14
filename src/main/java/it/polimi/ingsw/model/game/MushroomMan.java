@@ -11,9 +11,9 @@ import java.util.NoSuchElementException;
 public class MushroomMan extends CharacterCard
 {
     /**
-     * The color selected by the player
+     * The selected color
      */
-    SchoolColor color;
+    private SchoolColor color;
 
     /**
      * Constructor
@@ -41,8 +41,8 @@ public class MushroomMan extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
-        // If it is activated I accept only the SELECT_COLOR action
-        return action == ExpertGameAction.SELECT_COLOR;
+        // If it is activated I accept only the SELECT_COLOR action once and after only base actions
+        return (action == ExpertGameAction.SELECT_COLOR && color == null) || (action == ExpertGameAction.ACTION_BASE && color != null);
     }
 
     @Override
@@ -53,11 +53,19 @@ public class MushroomMan extends CharacterCard
         if(!activated)
             return;
 
+        //If the color is not already selected, i take the player selection
+        if(color == null)
+        {
+            //TODO IT COULD THROW A INDEXOUTOFBOUNDS EXCEPTION
+            color = instance.getSelectedPlayer()
+                    .orElseThrow(() -> new NoSuchElementException("[MushroomMan] No selected player"))
+                    .getSelectedColors().get(0);
+        }
+
         if(instance.motherNatureMoved)
             this.deactivate();
     }
 
-    //TODO problema perchè le varie chiamate non fanno riferimento a instance
     @Override
     public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
@@ -66,10 +74,13 @@ public class MushroomMan extends CharacterCard
             return instance.computePlayerInfluence(player, island);
 
         if(island < 0 || island > instance.islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+            throw new IndexOutOfBoundsException("[MushroomMan] island index out of bounds");
 
         if(player == null)
-            throw new NullPointerException("[Game] player null");
+            throw new NullPointerException("[MushroomMan] player null");
+
+        if(color == null)
+            throw new NoSuchElementException("[MushroomMan] No selected color");
 
         Island currentIsland = instance.islands.get(island);
 
@@ -98,7 +109,7 @@ public class MushroomMan extends CharacterCard
     }
 
     @Override
-    protected void deactivate()
+    public void deactivate()
     {
         color = null;
         super.deactivate();
