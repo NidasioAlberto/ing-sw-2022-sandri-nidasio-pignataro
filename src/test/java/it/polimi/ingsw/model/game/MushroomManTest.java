@@ -171,8 +171,7 @@ public class MushroomManTest
         //I active the card
         game.selectPlayer(0);
         player1.addCoins(10);
-        try { mushroomMan.activate();}
-        catch(Exception e){}
+        mushroomMan.activated = true;
 
         //I expect to receive a IndexOutOfBoundsException because of no selected color
         assertThrows(IndexOutOfBoundsException.class, () -> mushroomMan.applyAction());

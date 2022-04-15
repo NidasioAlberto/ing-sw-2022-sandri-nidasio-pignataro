@@ -85,7 +85,7 @@ public class Minstrel extends CharacterCard
         }
 
         // Move the student from entrance to dining
-        instance.putStudentToDining(instance.pickStudentFromEntrance());
+        Student studentEntrance = instance.pickStudentFromEntrance();
 
         // Remove the student from the dining
         Student student = currentPlayer.getBoard().removeStudentFromDining(currentPlayer.getSelectedColors().get(1)).
@@ -95,10 +95,17 @@ public class Minstrel extends CharacterCard
         // Add the student to the entrance
         currentPlayer.getBoard().addStudentToEntrance(student);
 
+        // Add the student to the dining
+        instance.putStudentToDining(studentEntrance);
+
         // Check if the player gain a professor
         instance.conquerProfessors();
 
         exchangeCounter += 1;
+
+        //Deactivate in case we reached the max number of swaps
+        if(exchangeCounter >= 2)
+            this.deactivate();
     }
 
     @Override

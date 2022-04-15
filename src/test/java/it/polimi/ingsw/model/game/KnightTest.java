@@ -162,8 +162,7 @@ public class KnightTest
         //I active the card
         game.selectPlayer(0);
         player1.addCoins(10);
-        try { knight.activate();}
-        catch(Exception e){}
+        knight.activated = true;
 
         //Now the card should be active and i can call applyAction.
         knight.applyAction();
@@ -199,8 +198,7 @@ public class KnightTest
         //Now i activate the card and check again
         game.selectPlayer(0);
         player1.addCoins(10);
-        try { knight.activate();}
-        catch(Exception e){}
+        knight.activated = true;
 
         // If i deselect the player the card should give me an error
         game.currentPlayerIndex = Optional.empty();

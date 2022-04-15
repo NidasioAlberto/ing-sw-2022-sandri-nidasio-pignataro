@@ -41,6 +41,11 @@ public class MushroomMan extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
+        /**
+         * This differs from the other cards because in this case you have to select a color and continue
+         * with the active card until mother nature is actually moved. So you first need to accept the color
+         * selection and, once it is selected, you have to accept only base commands
+         */
         // If it is activated I accept only the SELECT_COLOR action once and after only base actions
         return (action == ExpertGameAction.SELECT_COLOR && color == null) || (action == ExpertGameAction.ACTION_BASE && color != null);
     }

@@ -151,35 +151,14 @@ public class JokerTest
         // Player selection
         game.selectPlayer(0);
 
-        //TODO non viene lanciata
-
-        // Check if null is rejected
-        //assertThrows(NullPointerException.class, () -> joker.isValidAction(null));
-
-        // So that i don't have any problem with the card activation
-        player1.addCoins(10);
-
         // Enable the card
-        try
-        {
-            joker.activate();
-        } catch (Exception e)
-        {
-        }
+        joker.activated = true;
 
         // Theoretically if i don't perform any action, any number of swap student from character
         // card to entrance should be allowed
         for (int i = 0; i < 100; i++)
             assertEquals(true,
                     joker.isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
-
-        // I need to activate the card another time
-        try
-        {
-            joker.activate();
-        } catch (Exception e)
-        {
-        }
 
         // When i apply the action 3 times the card should be deactivated
         for (int i = 0; i < 3; i++)
@@ -197,12 +176,7 @@ public class JokerTest
         assertEquals(false, joker.activated);
 
         // I need to activate the card another time
-        try
-        {
-            joker.activate();
-        } catch (Exception e)
-        {
-        }
+        joker.activated = true;
 
         // When i ask for a normal action, the card should deactivate
         assertEquals(true, joker.isValidAction(ExpertGameAction.ACTION_BASE));
