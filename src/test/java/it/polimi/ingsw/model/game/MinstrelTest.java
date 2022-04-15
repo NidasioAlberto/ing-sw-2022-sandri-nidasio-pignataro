@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,14 +41,18 @@ public class MinstrelTest
         // Setup the game
         game.setupGame();
 
+        // Now i can instantiate the character card
+        minstrel = CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, game);
+
         //Add to the dining room 3 green students
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
 
         //Set the entrance students as yellow will be missing
-        for(int i = 0; i < player1.getBoard().getStudentsInEntrance().size(); i++)
-            player1.getBoard().removeStudentFromEntrance(player1.getBoard().getStudentsInEntrance().get(i));
+        List<Student> entrance = player1.getBoard().getStudentsInEntrance();
+        for(int i = 0; i < entrance.size(); i++)
+            player1.getBoard().removeStudentFromEntrance(entrance.get(i));
 
         player1.getBoard().addStudentToEntrance(new Student(SchoolColor.RED));
         player1.getBoard().addStudentToEntrance(new Student(SchoolColor.GREEN));
@@ -56,9 +61,6 @@ public class MinstrelTest
         player1.getBoard().addStudentToEntrance(new Student(SchoolColor.BLUE));
         player1.getBoard().addStudentToEntrance(new Student(SchoolColor.PINK));
         player1.getBoard().addStudentToEntrance(new Student(SchoolColor.GREEN));
-
-        // Now i can instantiate the character card
-        minstrel = CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, game);
     }
 
     @Test

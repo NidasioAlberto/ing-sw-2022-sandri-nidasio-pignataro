@@ -216,6 +216,7 @@ public abstract class CharacterCard extends Game
         return instance.getCharacterCards();
     }
 
+    public List<Student> getStudentBag(){ return instance.getStudentBag(); }
     /**
      * Factory Methods
      */

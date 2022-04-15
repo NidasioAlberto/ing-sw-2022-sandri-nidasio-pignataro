@@ -80,12 +80,18 @@ public class Minstrel extends CharacterCard
 
         // Check that the player has selected two students to swap
         if (currentPlayer.getSelectedColors().size() != 2)
-        {
             throw new NoSuchElementException("[Minstrel] The number of students selected is not correct");
-        }
 
-        // Move the student from entrance to dining
-        Student studentEntrance = instance.pickStudentFromEntrance();
+        // Take the student instance that needs to be moved.
+        // IMPORTANT: I can't use pickStudentFromEntrance because if the second selected color
+        // doesn't exist in dining, i would lose the entrance student due to immediate remove
+        Student studentEntrance = currentPlayer
+                .getBoard()
+                .getStudentsInEntrance()
+                .stream()
+                .filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(0))
+                .findFirst().orElseThrow(() -> new NoSuchElementException
+                        ("[Minstrel] No student of the specified color inside the current player's entrance"));
 
         // Remove the student from the dining
         Student student = currentPlayer.getBoard().removeStudentFromDining(currentPlayer.getSelectedColors().get(1)).
@@ -97,6 +103,9 @@ public class Minstrel extends CharacterCard
 
         // Add the student to the dining
         instance.putStudentToDining(studentEntrance);
+
+        // Remove the entrance student from entrance
+        currentPlayer.getBoard().removeStudentFromEntrance(studentEntrance);
 
         // Check if the player gain a professor
         instance.conquerProfessors();

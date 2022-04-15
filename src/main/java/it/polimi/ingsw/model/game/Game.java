@@ -605,8 +605,7 @@ public class Game
         if (studentBag.size() == 0)
             throw new NoSuchElementException("[Game] Student bag empty");
 
-        // TODO: Change back!
-        return studentBag.remove(0); // getRandomNumber(0, studentBag.size()));
+        return studentBag.remove(getRandomNumber(0, studentBag.size()));
     }
 
     /**

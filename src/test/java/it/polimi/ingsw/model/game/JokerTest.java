@@ -248,10 +248,11 @@ public class JokerTest
         // Now i select a color that doesn't exist on the card
         // First i fill the card with all the player cards
         // This for proves also the correct functioning of the swap
+        List<Student> studentsEntrance = player1.getBoard().getStudentsInEntrance();
         for (int i = 0; i < 6; i++)
         {
             player1.clearSelections();
-            player1.selectColor(player1.getBoard().getStudentsInEntrance().get(i).getColor());
+            player1.selectColor(studentsEntrance.get(i).getColor());
             player1.selectColor(studentsOnCard.get(i).getColor());
 
             // Activate the card
