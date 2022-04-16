@@ -189,6 +189,11 @@ public class JokerTest
         // Backup of contained students before any action
         List<Student> previousStudentPlayer = player1.getBoard().getStudentsInEntrance();
 
+        //Call applyAction with no player selected
+        joker.activated = true;
+        assertThrows(NoSuchElementException.class, () -> joker.applyAction());
+        joker.activated = false;
+
         // Select the first player
         game.selectPlayer(0);
 

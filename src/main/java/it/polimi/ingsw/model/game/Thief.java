@@ -57,7 +57,7 @@ public class Thief extends CharacterCard
         instance.players.stream().forEach(p ->
         {
             // For each player remove max 3 students from the dining room
-            IntStream.range(0, 4).forEach(i ->
+            IntStream.range(0, 3).forEach(i ->
             {
                 p.getBoard().removeStudentFromDining(
                     instance.getSelectedPlayer().orElseThrow(
