@@ -39,9 +39,20 @@ public class GameActionHandler
         gamePhase = new PlanPhase();
     }
 
+    /**
+     * This method is called by the Controller object to handle an action
+     * message incoming from a player
+     * @param message The command pattern message that needs to be executed
+     * @throws NullPointerException When the passed message is null
+     */
     public void handleAction(ActionMessage message)
     {
+        if(message == null)
+            throw new NullPointerException("[GameActionHandler] Null action message");
 
+        // Check if the fsm situation validates the action
+
+        message.applyAction(this);
     }
 
     public void playAssistantCard()
@@ -79,5 +90,14 @@ public class GameActionHandler
 
     }
 
+    /**
+     * Getters and setters
+     */
     public Phase getGamePhase() { return gamePhase; }
+    public void setGamePhase(Phase phase)
+    {
+        if(phase == null)
+            throw new NullPointerException("[GameActionHandler] Null phase");
+        this.gamePhase = phase;
+    }
 }
