@@ -92,12 +92,13 @@ public class ShamanTest
             shaman.activate();
             assertEquals(0, player1.getCoins());
 
-            // The card doesn't intercept any action, so if active it returns true
-            //TODO IT SHOULD NOT
-            /*for (ExpertGameAction action: ExpertGameAction.values())
+            // The card doesn't intercept any action, so it accepts only ACTION_BASE
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
-                assertTrue(shaman.isValidAction(action));
-            }*/
+                if (action == ExpertGameAction.ACTION_BASE)
+                    assertTrue(shaman.isValidAction(action));
+                else assertFalse(shaman.isValidAction(action));
+            }
         }
         catch (NotEnoughCoinsException e)
         {
@@ -160,7 +161,8 @@ public class ShamanTest
     }
 
     @Test
-    public void conquerProfessorsTest() {
+    public void conquerProfessorsTest()
+    {
         // Select a player
         game.selectPlayer(0);
         player1.addCoins(2);
@@ -256,5 +258,33 @@ public class ShamanTest
         shaman.conquerProfessors();
         assertEquals(0, player2.getBoard().getProfessors().size());
         assertEquals(2, player1.getBoard().getProfessors().size());
+    }
+
+    @Test
+    public void conquerProfessorsTest2()
+    {
+        // Player2 has 2 green students
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
+
+        // The card isn't active
+        shaman.conquerProfessors();
+        // The player2 gets the green professor
+        assertEquals(1, player2.getBoard().getProfessors().size());
+        assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
+
+        // Player1 has 2 green students too
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(0, player1.getBoard().getProfessors().size());
+        assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
+
+        // An exception is thrown if I call the method without a selected player
+        shaman.activated = true;
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class, () -> shaman.conquerProfessors());
+        assertEquals("[Shaman] No selected player", e1.getMessage());
+
+        shaman.activated = false;
     }
 }

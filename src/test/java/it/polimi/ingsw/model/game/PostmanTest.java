@@ -95,12 +95,13 @@ public class PostmanTest
             assertEquals(0, player1.getCoins());
             assertTrue(postman.activated);
 
-            // The card doesn't intercept any action, so if active it returns true
-            //TODO IT SHOULD NOT
-            /*for (ExpertGameAction action: ExpertGameAction.values())
+            // The card doesn't intercept any action, so it accepts only ACTION_BASE
+            for (ExpertGameAction action: ExpertGameAction.values())
             {
-                assertTrue(postman.isValidAction(action));
-            }*/
+                if (action == ExpertGameAction.ACTION_BASE)
+                    assertTrue(postman.isValidAction(action));
+                else assertFalse(postman.isValidAction(action));
+            }
         }
         catch (NotEnoughCoinsException e)
         {

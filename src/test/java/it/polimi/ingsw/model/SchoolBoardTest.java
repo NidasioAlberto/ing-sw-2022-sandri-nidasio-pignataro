@@ -191,6 +191,11 @@ public class SchoolBoardTest
     @Test
     public void addTowerTest()
     {
+        // The attribute maxTower is null, so an exception is thrown
+        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE);
+        NullPointerException e = assertThrows(NullPointerException.class, () -> board1.addTower(new Tower(TowerColor.WHITE)));
+        assertEquals("[SchoolBoard] Undefined max number of towers", e.getMessage());
+
         // Null add
         assertThrows(NullPointerException.class, () -> board.addTower(null));
         assertEquals(0, board.getTowers().size());
@@ -265,6 +270,11 @@ public class SchoolBoardTest
     @Test
     public void addStudentToEntranceTest()
     {
+        // The attribute maxStudentsInEntrance is null, so an exception is thrown
+        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE);
+        NullPointerException e = assertThrows(NullPointerException.class, () -> board1.addStudentToEntrance(new Student(SchoolColor.GREEN)));
+        assertEquals("[SchoolBoard] Undefined max number of students", e.getMessage());
+
         // Add the null element
         assertThrows(NullPointerException.class, () -> board.addStudentToEntrance(null));
         assertEquals(0, board.getStudentsInEntrance().size());
@@ -501,6 +511,31 @@ public class SchoolBoardTest
         {
             assertEquals(board.getStudentsNumber(color),
                     students.stream().filter(s -> s.getColor() == color).count());
+        }
+    }
+
+    @Test
+    public void getRemainingMovableStudentsInEntrance()
+    {
+        // The attribute maxStudentsInEntrance is null, so an exception is thrown
+        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE);
+        NullPointerException e = assertThrows(NullPointerException.class, () -> board1.getRemainingMovableStudentsInEntrance());
+        assertEquals("[SchoolBoard] Undefined max number of students", e.getMessage());
+
+        // Fill the entrance
+        for (int i = 0; i < board.getMaxStudentsInEntrance(); i++)
+            board.addStudentToEntrance(new Student(SchoolColor.GREEN));
+        assertEquals(board.getMaxStudentsInEntrance(), board.getStudentsInEntrance().size());
+
+        // 2 players mode, so I have to move 3 students
+        // At the beginning I haven't moved any student
+        assertEquals(3, board.getRemainingMovableStudentsInEntrance());
+
+        // Check the method as I remove students from the entrance
+        for (int i = 1; i <= 3; i++)
+        {
+            board.removeStudentFromEntrance(SchoolColor.GREEN);
+            assertEquals(3 - i, board.getRemainingMovableStudentsInEntrance());
         }
     }
 }

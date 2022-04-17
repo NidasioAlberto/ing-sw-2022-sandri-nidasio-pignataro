@@ -353,7 +353,7 @@ public class SchoolBoard
     public int getRemainingMovableStudentsInEntrance() throws NullPointerException
     {
         if (maxStudentsInEntrance == null)
-            throw new NullPointerException("[SchoolBoard] Undefined number of students");
+            throw new NullPointerException("[SchoolBoard] Undefined max number of students");
 
         int movableStudents = maxStudentsInEntrance == 7 ? 3 : 4;
         return movableStudents - (maxStudentsInEntrance - entrance.size());

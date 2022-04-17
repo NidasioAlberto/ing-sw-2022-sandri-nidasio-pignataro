@@ -155,6 +155,13 @@ public class GrandmaHerbsTest
     @Test
     public void applyActionTest()
     {
+        // An exception is thrown if I call the method without a selected player
+        grandmaHerbs.activated = true;
+        NoSuchElementException e4 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
+        assertEquals("[GrandmaHerbs] No selected player", e4.getMessage());
+
+        grandmaHerbs.activated = false;
+
         // Select a player
         player1.addCoins(2);
         game.selectPlayer(0);

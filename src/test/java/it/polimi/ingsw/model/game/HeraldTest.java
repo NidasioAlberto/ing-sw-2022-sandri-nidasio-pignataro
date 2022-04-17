@@ -125,6 +125,13 @@ public class HeraldTest
     @Test
     public void applyActionTest()
     {
+        // An exception is thrown if I call the method without a selected player
+        herald.activated = true;
+        NoSuchElementException e2 = assertThrows(NoSuchElementException.class, () -> herald.applyAction());
+        assertEquals("[Herald] No player selected", e2.getMessage());
+
+        herald.activated = false;
+
         // Select a player
         game.selectPlayer(0);
 

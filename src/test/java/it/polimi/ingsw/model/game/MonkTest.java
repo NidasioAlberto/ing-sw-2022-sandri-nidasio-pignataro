@@ -127,6 +127,13 @@ public class MonkTest
     @Test
     public void applyActionTest()
     {
+        // An exception is thrown if I call the method without a selected player
+        monk.activated = true;
+        NoSuchElementException e3 = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
+        assertEquals("[Monk] No selected player", e3.getMessage());
+
+        monk.activated = false;
+
         // Select a player
         player1.addCoins(1);
         game.selectPlayer(0);
