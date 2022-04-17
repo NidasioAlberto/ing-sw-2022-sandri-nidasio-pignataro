@@ -696,4 +696,14 @@ public class Game
         return islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
                 "[Game] No mother nature index, is the game initialized?")));
     }
+
+    public GameMode getGameMode()
+    {
+        return gameMode;
+    }
+
+    public int getPlayersNumber()
+    {
+        return playersNumber;
+    }
 }
