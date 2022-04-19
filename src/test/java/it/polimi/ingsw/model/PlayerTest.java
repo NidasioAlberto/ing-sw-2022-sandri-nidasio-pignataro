@@ -206,9 +206,6 @@ public class PlayerTest
      */
     public void removeSelectedCardTest()
     {
-        // Remove when no card is selected
-        assertThrows(NoSuchElementException.class, () -> player.removeSelectedCard());
-
         // Select a card
         AssistantCard card = new AssistantCard(Wizard.WIZARD_2, 1, 1);
         player.addCard(card);

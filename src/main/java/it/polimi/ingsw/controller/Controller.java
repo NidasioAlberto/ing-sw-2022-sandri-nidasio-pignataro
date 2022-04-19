@@ -78,7 +78,12 @@ public class Controller
      */
     public void performAction(ActionMessage message)
     {
-        // TODO
+        // TODO nel selected player c'è il giocatore che ha giocato il turno precedente
+        //  o che sta giocando in questo turno?
+        // se il player non è selezionato nel json, non ce il campo o il campo e vuoto?
+
+
+
         actionHandler.handleAction(message);
     }
 

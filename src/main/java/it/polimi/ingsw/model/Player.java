@@ -123,7 +123,6 @@ public class Player
      * @throws IllegalArgumentException if the player hasn't got the selected card.
      * @throws NullPointerException if the parameter is null.
      */
-    //TODO WHY Integer?
     public void selectCard(Integer turnOrder) throws IllegalArgumentException, NullPointerException
     {
         if (turnOrder == null)
@@ -193,16 +192,16 @@ public class Player
     }
 
     /**
-     * Removes the currently selected card or throws an error.
+     * Removes the currently selected card.
      */
-    public void removeSelectedCard() throws NoSuchElementException
+    public void removeSelectedCard()
     {
-        AssistantCard card = selectedCard.orElseThrow(() -> new NoSuchElementException(
-                "[Player] The player currently doesn't have a selected card"));
+        if(selectedCard.isPresent())
+        {
+            removeCard(selectedCard.get().getTurnOrder());
 
-        removeCard(card.getTurnOrder());
-
-        selectedCard = Optional.empty();
+            selectedCard = Optional.empty();
+        }
     }
 
     /**
@@ -244,6 +243,7 @@ public class Player
      *
      * @param card The index of the CharacterCard.
      */
+    //TODO WHY Integer?
     public void selectCharacterCard(int card)
     {
         selectedCharacterCard = Optional.of(card);
@@ -254,7 +254,7 @@ public class Player
      */
     public void clearSelections()
     {
-        selectedCard = Optional.empty();
+        removeSelectedCard();
         selectedIsland = Optional.empty();
         selectedColors.clear();
         selectedCloudTile = Optional.empty();
