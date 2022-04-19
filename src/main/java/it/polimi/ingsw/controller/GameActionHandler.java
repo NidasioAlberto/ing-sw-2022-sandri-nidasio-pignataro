@@ -4,6 +4,7 @@ import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.fsm.Phase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
 import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.game.Game;
 import org.json.JSONArray;
@@ -89,8 +90,6 @@ public class GameActionHandler
 
         game.getSelectedPlayer().get()
                 .selectCloudTile(json.getJSONObject("actionInfo").getInt("selectedCloudTile"));
-        game.getSelectedPlayer().get()
-                .selectCard(json.getJSONObject("actionInfo").getInt("selectedCard"));
         game.getSelectedPlayer().get().selectCharacterCard(
                 json.getJSONObject("actionInfo").getInt("selectedCharacterCard"));
 
@@ -98,42 +97,44 @@ public class GameActionHandler
         message.applyAction(this);
     }
 
-    public void playAssistantCard()
+    public void playAssistantCard(ActionMessage message)
+    {
+        JSONObject json = new JSONObject(message.getJson());
+        game.getSelectedPlayer().get()
+                .selectCard(json.getJSONObject("actionInfo").getInt("selectedCard"));
+    }
+
+    public void moveStudentFromEntranceToIsland(ActionMessage message)
     {
 
     }
 
-    public void moveStudentFromEntranceToIsland()
+    public void moveStudentFromEntranceToDining(ActionMessage message)
     {
 
     }
 
-    public void moveStudentFromEntranceToDining()
+    public void moveMotherNature(ActionMessage message)
     {
 
     }
 
-    public void moveMotherNature()
+    public void selectCloudTile(ActionMessage message)
     {
 
     }
 
-    public void selectCloudTile()
+    public void playCharacterCard(ActionMessage message)
     {
 
     }
 
-    public void playCharacterCard()
+    public void characterCardAction(ActionMessage message, ExpertGameAction action)
     {
 
     }
 
-    public void characterCardAction()
-    {
-
-    }
-
-    public void endTurn()
+    public void endTurn(ActionMessage message)
     {
 
     }
@@ -151,5 +152,10 @@ public class GameActionHandler
         if (phase == null)
             throw new NullPointerException("[GameActionHandler] Null phase");
         this.gamePhase = phase;
+    }
+
+    public Game getGame()
+    {
+        return game;
     }
 }
