@@ -618,6 +618,11 @@ public class Game
                 "[Game] No mother nature index, is the game initialized?")));
     }
 
+    public Optional<Integer> getMotherNatureIndex()
+    {
+        return motherNatureIndex;
+    }
+
     public GameMode getGameMode()
     {
         return gameMode;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.exceptions;
 
-public class NotEnoughCoinsException extends Exception
+public class NotEnoughCoinsException extends RuntimeException
 {
     public NotEnoughCoinsException(String str)
     {
