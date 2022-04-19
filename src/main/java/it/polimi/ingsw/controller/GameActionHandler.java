@@ -85,7 +85,7 @@ public class GameActionHandler
 
         game.getSelectedPlayer().get().selectCloudTile(json.getJSONObject("actionInfo").getInt("selectedCloudTile"));
         game.getSelectedPlayer().get().selectCard(json.getJSONObject("actionInfo").getInt("selectedCard"));
-        game.getSelectedPlayer().get().selectCharacterCard(json.getJSONObject("actionInfo").getString("selectedCharacterCard"));
+        game.getSelectedPlayer().get().selectCharacterCard(json.getJSONObject("actionInfo").getInt("selectedCharacterCard"));
 
         //Call the correct method (Command pattern)
         message.applyAction(this);
