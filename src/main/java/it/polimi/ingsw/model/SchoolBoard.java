@@ -325,6 +325,11 @@ public class SchoolBoard
         addStudentToDiningRoom(removed);
     }
 
+    public List<Tower> getTowers()
+    {
+        return new ArrayList<>(towers);
+    }
+
     public List<Professor> getProfessors()
     {
         return new ArrayList<>(professorTable);
@@ -333,11 +338,6 @@ public class SchoolBoard
     public List<Student> getStudentsInEntrance()
     {
         return new ArrayList<>(entrance);
-    }
-
-    public List<Tower> getTowers()
-    {
-        return new ArrayList<>(towers);
     }
 
     /**

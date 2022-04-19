@@ -32,8 +32,7 @@ public class PostmanTest
         {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        }
-        catch (TooManyPlayersException e)
+        } catch (TooManyPlayersException e)
         {
             e.printStackTrace();
         }
@@ -96,14 +95,14 @@ public class PostmanTest
             assertTrue(postman.activated);
 
             // The card doesn't intercept any action, so it accepts only ACTION_BASE
-            for (ExpertGameAction action: ExpertGameAction.values())
+            for (ExpertGameAction action : ExpertGameAction.values())
             {
-                if (action == ExpertGameAction.ACTION_BASE)
+                if (action == ExpertGameAction.BASE_ACTION)
                     assertTrue(postman.isValidAction(action));
-                else assertFalse(postman.isValidAction(action));
+                else
+                    assertFalse(postman.isValidAction(action));
             }
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -122,8 +121,7 @@ public class PostmanTest
             player1.addCoins(2);
             postman.activate();
             assertEquals(0, player1.getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -145,8 +143,7 @@ public class PostmanTest
             postman.activate();
             assertEquals(0, player1.getCoins());
             assertTrue(postman.activated);
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -173,14 +170,14 @@ public class PostmanTest
             // Activate the card
             player1.addCoins(1);
             postman.activate();
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
 
         // An exception is thrown if the player hasn't selected a card
-        NoSuchElementException e1 = assertThrows(NoSuchElementException.class, () -> postman.isValidMotherNatureMovement(1));
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class,
+                () -> postman.isValidMotherNatureMovement(1));
         assertEquals("[Postman] Player didn't select assistant card", e1.getMessage());
 
         // Select a card
@@ -201,8 +198,9 @@ public class PostmanTest
         postman.deactivate();
 
         // When the card is deactivated the instance's method is called
-        for( int i = 0; i < 5; i++)
-            assertEquals(game.isValidMotherNatureMovement(i), postman.isValidMotherNatureMovement(i));
+        for (int i = 0; i < 5; i++)
+            assertEquals(game.isValidMotherNatureMovement(i),
+                    postman.isValidMotherNatureMovement(i));
 
     }
 }

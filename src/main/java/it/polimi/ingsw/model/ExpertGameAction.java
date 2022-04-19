@@ -1,16 +1,16 @@
 package it.polimi.ingsw.model;
 
 /**
- * Enumeration of the all possible game actions in the game. Includes also
- * the character cards.
+ * Enumeration of the all possible game actions in the game. Includes also the character cards.
+ * 
  * IMPORTANT: THIS ACTIONS MUST BE ORDERED LIKE THE GAME FLOW
  */
 public enum ExpertGameAction
 {
     /**
-     * BASE ACTION: Action that pretends to be something about a non-expert game
+     * Action that pretends to be something about a non-expert game
      */
-    ACTION_BASE,
+    BASE_ACTION,
 
     /**
      * CHARACTER CARDS SECTION

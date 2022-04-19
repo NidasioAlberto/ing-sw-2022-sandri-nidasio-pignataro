@@ -36,33 +36,35 @@ public class Knight extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
-        // This card doesn't have a connected action, so as long as the action is a non-expert one, it will be good
-        return action == ExpertGameAction.ACTION_BASE;
+        // This card doesn't have a connected action, so as long as the action is a non-expert one,
+        // it will be good
+        return action == ExpertGameAction.BASE_ACTION;
     }
 
     @Override
     public void applyAction()
     {
         // If the card is not currently activated I do nothing
-        if(!activated)
+        if (!activated)
             return;
 
-        //This card deactivates when mother nature has already been moved
-        if(instance.motherNatureMoved)
+        // This card deactivates when mother nature has already been moved
+        if (instance.motherNatureMoved)
             this.deactivate();
     }
 
     @Override
-    public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
+    public int computePlayerInfluence(Player player, int island)
+            throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
-        if(island < 0 || island > instance.islands.size())
+        if (island < 0 || island > instance.islands.size())
             throw new IndexOutOfBoundsException("[Knight] island index out of bounds");
 
-        if(player == null)
+        if (player == null)
             throw new NullPointerException("[Knight] player null");
 
         // I compute the player influence only if the card is active
-        if(!activated)
+        if (!activated)
             return instance.computePlayerInfluence(player, island);
 
         Island currentIsland = instance.islands.get(island);
@@ -75,12 +77,11 @@ public class Knight extends CharacterCard
         influence += currentIsland.getTowers().stream()
                 .filter(t -> t.getColor().equals(player.getColor())).count();
 
-        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(
-                () -> new NoSuchElementException("[Knight] No selected player")
-        );
+        Player currentPlayer = instance.getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Knight] No selected player"));
 
         // Effect of the card: the current player gets 2 more influence points
-        if(player == currentPlayer)
+        if (player == currentPlayer)
             influence += 2;
 
         return influence;

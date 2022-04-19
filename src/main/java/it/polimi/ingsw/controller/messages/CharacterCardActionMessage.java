@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.GameActionHandler;
 /**
  * Message related to the activation of the character card effect.
  */
-public class CharacterCardActionMessage extends  ActionMessage
+public class CharacterCardActionMessage extends ActionMessage
 {
     protected CharacterCardActionMessage(String json)
     {

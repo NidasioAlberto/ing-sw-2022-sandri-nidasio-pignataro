@@ -162,9 +162,6 @@ public class Island
         }
     }
 
-    /**
-     * Getters
-     */
     public List<Student> getStudents()
     {
         // Create the result list

@@ -6,17 +6,20 @@ import it.polimi.ingsw.controller.messages.ActionMessage;
 public class SelectCloudTilePhase implements Phase
 {
     @Override
-    public void onValidAction(GameActionHandler handler) {
+    public void onValidAction(GameActionHandler handler)
+    {
 
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler) {
+    public void onEndGame(GameActionHandler handler)
+    {
 
     }
 
     @Override
-    public boolean isLegitAction(ActionMessage message) {
+    public boolean isLegitAction(ActionMessage message)
+    {
         return false;
     }
 }

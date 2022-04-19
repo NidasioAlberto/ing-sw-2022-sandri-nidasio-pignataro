@@ -32,10 +32,12 @@ public class MinstrelTest
         game = new Game();
 
         // Add the player to the game
-        try {
+        try
+        {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
 
         // Setup the game
@@ -44,14 +46,14 @@ public class MinstrelTest
         // Now i can instantiate the character card
         minstrel = CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, game);
 
-        //Add to the dining room 3 green students
+        // Add to the dining room 3 green students
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
 
-        //Set the entrance students as yellow will be missing
+        // Set the entrance students as yellow will be missing
         List<Student> entrance = player1.getBoard().getStudentsInEntrance();
-        for(int i = 0; i < entrance.size(); i++)
+        for (int i = 0; i < entrance.size(); i++)
             player1.getBoard().removeStudentFromEntrance(entrance.get(i));
 
         player1.getBoard().addStudentToEntrance(new Student(SchoolColor.RED));
@@ -66,17 +68,19 @@ public class MinstrelTest
     @Test
     public void constructorTest()
     {
-        //Null pointers inside the factory method
-        assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(null, game));
-        assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, null));
+        // Null pointers inside the factory method
+        assertThrows(NullPointerException.class,
+                () -> CharacterCard.createCharacterCard(null, game));
+        assertThrows(NullPointerException.class,
+                () -> CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, null));
 
-        //Type confirmation
+        // Type confirmation
         assertEquals(CharacterCardType.MINSTREL, minstrel.getCardType());
 
-        //Cost
+        // Cost
         assertEquals(1, minstrel.cost);
 
-        //Not already used
+        // Not already used
         assertEquals(false, minstrel.firstUsed);
         assertEquals(false, minstrel.isActivated());
     }
@@ -144,7 +148,7 @@ public class MinstrelTest
     @Test
     public void isPlayableTest()
     {
-        //Should be always playable
+        // Should be always playable
         assertEquals(true, minstrel.isPlayable());
     }
 
@@ -169,10 +173,10 @@ public class MinstrelTest
             player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
             player1.selectColor(SchoolColor.GREEN);
 
-            //Swap the students
+            // Swap the students
             minstrel.applyAction();
 
-            //Reset the selection
+            // Reset the selection
             player1.clearSelections();
         }
 
@@ -183,51 +187,52 @@ public class MinstrelTest
         minstrel.activated = true;
 
         // When i ask for a normal action, the card should deactivate
-        assertEquals(true, minstrel.isValidAction(ExpertGameAction.ACTION_BASE));
+        assertEquals(true, minstrel.isValidAction(ExpertGameAction.BASE_ACTION));
         assertEquals(false, minstrel.isActivated());
     }
 
     @Test
     public void applyActionTest()
     {
-        //Activating the card without a selected player should throw a NoSuchElement
+        // Activating the card without a selected player should throw a NoSuchElement
         minstrel.activated = true;
         assertThrows(NoSuchElementException.class, () -> minstrel.applyAction());
 
-        //Selecting the player
+        // Selecting the player
         game.selectPlayer(0);
 
-        //I expect some errors about missing color selection
+        // I expect some errors about missing color selection
         assertThrows(NoSuchElementException.class, () -> minstrel.applyAction());
-        //Even if i select one color
+        // Even if i select one color
         player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());
         assertThrows(NoSuchElementException.class, () -> minstrel.applyAction());
 
-        //Now i select another color but not present in dining
+        // Now i select another color but not present in dining
         player1.selectColor(SchoolColor.RED);
 
         assertThrows(NoSuchElementException.class, () -> minstrel.applyAction());
 
-        //Now i select a color but not present in entrance
+        // Now i select a color but not present in entrance
         player1.clearSelections();
         player1.selectColor(SchoolColor.YELLOW);
         player1.selectColor(SchoolColor.GREEN);
 
-        //I expect an error
+        // I expect an error
         assertThrows(NoSuchElementException.class, () -> minstrel.applyAction());
 
-        //And now the correct case
+        // And now the correct case
         player1.clearSelections();
         player1.selectColor(SchoolColor.RED);
         player1.selectColor(SchoolColor.GREEN);
 
         minstrel.applyAction();
 
-        //I verify that the red increased by 1
+        // I verify that the red increased by 1
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.RED));
-        //I verify that the greens are 2
+        // I verify that the greens are 2
         assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
-        //I verify that there is no red student in entrance
-        assertEquals(true, player1.getBoard().getStudentsInEntrance().stream().filter(p -> p.getColor() == SchoolColor.RED).findFirst().isEmpty());
+        // I verify that there is no red student in entrance
+        assertEquals(true, player1.getBoard().getStudentsInEntrance().stream()
+                .filter(p -> p.getColor() == SchoolColor.RED).findFirst().isEmpty());
     }
 }

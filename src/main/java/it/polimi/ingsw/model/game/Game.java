@@ -38,8 +38,6 @@ public class Game
 
     protected Optional<Integer> currentCharacterCardIndex;
 
-    //protected Optional<ExpertGameAction> previousAction;
-
     protected boolean motherNatureMoved;
 
     public Game() throws NullPointerException
@@ -71,7 +69,6 @@ public class Game
         currentPlayerIndex = Optional.empty();
         motherNatureIndex = Optional.empty();
         currentCharacterCardIndex = Optional.empty();
-        //previousAction = Optional.empty();
         motherNatureMoved = false;
     }
 
@@ -425,82 +422,6 @@ public class Game
         // Put them in the current player's entrance
         students.forEach(s -> getSelectedPlayer().get().getBoard().addStudentToEntrance(s));
     }
-
-    /**
-     * Tells whether the given action can be played in the current game status.
-     */
-    /*public boolean isValidAction(ExpertGameAction action)
-    {
-        // A player must be selected all al cases
-        Optional<Player> currentPlayer = getSelectedPlayer();
-        if (currentPlayer.isEmpty())
-            return false;
-
-        switch (action)
-        {
-            case PLAY_ASSISTANT_CARD:
-            {
-                // To play an assistant card no previous action has to be played
-                if (previousAction.isPresent())
-                    return false;
-
-                // The player must have not already selected a assistant card
-                return currentPlayer.get().getSelectedCard().isEmpty();
-            }
-            case MOVE_STUDENT_FROM_ENTRANCE_TO_DINING:
-            case MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND:
-            {
-                // An action must have already been played
-                if (previousAction.isEmpty())
-                    return false;
-
-                // The previous action must be one of the 3 following action
-                ExpertGameAction prevAction = previousAction.get();
-                if (!prevAction.equals(ExpertGameAction.PLAY_ASSISTANT_CARD)
-                        && !prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
-                        && !prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
-                    return false;
-
-                // The player must not already have moved all the allowed students
-                SchoolBoard currentBoard = currentPlayer.get().getBoard();
-                return currentBoard.getRemainingMovableStudentsInEntrance() != 0;
-            }
-            case MOVE_MOTHER_NATURE:
-            {
-                // An action must have already been played
-                if (previousAction.isEmpty())
-                    return false;
-
-                // The previous action must be one of the 2 following action
-                ExpertGameAction prevAction = previousAction.get();
-                if (!prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_DINING)
-                        && !prevAction.equals(ExpertGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND))
-                    return false;
-
-                // The player must have moved all of its students
-                SchoolBoard currentBoard = currentPlayer.get().getBoard();
-                return currentBoard.getRemainingMovableStudentsInEntrance() == 0;
-            }
-            case SELECT_CLOUD_TILE:
-            {
-                // An action must have already been played
-                if (previousAction.isEmpty())
-                    return false;
-
-                // The previous must be MOVE_MOTHER_NATURE
-                ExpertGameAction prevAction = previousAction.get();
-                return prevAction.equals(ExpertGameAction.MOVE_MOTHER_NATURE);
-            }
-            case PLAY_CHARACTER_CARD:
-                // TODO: REMEMBER TO CLEAR THIS OPTIONAL EVERY PLAYER CHANGE
-                if (currentCharacterCardIndex.isEmpty())
-                    return true;
-                else
-                    return false;
-            default:
-                return false;
-        }
-    }*/
 
     /**
      * Sets up all the game's components.

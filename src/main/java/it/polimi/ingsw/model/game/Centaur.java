@@ -36,19 +36,19 @@ public class Centaur extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
-        //As long as the action is base action, for this card is ok
-        return action == ExpertGameAction.ACTION_BASE;
+        // As long as the action is base action, for this card is ok
+        return action == ExpertGameAction.BASE_ACTION;
     }
 
     @Override
     public void applyAction()
     {
-        //I have to check if mother nature has been moved.
-        //If so i can disable the card
-        if(!activated)
+        // I have to check if mother nature has been moved.
+        // If so i can disable the card
+        if (!activated)
             return;
 
-        if(instance.motherNatureMoved)
+        if (instance.motherNatureMoved)
             this.deactivate();
     }
 

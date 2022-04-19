@@ -19,7 +19,7 @@ public class Joker extends CharacterCard
      */
     private int exchangeCounter;
 
-     /**
+    /**
      * This class has a student list
      */
     private List<Student> students;
@@ -59,21 +59,21 @@ public class Joker extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
-        if(action == ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
+        if (action == ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
         {
             // If it is activated I accept the
             // SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE
-            if(exchangeCounter < 3)
+            if (exchangeCounter < 3)
             {
                 return true;
             }
         }
 
-        //If he wants to do something different i can deactivate the card
+        // If he wants to do something different i can deactivate the card
         this.deactivate();
 
-        //And accept if the action is a base action
-        return action == ExpertGameAction.ACTION_BASE;
+        // And accept if the action is a base action
+        return action == ExpertGameAction.BASE_ACTION;
     }
 
     /**
@@ -83,28 +83,29 @@ public class Joker extends CharacterCard
     @Override
     public void applyAction() throws NoSuchElementException
     {
-        //If the card is not currently activated i do nothing
-        if(!activated)
+        // If the card is not currently activated i do nothing
+        if (!activated)
             return;
 
         // Get the current player
-        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(
-                () -> new NoSuchElementException("[Joker] No selected player"));
+        Player currentPlayer = instance.getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Joker] No selected player"));
 
         // Check that the player has selected two students to swap
-        if(currentPlayer.getSelectedColors().size() != 2)
+        if (currentPlayer.getSelectedColors().size() != 2)
         {
-            throw new NoSuchElementException("[Joker] The number of students selected is not correct");
+            throw new NoSuchElementException(
+                    "[Joker] The number of students selected is not correct");
         }
 
         // Get the selected student from the entrance
         Student entranceStudent = instance.pickStudentFromEntrance();
 
         // Get the selected student from the card
-        Student cardStudent = students.stream().filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1))
-                .findFirst().orElseThrow(
-                () -> new NoSuchElementException("[Joker] No student of the selected color on the card")
-        );
+        Student cardStudent = students.stream()
+                .filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                        "[Joker] No student of the selected color on the card"));
 
         // Remove the cardStudent from the card
         students.remove(cardStudent);
@@ -117,8 +118,8 @@ public class Joker extends CharacterCard
 
         exchangeCounter += 1;
 
-        //If we hit 3 swaps i deactivate the card
-        if(exchangeCounter >= 3)
+        // If we hit 3 swaps i deactivate the card
+        if (exchangeCounter >= 3)
             deactivate();
     }
 

@@ -95,7 +95,7 @@ public class ShamanTest
             // The card doesn't intercept any action, so it accepts only ACTION_BASE
             for (ExpertGameAction action: ExpertGameAction.values())
             {
-                if (action == ExpertGameAction.ACTION_BASE)
+                if (action == ExpertGameAction.BASE_ACTION)
                     assertTrue(shaman.isValidAction(action));
                 else assertFalse(shaman.isValidAction(action));
             }

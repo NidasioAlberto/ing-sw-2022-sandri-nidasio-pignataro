@@ -70,8 +70,8 @@ public class IslandTile
     }
 
     /**
-     * Method to remove the tower, no matter what tower it is. Keep in ming that this method does
-     * not move the removed tower its player board!
+     * Method to remove the tower, no matter what tower it is. Keep in mind that this method does
+     * not move the removed tower back its player's board!
      */
     public void removeTower()
     {

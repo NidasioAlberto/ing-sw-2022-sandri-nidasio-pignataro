@@ -37,7 +37,7 @@ public class Shaman extends CharacterCard
     public boolean isValidAction(ExpertGameAction action)
     {
         // I don't have to intercept any action
-        return action == ExpertGameAction.ACTION_BASE;
+        return action == ExpertGameAction.BASE_ACTION;
     }
 
     @Override

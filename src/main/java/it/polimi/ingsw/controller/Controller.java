@@ -9,9 +9,8 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
 
 /**
- * This class allows creating, starting and ending a game.
- * The controller links the model package with the network one
- * in order to organize the match phases and actions.
+ * This class allows creating, starting and ending a game. The controller links the model package
+ * with the network one in order to organize the match phases and actions.
  */
 public class Controller
 {
@@ -32,6 +31,7 @@ public class Controller
 
     /**
      * Constructor.
+     * 
      * @param match The match server.
      * @param playersNumber The number of players of this game.
      * @param mode The modality of the game.
@@ -49,7 +49,7 @@ public class Controller
         if (mode == null)
             throw new NullPointerException("[Controller] Game mode is null");
 
-        //TODO se non facciamo la modalità a 4 giocatori bisogna cambiare questo e altro
+        // TODO se non facciamo la modalità a 4 giocatori bisogna cambiare questo e altro
         if (playersNumber < 2 || playersNumber > 4)
             throw new IllegalArgumentException("[Controller] Invalid players number");
 
@@ -60,7 +60,7 @@ public class Controller
 
     private void endGame()
     {
-        //TODO definire come gestire la fine della partita
+        // TODO definire come gestire la fine della partita
     }
 
     /**
@@ -73,16 +73,18 @@ public class Controller
 
     /**
      * Check if the message is related to the player that should now play an action.
+     * 
      * @param message It represents the player's action.
      */
     public void performAction(ActionMessage message)
     {
-        //TODO
+        // TODO
         actionHandler.handleAction(message);
     }
 
     /**
      * Sends a message to all the players.
+     * 
      * @param message The message to send.
      * @throws NullPointerException If the message is null.
      */
@@ -96,12 +98,14 @@ public class Controller
 
     /**
      * Sends a message to a specified player.
+     * 
      * @param player The message receiver.
      * @param message The message to send.
      * @throws NullPointerException If the player or message are null.
      * @throws IllegalArgumentException If the player doesn't exist.
      */
-    public void sendMessage(String player, String message) throws NullPointerException, IllegalArgumentException
+    public void sendMessage(String player, String message)
+            throws NullPointerException, IllegalArgumentException
     {
         if (message == null)
             throw new NullPointerException("[Controller] Message is null");
@@ -110,20 +114,23 @@ public class Controller
             throw new NullPointerException("[Controller] Player is null");
 
         // Check if there is a player with such nickname
-        for (Player existingPlayer: game.getPlayerTableList())
+        for (Player existingPlayer : game.getPlayerTableList())
         {
             // If the player exists, the message is sent
-            if (existingPlayer.getNickname().equals(player)){
+            if (existingPlayer.getNickname().equals(player))
+            {
                 match.sendMessage(player, message);
                 return;
             }
         }
 
-        throw new IllegalArgumentException("[Controller] It doesn't exist a player with such nickname");
+        throw new IllegalArgumentException(
+                "[Controller] It doesn't exist a player with such nickname");
     }
 
     /**
      * Adds a player to the game.
+     * 
      * @param nickname The player's nickname.
      * @throws NullPointerException If the nickname is null.
      * @throws IllegalArgumentException If already exists a player with such nickname.
@@ -135,13 +142,14 @@ public class Controller
         if (nickname == null)
             throw new NullPointerException("[Controller] The nickname is null");
 
-        for (Player player: game.getPlayerTableList())
+        for (Player player : game.getPlayerTableList())
         {
             if (player.getNickname().equals(nickname))
-                throw new IllegalArgumentException("[Controller] Already existing a player with such nickname");
+                throw new IllegalArgumentException(
+                        "[Controller] Already existing a player with such nickname");
         }
 
-        //TODO il server dovrebbe controllare che non venga lanciata la TooManyPLayersException
+        // TODO il server dovrebbe controllare che non venga lanciata la TooManyPLayersException
 
         // Add the player to the game with the correct color of the towers
         switch (game.getPlayersNumber())

@@ -157,8 +157,8 @@ public class JokerTest
         // Theoretically if i don't perform any action, any number of swap student from character
         // card to entrance should be allowed
         for (int i = 0; i < 100; i++)
-            assertEquals(true,
-                    joker.isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
+            assertEquals(true, joker
+                    .isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE));
 
         // When i apply the action 3 times the card should be deactivated
         for (int i = 0; i < 3; i++)
@@ -179,7 +179,7 @@ public class JokerTest
         joker.activated = true;
 
         // When i ask for a normal action, the card should deactivate
-        assertEquals(true, joker.isValidAction(ExpertGameAction.ACTION_BASE));
+        assertEquals(true, joker.isValidAction(ExpertGameAction.BASE_ACTION));
         assertEquals(false, joker.isActivated());
     }
 
@@ -189,7 +189,7 @@ public class JokerTest
         // Backup of contained students before any action
         List<Student> previousStudentPlayer = player1.getBoard().getStudentsInEntrance();
 
-        //Call applyAction with no player selected
+        // Call applyAction with no player selected
         joker.activated = true;
         assertThrows(NoSuchElementException.class, () -> joker.applyAction());
         joker.activated = false;

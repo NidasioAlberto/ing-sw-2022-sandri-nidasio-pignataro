@@ -88,8 +88,8 @@ public abstract class CharacterCard extends Game
         if (instance.getSelectedPlayer().isEmpty())
             throw new NoSuchElementException("[CharacterCard] No player selected");
 
-        //If already activated I don't have to activate it another time
-        if(activated)
+        // If already activated I don't have to activate it another time
+        if (activated)
             return;
 
         // I subtract the coins only if the player can pay
@@ -104,10 +104,10 @@ public abstract class CharacterCard extends Game
                 this.firstUsed = true;
                 this.cost++;
             }
-        }
-        else
+        } else
         {
-            throw new NotEnoughCoinsException("[CharacterCard] Selected player doesn't have enough coins to activate the card");
+            throw new NotEnoughCoinsException(
+                    "[CharacterCard] Selected player doesn't have enough coins to activate the card");
         }
     }
 
@@ -126,11 +126,11 @@ public abstract class CharacterCard extends Game
      */
     public abstract CharacterCardType getCardType();
 
-    public boolean isActivated() { return activated; }
+    public boolean isActivated()
+    {
+        return activated;
+    }
 
-    /**
-     * Override of all the Game methods
-     */
     public void addPlayer(Player player) throws TooManyPlayersException
     {
         instance.addPlayer(player);
@@ -216,10 +216,11 @@ public abstract class CharacterCard extends Game
         return instance.getCharacterCards();
     }
 
-    public List<Student> getStudentBag(){ return instance.getStudentBag(); }
-    /**
-     * Factory Methods
-     */
+    public List<Student> getStudentBag()
+    {
+        return instance.getStudentBag();
+    }
+
     public static CharacterCard createCharacterCard(CharacterCardType type, Game game)
             throws NullPointerException
     {

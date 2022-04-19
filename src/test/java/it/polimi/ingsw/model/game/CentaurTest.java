@@ -30,8 +30,7 @@ public class CentaurTest
         {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        }
-        catch (TooManyPlayersException e)
+        } catch (TooManyPlayersException e)
         {
             e.printStackTrace();
         }
@@ -76,7 +75,7 @@ public class CentaurTest
     @Test
     public void isValidActionTest()
     {
-         // A player must be selected to activate the card
+        // A player must be selected to activate the card
         assertThrows(NoSuchElementException.class, () -> centaur.activate());
 
         // Select a player
@@ -93,14 +92,14 @@ public class CentaurTest
             assertEquals(0, player1.getCoins());
 
             // The card accepts only ACTION_BASE
-            for (ExpertGameAction action: ExpertGameAction.values())
+            for (ExpertGameAction action : ExpertGameAction.values())
             {
-                if (action == ExpertGameAction.ACTION_BASE)
+                if (action == ExpertGameAction.BASE_ACTION)
                     assertTrue(centaur.isValidAction(action));
-                else assertFalse(centaur.isValidAction(action));
+                else
+                    assertFalse(centaur.isValidAction(action));
             }
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -120,8 +119,7 @@ public class CentaurTest
             player1.addCoins(4);
             centaur.activate();
             assertEquals(0, player1.getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -143,8 +141,7 @@ public class CentaurTest
             centaur.activate();
             assertEquals(0, player1.getCoins());
             assertTrue(centaur.activated);
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -173,20 +170,22 @@ public class CentaurTest
             centaur.activate();
             assertEquals(0, player1.getCoins());
             assertTrue(centaur.activated);
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
 
         // An exception is thrown if the island index is wrong
-        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, () -> centaur.computePlayerInfluence(player1, -1));
+        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
+                () -> centaur.computePlayerInfluence(player1, -1));
         assertEquals("[Centaur] island index out of bounds", e.getMessage());
-        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class, () -> centaur.computePlayerInfluence(player1, 12));
+        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class,
+                () -> centaur.computePlayerInfluence(player1, 12));
         assertEquals("[Centaur] island index out of bounds", e1.getMessage());
 
         // An exception is thrown if the player is null
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> centaur.computePlayerInfluence(null, 1));
+        NullPointerException e2 = assertThrows(NullPointerException.class,
+                () -> centaur.computePlayerInfluence(null, 1));
         assertEquals("[Centaur] player null", e2.getMessage());
 
         // The player selects an island where there is already a student
@@ -196,7 +195,8 @@ public class CentaurTest
         assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
 
         // The player has the professor of the student color on the island
-        player1.getBoard().addProfessor(new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
+        player1.getBoard().addProfessor(
+                new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
 
         // The island has a tower of the color of the player1
         game.getIslands().get(islandIndex).addTower(new Tower(TowerColor.WHITE));

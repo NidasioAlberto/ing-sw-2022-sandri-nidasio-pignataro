@@ -38,33 +38,34 @@ public class Postman extends CharacterCard
     public boolean isValidAction(ExpertGameAction action)
     {
         // I don't have to intercept any action
-        return action == ExpertGameAction.ACTION_BASE;
+        return action == ExpertGameAction.BASE_ACTION;
     }
 
     @Override
     public void applyAction()
     {
-        //I have to check if mother nature has been moved.
-        //If so i can disable the card
-        if(!activated)
+        // I have to check if mother nature has been moved.
+        // If so i can disable the card
+        if (!activated)
             return;
 
-        if(instance.motherNatureMoved)
+        if (instance.motherNatureMoved)
             this.deactivate();
     }
 
     @Override
     public boolean isValidMotherNatureMovement(int steps)
     {
-        if(!activated)
+        if (!activated)
             return instance.isValidMotherNatureMovement(steps);
 
-        //I have to check if the current player can do this movement
-        Player currentPlayer        = instance.getSelectedPlayer().orElseThrow(() -> new NoSuchElementException("[Postman] No player selected"));
-        AssistantCard selectedCard  = currentPlayer.getSelectedCard()
-                        .orElseThrow(() -> new NoSuchElementException("[Postman] Player didn't select assistant card"));
+        // I have to check if the current player can do this movement
+        Player currentPlayer = instance.getSelectedPlayer()
+                .orElseThrow(() -> new NoSuchElementException("[Postman] No player selected"));
+        AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(
+                () -> new NoSuchElementException("[Postman] Player didn't select assistant card"));
 
-        //Here occurs the modification
+        // Here occurs the modification
         return selectedCard.getSteps() + 2 >= steps && steps >= 1;
     }
 
