@@ -1,6 +1,11 @@
 package it.polimi.ingsw.network.commands;
 
-public class JoinMatchCommand
-{
+import org.json.JSONObject;
 
+public class JoinMatchCommand extends Command
+{
+    JoinMatchCommand(JSONObject commandJson)
+    {
+        // ...
+    }
 }

@@ -1,6 +1,11 @@
 package it.polimi.ingsw.network.commands;
 
-public class SetNameCommand
-{
+import org.json.JSONObject;
 
+public class SetNameCommand extends Command
+{
+    SetNameCommand(JSONObject commandJson)
+    {
+        // ...
+    }
 }

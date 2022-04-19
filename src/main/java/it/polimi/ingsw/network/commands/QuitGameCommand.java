@@ -1,6 +1,11 @@
 package it.polimi.ingsw.network.commands;
 
-public class QuitGameCommand
-{
+import org.json.JSONObject;
 
+public class QuitGameCommand extends Command
+{
+    QuitGameCommand(JSONObject commandJson)
+    {
+        // ...
+    }
 }
