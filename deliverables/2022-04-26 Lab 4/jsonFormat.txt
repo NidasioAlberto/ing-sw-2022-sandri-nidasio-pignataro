@@ -1,0 +1,16 @@
+{
+    "playerInfo":
+    {
+        "playerName": "name",
+        "playerIP" (?): "ip"
+    },
+    "actionInfo":
+    {
+        "selectedIsland": "index"
+        "selectedColors": ["array of colors"] //In alternativa possiamo usare un indice rispetto al values() dell'enum
+        "selectedCloudTile": "index"
+        "selectedCard": "index"
+        "selectedCharacterCard": "index"
+        "characterCardAction": "action" //In alternativa possiamo usare un indice rispetto al values() dell'enum
+    }
+}
