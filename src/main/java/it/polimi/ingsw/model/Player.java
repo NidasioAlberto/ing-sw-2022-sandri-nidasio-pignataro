@@ -129,9 +129,13 @@ public class Player
         if (turnOrder == null)
             throw new NullPointerException("[Player] The turn order can't be null");
 
+        //Set the current card to used
+        if(selectedCard.isPresent())
+            selectedCard.get().toggleUsed();
+
         for (int i = 0; i < cards.size(); i++)
         {
-            if (cards.get(i).getTurnOrder() == turnOrder)
+            if (cards.get(i).getTurnOrder() == turnOrder && !cards.get(i).isUsed())
             {
                 selectedCard = Optional.of(cards.get(i));
                 return;

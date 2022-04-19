@@ -17,6 +17,6 @@ public class MoveMotherNatureMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.moveMotherNature();
+        handler.moveMotherNature(this);
     }
 }

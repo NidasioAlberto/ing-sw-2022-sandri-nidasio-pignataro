@@ -17,6 +17,6 @@ public class SelectCloudTileMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.selectCloudTile();
+        handler.selectCloudTile(this);
     }
 }

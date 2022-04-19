@@ -17,6 +17,6 @@ public class MoveStudentFromEntranceToDiningMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.moveStudentFromEntranceToDining();
+        handler.moveStudentFromEntranceToDining(this);
     }
 }

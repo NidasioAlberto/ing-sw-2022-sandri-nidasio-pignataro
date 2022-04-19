@@ -17,6 +17,6 @@ public class PlayAssistantCardMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.playAssistantCard();
+        handler.playAssistantCard(this);
     }
 }

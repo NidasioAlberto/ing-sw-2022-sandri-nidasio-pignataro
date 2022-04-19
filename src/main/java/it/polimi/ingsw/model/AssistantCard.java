@@ -26,6 +26,11 @@ public class AssistantCard
     private int steps;
 
     /**
+     * Tells if the card has already been used
+     */
+    private boolean used;
+
+    /**
      * Constructor.
      * 
      * @param wizard The wizard type.
@@ -49,9 +54,10 @@ public class AssistantCard
             throw new IllegalArgumentException(
                     "[AssistantCard] An invalid steps number was provided");
 
-        this.wizard = wizard;
-        this.turnOrder = turnOrder;
-        this.steps = steps;
+        this.wizard     = wizard;
+        this.turnOrder  = turnOrder;
+        this.steps      = steps;
+        this.used       = false;
     }
 
     public Wizard getWizard()
@@ -68,4 +74,8 @@ public class AssistantCard
     {
         return steps;
     }
+
+    public boolean isUsed() { return used; }
+
+    public void toggleUsed() { this.used = true; }
 }

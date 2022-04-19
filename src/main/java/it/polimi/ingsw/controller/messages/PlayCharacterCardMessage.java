@@ -17,6 +17,6 @@ public class PlayCharacterCardMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.playCharacterCard();
+        handler.playCharacterCard(this);
     }
 }

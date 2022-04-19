@@ -17,6 +17,6 @@ public class EndTurnMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.endTurn();
+        handler.endTurn(this);
     }
 }

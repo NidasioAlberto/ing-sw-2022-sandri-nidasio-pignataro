@@ -17,6 +17,6 @@ public class MoveStudentFromEntranceToIslandMessage extends ActionMessage
     {
         super.applyAction(handler);
 
-        handler.moveStudentFromEntranceToIsland();
+        handler.moveStudentFromEntranceToIsland(this);
     }
 }
