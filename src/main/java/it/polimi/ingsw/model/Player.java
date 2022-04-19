@@ -55,6 +55,11 @@ public class Player
      */
     private Optional<Integer> selectedCloudTile;
 
+    /**
+     * The character card selected by the player.
+     */
+    private Optional<Integer> selectedCharacterCard;
+
     public Player(String nickname, TowerColor color)
     {
         this(nickname, new SchoolBoard(color));
@@ -76,6 +81,7 @@ public class Player
         selectedIsland = Optional.empty();
         selectedColors = new ArrayList<SchoolColor>();
         selectedCloudTile = Optional.empty();
+        selectedCharacterCard = Optional.empty();
     }
 
     /**
@@ -229,6 +235,16 @@ public class Player
     }
 
     /**
+     * Method to select a CharacterCard during the action phase.
+     *
+     * @param card The index of the CharacterCard.
+     */
+    public void selectCharacterCard(int card)
+    {
+        selectedCharacterCard = Optional.of(card);
+    }
+
+    /**
      * Method to call at the end of the player's turn to clear all the selections
      */
     public void clearSelections()
@@ -237,6 +253,7 @@ public class Player
         selectedIsland = Optional.empty();
         selectedColors.clear();
         selectedCloudTile = Optional.empty();
+        selectedCharacterCard = Optional.empty();
     }
 
     public String getNickname()
@@ -267,6 +284,11 @@ public class Player
     public Optional<Integer> getSelectedCloudTile()
     {
         return selectedCloudTile;
+    }
+
+    public Optional<Integer> getSelectedCharacterCard()
+    {
+        return selectedCharacterCard;
     }
 
     public List<AssistantCard> getCards()

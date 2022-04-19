@@ -32,7 +32,11 @@ public abstract class ActionMessage
      * of the handler
      * @param handler The controller handler that contains all the functions the player could call
      */
-    public abstract void applyAction(GameActionHandler handler);
+    public void applyAction(GameActionHandler handler) throws NullPointerException
+    {
+        if (handler == null)
+            throw new NullPointerException("[ActionMessage] Handler is null");
+    }
 
     /**
      * Getters and setters

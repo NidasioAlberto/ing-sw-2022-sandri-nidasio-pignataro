@@ -60,7 +60,7 @@ public class Controller
 
     private void endGame()
     {
-
+        //TODO definire come gestire la fine della partita
     }
 
     /**
@@ -71,9 +71,14 @@ public class Controller
         game.setupGame();
     }
 
+    /**
+     * Check if the message is related to the player that should now play an action.
+     * @param message It represents the player's action.
+     */
     public void performAction(ActionMessage message)
     {
-
+        //TODO
+        actionHandler.handleAction(message);
     }
 
     /**
