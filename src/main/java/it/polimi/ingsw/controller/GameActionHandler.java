@@ -104,6 +104,8 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
+        if (!gamePhase.isLegitAction(message))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         //Parse the card
         JSONObject json = new JSONObject(message.getJson());
@@ -118,6 +120,8 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
+        if (!gamePhase.isLegitAction(message))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         //Move the student to the selected island
         game.putStudentToIsland(game.getSelectedPlayer().get()
@@ -134,6 +138,8 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
+        if (!gamePhase.isLegitAction(message))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         //Move the student to dining
         game.getSelectedPlayer().get()
@@ -153,6 +159,8 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
+        if (!gamePhase.isLegitAction(message))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         //Calculate the difference from the indexed island and the current one
         int pos = game.getMotherNatureIndex()
@@ -162,9 +170,9 @@ public class GameActionHandler
                 .getSelectedIsland().orElseThrow(() -> new NoSuchElementException("[GameActionHandler] No selected island"));
 
         //Based on the actual difference i move mother nature of the calculated steps
-        if(wantedPos > pos)
+        if(wantedPos > pos && game.isValidMotherNatureMovement(wantedPos - pos))
             game.moveMotherNature(wantedPos - pos);
-        else if(wantedPos < pos)
+        else if(wantedPos < pos && game.isValidMotherNatureMovement(Game.ISLAND_TILES_NUMBER + wantedPos - pos))
             game.moveMotherNature(Game.ISLAND_TILES_NUMBER + wantedPos - pos);
         else
             throw new InvalidParameterException("[GameActionHandler] Mother nature cannot stay in the same position");
@@ -180,6 +188,8 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
+        if (!gamePhase.isLegitAction(message))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         //I use the designed method
         game.moveStudentsFromCloudTile();
