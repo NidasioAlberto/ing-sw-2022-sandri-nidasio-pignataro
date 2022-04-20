@@ -130,7 +130,7 @@ public class Joker extends CharacterCard
     }
 
     @Override
-    protected void deactivate()
+    public void deactivate()
     {
         exchangeCounter = 0;
         super.deactivate();

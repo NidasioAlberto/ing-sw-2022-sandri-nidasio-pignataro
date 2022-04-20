@@ -122,7 +122,7 @@ public class Minstrel extends CharacterCard
     }
 
     @Override
-    protected void deactivate()
+    public void deactivate()
     {
         exchangeCounter = 0;
         super.deactivate();
