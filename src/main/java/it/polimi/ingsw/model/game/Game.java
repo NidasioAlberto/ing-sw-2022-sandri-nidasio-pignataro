@@ -556,6 +556,15 @@ public class Game
     }
 
     /**
+     * This method clears the things that have to be cleared when a new turn begins
+     * such as currentCharacterCard
+     */
+    public void clearTurn()
+    {
+        this.currentCharacterCardIndex = Optional.empty();
+    }
+
+    /**
      * Return a list of the available character cards in the game.
      */
     public List<CharacterCard> getCharacterCards()
@@ -588,7 +597,6 @@ public class Game
         }
     }
 
-    // TODO: IT IS NOT SO GOOD, BUT FOR GRANDMA HERBS WE HAVE NO CHOICE
     public List<Island> getIslands()
     {
         return new ArrayList<Island>(islands);

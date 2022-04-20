@@ -114,7 +114,7 @@ public abstract class CharacterCard extends Game
     /**
      * Method to deactivate the card effect. Deactivated => the methods are pass through
      */
-    protected void deactivate()
+    public void deactivate()
     {
         this.activated = false;
     }

@@ -241,7 +241,7 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
-        
+
         if (game.getCurrentCharacterCard().isPresent())
             throw new InvalidModuleException("[GameActionHandler] A character card was already played");
 
@@ -277,6 +277,21 @@ public class GameActionHandler
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
+
+        //Check if a character card is active and in case if the action is valid
+        if (game.getCurrentCharacterCard().isPresent() &&
+                game.getCurrentCharacterCard().get().isActivated() &&
+                !game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
+
+        // Clear the selections and disable any character card
+        game.getSelectedPlayer().get().clearSelections();
+        game.clearTurn();
+        for(CharacterCard card : game.getCharacterCards())
+            card.deactivate();
+
+        //If all goes correctly i step the FSM
+        gamePhase.onValidAction(this);
     }
 
     /**
