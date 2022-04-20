@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -78,23 +80,26 @@ public class GameActionHandler
         if (!playerName.equals(game.getSelectedPlayer().get().getNickname()))
             throw new InvalidModuleException("[GameActionHandler] Wrong player");
 
-        // First of i clear all the player's selections
-        game.getSelectedPlayer().get().clearSelections();
-
-        // Now i parse all the selected stuff
-        game.getSelectedPlayer().get()
-                .selectIsland(json.getJSONObject("actionInfo").getInt("selectedIsland"));
+        // I first parse all the stuff in temporary variables so that if an error occurs
+        // I don't risk deleting stuff from player selection
+        int selectedIsland = json.getJSONObject("actionInfo").getInt("selectedIsland");
+        int selectedCloudTile = json.getJSONObject("actionInfo").getInt("selectedCloudTile");
+        int selectedCharacterCard = json.getJSONObject("actionInfo").getInt("selectedCharacterCard");
+        List<SchoolColor> selectedColors = new ArrayList<SchoolColor>();
 
         // For the selected colors i need to add a for loop
-        JSONArray selectedColors = json.getJSONObject("actionInfo").getJSONArray("selectedColors");
-        for (int i = 0; i < selectedColors.length(); i++)
-            game.getSelectedPlayer().get()
-                    .selectColor(SchoolColor.valueOf(selectedColors.getString(i)));
+        JSONArray colors = json.getJSONObject("actionInfo").getJSONArray("selectedColors");
+        for (int i = 0; i < colors.length(); i++)
+            selectedColors.add(SchoolColor.valueOf(colors.getString(i)));
 
-        game.getSelectedPlayer().get()
-                .selectCloudTile(json.getJSONObject("actionInfo").getInt("selectedCloudTile"));
-        game.getSelectedPlayer().get().selectCharacterCard(
-                json.getJSONObject("actionInfo").getInt("selectedCharacterCard"));
+        // First of i clear all the player's selections
+        game.getSelectedPlayer().get().clearSelections();
+        // Now i assign all the selected stuff
+        game.getSelectedPlayer().get().selectIsland(selectedIsland);
+        game.getSelectedPlayer().get().selectCloudTile(selectedCloudTile);
+        game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
+        for(SchoolColor color : selectedColors)
+            game.getSelectedPlayer().get().selectColor(color);
 
         // Call the correct method (Command pattern)
         message.applyAction(this);
