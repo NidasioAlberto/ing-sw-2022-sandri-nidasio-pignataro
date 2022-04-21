@@ -121,13 +121,9 @@ public class Player
      * 
      * @param turnOrder The number of turn of the card.
      * @throws IllegalArgumentException if the player hasn't got the selected card.
-     * @throws NullPointerException if the parameter is null.
      */
-    public void selectCard(Integer turnOrder) throws IllegalArgumentException, NullPointerException
+    public void selectCard(int turnOrder) throws IllegalArgumentException
     {
-        if (turnOrder == null)
-            throw new NullPointerException("[Player] The turn order can't be null");
-
         //Set the current card to used
         if(selectedCard.isPresent())
             selectedCard.get().toggleUsed();
@@ -173,13 +169,9 @@ public class Player
      * 
      * @param turnOrder The number of turn of the card.
      * @throws IllegalArgumentException if the player doesn't have the selected card.
-     * @throws NullPointerException if the parameter is null
      */
-    public void removeCard(Integer turnOrder) throws IllegalArgumentException, NullPointerException
+    public void removeCard(int turnOrder) throws IllegalArgumentException
     {
-        if (turnOrder == null)
-            throw new NullPointerException("[Player] The parameter can't be null");
-
         for (int i = 0; i < cards.size(); i++)
         {
             if (cards.get(i).getTurnOrder() == turnOrder)
@@ -243,7 +235,6 @@ public class Player
      *
      * @param card The index of the CharacterCard.
      */
-    //TODO WHY Integer?
     public void selectCharacterCard(int card)
     {
         selectedCharacterCard = Optional.of(card);
@@ -254,7 +245,7 @@ public class Player
      */
     public void clearSelections()
     {
-        removeSelectedCard();
+        selectedCard = Optional.empty();
         selectedIsland = Optional.empty();
         selectedColors.clear();
         selectedCloudTile = Optional.empty();

@@ -131,9 +131,6 @@ public class PlayerTest
         AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 1, 1);
         player.addCard(card);
 
-        // Select a card with null turnOrder
-        assertThrows(NullPointerException.class, () -> player.selectCard(null));
-
         // Select a card the player doesn't have
         assertThrows(IllegalArgumentException.class, () -> player.selectCard(2));
 
@@ -183,9 +180,6 @@ public class PlayerTest
      */
     public void removeCardTest()
     {
-        // The parameter can't be null
-        assertThrows(NullPointerException.class, () -> player.removeCard(null));
-
         // Add a correct card
         AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 1, 1);
         player.addCard(card);
