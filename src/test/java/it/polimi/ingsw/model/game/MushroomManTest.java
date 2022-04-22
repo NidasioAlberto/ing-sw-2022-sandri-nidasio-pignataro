@@ -69,6 +69,11 @@ public class MushroomManTest
     @Test
     public void generalCardTest()
     {
+        // If the card is active, we can't apply the action if no player is selected
+        mushroomMan.activated = true;
+        assertThrows(NoSuchElementException.class, () -> mushroomMan.applyAction());
+        mushroomMan.activated = false;
+
         // If we don't select a player we expect noSuchElementException
         assertThrows(NoSuchElementException.class, () -> mushroomMan.activate());
 
@@ -110,7 +115,7 @@ public class MushroomManTest
         assertEquals(4, mushroomMan.cost);
         assertEquals(7, player1.getCoins());
 
-        // Finally if I deactivate the card the cost will be 4 coins
+        // Finally, if I deactivate the card the cost will be 4 coins
         mushroomMan.deactivate();
 
         try

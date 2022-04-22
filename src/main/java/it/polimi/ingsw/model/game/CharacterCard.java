@@ -106,8 +106,7 @@ public abstract class CharacterCard extends Game
             }
         } else
         {
-            throw new NotEnoughCoinsException(
-                    "[CharacterCard] Selected player doesn't have enough coins to activate the card");
+            throw new NotEnoughCoinsException();
         }
     }
 

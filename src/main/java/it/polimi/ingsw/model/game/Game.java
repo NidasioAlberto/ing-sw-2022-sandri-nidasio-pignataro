@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NotEnoughPlayersException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import java.util.*;
 import java.util.stream.*;
@@ -426,11 +427,11 @@ public class Game
     /**
      * Sets up all the game's components.
      */
-    public void setupGame() throws IllegalStateException
+    public void setupGame() throws NotEnoughPlayersException
     {
         // 0. Check if all the expected players have been added to the game
         if (players.size() != playersNumber)
-            throw new IllegalStateException("[Game] Not enough players to setup the game");
+            throw new NotEnoughPlayersException();
 
         // 1. Place the islands
         IntStream.range(0, ISLAND_TILES_NUMBER).forEach(i -> islands.add(new Island()));

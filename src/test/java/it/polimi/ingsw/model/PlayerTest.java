@@ -128,16 +128,24 @@ public class PlayerTest
      */
     public void selectCardTest()
     {
-        AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 1, 1);
-        player.addCard(card);
+        AssistantCard card1 = new AssistantCard(Wizard.WIZARD_1, 1, 1);
+        AssistantCard card2 = new AssistantCard(Wizard.WIZARD_1, 2, 1);
+        player.addCard(card1);
+        player.addCard(card2);
 
         // Select a card the player doesn't have
-        assertThrows(IllegalArgumentException.class, () -> player.selectCard(2));
+        assertThrows(IllegalArgumentException.class, () -> player.selectCard(3));
 
         // Select a card the player has
         assertTrue(player.getSelectedCard().isEmpty());
         player.selectCard(1);
-        assertEquals(card, player.getSelectedCard().get());
+        assertEquals(card1, player.getSelectedCard().get());
+
+        // Select another card, so the previous one is now used
+        assertFalse(card1.isUsed());
+        player.selectCard(2);
+        assertTrue(card1.isUsed());
+        assertEquals(card2, player.getSelectedCard().get());
     }
 
     @Test
@@ -267,6 +275,20 @@ public class PlayerTest
 
     @Test
     /**
+     * Test the method selectCharacterCard
+     */
+    public void selectCharacterCardTest()
+    {
+        // At the beginning no CharacterCard is selected
+        assertTrue(player.getSelectedCharacterCard().isEmpty());
+
+        // Select a CharacterCard
+        player.selectCharacterCard(1);
+        assertEquals(1, player.getSelectedCharacterCard().get());
+    }
+
+    @Test
+    /**
      * Test the method clearSelections
      */
     public void clearSelectionsTest()
@@ -278,6 +300,7 @@ public class PlayerTest
         player.selectIsland(1);
         player.selectColor(SchoolColor.GREEN);
         player.selectCloudTile(1);
+        player.selectCharacterCard(1);
 
         // Check the selections
         assertEquals(card, player.getSelectedCard().get());
@@ -291,5 +314,6 @@ public class PlayerTest
         assertTrue(player.getSelectedIsland().isEmpty());
         assertTrue(player.getSelectedColors().isEmpty());
         assertTrue(player.getSelectedCloudTile().isEmpty());
+        assertTrue(player.getSelectedCharacterCard().isEmpty());
     }
 }

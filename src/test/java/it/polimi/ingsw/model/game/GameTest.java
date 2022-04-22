@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NotEnoughPlayersException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
 import org.junit.jupiter.api.*;
@@ -294,8 +295,10 @@ public class GameTest
         // Setup the game
         game.setupGame();
 
-        // Now it should work
+        // Now it should work and I check the mother nature index after the movement
+        int index = game.getMotherNatureIndex().get();
         assertDoesNotThrow(() -> game.moveMotherNature(3));
+        assertEquals((index + 3) % game.getIslands().size(), game.getMotherNatureIndex().get());
     }
 
     @Test
@@ -577,6 +580,11 @@ public class GameTest
         assertTrue(card.isPresent());
         assertEquals(game.getCharacterCards().get(1), card.get());
 
+        // Clear selection
+        assertFalse(game.currentCharacterCardIndex.isEmpty());
+        game.clearTurn();
+        assertTrue(game.currentCharacterCardIndex.isEmpty());
+
         // Select an out of bound card
         game.setCurrentCharacterCard(42);
 
@@ -589,5 +597,16 @@ public class GameTest
     {
         // When the game is not set up this should throw
         assertThrows(NoSuchElementException.class, () -> game.getCurrentIsland());
+    }
+
+    @Test
+    public void setupGameTest()
+    {
+        // Not all the expected players have been added to the game
+        assertThrows(NotEnoughPlayersException.class, () -> game.setupGame());
+
+        // Check the players number and the game mode
+        assertEquals(2, game.getPlayersNumber());
+        assertEquals(GameMode.CLASSIC, game.getGameMode());
     }
 }

@@ -144,7 +144,15 @@ public class Controller
     public void performAction(ActionMessage message)
     {
         //TODO
-        actionHandler.handleAction(message);
+        /*try
+        {
+            actionHandler.handleAction(message);
+        }
+        catch (EndGameException e)
+        {
+            endGame();
+        }*/
+
     }
 
     /**

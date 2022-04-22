@@ -54,6 +54,10 @@ public class AssistantCard
             throw new IllegalArgumentException(
                     "[AssistantCard] An invalid steps number was provided");
 
+        if ((2 * steps - turnOrder) != 0 && (2 * steps - turnOrder) != 1)
+            throw new IllegalArgumentException(
+                    "[AssistantCard] Turn value and steps number are not compatible");
+
         this.wizard     = wizard;
         this.turnOrder  = turnOrder;
         this.steps      = steps;

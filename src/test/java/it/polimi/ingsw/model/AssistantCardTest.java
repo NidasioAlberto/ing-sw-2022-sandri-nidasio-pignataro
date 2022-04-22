@@ -52,6 +52,28 @@ public class AssistantCardTest
                 () -> new AssistantCard(Wizard.WIZARD_1, 3, 0));
         assertThrows(IllegalArgumentException.class,
                 () -> new AssistantCard(Wizard.WIZARD_1, 6, 6));
+
+        // Incompatible turn value and steps number
+        assertThrows(IllegalArgumentException.class,
+                () -> new AssistantCard(Wizard.WIZARD_1, 10, 2));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AssistantCard(Wizard.WIZARD_1, 2, 10));
+
     }
 
+    @Test
+    public void toggleUsedTest()
+    {
+        // Create a card
+        AssistantCard card = new AssistantCard(Wizard.WIZARD_1, 1, 1);
+
+        // At the beginning the card isn't used
+        assertFalse(card.isUsed());
+
+        // When I use the card I toggle it
+        card.toggleUsed();
+
+        // The card has been used
+        assertTrue(card.isUsed());
+    }
 }

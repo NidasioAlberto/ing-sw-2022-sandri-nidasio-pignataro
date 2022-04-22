@@ -11,7 +11,7 @@ public class TooManyPlayersException extends Exception
         this.currentPlayersNumber = currentPlayersNumber;
     }
 
-    int getCurrentPlayersNumber()
+    public int getCurrentPlayersNumber()
     {
         return currentPlayersNumber;
     }
