@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class allows creating, starting and ending a game. The controller links the model package
  * with the network one in order to organize the match phases and actions.
@@ -58,9 +61,70 @@ public class Controller
         actionHandler = new GameActionHandler(game);
     }
 
+    /**
+     * The method is called when the game is ended.
+     * It determines the winner.
+     */
     private void endGame()
     {
-        // TODO definire come gestire la fine della partita
+        // Check if there is a player that has built all the towers
+        for (Player player : game.getPlayerTableList())
+        {
+            if (player.getBoard().getTowers().size() == 0)
+            {
+                sendAllMessage("The game is ended. The winner is " + player.getNickname());
+                return;
+            }
+        }
+
+        // Check if there is a player who has run out of cards
+        boolean runOutOfCards = false;
+
+        for (Player player : game.getPlayerTableList())
+        {
+            if (player.getCards().size() == 0)
+            {
+               runOutOfCards = true;
+            }
+        }
+
+        // Check if there are only 3 groups of islands or there aren't student in the bag
+        if (runOutOfCards || game.getIslands().size() <= 3 || game.getStudentBag().size() == 0)
+        {
+            List<Player> rank = new ArrayList<>(game.getPlayerTableList());
+
+            // The winner is the player who has built the most towers.
+            // In case of a tie, the winner is the player who controls the most professors
+            rank.stream().sorted((a, b) -> a.getBoard().getTowers().size() == b.getBoard().getTowers().size() ?
+                    a.getBoard().getProfessors().size() - b.getBoard().getProfessors().size() :
+                    a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
+
+            // The first player in the rank has the most tower or has the same tower as the second,
+            // but the first has more professors, so the first wins
+            if (rank.get(0).getBoard().getTowers().size() > rank.get(1).getBoard().getTowers().size() ||
+               (rank.get(0).getBoard().getTowers().size() == rank.get(1).getBoard().getTowers().size() &&
+               rank.get(0).getBoard().getProfessors().size() > rank.get(1).getBoard().getProfessors().size()))
+            {
+                sendAllMessage("The game is ended. The winner is " + rank.get(0).getNickname());
+                return;
+            }
+            // Case of a three players game and a tie between the first two
+            else if (rank.size() == 3 &&
+                    (rank.get(0).getBoard().getTowers().size() > rank.get(2).getBoard().getTowers().size() ||
+                    (rank.get(0).getBoard().getTowers().size() == rank.get(2).getBoard().getTowers().size() &&
+                     rank.get(0).getBoard().getProfessors().size() > rank.get(2).getBoard().getProfessors().size())))
+            {
+                sendAllMessage("The game is ended. It is a tie between "
+                        + rank.get(0).getNickname() + " and " + rank.get(1).getNickname());
+                return;
+            }
+            // Otherwise, it is a tie between all the players
+            else
+            {
+                sendAllMessage("The game is ended. It is a tie between all the players.");
+                return;
+            }
+        }
     }
 
     /**
@@ -72,18 +136,14 @@ public class Controller
     }
 
     /**
-     * Check if the message is related to the player that should now play an action.
+     * The method passes the message to the handler.
+     * It catches and handles all the possible exceptions that are thrown if something goes wrong.
      * 
      * @param message It represents the player's action.
      */
     public void performAction(ActionMessage message)
     {
-        // TODO nel selected player c'è il giocatore che ha giocato il turno precedente
-        //  o che sta giocando in questo turno?
-        // se il player non è selezionato nel json, non ce il campo o il campo e vuoto?
-
-
-
+        //TODO
         actionHandler.handleAction(message);
     }
 
