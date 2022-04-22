@@ -65,7 +65,7 @@ public class GameActionHandler
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
 
-        if (!gamePhase.isLegitAction(message))
+        if (!gamePhase.isLegitAction(message, this))
             throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         if (game.getSelectedPlayer().isEmpty())

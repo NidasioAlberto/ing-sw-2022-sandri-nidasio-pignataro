@@ -17,7 +17,8 @@ public class EndTurnPhase implements Phase
     }
 
     @Override
-    public boolean isLegitAction(ActionMessage message) {
+    public boolean isLegitAction(ActionMessage message, GameActionHandler handler)
+    {
         return false;
     }
 }

@@ -29,5 +29,5 @@ public interface Phase
      * @param message The message to be executed
      * @return Boolean that represents the result
      */
-    boolean isLegitAction(ActionMessage message);
+    boolean isLegitAction(ActionMessage message, GameActionHandler handler);
 }

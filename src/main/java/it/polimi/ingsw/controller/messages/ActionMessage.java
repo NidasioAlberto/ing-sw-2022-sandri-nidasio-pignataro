@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.messages;
 
 import it.polimi.ingsw.controller.GameActionHandler;
+import it.polimi.ingsw.model.game.BaseGameAction;
 
 /**
  * This class represents a message of the Command Pattern. Depending on the arrived message, we pass
@@ -13,6 +14,11 @@ public abstract class ActionMessage
      * Json parsed message to carry along with the actual command to execute
      */
     protected String json;
+
+    /**
+     * Game action type
+     */
+    protected BaseGameAction actionType;
 
     /**
      * Constructor
@@ -55,4 +61,6 @@ public abstract class ActionMessage
 
         this.json = json;
     }
+
+    public BaseGameAction getActionType() { return actionType; }
 }
