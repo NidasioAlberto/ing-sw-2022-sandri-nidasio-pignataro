@@ -68,20 +68,15 @@ public class GameActionHandler
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
 
-        if (!gamePhase.isLegitAction(message, this))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
-
         if (game.getSelectedPlayer().isEmpty())
             throw new NoSuchElementException("[GameActionHandler] No selected player");
+
+        if (!gamePhase.isLegitAction(message, this))
+            throw new InvalidModuleException("[GameActionHandler] No legit action");
 
         // The action is legit, so i can set the player's parameters and call the method
         // Information parsing
         JSONObject json = new JSONObject(message.getJson());
-        String playerName = json.getJSONObject("playerInfo").getString("playerName");
-
-        // If the player is different from the selected one i reject
-        if (!playerName.equals(game.getSelectedPlayer().get().getNickname()))
-            throw new InvalidModuleException("[GameActionHandler] Wrong player");
 
         // I first parse all the stuff in temporary variables so that if an error occurs
         // I don't risk deleting stuff from player selection
