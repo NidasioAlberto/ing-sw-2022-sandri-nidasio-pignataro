@@ -48,6 +48,9 @@ public class GameActionHandler
 
         this.game = game;
 
+        // Before instantiating the FSM i need to select the first player
+        game.selectPlayer(0);
+
         // Instantiate the FSM
         gamePhase = new PlanPhase();
     }

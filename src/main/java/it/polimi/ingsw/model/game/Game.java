@@ -109,7 +109,16 @@ public class Game
      */
     public Optional<Player> getSelectedPlayer()
     {
-        return currentPlayerIndex.map(index -> players.get(index));
+        return currentPlayerIndex.map(index -> getSortedPlayerList().get(index));
+    }
+
+    /**
+     * @return The currently selected player index referred to the tableList OR the sortedList
+     * the controller will handle the difference and the game must refer to sortedList
+     */
+    public Optional<Integer> getSelectedPlayerIndex()
+    {
+        return currentPlayerIndex;
     }
 
     /**

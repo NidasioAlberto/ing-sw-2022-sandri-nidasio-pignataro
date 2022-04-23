@@ -3,6 +3,12 @@ package it.polimi.ingsw.controller.fsm;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 
+/**
+ * This interface describes a single FSM node about the basic actions that a player could do.
+ * In short terms, it maintains memory about what should be done following
+ * the correct game flow and changes the game selected player depending on
+ * what player should do what.
+ */
 public interface Phase
 {
     /**
