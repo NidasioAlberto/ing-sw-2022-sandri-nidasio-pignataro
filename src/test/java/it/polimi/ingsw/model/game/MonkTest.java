@@ -130,7 +130,7 @@ public class MonkTest
         // An exception is thrown if I call the method without a selected player
         monk.activated = true;
         NoSuchElementException e3 = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
-        assertEquals("[Monk] No selected player", e3.getMessage());
+        assertEquals("[Monk] No player selected", e3.getMessage());
 
         monk.activated = false;
 
@@ -157,7 +157,7 @@ public class MonkTest
 
         // An exception is thrown if no colors are selected
         NoSuchElementException e = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
-        assertEquals("[Monk] No selected color", e.getMessage());
+        assertEquals("[Monk] No color selected", e.getMessage());
 
         // Search a student color not present on the card
         int counter;
@@ -186,7 +186,7 @@ public class MonkTest
 
         // An exception is thrown if there isn't a selected island
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class, () -> monk.applyAction());
-        assertEquals("[Game] No selected island", e2.getMessage());
+        assertEquals("[Game] No island selected", e2.getMessage());
 
         // The player selects an island where there is already a student
         int islandIndex = 0;

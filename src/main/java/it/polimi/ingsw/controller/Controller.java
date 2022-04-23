@@ -1,15 +1,17 @@
 package it.polimi.ingsw.controller;
 
+import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;
-import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * This class allows creating, starting and ending a game. The controller links the model package
@@ -132,6 +134,7 @@ public class Controller
      */
     public void setupGame()
     {
+        // TODO vanno aggiunte delle catch
         game.setupGame();
     }
 
@@ -144,15 +147,99 @@ public class Controller
     public void performAction(ActionMessage message)
     {
         //TODO
-        /*try
+        try
         {
             actionHandler.handleAction(message);
         }
         catch (EndGameException e)
         {
             endGame();
-        }*/
+            // se il gioco non è veramente terminato?
+        }
+        catch (NoLegitActionException e)
+        {
 
+        }
+        catch (WrongPlayerException e)
+        {
+
+        }
+        catch (InvalidModuleException e)
+        {
+
+        }
+        catch (NoSelectedPlayerException e)
+        {
+
+        }
+        catch (NoSelectedIslandException e)
+        {
+
+        }
+        catch (NoSelectedColorException e)
+        {
+
+        }
+        catch (NoSelectedAssistantCardException e)
+        {
+
+        }
+        catch (NoSelectedStudentsException e)
+        {
+
+        }
+        catch (NoSelectedCloudTileException e)
+        {
+
+        }
+        catch (NoSelectedCharacterCardException e)
+        {
+
+        }
+        catch (IslandIndexOutOfBoundsException e)
+        {
+
+        }
+        catch (NoSuchStudentOnCardException e)
+        {
+
+        }
+        catch (NoSuchStudentInEntranceException e)
+        {
+
+        }
+        catch (NoSuchStudentInDiningException e)
+        {
+
+        }
+        catch (NoSuchAssistantCardException e)
+        {
+
+        }
+        catch (NoMoreNoEntryTilesException e)
+        {
+
+        }
+        catch (NullPointerException e)
+        {
+
+        }
+        catch (IllegalArgumentException e)
+        {
+
+        }
+        catch (IllegalStateException e)
+        {
+
+        }
+        catch (NoSuchElementException e)
+        {
+
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.EndGameException;
 import org.junit.jupiter.api.*;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -239,16 +240,13 @@ public class SchoolBoardTest
         Tower secondTower = new Tower(TowerColor.BLACK);
         board.addTower(firstTower);
         board.addTower(secondTower);
+        assertEquals(2, board.getTowers().size());
+        assertEquals(true, board.getTowers().contains(firstTower));
+        assertEquals(true, board.getTowers().contains(secondTower));
 
         // Remove null object
         assertThrows(NullPointerException.class, () -> board.removeTower((Tower) null));
         assertThrows(NullPointerException.class, () -> board.removeTower((TowerColor) null));
-
-        // Remove object that doesn't exist
-        assertThrows(NoSuchElementException.class, () -> board.removeTower(TowerColor.WHITE));
-        assertEquals(2, board.getTowers().size());
-        assertEquals(true, board.getTowers().contains(firstTower));
-        assertEquals(true, board.getTowers().contains(secondTower));
 
         // Remove a different instance
         board.removeTower(new Tower(TowerColor.BLACK));
@@ -262,9 +260,13 @@ public class SchoolBoardTest
         assertEquals(true, board.getTowers().contains(secondTower));
         assertEquals(false, board.getTowers().contains(firstTower));
 
-        // Remove the second tower
-        board.removeTower(secondTower.getColor());
+        // Remove the last tower
+        board.removeTower(secondTower);
         assertEquals(0, board.getTowers().size());
+
+        // There are no more towers so if I try to remove another one, EndGameException is thrown
+        assertThrows(EndGameException.class, () -> board.removeTower(new Tower(TowerColor.BLACK)));
+        assertThrows(EndGameException.class, () -> board.removeTower(TowerColor.BLACK));
     }
 
     @Test

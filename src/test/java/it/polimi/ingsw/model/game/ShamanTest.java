@@ -283,7 +283,7 @@ public class ShamanTest
         // An exception is thrown if I call the method without a selected player
         shaman.activated = true;
         NoSuchElementException e1 = assertThrows(NoSuchElementException.class, () -> shaman.conquerProfessors());
-        assertEquals("[Shaman] No selected player", e1.getMessage());
+        assertEquals("[Shaman] No player selected", e1.getMessage());
 
         shaman.activated = false;
     }

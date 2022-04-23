@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -53,7 +54,7 @@ public class Shaman extends CharacterCard
     }
 
     @Override
-    public void conquerProfessors()
+    public void conquerProfessors() throws NoSuchElementException
     {
         //If the card is not activated I skip this method
         if(!activated)
@@ -123,7 +124,7 @@ public class Shaman extends CharacterCard
                 // MOVE THE PROFESSOR IF THE CURRENT KING ISN'T THE PLAYER THAT HAS PLAYED THIS CARD
                 // AND THE PLAYER THAT HAS PLAYED THIS CARD HAS THE SAME STUDENTS NUMBER OF CURRENT KING
                 if (currentKing != instance.getSelectedPlayer().orElseThrow(
-                        () -> new NoSuchElementException("[Shaman] No selected player"))
+                        () -> new NoSelectedPlayerException("[Shaman]"))
                         && instance.getSelectedPlayer().get().getBoard().getStudentsNumber(color) >=
                         currentKing.getBoard().getStudentsNumber(color))
                 {

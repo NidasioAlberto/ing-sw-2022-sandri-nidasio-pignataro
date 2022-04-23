@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.ExpertGameAction;
+import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
 import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
@@ -61,10 +63,10 @@ public class Thief extends CharacterCard
             {
                 p.getBoard().removeStudentFromDining(
                     instance.getSelectedPlayer().orElseThrow(
-                    () -> new NoSuchElementException("[Thief] No selected player"))
+                    () -> new NoSelectedPlayerException("[Thief]"))
                     // Of the color selected from the current player
                     .getSelectedColors().stream().findFirst().orElseThrow(
-                    () -> new NoSuchElementException("[Thief] No selected color"))
+                    () -> new NoSelectedColorException("[Thief]"))
                 )
                 // The student removed is replaced in the bag
                 .ifPresent(s -> instance.addStudentToBag(s));

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -182,8 +183,8 @@ public class MushroomManTest
         player1.addCoins(10);
         mushroomMan.activated = true;
 
-        // I expect to receive a IndexOutOfBoundsException because of no selected color
-        assertThrows(IndexOutOfBoundsException.class, () -> mushroomMan.applyAction());
+        // I expect to receive a NoSelectedStudentsException because of no selected student color
+        assertThrows(NoSelectedStudentsException.class, () -> mushroomMan.applyAction());
 
         // So i select the color and apply the action
         player1.selectColor(SchoolColor.RED);

@@ -3,6 +3,10 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentInDiningException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
 
 import java.util.NoSuchElementException;
 
@@ -75,26 +79,23 @@ public class Minstrel extends CharacterCard
 
         // Get the current player
         Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Minstrel] No selected player"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[Minstrel]"));
 
         // Check that the player has selected two students to swap
         if (currentPlayer.getSelectedColors().size() != 2)
-            throw new NoSuchElementException(
-                    "[Minstrel] The number of students selected is not correct");
+            throw new NoSelectedStudentsException("[Minstrel]");
 
         // Take the student instance that needs to be moved.
         // IMPORTANT: I can't use pickStudentFromEntrance because if the second selected color
         // doesn't exist in dining, i would lose the entrance student due to immediate remove
         Student studentEntrance = currentPlayer.getBoard().getStudentsInEntrance().stream()
                 .filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(0)).findFirst()
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[Minstrel] No student of the specified color inside the current player's entrance"));
+                .orElseThrow(() -> new NoSuchStudentInEntranceException("[Minstrel]"));
 
         // Remove the student from the dining
         Student student = currentPlayer.getBoard()
                 .removeStudentFromDining(currentPlayer.getSelectedColors().get(1))
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[Minstrel]  No students of the specified color inside the current player's dining"));
+                .orElseThrow(() -> new NoSuchStudentInDiningException("[Minstrel]"));
 
         // Add the student to the entrance
         currentPlayer.getBoard().addStudentToEntrance(student);

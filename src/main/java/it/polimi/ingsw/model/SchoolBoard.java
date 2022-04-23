@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.EndGameException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentInDiningException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
+
 import java.util.*;
 
 /**
@@ -77,7 +81,7 @@ public class SchoolBoard
         if (playersNumber < 2 || playersNumber > 4)
             throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
 
-        // The number of players must be modifiable
+        // The number of players must not be modifiable
         if (maxStudentsInEntrance != null && maxTowers != null)
             throw new IllegalStateException("[SchoolBoard] The number of players can't be changed");
 
@@ -161,14 +165,20 @@ public class SchoolBoard
     /**
      * Removes the tower from the list.
      * 
-     * @param tower the tower that has to be removed
+     * @param tower the tower that has to be removed.
+     * @throws NullPointerException if the parameter is null.
+     * @throws EndGameException if there are no more towers.
      */
-    public void removeTower(Tower tower)
+    public void removeTower(Tower tower) throws NullPointerException, EndGameException
     {
         if (tower == null)
             throw new NullPointerException("[SchoolBoard] Null tower");
 
-        // Checks if the tower is not null and present
+        // Check if there are still towers
+        if (towers.size() == 0)
+            throw new EndGameException("[SchoolBoard] Towers finished");
+
+        // Checks if the tower is present
         if (towers.contains(tower))
             towers.remove(tower);
     }
@@ -177,14 +187,17 @@ public class SchoolBoard
      * Same as removeTower(Tower) but removes a tower of that color
      * 
      * @param color the color of the removed tower
+     * @throws NullPointerException if the parameter is null.
+     * @throws EndGameException if there are no more towers.
      */
     public void removeTower(TowerColor color)
     {
         if (color == null)
             throw new NullPointerException("[SchoolBoard] Null color");
 
-        removeTower(towers.stream().filter(t -> t.getColor() == color).findFirst().orElseThrow(
-                () -> new NoSuchElementException("[SchoolBoard] No tower of that color")));
+        if (color == towerColor)
+            removeTower(towers.stream().filter(t -> t.getColor() == color).findFirst().orElseThrow(
+                () -> new EndGameException("[SchoolBoard] Towers finished")));
     }
 
     /**
@@ -302,7 +315,7 @@ public class SchoolBoard
             addStudentToDiningRoom(student);
         } else
         {
-            throw new NoSuchElementException("[SchoolBoard] No such student in Entrance");
+            throw new NoSuchStudentInEntranceException("[SchoolBoard]");
         }
     }
 
@@ -318,9 +331,8 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null color");
 
         // Save the student instance
-        Student removed =
-                removeStudentFromEntrance(color).orElseThrow(() -> new NoSuchElementException(
-                        "[SchoolBoard] No student in Entrance with the specified color"));
+        Student removed = removeStudentFromEntrance(color).orElseThrow(
+                        () -> new NoSuchStudentInEntranceException("[SchoolBoard]"));
 
         addStudentToDiningRoom(removed);
     }

@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.EndGameException;
+import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -111,7 +115,7 @@ public class Player
                     "[Player] You can't remove a negative number of coins");
 
         if (this.coins < coins)
-            throw new IllegalArgumentException("[Player] There aren't enough coins");
+            throw new NotEnoughCoinsException();
 
         this.coins -= coins;
     }
@@ -120,9 +124,9 @@ public class Player
      * Method to select an AssistantCard during the planning phase.
      * 
      * @param turnOrder The number of turn of the card.
-     * @throws IllegalArgumentException if the player hasn't got the selected card.
+     * @throws NoSuchAssistantCardException if the player hasn't got the selected card.
      */
-    public void selectCard(int turnOrder) throws IllegalArgumentException
+    public void selectCard(int turnOrder) throws NoSuchAssistantCardException
     {
         //Set the current card to used
         if(selectedCard.isPresent())
@@ -136,7 +140,7 @@ public class Player
                 return;
             }
         }
-        throw new IllegalArgumentException("[Player] There isn't a card with such turnOrder");
+        throw new NoSuchAssistantCardException("[Player]");
     }
 
     /**
@@ -168,19 +172,22 @@ public class Player
      * Method to remove an AssistantCard from the player's list of cards.
      * 
      * @param turnOrder The number of turn of the card.
-     * @throws IllegalArgumentException if the player doesn't have the selected card.
+     * @throws NoSuchAssistantCardException if the player doesn't have the selected card.
+     * @throws EndGameException if the last card is removed.
      */
-    public void removeCard(int turnOrder) throws IllegalArgumentException
+    public void removeCard(int turnOrder) throws NoSuchAssistantCardException, EndGameException
     {
         for (int i = 0; i < cards.size(); i++)
         {
             if (cards.get(i).getTurnOrder() == turnOrder)
             {
                 cards.remove(i);
+                if (cards.size() == 0)
+                    throw new EndGameException("Assistant cards finished");
                 return;
             }
         }
-        throw new IllegalArgumentException("[Player] There isn't a card with such turnOrder");
+        throw new NoSuchAssistantCardException("[Player]");
     }
 
     /**

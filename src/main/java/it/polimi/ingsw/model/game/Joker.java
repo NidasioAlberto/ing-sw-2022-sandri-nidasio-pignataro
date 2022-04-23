@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,13 +92,12 @@ public class Joker extends CharacterCard
 
         // Get the current player
         Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Joker] No selected player"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[Joker]"));
 
         // Check that the player has selected two students to swap
         if (currentPlayer.getSelectedColors().size() != 2)
         {
-            throw new NoSuchElementException(
-                    "[Joker] The number of students selected is not correct");
+            throw new NoSelectedStudentsException("[Joker]");
         }
 
         // Get the selected student from the entrance
@@ -104,8 +106,7 @@ public class Joker extends CharacterCard
         // Get the selected student from the card
         Student cardStudent = students.stream()
                 .filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst()
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[Joker] No student of the selected color on the card"));
+                .orElseThrow(() -> new NoSuchStudentOnCardException("[Joker]"));
 
         // Remove the cardStudent from the card
         students.remove(cardStudent);

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.EndGameException;
+import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
 import it.polimi.ingsw.model.exceptions.NotEnoughPlayersException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
@@ -155,7 +157,7 @@ public class GameTest
         player2.selectIsland(3);
 
         // This should still fail because the game is not setup
-        assertThrows(NoSuchElementException.class,
+        assertThrows(IslandIndexOutOfBoundsException.class,
                 () -> game.putStudentToIsland(new Student(SchoolColor.YELLOW)));
 
         // Setup the game
@@ -438,7 +440,7 @@ public class GameTest
     public void getStudentFromBagTest()
     {
         // When the game is not set up this should fail, the bag is empty
-        assertThrows(NoSuchElementException.class, () -> game.getStudentFromBag());
+        assertThrows(EndGameException.class, () -> game.getStudentFromBag());
 
         // Create the players
         Player player1 = new Player("Player1", TowerColor.BLACK);

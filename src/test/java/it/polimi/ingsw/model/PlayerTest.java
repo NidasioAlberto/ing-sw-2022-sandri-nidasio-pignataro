@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
 import com.sun.source.tree.Scope;
+import it.polimi.ingsw.model.exceptions.EndGameException;
+import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -112,7 +115,7 @@ public class PlayerTest
         assertThrows(IllegalArgumentException.class, () -> player.removeCoins(-1));
 
         // The number of player's coins can't be negative
-        assertThrows(IllegalArgumentException.class, () -> player.removeCoins(1));
+        assertThrows(NotEnoughCoinsException.class, () -> player.removeCoins(1));
 
         // Add and remove 3 coins
         player.addCoins(3);
@@ -134,7 +137,7 @@ public class PlayerTest
         player.addCard(card2);
 
         // Select a card the player doesn't have
-        assertThrows(IllegalArgumentException.class, () -> player.selectCard(3));
+        assertThrows(NoSuchAssistantCardException.class, () -> player.selectCard(3));
 
         // Select a card the player has
         assertTrue(player.getSelectedCard().isEmpty());
@@ -195,10 +198,21 @@ public class PlayerTest
         assertEquals(1, player.getCards().size());
 
         // Remove a card the player doesn't have
-        assertThrows(IllegalArgumentException.class, () -> player.removeCard(2));
+        assertThrows(NoSuchAssistantCardException.class, () -> player.removeCard(2));
+
+        // Add a correct card
+        AssistantCard card1 = new AssistantCard(Wizard.WIZARD_1, 2, 1);
+        player.addCard(card1);
+        assertEquals(card1, player.getCards().get(1));
+        assertEquals(2, player.getCards().size());
 
         // Remove a card the player has
         player.removeCard(1);
+        assertEquals(1, player.getCards().size());
+        assertEquals(card1, player.getCards().get(0));
+
+        // Remove the last card, so EndGameException is thrown
+        assertThrows(EndGameException.class, () -> player.removeCard(2));
         assertEquals(0, player.getCards().size());
     }
 
@@ -210,7 +224,9 @@ public class PlayerTest
     {
         // Select a card
         AssistantCard card = new AssistantCard(Wizard.WIZARD_2, 1, 1);
+        AssistantCard card1 = new AssistantCard(Wizard.WIZARD_2, 2, 1);
         player.addCard(card);
+        player.addCard(card1);
         player.selectCard(1);
         assertEquals(card, player.getSelectedCard().get());
         assertEquals(card, player.getCards().get(0));
@@ -218,7 +234,8 @@ public class PlayerTest
         // Remove the selected card
         player.removeSelectedCard();
         assertTrue(player.getSelectedCard().isEmpty());
-        assertTrue(player.getCards().isEmpty());
+        assertEquals(1, player.getCards().size());
+        assertEquals(card1, player.getCards().get(0));
     }
 
     @Test

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
 
 import java.util.NoSuchElementException;
 
@@ -61,7 +62,7 @@ public class Centaur extends CharacterCard
             return instance.computePlayerInfluence(player, island);
 
         if (island < 0 || island >= instance.islands.size())
-            throw new IndexOutOfBoundsException("[Centaur] island index out of bounds");
+            throw new IslandIndexOutOfBoundsException("[Centaur]");
 
         if (player == null)
             throw new NullPointerException("[Centaur] player null");

@@ -178,10 +178,10 @@ public class CentaurTest
         // An exception is thrown if the island index is wrong
         IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
                 () -> centaur.computePlayerInfluence(player1, -1));
-        assertEquals("[Centaur] island index out of bounds", e.getMessage());
+        assertEquals("[Centaur] Island index out of bounds", e.getMessage());
         IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class,
                 () -> centaur.computePlayerInfluence(player1, 12));
-        assertEquals("[Centaur] island index out of bounds", e1.getMessage());
+        assertEquals("[Centaur] Island index out of bounds", e1.getMessage());
 
         // An exception is thrown if the player is null
         NullPointerException e2 = assertThrows(NullPointerException.class,

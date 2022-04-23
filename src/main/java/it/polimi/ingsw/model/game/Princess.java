@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,12 +73,11 @@ public class Princess extends CharacterCard
         // Take a student of the selected color from the card
         Student student = students.stream().filter(s -> s.getColor() == instance
                         .getSelectedPlayer().orElseThrow(
-                            () -> new NoSuchElementException("[Princess] No selected player")
+                            () -> new NoSelectedPlayerException("[Princess]")
                         ).getSelectedColors().stream().findFirst().orElseThrow(
-                            () -> new NoSuchElementException("[Princess] No selected color")
+                            () -> new NoSelectedColorException("[Princess]")
                         ))
-                        .findFirst().orElseThrow(() -> new NoSuchElementException(
-                            "[Princess] No students of the selected color on the card"));
+                        .findFirst().orElseThrow(() -> new NoSuchStudentOnCardException("[Princess]"));
 
         // Remove the student from the card
         students.remove(student);

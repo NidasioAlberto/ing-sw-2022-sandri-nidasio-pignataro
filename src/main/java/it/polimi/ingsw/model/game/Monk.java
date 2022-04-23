@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,16 +69,14 @@ public class Monk extends CharacterCard
         //Take the selected color
         SchoolColor selectedColor = instance.getSelectedPlayer()
                 .orElseThrow(
-                        () -> new NoSuchElementException("[Monk] No selected player")
+                        () -> new NoSelectedPlayerException("[Monk]")
                 ).getSelectedColors().stream().findFirst().orElseThrow(
-                        () -> new NoSuchElementException("[Monk] No selected color")
+                        () -> new NoSelectedColorException("[Monk]")
                 );
         //Take the selected student from the card
         Student selectedStudent = students.stream()
                 .filter(s -> s.getColor() == selectedColor)
-                .findFirst().orElseThrow(
-                        () -> new NoSuchElementException("[Monk] No such student on card")
-                );
+                .findFirst().orElseThrow(() -> new NoSuchStudentOnCardException("[Monk]"));
 
         //Put the student to the island
         instance.putStudentToIsland(selectedStudent);

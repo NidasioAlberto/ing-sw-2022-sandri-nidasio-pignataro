@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.ExpertGameAction;
+import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
+import it.polimi.ingsw.model.exceptions.NoMoreNoEntryTilesException;
+import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
 import java.util.NoSuchElementException;
 
@@ -61,13 +65,13 @@ public class GrandmaHerbs extends CharacterCard
 
         // If there aren't noEntryTiles an exception is thrown
         if (noEntryTiles <= 0)
-            throw new NoSuchElementException("[GrandmaHerbs] There are no more noEntryTiles");
+            throw new NoMoreNoEntryTilesException("[GrandmaHerbs]");
 
         //Put the no entry tile on the selected island
         int island = instance.getSelectedPlayer().orElseThrow(
-                () -> new NoSuchElementException("[GrandmaHerbs] No selected player")
+                () -> new NoSelectedPlayerException("[GrandmaHerbs]")
         ).getSelectedIsland().orElseThrow(
-                () -> new NoSuchElementException("[GrandmaHerbs] No selected island")
+                () -> new NoSelectedIslandException("[GrandmaHerbs]")
         );
 
         //Add the noEntryTile to the selected island
@@ -85,7 +89,7 @@ public class GrandmaHerbs extends CharacterCard
     {
         //I check if the index is correct
         if(island < 0 || island >= instance.islands.size())
-            throw new IndexOutOfBoundsException("[GrandmaHerbs] island index out of bounds");
+            throw new IslandIndexOutOfBoundsException("[GrandmaHerbs]");
 
         //I check if on the island there is a no entry tile
         if(instance.islands.get(island).getNoEntryTiles() > 0)

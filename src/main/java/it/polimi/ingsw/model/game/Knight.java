@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
 import java.util.NoSuchElementException;
 
@@ -27,7 +29,7 @@ public class Knight extends CharacterCard
     }
 
     @Override
-    public boolean isPlayable() throws NoSuchElementException
+    public boolean isPlayable()
     {
         // This card is playable only before the movement of mother nature
         return !instance.motherNatureMoved;
@@ -58,7 +60,7 @@ public class Knight extends CharacterCard
             throws NoSuchElementException, IndexOutOfBoundsException, NullPointerException
     {
         if (island < 0 || island > instance.islands.size())
-            throw new IndexOutOfBoundsException("[Knight] island index out of bounds");
+            throw new IslandIndexOutOfBoundsException("[Knight]");
 
         if (player == null)
             throw new NullPointerException("[Knight] player null");
@@ -78,7 +80,7 @@ public class Knight extends CharacterCard
                 .filter(t -> t.getColor().equals(player.getColor())).count();
 
         Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Knight] No selected player"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[Knight]"));
 
         // Effect of the card: the current player gets 2 more influence points
         if (player == currentPlayer)

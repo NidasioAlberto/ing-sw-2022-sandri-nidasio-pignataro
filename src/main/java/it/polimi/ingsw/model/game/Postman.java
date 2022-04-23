@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exceptions.NoSelectedAssistantCardException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
 import java.util.NoSuchElementException;
 
@@ -54,16 +56,16 @@ public class Postman extends CharacterCard
     }
 
     @Override
-    public boolean isValidMotherNatureMovement(int steps)
+    public boolean isValidMotherNatureMovement(int steps) throws NoSuchElementException
     {
         if (!activated)
             return instance.isValidMotherNatureMovement(steps);
 
         // I have to check if the current player can do this movement
         Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Postman] No player selected"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[Postman]"));
         AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(
-                () -> new NoSuchElementException("[Postman] Player didn't select assistant card"));
+                () -> new NoSelectedAssistantCardException("[Postman]"));
 
         // Here occurs the modification
         return selectedCard.getSteps() + 2 >= steps && steps >= 1;

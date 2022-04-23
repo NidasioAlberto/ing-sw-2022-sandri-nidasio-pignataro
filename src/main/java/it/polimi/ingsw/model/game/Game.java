@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.NotEnoughPlayersException;
-import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.model.exceptions.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -127,7 +127,7 @@ public class Game
                     - b.getSelectedCard().orElseThrow().getTurnOrder());
         } catch (NoSuchElementException e)
         {
-            throw new NoSuchElementException("[Game] One of the players have not selected a card");
+            throw new NoSelectedAssistantCardException("[Game]");
         }
         return sortedList;
     }
@@ -153,13 +153,13 @@ public class Game
         try
         {
             islands.get(getSelectedPlayer()
-                    .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
+                    .orElseThrow(() -> new NoSelectedPlayerException("[Game]"))
                     .getSelectedIsland()
-                    .orElseThrow(() -> new NoSuchElementException("[Game] No selected island")))
+                    .orElseThrow(() -> new NoSelectedIslandException("[Game]")))
                     .addStudent(student);
         } catch (IndexOutOfBoundsException e)
         {
-            throw new NoSuchElementException("[Game] There is no island with the selected index");
+            throw new IslandIndexOutOfBoundsException("[Game]");
         }
     }
 
@@ -175,7 +175,7 @@ public class Game
     {
         // Move the student
         getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
+                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"))
                 .getBoard().addStudentToDiningRoom(student);
         // TODO forse qui va chiamata la conquerProfessor
     }
@@ -189,14 +189,14 @@ public class Game
     {
         // Get the player selected color
         SchoolColor selectedColor = getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Game] No selected player"))
+                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"))
                 .getSelectedColors().stream().findFirst()
-                .orElseThrow(() -> new NoSuchElementException("[Game] No selected color"));
+                .orElseThrow(() -> new NoSelectedColorException("[Game]"));
 
         // Get the student instance to be removed and returned
         Student result = getSelectedPlayer().get().getBoard().getStudentsInEntrance().stream()
                 .filter(s -> s.getColor() == selectedColor).findFirst().orElseThrow(
-                        () -> new NoSuchElementException("[Game] No selected student in entrance"));
+                        () -> new NoSuchStudentInEntranceException("[Game]"));
 
         // Remove the instance from the entrance
         getSelectedPlayer().get().getBoard().removeStudentFromEntrance(result);
@@ -300,10 +300,10 @@ public class Game
     {
         // I have to check if the current player can do this movement
         Player currentPlayer = getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException("[Game] No player selected"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
         AssistantCard selectedCard =
-                currentPlayer.getSelectedCard().orElseThrow(() -> new NoSuchElementException(
-                        "[Game] The currently selected player didn't select assistant card"));
+                currentPlayer.getSelectedCard().orElseThrow(() -> new NoSelectedAssistantCardException(
+                        "[Game]"));
 
         return selectedCard.getSteps() >= steps && steps >= 1;
     }
@@ -319,7 +319,7 @@ public class Game
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
         if (island < 0 || island >= islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+            throw new IslandIndexOutOfBoundsException("[Game]");
 
         Island currentIsland = islands.get(island);
 
@@ -387,7 +387,7 @@ public class Game
             throw new NullPointerException("[Game] player null");
 
         if (island < 0 || island >= islands.size())
-            throw new IndexOutOfBoundsException("[Game] island index out of bounds");
+            throw new IslandIndexOutOfBoundsException("[Game]");
 
         Island currentIsland = islands.get(island);
 
@@ -411,10 +411,9 @@ public class Game
     public void moveStudentsFromCloudTile() throws NoSuchElementException
     {
         CloudTile cloudTile = cloudTiles.get(getSelectedPlayer()
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[Game] Unable to get the current player, is a player selected?"))
+                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"))
                 .getSelectedCloudTile()
-                .orElseThrow(() -> new NoSuchElementException("[Game] No Cloud Tile selected")));
+                .orElseThrow(() -> new NoSelectedCloudTileException("[Game]")));
 
         // Remove the students from the cloud tile
         List<Student> students = cloudTile.getStudents();
@@ -525,7 +524,7 @@ public class Game
     public Student getStudentFromBag() throws NoSuchElementException
     {
         if (studentBag.size() == 0)
-            throw new NoSuchElementException("[Game] Student bag empty");
+            throw new EndGameException("[Game] Student bag empty");
 
         return studentBag.remove(getRandomNumber(0, studentBag.size()));
     }
@@ -591,7 +590,7 @@ public class Game
         try
         {
             return Optional.of(characterCards.get(currentCharacterCardIndex.orElseThrow(
-                    () -> new NoSuchElementException("[Game] Character card not selected"))));
+                    () -> new NoSelectedCharacterCardException("[Game]"))));
         } catch (IndexOutOfBoundsException e)
         {
             return Optional.empty();

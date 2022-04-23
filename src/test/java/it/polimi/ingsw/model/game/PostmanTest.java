@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;
+import it.polimi.ingsw.model.exceptions.NoSelectedAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,9 +177,9 @@ public class PostmanTest
         }
 
         // An exception is thrown if the player hasn't selected a card
-        NoSuchElementException e1 = assertThrows(NoSuchElementException.class,
+        NoSuchElementException e1 = assertThrows(NoSelectedAssistantCardException.class,
                 () -> postman.isValidMotherNatureMovement(1));
-        assertEquals("[Postman] Player didn't select assistant card", e1.getMessage());
+        assertEquals("[Postman] No assistant card selected", e1.getMessage());
 
         // Select a card
         player1.selectCard(1);

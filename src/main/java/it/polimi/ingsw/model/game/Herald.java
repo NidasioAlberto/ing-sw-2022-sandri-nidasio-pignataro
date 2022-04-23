@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.ExpertGameAction;
+import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
 import java.util.NoSuchElementException;
 
@@ -48,8 +50,8 @@ public class Herald extends CharacterCard
 
         //Compute the influence in that island
         instance.computeInfluence(instance.getSelectedPlayer().orElseThrow(
-                () -> new NoSuchElementException("[Herald] No player selected"))
-                .getSelectedIsland().orElseThrow(() -> new NoSuchElementException("[Herald] No island selected")));
+                () -> new NoSelectedPlayerException("[Herald]"))
+                .getSelectedIsland().orElseThrow(() -> new NoSelectedIslandException("[Herald]")));
 
         //Disable the card
         deactivate();

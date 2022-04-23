@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
+import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 
 import java.util.NoSuchElementException;
 
@@ -32,7 +36,7 @@ public class MushroomMan extends CharacterCard
     }
 
     @Override
-    public boolean isPlayable() throws NoSuchElementException
+    public boolean isPlayable()
     {
         // This card is playable only before the movement of mother nature
         return !instance.motherNatureMoved;
@@ -60,14 +64,15 @@ public class MushroomMan extends CharacterCard
         if (!activated)
             return;
 
-        // If the color is not already selected, i take the player selection
+        // If the color is not already selected, I take the player selection
         if (color == null)
         {
-            // TODO IT COULD THROW A INDEXOUTOFBOUNDS EXCEPTION
-            color = instance.getSelectedPlayer()
-                    .orElseThrow(
-                            () -> new NoSuchElementException("[MushroomMan] No selected player"))
-                    .getSelectedColors().get(0);
+            Player selectedPlayer = instance.getSelectedPlayer()
+                    .orElseThrow(() -> new NoSelectedPlayerException("[MushroomMan]"));
+            if (selectedPlayer.getSelectedColors().size() != 1)
+                throw new NoSelectedStudentsException("[MushroomMan]");
+
+            color = selectedPlayer.getSelectedColors().get(0);
         }
 
         if (instance.motherNatureMoved)
@@ -83,13 +88,13 @@ public class MushroomMan extends CharacterCard
             return instance.computePlayerInfluence(player, island);
 
         if (island < 0 || island > instance.islands.size())
-            throw new IndexOutOfBoundsException("[MushroomMan] island index out of bounds");
+            throw new IslandIndexOutOfBoundsException("[MushroomMan]");
 
         if (player == null)
             throw new NullPointerException("[MushroomMan] player null");
 
         if (color == null)
-            throw new NoSuchElementException("[MushroomMan] No selected color");
+            throw new NoSelectedColorException("[MushroomMan]");
 
         Island currentIsland = instance.islands.get(island);
 

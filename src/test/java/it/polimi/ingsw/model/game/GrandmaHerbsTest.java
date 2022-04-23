@@ -158,7 +158,7 @@ public class GrandmaHerbsTest
         // An exception is thrown if I call the method without a selected player
         grandmaHerbs.activated = true;
         NoSuchElementException e4 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
-        assertEquals("[GrandmaHerbs] No selected player", e4.getMessage());
+        assertEquals("[GrandmaHerbs] No player selected", e4.getMessage());
 
         grandmaHerbs.activated = false;
 
@@ -237,7 +237,7 @@ public class GrandmaHerbsTest
 
         // When there aren't noEntryTiles on the card an exception is thrown
         NoSuchElementException e3 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
-        assertEquals("[GrandmaHerbs] There are no more noEntryTiles", e3.getMessage());
+        assertEquals("[GrandmaHerbs] No more no entry tiles", e3.getMessage());
     }
 
     @Test
@@ -245,9 +245,9 @@ public class GrandmaHerbsTest
     {
         // An exception is thrown when the island index is wrong
         IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, () -> grandmaHerbs.computeInfluence(-1));
-        assertEquals("[GrandmaHerbs] island index out of bounds", e.getMessage());
+        assertEquals("[GrandmaHerbs] Island index out of bounds", e.getMessage());
         IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class, () -> grandmaHerbs.computeInfluence(12));
-        assertEquals("[GrandmaHerbs] island index out of bounds", e1.getMessage());
+        assertEquals("[GrandmaHerbs] Island index out of bounds", e1.getMessage());
 
         // Select a player
         player1.addCoins(2);
