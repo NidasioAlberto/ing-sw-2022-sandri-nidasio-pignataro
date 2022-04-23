@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller.messages;
 
 import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.GameActionHandler;
-import it.polimi.ingsw.model.game.BaseGameAction;
+import it.polimi.ingsw.model.BaseGameAction;
 
 /**
  * Message related to the played assistant card.

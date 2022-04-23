@@ -2,12 +2,9 @@ package it.polimi.ingsw.controller.fsm;
 
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.controller.messages.ActionMessage;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
-import it.polimi.ingsw.model.game.BaseGameAction;
+import it.polimi.ingsw.model.BaseGameAction;
 import org.json.JSONObject;
-
-import java.util.NoSuchElementException;
 
 public class PlanPhase implements Phase
 {

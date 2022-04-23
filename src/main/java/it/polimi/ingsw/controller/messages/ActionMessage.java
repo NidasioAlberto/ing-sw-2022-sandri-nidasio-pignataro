@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.messages;
 
 import it.polimi.ingsw.controller.GameActionHandler;
-import it.polimi.ingsw.model.game.BaseGameAction;
+import it.polimi.ingsw.model.BaseGameAction;
 
 /**
  * This class represents a message of the Command Pattern. Depending on the arrived message, we pass

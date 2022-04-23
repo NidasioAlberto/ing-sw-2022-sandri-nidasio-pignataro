@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.game;
+package it.polimi.ingsw.model;
 
 /**
  * Represents the actions that the basic FSM game can understand, accept and/or reject

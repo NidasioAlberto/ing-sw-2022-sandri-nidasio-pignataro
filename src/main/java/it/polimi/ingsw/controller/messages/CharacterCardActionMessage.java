@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller.messages;
 import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.ExpertGameAction;
-import it.polimi.ingsw.model.game.BaseGameAction;
+import it.polimi.ingsw.model.BaseGameAction;
 import org.json.JSONObject;
 
 /**
