@@ -1,28 +1,38 @@
 package it.polimi.ingsw.controller.messages;
 
-import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
+import it.polimi.ingsw.model.SchoolColor;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Message related to the movement of a student from entrance to an island.
  */
 public class MoveStudentFromEntranceToIslandMessage extends ActionMessage
 {
-    protected MoveStudentFromEntranceToIslandMessage(String json)
+    List<SchoolColor> selectedColors;
+
+    protected MoveStudentFromEntranceToIslandMessage(JSONObject actionJson) throws JSONException
     {
-        super(json);
-        this.actionType = BaseGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND;
+        selectedColors = new ArrayList<>();
+
+        JSONArray colors = actionJson.getJSONArray("selectedColors");
+        for (int i = 0; i < colors.length(); i++)
+            selectedColors.add(SchoolColor.valueOf(colors.getString(i)));
     }
 
-    @Override
     public void applyAction(GameActionHandler handler)
     {
-        super.applyAction(handler);
-        //Check if the action corresponds to the actionType (to avoid cheating)
-        if(actionType != BaseGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND)
-            throw new InvalidModuleException("[MoveStudentFromEntranceToIslandMessage] Bad action type");
+        checkHandler(handler);
+        handler.moveStudentFromEntranceToIsland(selectedColors);
+    }
 
-        handler.moveStudentFromEntranceToIsland(this);
+    public BaseGameAction getBaseGameAction()
+    {
+        return BaseGameAction.MOVE_STUDENT_FROM_ENTRANCE_TO_ISLAND;
     }
 }

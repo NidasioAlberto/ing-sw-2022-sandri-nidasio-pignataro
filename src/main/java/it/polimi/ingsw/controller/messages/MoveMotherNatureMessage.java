@@ -1,28 +1,30 @@
 package it.polimi.ingsw.controller.messages;
 
-import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Message related to the movement of mother nature.
  */
 public class MoveMotherNatureMessage extends ActionMessage
 {
-    protected MoveMotherNatureMessage(String json)
+    int selectedIsland;
+
+    protected MoveMotherNatureMessage(JSONObject actionJson) throws JSONException
     {
-        super(json);
-        this.actionType = BaseGameAction.MOVE_MOTHER_NATURE;
+        selectedIsland = actionJson.getInt("selectedIsland");
     }
 
-    @Override
     public void applyAction(GameActionHandler handler)
     {
-        super.applyAction(handler);
-        //Check if the action corresponds to the actionType (to avoid cheating)
-        if(actionType != BaseGameAction.MOVE_MOTHER_NATURE)
-            throw new InvalidModuleException("[MoveMotherNatureMessage] Bad action type");
+        checkHandler(handler);
+        handler.moveMotherNature(selectedIsland);
+    }
 
-        handler.moveMotherNature(this);
+    public BaseGameAction getBaseGameAction()
+    {
+        return BaseGameAction.MOVE_MOTHER_NATURE;
     }
 }

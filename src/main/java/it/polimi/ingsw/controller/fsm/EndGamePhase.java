@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.fsm;
 
 import it.polimi.ingsw.controller.GameActionHandler;
-import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.model.BaseGameAction;
 
 public class EndGamePhase implements Phase
 {
@@ -18,7 +18,8 @@ public class EndGamePhase implements Phase
     }
 
     @Override
-    public boolean isLegitAction(ActionMessage message, GameActionHandler handler)
+    public boolean isLegitAction(GameActionHandler handler, String playerName,
+            BaseGameAction baseAction)
     {
         return false;
     }

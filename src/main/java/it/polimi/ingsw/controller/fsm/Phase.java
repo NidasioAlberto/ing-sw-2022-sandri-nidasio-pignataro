@@ -1,13 +1,12 @@
 package it.polimi.ingsw.controller.fsm;
 
 import it.polimi.ingsw.controller.GameActionHandler;
-import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.model.BaseGameAction;
 
 /**
- * This interface describes a single FSM node about the basic actions that a player could do.
- * In short terms, it maintains memory about what should be done following
- * the correct game flow and changes the game selected player depending on
- * what player should do what.
+ * This interface describes a single FSM node about the basic actions that a player could do. In
+ * short terms, it maintains memory about what should be done following the correct game flow and
+ * changes the game selected player depending on what player should do what.
  */
 public interface Phase
 {
@@ -31,9 +30,7 @@ public interface Phase
     /**
      * This method decides based on the actual state if the arrived action should be executed or
      * not.
-     * 
-     * @param message The message to be executed
-     * @return Boolean that represents the result
      */
-    boolean isLegitAction(ActionMessage message, GameActionHandler handler);
+    public boolean isLegitAction(GameActionHandler handler, String playerName,
+            BaseGameAction baseAction);
 }

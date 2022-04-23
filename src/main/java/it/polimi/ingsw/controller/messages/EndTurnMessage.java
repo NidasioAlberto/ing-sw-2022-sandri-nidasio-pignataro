@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller.messages;
 
-import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
@@ -9,20 +8,14 @@ import it.polimi.ingsw.model.BaseGameAction;
  */
 public class EndTurnMessage extends ActionMessage
 {
-    protected EndTurnMessage(String json)
-    {
-        super(json);
-        this.actionType = BaseGameAction.END_TURN;
-    }
-
-    @Override
     public void applyAction(GameActionHandler handler)
     {
-        super.applyAction(handler);
-        //Check if the action corresponds to the actionType (to avoid cheating)
-        if(actionType != BaseGameAction.END_TURN)
-            throw new InvalidModuleException("[EndTurnMessage] Bad action type");
+        checkHandler(handler);
+        handler.endTurn();
+    }
 
-        handler.endTurn(this);
+    public BaseGameAction getBaseGameAction()
+    {
+        return BaseGameAction.END_TURN;
     }
 }

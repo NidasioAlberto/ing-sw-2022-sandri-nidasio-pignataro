@@ -54,7 +54,7 @@ public class Controller
         if (mode == null)
             throw new NullPointerException("[Controller] Game mode is null");
 
-        // TODO se non facciamo la modalità a 4 giocatori bisogna cambiare questo e altro
+        // TODO: Se non facciamo la modalità a 4 giocatori bisogna cambiare questo e altro
         if (playersNumber < 2 || playersNumber > 4)
             throw new IllegalArgumentException("[Controller] Invalid players number");
 
@@ -64,8 +64,7 @@ public class Controller
     }
 
     /**
-     * The method is called when the game is ended.
-     * It determines the winner.
+     * The method is called when the game is ended. It determines the winner.
      */
     private void endGame()
     {
@@ -86,7 +85,7 @@ public class Controller
         {
             if (player.getCards().size() == 0)
             {
-               runOutOfCards = true;
+                runOutOfCards = true;
             }
         }
 
@@ -97,27 +96,34 @@ public class Controller
 
             // The winner is the player who has built the most towers.
             // In case of a tie, the winner is the player who controls the most professors
-            rank.stream().sorted((a, b) -> a.getBoard().getTowers().size() == b.getBoard().getTowers().size() ?
-                    a.getBoard().getProfessors().size() - b.getBoard().getProfessors().size() :
-                    a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
+            rank.stream().sorted(
+                    (a, b) -> a.getBoard().getTowers().size() == b.getBoard().getTowers().size()
+                            ? a.getBoard().getProfessors().size()
+                                    - b.getBoard().getProfessors().size()
+                            : a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
 
             // The first player in the rank has the most tower or has the same tower as the second,
             // but the first has more professors, so the first wins
-            if (rank.get(0).getBoard().getTowers().size() > rank.get(1).getBoard().getTowers().size() ||
-               (rank.get(0).getBoard().getTowers().size() == rank.get(1).getBoard().getTowers().size() &&
-               rank.get(0).getBoard().getProfessors().size() > rank.get(1).getBoard().getProfessors().size()))
+            if (rank.get(0).getBoard().getTowers().size() > rank.get(1).getBoard().getTowers()
+                    .size()
+                    || (rank.get(0).getBoard().getTowers().size() == rank.get(1).getBoard()
+                            .getTowers().size()
+                            && rank.get(0).getBoard().getProfessors().size() > rank.get(1)
+                                    .getBoard().getProfessors().size()))
             {
                 sendAllMessage("The game is ended. The winner is " + rank.get(0).getNickname());
                 return;
             }
             // Case of a three players game and a tie between the first two
-            else if (rank.size() == 3 &&
-                    (rank.get(0).getBoard().getTowers().size() > rank.get(2).getBoard().getTowers().size() ||
-                    (rank.get(0).getBoard().getTowers().size() == rank.get(2).getBoard().getTowers().size() &&
-                     rank.get(0).getBoard().getProfessors().size() > rank.get(2).getBoard().getProfessors().size())))
+            else if (rank.size() == 3 && (rank.get(0).getBoard().getTowers().size() > rank.get(2)
+                    .getBoard().getTowers().size()
+                    || (rank.get(0).getBoard().getTowers().size() == rank.get(2).getBoard()
+                            .getTowers().size()
+                            && rank.get(0).getBoard().getProfessors().size() > rank.get(2)
+                                    .getBoard().getProfessors().size())))
             {
-                sendAllMessage("The game is ended. It is a tie between "
-                        + rank.get(0).getNickname() + " and " + rank.get(1).getNickname());
+                sendAllMessage("The game is ended. It is a tie between " + rank.get(0).getNickname()
+                        + " and " + rank.get(1).getNickname());
                 return;
             }
             // Otherwise, it is a tie between all the players
@@ -139,104 +145,82 @@ public class Controller
     }
 
     /**
-     * The method passes the message to the handler.
-     * It catches and handles all the possible exceptions that are thrown if something goes wrong.
+     * The method passes the message to the handler. It catches and handles all the possible
+     * exceptions that are thrown if something goes wrong.
      * 
      * @param message It represents the player's action.
      */
-    public void performAction(ActionMessage message)
+    public void performAction(ActionMessage message, String playerName)
     {
-        //TODO
+        // TODO
         try
         {
-            actionHandler.handleAction(message);
-        }
-        catch (EndGameException e)
+            actionHandler.handleAction(message, playerName);
+        } catch (EndGameException e)
         {
             endGame();
             // se il gioco non è veramente terminato?
-        }
-        catch (NoLegitActionException e)
+        } catch (NoLegitActionException e)
         {
 
-        }
-        catch (WrongPlayerException e)
+        } catch (WrongPlayerException e)
         {
 
-        }
-        catch (InvalidModuleException e)
+        } catch (InvalidModuleException e)
         {
 
-        }
-        catch (NoSelectedPlayerException e)
+        } catch (NoSelectedPlayerException e)
         {
 
-        }
-        catch (NoSelectedIslandException e)
+        } catch (NoSelectedIslandException e)
         {
 
-        }
-        catch (NoSelectedColorException e)
+        } catch (NoSelectedColorException e)
         {
 
-        }
-        catch (NoSelectedAssistantCardException e)
+        } catch (NoSelectedAssistantCardException e)
         {
 
-        }
-        catch (NoSelectedStudentsException e)
+        } catch (NoSelectedStudentsException e)
         {
 
-        }
-        catch (NoSelectedCloudTileException e)
+        } catch (NoSelectedCloudTileException e)
         {
 
-        }
-        catch (NoSelectedCharacterCardException e)
+        } catch (NoSelectedCharacterCardException e)
         {
 
-        }
-        catch (IslandIndexOutOfBoundsException e)
+        } catch (IslandIndexOutOfBoundsException e)
         {
 
-        }
-        catch (NoSuchStudentOnCardException e)
+        } catch (NoSuchStudentOnCardException e)
         {
 
-        }
-        catch (NoSuchStudentInEntranceException e)
+        } catch (NoSuchStudentInEntranceException e)
         {
 
-        }
-        catch (NoSuchStudentInDiningException e)
+        } catch (NoSuchStudentInDiningException e)
         {
 
-        }
-        catch (NoSuchAssistantCardException e)
+        } catch (NoSuchAssistantCardException e)
         {
 
-        }
-        catch (NoMoreNoEntryTilesException e)
+        } catch (NoMoreNoEntryTilesException e)
         {
 
-        }
-        catch (NullPointerException e)
+        } catch (NullPointerException e)
         {
 
-        }
-        catch (IllegalArgumentException e)
+        } catch (IllegalArgumentException e)
         {
 
-        }
-        catch (IllegalStateException e)
+        } catch (IllegalStateException e)
         {
 
-        }
-        catch (NoSuchElementException e)
+        } catch (NoSuchElementException e)
         {
 
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
 
         }

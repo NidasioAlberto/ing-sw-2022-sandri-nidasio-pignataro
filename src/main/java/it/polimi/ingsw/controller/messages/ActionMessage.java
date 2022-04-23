@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.messages;
 
+import org.json.JSONObject;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
@@ -11,56 +12,56 @@ import it.polimi.ingsw.model.BaseGameAction;
 public abstract class ActionMessage
 {
     /**
-     * Json parsed message to carry along with the actual command to execute
-     */
-    protected String json;
-
-    /**
-     * Game action type
-     */
-    protected BaseGameAction actionType;
-
-    /**
-     * Constructor
+     * Factory method to generate an action message from a given JSON object.
      * 
-     * @param json The message to be delivered with the command
-     * @throws NullPointerException When the json message is null
+     * @param actionJson JSON action object
+     * @return Appropriately created action base on the JSON content.
+     * @throws IllegalArgumentException Thrown if the command was not recognized.
      */
-    protected ActionMessage(String json)
+    static public ActionMessage buildActionMessage(JSONObject actionJson)
+            throws IllegalArgumentException
     {
-        if (json == null)
-            throw new NullPointerException("[ActionMessage] Null json message");
+        String actionId = actionJson.getString("actionId");
 
-        this.json = json;
+        if (actionId == CharacterCardActionMessage.class.getName())
+            return new CharacterCardActionMessage(actionJson);
+        else if (actionId == EndTurnMessage.class.getName())
+            return new EndTurnMessage();
+        else if (actionId == MoveMotherNatureMessage.class.getName())
+            return new MoveMotherNatureMessage(actionJson);
+        else if (actionId == MoveStudentFromEntranceToDiningMessage.class.getName())
+            return new MoveStudentFromEntranceToDiningMessage(actionJson);
+        else if (actionId == MoveStudentFromEntranceToIslandMessage.class.getName())
+            return new MoveStudentFromEntranceToIslandMessage(actionJson);
+        else if (actionId == PlayAssistantCardMessage.class.getName())
+            return new PlayAssistantCardMessage(actionJson);
+        else if (actionId == PlayCharacterCardMessage.class.getName())
+            return new PlayCharacterCardMessage(actionJson);
+        else if (actionId == SelectCloudTileMessage.class.getName())
+            return new SelectCloudTileMessage(actionJson);
+
+        throw new IllegalArgumentException(
+                "[ActionMessage] Unrecognized action message " + actionId);
     }
 
     /**
-     * The method that has to be called to allow the message to call the specific function of the
-     * handler
+     * Checks if the given game action handler is valid.
      * 
-     * @param handler The controller handler that contains all the functions the player could call
+     * @throws NullPointerException Thrown if the handler is null.
      */
-    public void applyAction(GameActionHandler handler) throws NullPointerException
+    public void checkHandler(GameActionHandler handler) throws NullPointerException
     {
         if (handler == null)
             throw new NullPointerException("[ActionMessage] Handler is null");
     }
 
     /**
-     * Getters and setters
+     * Method that has to be called to handle the message. Uses the given game action handler.
+     * 
+     * @param handler The controller handler that contains all the functions the player could call.
+     * @throws NullPointerException Thrown if handler is null.
      */
-    public String getJson()
-    {
-        return json;
-    }
+    abstract public void applyAction(GameActionHandler handler) throws NullPointerException;
 
-    public void setJson(String json)
-    {
-        if (json == null)
-            throw new NullPointerException("[ActionMessage] Null json message");
-
-        this.json = json;
-    }
-
-    public BaseGameAction getActionType() { return actionType; }
+    abstract public BaseGameAction getBaseGameAction();
 }

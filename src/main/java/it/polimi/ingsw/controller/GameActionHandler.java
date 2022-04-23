@@ -6,14 +6,12 @@ import it.polimi.ingsw.controller.fsm.PlanPhase;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -57,13 +55,14 @@ public class GameActionHandler
 
     /**
      * This method is called by the Controller object to handle an action message incoming from a
-     * player
+     * player.
      * 
      * @param message The command pattern message that needs to be executed
      * @throws NullPointerException When the passed message is null
      * @throws InvalidModuleException When the action is not actually valid
      */
-    public void handleAction(ActionMessage message)
+    public void handleAction(ActionMessage message, String playerName)
+            throws NullPointerException, NoSuchElementException, InvalidModuleException
     {
         if (message == null)
             throw new NullPointerException("[GameActionHandler] Null action message");
@@ -71,230 +70,182 @@ public class GameActionHandler
         if (game.getSelectedPlayer().isEmpty())
             throw new NoSuchElementException("[GameActionHandler] No selected player");
 
-        if (!gamePhase.isLegitAction(message, this))
+        if (!gamePhase.isLegitAction(this, playerName, message.getBaseGameAction()))
             throw new InvalidModuleException("[GameActionHandler] No legit action");
-
-        // The action is legit, so i can set the player's parameters and call the method
-        // Information parsing
-        JSONObject json = new JSONObject(message.getJson());
-
-        // I first parse all the stuff in temporary variables so that if an error occurs
-        // I don't risk deleting stuff from player selection
-        int selectedIsland = json.getJSONObject("actionInfo").getInt("selectedIsland");
-        int selectedCloudTile = json.getJSONObject("actionInfo").getInt("selectedCloudTile");
-        int selectedCharacterCard = json.getJSONObject("actionInfo").getInt("selectedCharacterCard");
-        List<SchoolColor> selectedColors = new ArrayList<SchoolColor>();
-
-        // For the selected colors i need to add a for loop
-        JSONArray colors = json.getJSONObject("actionInfo").getJSONArray("selectedColors");
-        for (int i = 0; i < colors.length(); i++)
-            selectedColors.add(SchoolColor.valueOf(colors.getString(i)));
-
-        // First of i clear all the player's selections
-        game.getSelectedPlayer().get().clearSelections();
-        // Now i assign all the selected stuff
-        game.getSelectedPlayer().get().selectIsland(selectedIsland);
-        game.getSelectedPlayer().get().selectCloudTile(selectedCloudTile);
-        game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
-        for(SchoolColor color : selectedColors)
-            game.getSelectedPlayer().get().selectColor(color);
 
         // Call the correct method (Command pattern)
         message.applyAction(this);
     }
 
-    public void playAssistantCard(ActionMessage message)
+    public void playAssistantCard(int selectedCard) throws NoSuchAssistantCardException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
+        game.getSelectedPlayer().get().selectCard(selectedCard);
 
-        //Parse the card
-        JSONObject json = new JSONObject(message.getJson());
-        game.getSelectedPlayer().get()
-                .selectCard(json.getJSONObject("actionInfo").getInt("selectedCard"));
-
-        //At the end i trigger the FSM
+        // At the end i trigger the FSM
         gamePhase.onValidAction(this);
     }
 
-    public void moveStudentFromEntranceToIsland(ActionMessage message)
+    public void moveStudentFromEntranceToIsland(List<SchoolColor> selectedColors)
+            throws InvalidModuleException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
+        checkIfCharacterCardIsStillPlayable();
 
-        //Check if a character card is active and in case if the action is valid
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated() &&
-                !game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+        // Select the colors
+        for (SchoolColor color : selectedColors)
+            game.getSelectedPlayer().get().selectColor(color);
 
-        //Move the student to the selected island
-        game.putStudentToIsland(game.getSelectedPlayer().get()
-                .getBoard()
-                .removeStudentFromEntrance(game
-                        .getSelectedPlayer()
-                        .get().getSelectedColors().get(0)).get());
+        // Move the student to the selected island
+        game.putStudentToIsland(game.getSelectedPlayer().get().getBoard().removeStudentFromEntrance(
+                game.getSelectedPlayer().get().getSelectedColors().get(0)).get());
 
-        //If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated())
+        // If the current card is activated i can apply the action
+        if (game.getCurrentCharacterCard().isPresent()
+                && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
 
-        //If the action goes well i trigger the FSM
+        // If the action goes well i trigger the FSM
         gamePhase.onValidAction(this);
     }
 
-    public void moveStudentFromEntranceToDining(ActionMessage message)
+    public void moveStudentFromEntranceToDining(List<SchoolColor> selectedColors)
+            throws InvalidModuleException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
+        checkIfCharacterCardIsStillPlayable();
 
-        //Check if a character card is active and in case if the action is valid
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated() &&
-                !game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+        // Select the colors
+        for (SchoolColor color : selectedColors)
+            game.getSelectedPlayer().get().selectColor(color);
 
-        //Move the student to dining
-        game.getSelectedPlayer().get()
-                .getBoard()
-                .addStudentToDiningRoom(game
-                        .getSelectedPlayer()
-                        .get().getBoard()
-                        .removeStudentFromEntrance(game
-                                .getSelectedPlayer()
-                                .get().getSelectedColors().get(0)).get());
+        // Move the student to dining
+        game.getSelectedPlayer().get().getBoard()
+                .addStudentToDiningRoom(
+                        game.getSelectedPlayer().get().getBoard()
+                                .removeStudentFromEntrance(
+                                        game.getSelectedPlayer().get().getSelectedColors().get(0))
+                                .get());
 
-        //If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated())
+        // If the current card is activated i can apply the action
+        if (game.getCurrentCharacterCard().isPresent()
+                && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
 
-        //If the action goes well i trigger the FSM
+        // If the action goes well i trigger the FSM
         gamePhase.onValidAction(this);
     }
 
-    public void moveMotherNature(ActionMessage message)
+    public void moveMotherNature(int selectedIsland)
+            throws InvalidModuleException, NoSuchElementException, InvalidParameterException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
+        checkIfCharacterCardIsStillPlayable();
 
-        //Check if a character card is active and in case if the action is valid
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated() &&
-                !game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+        // Select the island
+        game.getSelectedPlayer().get().selectIsland(selectedIsland);
 
-        //Calculate the difference from the indexed island and the current one
-        int pos = game.getMotherNatureIndex()
-                .orElseThrow(() -> new NoSuchElementException("[GameActionHandler] No mother nature position, is the game setup?"));
+        int currentPosition =
+                game.getMotherNatureIndex().orElseThrow(() -> new NoSuchElementException(
+                        "[GameActionHandler] No mother nature position, is the game setup?"));
 
-        int wantedPos = game.getSelectedPlayer().get()
-                .getSelectedIsland().orElseThrow(() -> new NoSuchElementException("[GameActionHandler] No selected island"));
+        int wantedPosition = game.getSelectedPlayer().get().getSelectedIsland().orElseThrow(
+                () -> new NoSuchElementException("[GameActionHandler] No selected island"));
 
-        //Based on the actual difference i move mother nature of the calculated steps
-        if(wantedPos > pos && game.isValidMotherNatureMovement(wantedPos - pos))
-            game.moveMotherNature(wantedPos - pos);
-        else if(wantedPos < pos && game.isValidMotherNatureMovement(Game.ISLAND_TILES_NUMBER + wantedPos - pos))
-            game.moveMotherNature(Game.ISLAND_TILES_NUMBER + wantedPos - pos);
+        // Calculate the difference from the indexed island and the current one
+        // Based on the actual difference i move mother nature of the calculated steps
+        if (wantedPosition > currentPosition
+                && game.isValidMotherNatureMovement(wantedPosition - currentPosition))
+            game.moveMotherNature(wantedPosition - currentPosition);
+        else if (wantedPosition < currentPosition && game.isValidMotherNatureMovement(
+                Game.ISLAND_TILES_NUMBER + wantedPosition - currentPosition))
+            game.moveMotherNature(Game.ISLAND_TILES_NUMBER + wantedPosition - currentPosition);
         else
-            throw new InvalidParameterException("[GameActionHandler] Mother nature cannot stay in the same position");
+            throw new InvalidParameterException(
+                    "[GameActionHandler] Mother nature cannot stay in the same position");
 
-        //If all goes correctly i compute the influence
+        // If all goes correctly i compute the influence
         game.computeInfluence();
 
-        //If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated())
+        // If the current card is activated i can apply the action
+        if (game.getCurrentCharacterCard().isPresent()
+                && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
 
-        //Step the FSM
+        // Step the FSM
         gamePhase.onValidAction(this);
     }
 
-    public void selectCloudTile(ActionMessage message)
+    public void selectCloudTile(int selectedCloudTile) throws InvalidModuleException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
+        checkIfCharacterCardIsStillPlayable();
 
-        //Check if a character card is active and in case if the action is valid
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated() &&
-                !game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+        // Select the cloud tile
+        game.getSelectedPlayer().get().selectCloudTile(selectedCloudTile);
 
-        //I use the designed method
+        // I use the designed method
         game.moveStudentsFromCloudTile();
 
-        //If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated())
+        // If the current card is activated i can apply the action
+        if (game.getCurrentCharacterCard().isPresent()
+                && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
 
-        //If all goes correctly i step the FSM
+        // If all goes correctly i step the FSM
         gamePhase.onValidAction(this);
     }
 
-    public void playCharacterCard(ActionMessage message) throws NotEnoughCoinsException
+    public void playCharacterCard(int selectedCharacterCard)
+            throws InvalidModuleException, NoSuchElementException, NotEnoughCoinsException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
-
         if (game.getCurrentCharacterCard().isPresent())
-            throw new InvalidModuleException("[GameActionHandler] A character card was already played");
+            throw new InvalidModuleException(
+                    "[GameActionHandler] A character card was already played");
 
-        int index = game.getSelectedPlayer().get().getSelectedCharacterCard()
-                .orElseThrow(() -> new NoSuchElementException("[GameActionHandler] No Character Card selected"));
+        // Select the card
+        game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
 
-        //I select the character card if the card is playable and no card has already been played
-        if(game.getCharacterCards().get(index).isPlayable() && game.getCurrentCharacterCard().isEmpty())
+        // I select the character card if the card is playable and no card has already been played
+        if (game.getCharacterCards().get(selectedCharacterCard).isPlayable()
+                && game.getCurrentCharacterCard().isEmpty())
         {
-            game.setCurrentCharacterCard(index);
-            game.getCharacterCards().get(index).activate();
+            game.setCurrentCharacterCard(selectedCharacterCard);
+            game.getCharacterCards().get(selectedCharacterCard).activate();
         }
-        //IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD PLAY
+        // IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD'S PLAY
     }
 
-    public void characterCardAction(ActionMessage message, ExpertGameAction action)
+    public void characterCardAction(ExpertGameAction action, int selectedCharacterCard)
+            throws NullPointerException, NoSuchElementException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
+        if (action == null)
+            throw new NullPointerException("[GameActionHandler] Null expert game action");
 
-        //Get the current card
+        // Select the card
+        game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
+
+        // Get the current card if activated
         CharacterCard currentCard = game.getCurrentCharacterCard().filter(c -> c.isActivated())
-                .orElseThrow(() -> new NoSuchElementException("[GameActionHandler] No active character card"));
+                .orElseThrow(() -> new NoSuchElementException(
+                        "[GameActionHandler] No active character card"));
 
-        //If the action is valid i execute the action
-        if(currentCard.isValidAction(action))
+        // If the action is valid i execute the action
+        if (currentCard.isValidAction(action))
             currentCard.applyAction();
         else
             throw new InvalidModuleException("[GameActionHandler] No legit action");
     }
 
-    public void endTurn(ActionMessage message)
+    public void endTurn() throws InvalidModuleException
     {
-        if (message == null)
-            throw new NullPointerException("[GameActionHandler] Null action message");
-
-        //Check if a character card is active and in case if the action is valid
-        if (game.getCurrentCharacterCard().isPresent() &&
-                game.getCurrentCharacterCard().get().isActivated() &&
-                !game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+        checkIfCharacterCardIsStillPlayable();
 
         // Clear the selections and disable any character card
         game.getSelectedPlayer().get().clearSelections();
         game.clearTurn();
-        for(CharacterCard card : game.getCharacterCards())
+        for (CharacterCard card : game.getCharacterCards())
             card.deactivate();
 
-        //If all goes correctly i step the FSM
+        // If all goes correctly i step the FSM
         gamePhase.onValidAction(this);
     }
 
-    /**
-     * Getters and setters
-     */
     public Phase getGamePhase()
     {
         return gamePhase;
@@ -310,5 +261,16 @@ public class GameActionHandler
     public Game getGame()
     {
         return game;
+    }
+
+    private void checkIfCharacterCardIsStillPlayable() throws InvalidModuleException
+    {
+        // If there is sill an active character card which is has not been player the turn can't end
+        if (game.getCurrentCharacterCard().isPresent()
+                && game.getCurrentCharacterCard().get().isActivated()
+                && !game.getCurrentCharacterCard().get()
+                        .isValidAction(ExpertGameAction.BASE_ACTION))
+            throw new InvalidModuleException(
+                    "[GameActionHandler] The turn can't end, a character card is still active an not played yet");
     }
 }

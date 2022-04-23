@@ -3,12 +3,13 @@
         "playerName": "name",
         "playerIP" (?): "ip"
     },
-    "actionInfo": {
-        "selectedIsland": "index"
-        "selectedColors": ["array of colors"]
-        "selectedCloudTile": "index"
-        "selectedCard": "index"
-        "selectedCharacterCard": "index"
+    "action": {
+        "actionId": "<id>",
+        "selectedIsland": "index",
+        "selectedColors": ["array of colors"],
+        "selectedCloudTile": "index",
+        "selectedCard": "index",
+        "selectedCharacterCard": "index",
         "characterCardAction": "action"
     }
     "command": {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.messages;
 
-import com.sun.jdi.InvalidModuleException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
@@ -9,20 +10,21 @@ import it.polimi.ingsw.model.BaseGameAction;
  */
 public class SelectCloudTileMessage extends ActionMessage
 {
-    protected SelectCloudTileMessage(String json)
+    int selectedCloudTile;
+
+    protected SelectCloudTileMessage(JSONObject actionJson) throws JSONException
     {
-        super(json);
-        this.actionType = BaseGameAction.SELECT_CLOUD_TILE;
+        selectedCloudTile = actionJson.getInt("selectedCloudTile");
     }
 
-    @Override
     public void applyAction(GameActionHandler handler)
     {
-        super.applyAction(handler);
-        //Check if the action corresponds to the actionType (to avoid cheating)
-        if(actionType != BaseGameAction.SELECT_CLOUD_TILE)
-            throw new InvalidModuleException("[SelectCloudTileMessage] Bad action type");
+        checkHandler(handler);
+        handler.selectCloudTile(selectedCloudTile);
+    }
 
-        handler.selectCloudTile(this);
+    public BaseGameAction getBaseGameAction()
+    {
+        return BaseGameAction.SELECT_CLOUD_TILE;
     }
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.messages;
 
-import com.sun.jdi.InvalidModuleException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
@@ -9,20 +10,21 @@ import it.polimi.ingsw.model.BaseGameAction;
  */
 public class PlayCharacterCardMessage extends ActionMessage
 {
-    protected PlayCharacterCardMessage(String json)
+    int selectedCharacterCard;
+
+    protected PlayCharacterCardMessage(JSONObject actionJson) throws JSONException
     {
-        super(json);
-        this.actionType = BaseGameAction.PLAY_CHARACTER_CARD;
+        selectedCharacterCard = actionJson.getInt("selectedCharacterCard");
     }
 
-    @Override
     public void applyAction(GameActionHandler handler)
     {
-        super.applyAction(handler);
-        //Check if the action corresponds to the actionType (to avoid cheating)
-        if(actionType != BaseGameAction.PLAY_CHARACTER_CARD)
-            throw new InvalidModuleException("[PlayCharacterCardMessage] Bad action type");
+        checkHandler(handler);
+        handler.playCharacterCard(selectedCharacterCard);
+    }
 
-        handler.playCharacterCard(this);
+    public BaseGameAction getBaseGameAction()
+    {
+        return BaseGameAction.PLAY_CHARACTER_CARD;
     }
 }

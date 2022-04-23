@@ -1,23 +1,26 @@
 package it.polimi.ingsw.controller.fsm;
 
 import it.polimi.ingsw.controller.GameActionHandler;
-import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.model.BaseGameAction;
 
 public class EndTurnPhase implements Phase
 {
 
     @Override
-    public void onValidAction(GameActionHandler handler) {
+    public void onValidAction(GameActionHandler handler)
+    {
 
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler) {
+    public void onEndGame(GameActionHandler handler)
+    {
 
     }
 
     @Override
-    public boolean isLegitAction(ActionMessage message, GameActionHandler handler)
+    public boolean isLegitAction(GameActionHandler handler, String playerName,
+            BaseGameAction baseAction)
     {
         return false;
     }
