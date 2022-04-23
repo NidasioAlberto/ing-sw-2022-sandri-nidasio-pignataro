@@ -30,8 +30,8 @@ public class Server
         // ...
     }
 
-    public void actionCall(ActionMessage message, PlayerConnection player)
+    public void actionCall(ActionMessage action, PlayerConnection player)
     {
-        // ...
+        // Call actionCall on the match
     }
 }

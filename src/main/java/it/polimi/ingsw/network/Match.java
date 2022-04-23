@@ -27,6 +27,6 @@ public class Match
 
     public void actionCall(ActionMessage message, PlayerConnection player)
     {
-        // ...
+        gameController.performAction(message, player.getPlayerName());
     }
 }
