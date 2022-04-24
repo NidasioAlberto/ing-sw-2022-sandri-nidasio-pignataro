@@ -23,7 +23,7 @@ public class PlanPhase implements Phase
         {
             // If not i select the first player (now about the sorted list)
             handler.getGame().selectPlayer(0);
-            handler.setGamePhase(new StartTurnPhase());
+            handler.setGamePhase(new MoveStudentPhase());
         }
     }
 

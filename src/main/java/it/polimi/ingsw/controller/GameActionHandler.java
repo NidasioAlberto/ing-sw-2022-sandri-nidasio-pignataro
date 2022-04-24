@@ -78,7 +78,8 @@ public class GameActionHandler
 
     public void playAssistantCard(int selectedCard) throws NoSuchAssistantCardException
     {
-        game.getSelectedPlayer().get().selectCard(selectedCard);
+        // The player selection at assistant card stage is about table order
+        game.getPlayerTableList().get(game.getSelectedPlayerIndex().get()).selectCard(selectedCard);
 
         // At the end i trigger the FSM
         gamePhase.onValidAction(this);
