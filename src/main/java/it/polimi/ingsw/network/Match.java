@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import java.util.List;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.model.GameMode;
 
 public class Match
 {
@@ -10,7 +11,17 @@ public class Match
 
     private Controller gameController;
 
+    Match(int playersNumber, GameMode mode)
+    {
+        // ...
+    }
+
     public void addPlayer(PlayerConnection player)
+    {
+        // ...
+    }
+
+    public void removePlayer(PlayerConnection player)
     {
         // ...
     }
@@ -25,8 +36,8 @@ public class Match
         // ...
     }
 
-    public void actionCall(ActionMessage message, PlayerConnection player)
+    public void actionCall(ActionMessage action, PlayerConnection player)
     {
-        gameController.performAction(message, player.getPlayerName());
+        gameController.performAction(action, player.getPlayerName());
     }
 }

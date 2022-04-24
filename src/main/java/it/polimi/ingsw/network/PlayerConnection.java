@@ -36,14 +36,14 @@ public class PlayerConnection implements Runnable
         }
     }
 
-    /**
-     * Tells whether the PlayerConnection is listening over the socket.
-     * 
-     * @throws IOException When the client is not connected anymore.
-     */
-    public synchronized boolean isActive() throws IOException
+    public synchronized boolean isActive()
     {
         return active;
+    }
+
+    public synchronized void setActive(boolean active)
+    {
+        this.active = active;
     }
 
     public Socket getPlayerSocket()
@@ -62,7 +62,7 @@ public class PlayerConnection implements Runnable
     }
 
     /**
-     * Terminates the connection with the client,.
+     * Terminates the connection with the client.
      */
     public void close() throws IOException
     {
