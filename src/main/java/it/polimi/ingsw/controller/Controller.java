@@ -140,8 +140,13 @@ public class Controller
      */
     public void setupGame()
     {
-        // TODO vanno aggiunte delle catch
-        game.setupGame();
+        try
+        {
+            game.setupGame();
+        } catch (NotEnoughPlayersException e)
+        {
+            sendAllMessage(e.getMessage());
+        }
     }
 
     /**
@@ -160,69 +165,66 @@ public class Controller
         {
             endGame();
             // se il gioco non è veramente terminato?
+            //forse conviene separare in isGameEnded and computeWinner
         } catch (NoLegitActionException e)
         {
-
+            sendMessage(getCurrentPlayer(), "You can't do this action right now.");
         } catch (WrongPlayerException e)
         {
-
-        } catch (InvalidModuleException e)
-        {
-
+            sendMessage(e.getPlayer(), "This is not your turn, you have to wait.");
         } catch (NoSelectedPlayerException e)
         {
 
         } catch (NoSelectedIslandException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select an island to perform the action.");
         } catch (NoSelectedColorException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a color to perform the action.");
         } catch (NoSelectedAssistantCardException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select an assistant card to perform the action.");
         } catch (NoSelectedStudentsException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select the students to perform the action.");
         } catch (NoSelectedCloudTileException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a cloud tile to perform the action.");
         } catch (NoSelectedCharacterCardException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a character card to perform the action.");
         } catch (IslandIndexOutOfBoundsException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a character card to perform the action.");
+        } catch (NotEnoughCoinsException e)
+        {
+            sendMessage(getCurrentPlayer(),"You don't have enough coins to play this card.");
         } catch (NoSuchStudentOnCardException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a student present on the card.");
         } catch (NoSuchStudentInEntranceException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a student present in your entrance room.");
         } catch (NoSuchStudentInDiningException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You have to select a student present in your dining room.");
         } catch (NoSuchAssistantCardException e)
         {
-
+            sendMessage(getCurrentPlayer(),"You don't have the assistant card you selected.");
+        } catch (InvalidMovementException e)
+        {
+            sendMessage(getCurrentPlayer(),e.getMessage());
+        } catch (InvalidCharacterCardException e)
+        {
+            sendMessage(getCurrentPlayer(), e.getMessage());
         } catch (NoMoreNoEntryTilesException e)
         {
-
-        } catch (NullPointerException e)
-        {
-
-        } catch (IllegalArgumentException e)
-        {
-
-        } catch (IllegalStateException e)
-        {
-
-        } catch (NoSuchElementException e)
-        {
-
+            sendMessage(getCurrentPlayer(),
+                    "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
         } catch (Exception e)
         {
-
+            sendAllMessage("Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible");
+            //TODO va chiusa la partita, servirebbe un metodo del tipo closeGame in match
         }
     }
 
@@ -304,8 +306,6 @@ public class Controller
                 game.addPlayer(new Player(nickname, TowerColor.WHITE));
             case 2:
                 game.addPlayer(new Player(nickname, TowerColor.GREY));
-            default:
-                game.addPlayer(new Player(nickname, TowerColor.BLACK));
         }
     }
 
@@ -325,5 +325,11 @@ public class Controller
     public int getPlayersNumber()
     {
         return game.getPlayersNumber();
+    }
+
+    public String getCurrentPlayer()
+    {
+        return game.getSelectedPlayer().orElseThrow(
+                () -> new NoSelectedPlayerException("[Controller]")).getNickname();
     }
 }

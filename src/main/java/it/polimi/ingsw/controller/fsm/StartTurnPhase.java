@@ -27,8 +27,7 @@ public class StartTurnPhase implements Phase
     {
         // Check if the player corresponds to the selected one in SORTED LIST
         Player currentPlayer = handler.getGame().getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException(
-                        "[StartTurnPhase] No selected player, is the gameActionHandler instantiated?"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[StartTurnPhase]"));
 
         // I only accept if and only if the player is the correct one
         // and the action type is a student movement

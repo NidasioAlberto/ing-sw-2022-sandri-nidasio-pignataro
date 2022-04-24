@@ -13,8 +13,7 @@ public class PlanPhase implements Phase
         // change the selected player referring to the sorted list and switch
         // to the startTurnPhase
         int playerIndex = handler.getGame().getSelectedPlayerIndex()
-                .orElseThrow(() -> new NoSelectedPlayerException(
-                        "[PlanPhase] No such selected player, is the GameActionHandler instantiated?"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
 
         // If we are not dealing with the last one i switch player and maintain the current state
         if (playerIndex < handler.getGame().getPlayerTableList().size() - 1)
@@ -41,8 +40,7 @@ public class PlanPhase implements Phase
     {
         // I check if it is the allowed player FROM THE TABLE LIST
         int playerIndex = handler.getGame().getSelectedPlayerIndex()
-                .orElseThrow(() -> new NoSelectedPlayerException(
-                        "[PlanPhase] No such selected player, is the GameActionHandler instantiated?"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
 
         // I accept the action if and only if the player is correct and the action is an assistant
         // card play

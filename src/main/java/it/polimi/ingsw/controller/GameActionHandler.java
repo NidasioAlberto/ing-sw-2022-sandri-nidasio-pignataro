@@ -6,8 +6,7 @@ import it.polimi.ingsw.controller.fsm.PlanPhase;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
-import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
 
@@ -68,10 +67,10 @@ public class GameActionHandler
             throw new NullPointerException("[GameActionHandler] Null action message");
 
         if (game.getSelectedPlayer().isEmpty())
-            throw new NoSuchElementException("[GameActionHandler] No selected player");
+            throw new NoSelectedPlayerException("[GameActionHandler]");
 
         if (!gamePhase.isLegitAction(this, playerName, message.getBaseGameAction()))
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+            throw new NoLegitActionException();
 
         // Call the correct method (Command pattern)
         message.applyAction(this);
@@ -146,7 +145,7 @@ public class GameActionHandler
                         "[GameActionHandler] No mother nature position, is the game setup?"));
 
         int wantedPosition = game.getSelectedPlayer().get().getSelectedIsland().orElseThrow(
-                () -> new NoSuchElementException("[GameActionHandler] No selected island"));
+                () -> new NoSelectedIslandException("[GameActionHandler]"));
 
         // Calculate the difference from the indexed island and the current one
         // Based on the actual difference i move mother nature of the calculated steps
@@ -157,7 +156,7 @@ public class GameActionHandler
                 Game.ISLAND_TILES_NUMBER + wantedPosition - currentPosition))
             game.moveMotherNature(Game.ISLAND_TILES_NUMBER + wantedPosition - currentPosition);
         else
-            throw new InvalidParameterException(
+            throw new InvalidMovementException(
                     "[GameActionHandler] Mother nature cannot stay in the same position");
 
         // If all goes correctly i compute the influence
@@ -195,7 +194,7 @@ public class GameActionHandler
             throws InvalidModuleException, NoSuchElementException, NotEnoughCoinsException
     {
         if (game.getCurrentCharacterCard().isPresent())
-            throw new InvalidModuleException(
+            throw new InvalidCharacterCardException(
                     "[GameActionHandler] A character card was already played");
 
         // Select the card
@@ -222,14 +221,13 @@ public class GameActionHandler
 
         // Get the current card if activated
         CharacterCard currentCard = game.getCurrentCharacterCard().filter(c -> c.isActivated())
-                .orElseThrow(() -> new NoSuchElementException(
-                        "[GameActionHandler] No active character card"));
+                .orElseThrow(() -> new NoSelectedCharacterCardException("[GameActionHandler]"));
 
         // If the action is valid i execute the action
         if (currentCard.isValidAction(action))
             currentCard.applyAction();
         else
-            throw new InvalidModuleException("[GameActionHandler] No legit action");
+            throw new NoLegitActionException();
     }
 
     public void endTurn() throws InvalidModuleException
@@ -265,12 +263,12 @@ public class GameActionHandler
 
     private void checkIfCharacterCardIsStillPlayable() throws InvalidModuleException
     {
-        // If there is sill an active character card which is has not been player the turn can't end
+        // If there is still an active character card which is has not been played the turn can't end
         if (game.getCurrentCharacterCard().isPresent()
                 && game.getCurrentCharacterCard().get().isActivated()
                 && !game.getCurrentCharacterCard().get()
                         .isValidAction(ExpertGameAction.BASE_ACTION))
             throw new InvalidModuleException(
-                    "[GameActionHandler] The turn can't end, a character card is still active an not played yet");
+                    "[GameActionHandler] The turn can't end, a character card is still active and not played yet");
     }
 }
