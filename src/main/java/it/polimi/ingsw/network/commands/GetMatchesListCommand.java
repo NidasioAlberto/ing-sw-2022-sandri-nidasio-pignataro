@@ -1,11 +1,11 @@
 package it.polimi.ingsw.network.commands;
 
-import org.json.JSONObject;
+import it.polimi.ingsw.network.PlayerConnection;
 
 public class GetMatchesListCommand extends Command
 {
-    GetMatchesListCommand(JSONObject commandJson)
+    public void applyCommand(PlayerConnection connection) throws IllegalArgumentException
     {
-        // ...
+        // TODO: Create a MatchesListCommand and send it to the client
     }
 }

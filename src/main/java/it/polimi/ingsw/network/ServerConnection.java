@@ -42,7 +42,10 @@ public class ServerConnection implements Runnable
         {
             try
             {
+                // For now a new PlayerConnection starts running, when the user will set up it's
+                // info the class will register itself to the server
                 executor.submit(new PlayerConnection(server, serverSocket.accept()));
+                System.out.println("[ServerConnection] Accepted new player");
             } catch (IOException e)
             {
                 System.err.println("[Error] " + e.getMessage());
@@ -56,12 +59,14 @@ public class ServerConnection implements Runnable
         try
         {
             ServerSocket socket = new ServerSocket(port);
-            System.out.println("Server socket started, listening on port" + port);
+            System.out
+                    .println("[ServerConnection] Server socket started, listening on port " + port);
 
             acceptConnections(socket);
         } catch (IOException e)
         {
-            System.err.println("[Error] Problem during Socket initialization, quitting...");
+            System.err
+                    .println("[ServerConnection] Error during Socket initialization, quitting...");
             System.exit(-1);
         }
     }

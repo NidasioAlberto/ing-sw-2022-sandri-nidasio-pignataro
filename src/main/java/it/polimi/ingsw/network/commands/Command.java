@@ -19,15 +19,26 @@ public abstract class Command
         if (commandId == CreateMatchCommand.class.getName())
             return new CreateMatchCommand(command);
         else if (commandId == GetMatchesListCommand.class.getName())
-            return new GetMatchesListCommand(command);
+            return new GetMatchesListCommand();
         else if (commandId == JoinMatchCommand.class.getName())
             return new JoinMatchCommand(command);
         else if (commandId == QuitGameCommand.class.getName())
-            return new QuitGameCommand(command);
+            return new QuitGameCommand();
         else if (commandId == SetNameCommand.class.getName())
             return new SetNameCommand(command);
 
         throw new IllegalArgumentException("[Command] Unrecognized command " + commandId);
+    }
+
+    /**
+     * Checks if the given player connection is valid.
+     * 
+     * @throws NullPointerException Thrown if the handler is null.
+     */
+    public void checkPlayerConnection(PlayerConnection connection) throws NullPointerException
+    {
+        if (connection == null)
+            throw new NullPointerException("[Command] Player connection is null");
     }
 
     /**
@@ -36,9 +47,5 @@ public abstract class Command
      * @param connection The player's connection used to apply the command.
      * @throws NullPointerException Thrown if handler is null.
      */
-    public void applyCommand(PlayerConnection connection) throws NullPointerException
-    {
-        if (connection == null)
-            throw new NullPointerException("[ActionMessage] Handler is null");
-    }
+    abstract public void applyCommand(PlayerConnection connection) throws NullPointerException;
 }

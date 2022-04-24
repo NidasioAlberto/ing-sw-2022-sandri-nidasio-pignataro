@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import java.net.Socket;
+import java.util.Optional;
 import org.json.JSONObject;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.network.commands.Command;
@@ -11,12 +12,14 @@ import java.io.ObjectOutputStream;
 public class PlayerConnection implements Runnable
 {
     private Socket playerSocket;
+
     ObjectInputStream inputStream;
+
     ObjectOutputStream outputStream;
 
     private Server server;
 
-    private String playerName;
+    private Optional<String> playerName = Optional.empty();
 
     private boolean active = true;
 
@@ -51,24 +54,34 @@ public class PlayerConnection implements Runnable
         return playerSocket;
     }
 
-    public String getPlayerName()
+    public Server getServer()
+    {
+        return server;
+    }
+
+    public Optional<String> getPlayerName()
     {
         return playerName;
     }
 
     public void setPlayerName(String playerName)
     {
-        this.playerName = playerName;
+        this.playerName = Optional.of(playerName);
     }
 
-    /**
-     * Terminates the connection with the client.
-     */
-    public void close() throws IOException
+    public void close()
     {
-        // TODO: Remove the player from the server
+        server.removePlayer(this);
 
-        playerSocket.close();
+        try
+        {
+            playerSocket.close();
+        } catch (IOException e)
+        {
+            System.err.println(
+                    "[Player connection] An error occurred while closing the player's connection");
+            System.err.println("[Player connection] " + e.getMessage());
+        }
     }
 
     @Override
@@ -83,7 +96,8 @@ public class PlayerConnection implements Runnable
             }
         } catch (IOException e)
         {
-            // TODO: Handle what happens when a player suddenly disconnects
+            // The player suddenly disconnected, remove it from the server
+            server.removePlayer(this);
         } catch (ClassNotFoundException e)
         {
             System.out.println("SEVERE ERROR!");

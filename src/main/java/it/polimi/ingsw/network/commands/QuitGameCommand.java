@@ -1,11 +1,11 @@
 package it.polimi.ingsw.network.commands;
 
-import org.json.JSONObject;
+import it.polimi.ingsw.network.PlayerConnection;
 
 public class QuitGameCommand extends Command
 {
-    QuitGameCommand(JSONObject commandJson)
+    public void applyCommand(PlayerConnection connection) throws NullPointerException
     {
-        // ...
+        connection.close();
     }
 }
