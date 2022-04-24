@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import java.util.*;
+import java.util.concurrent.Executors;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
 
@@ -19,6 +20,27 @@ public class Server
         serverConnection = new ServerConnection(this);
         lobby = new ArrayList<>();
         matches = new HashMap<>();
+
+        // Start a thread that controls when to close the server
+        Thread quiThread = new Thread(this::waitToQuit);
+        quiThread.start();
+    }
+
+    public void waitToQuit()
+    {
+        System.out.println("[Server] Type \"quit\" to exit");
+
+        Scanner scanner = new Scanner(System.in);
+        while (true)
+        {
+            if (scanner.nextLine().equals("quit"))
+            {
+                scanner.close();
+                serverConnection.setActive(false);
+                System.exit(0);
+                break;
+            }
+        }
     }
 
     public synchronized ServerConnection getServerConnection()
@@ -55,6 +77,11 @@ public class Server
 
     public void addPlayerToMatch(String id, PlayerConnection player) throws IllegalArgumentException
     {
+        // Check if the player has a name
+        if (player.getPlayerName().isEmpty())
+            throw new IllegalArgumentException(
+                    "[Server] The player must have a name to participate in a match");
+
         // Check if the player isn't in another match
         if (playersMapMatch.containsKey(player))
             throw new IllegalArgumentException(
@@ -100,5 +127,11 @@ public class Server
 
         // Perform the action
         match.actionCall(action, player);
+    }
+
+    public static void main(String[] args)
+    {
+        Server server = new Server();
+        Executors.newCachedThreadPool().submit(server.serverConnection);
     }
 }
