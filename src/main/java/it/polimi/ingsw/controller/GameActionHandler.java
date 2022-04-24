@@ -48,8 +48,8 @@ public class GameActionHandler
         // Before instantiating the FSM i need to select the first player
         game.selectPlayer(0);
 
-        // Instantiate the FSM
-        gamePhase = new PlanPhase();
+        // Instantiate the FSM (I want the initial phase to be in table order)
+        gamePhase = new PlanPhase(game.getPlayerTableList());
     }
 
     /**

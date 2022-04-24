@@ -1,11 +1,29 @@
 package it.polimi.ingsw.controller.fsm;
 
 import it.polimi.ingsw.controller.GameActionHandler;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.BaseGameAction;
 
+import java.util.List;
+
 public class PlanPhase implements Phase
 {
+
+    /**
+     * List that represents the player order that needs to be followed.
+     * This is because at the very beginning, the players in table order
+     * place an assistant card, whereas for the rest of the match players
+     * in play order place an assistant card.
+     */
+    private List<Player> orderList;
+
+    //TODO UNDERSTAND THE PLAYER ORDER
+    public PlanPhase(List<Player> orderList)
+    {
+        this.orderList = orderList;
+    }
+
     @Override
     public void onValidAction(GameActionHandler handler)
     {
@@ -16,7 +34,7 @@ public class PlanPhase implements Phase
                 .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
 
         // If we are not dealing with the last one i switch player and maintain the current state
-        if (playerIndex < handler.getGame().getPlayerTableList().size() - 1)
+        if (playerIndex < orderList.size() - 1)
         {
             handler.getGame().selectPlayer(playerIndex + 1);
         } else
@@ -38,13 +56,13 @@ public class PlanPhase implements Phase
     public boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction)
     {
-        // I check if it is the allowed player FROM THE TABLE LIST
+        // I check if it is the allowed player from the initial passed list
         int playerIndex = handler.getGame().getSelectedPlayerIndex()
                 .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
 
         // I accept the action if and only if the player is correct and the action is an assistant
         // card play
-        return handler.getGame().getPlayerTableList().get(playerIndex).getNickname()
-                .equals(playerName) && baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
+        return orderList.get(playerIndex).getNickname().equals(playerName) &&
+                baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
     }
 }

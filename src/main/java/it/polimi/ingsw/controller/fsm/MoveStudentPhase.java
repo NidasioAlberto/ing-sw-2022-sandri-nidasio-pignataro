@@ -10,7 +10,7 @@ public class MoveStudentPhase implements Phase
     /**
      * Internal counter that memorize how many students have been moved
      */
-    int counter;
+    private int counter;
 
     public MoveStudentPhase()
     {
