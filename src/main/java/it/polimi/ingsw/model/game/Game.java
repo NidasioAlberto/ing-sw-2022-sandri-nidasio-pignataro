@@ -109,6 +109,15 @@ public class Game
      */
     public Optional<Player> getSelectedPlayer()
     {
+        // Check if all the players selected a card
+        //TODO CHECK THAT THIS MODIFY DIDN'T AFFECT OTHER CODE
+        for(Player player : players)
+        {
+            if (player.getSelectedCard().isEmpty())
+            {
+                return currentPlayerIndex.map(index -> players.get(index));
+            }
+        }
         return currentPlayerIndex.map(index -> getSortedPlayerList().get(index));
     }
 
