@@ -100,7 +100,7 @@ public class PlayerConnection implements Runnable
             server.removePlayer(this);
         } catch (ClassNotFoundException e)
         {
-            System.out.println("SEVERE ERROR!");
+            System.out.println("SERVER ERROR!");
             System.out.println(e.getMessage());
         }
     }

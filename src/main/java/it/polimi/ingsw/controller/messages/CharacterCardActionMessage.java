@@ -12,18 +12,16 @@ import org.json.JSONObject;
 public class CharacterCardActionMessage extends ActionMessage
 {
     ExpertGameAction action;
-    int selectedCharacterCard;
 
     protected CharacterCardActionMessage(JSONObject actionJson) throws JSONException
     {
         action = ExpertGameAction.valueOf(actionJson.getString("characterCardAction"));
-        selectedCharacterCard = actionJson.getInt("selectedCharacterCard");
     }
 
     public void applyAction(GameActionHandler handler)
     {
         checkHandler(handler);
-        handler.characterCardAction(action, selectedCharacterCard);
+        handler.characterCardAction(action);
     }
 
     public BaseGameAction getBaseGameAction()

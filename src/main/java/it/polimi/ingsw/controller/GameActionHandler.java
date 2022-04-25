@@ -211,14 +211,11 @@ public class GameActionHandler
         // IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD'S PLAY
     }
 
-    public void characterCardAction(ExpertGameAction action, int selectedCharacterCard)
+    public void characterCardAction(ExpertGameAction action)
             throws NullPointerException, NoSuchElementException
     {
         if (action == null)
             throw new NullPointerException("[GameActionHandler] Null expert game action");
-
-        // Select the card
-        game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
 
         // Get the current card if activated
         CharacterCard currentCard = game.getCurrentCharacterCard().filter(c -> c.isActivated())

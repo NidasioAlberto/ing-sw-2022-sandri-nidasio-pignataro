@@ -5,8 +5,7 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
 
-public class Match
-{
+public class Match {
     private List<PlayerConnection> players;
 
     private Controller gameController;
@@ -38,6 +37,6 @@ public class Match
 
     public void actionCall(ActionMessage action, PlayerConnection player)
     {
-        gameController.performAction(action, player.getPlayerName());
+        gameController.performAction(action, player.getPlayerName().get());
     }
 }
