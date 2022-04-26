@@ -327,6 +327,15 @@ public class PlayerTest
 
         // Clear the selections
         player.clearSelections();
+        assertFalse(player.getSelectedCard().isEmpty());
+        assertTrue(player.getSelectedIsland().isEmpty());
+        assertTrue(player.getSelectedColors().isEmpty());
+
+        player.selectIsland(1);
+        player.selectColor(SchoolColor.GREEN);
+
+        // Clear the selections at the end of the turn
+        player.clearSelectionsEndRound();
         assertTrue(player.getSelectedCard().isEmpty());
         assertTrue(player.getSelectedIsland().isEmpty());
         assertTrue(player.getSelectedColors().isEmpty());

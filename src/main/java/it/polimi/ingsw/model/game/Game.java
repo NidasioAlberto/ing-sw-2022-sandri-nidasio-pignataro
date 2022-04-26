@@ -609,7 +609,7 @@ public class Game
         {
             return Optional.of(characterCards.get(currentCharacterCardIndex.orElseThrow(
                     () -> new NoSelectedCharacterCardException("[Game]"))));
-        } catch (IndexOutOfBoundsException e)
+        } catch (NoSelectedCharacterCardException e)
         {
             return Optional.empty();
         }

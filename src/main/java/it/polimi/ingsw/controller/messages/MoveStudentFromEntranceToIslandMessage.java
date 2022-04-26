@@ -15,6 +15,7 @@ import org.json.JSONObject;
 public class MoveStudentFromEntranceToIslandMessage extends ActionMessage
 {
     List<SchoolColor> selectedColors;
+    int selectedIsland;
 
     protected MoveStudentFromEntranceToIslandMessage(JSONObject actionJson) throws JSONException
     {
@@ -23,12 +24,14 @@ public class MoveStudentFromEntranceToIslandMessage extends ActionMessage
         JSONArray colors = actionJson.getJSONArray("selectedColors");
         for (int i = 0; i < colors.length(); i++)
             selectedColors.add(SchoolColor.valueOf(colors.getString(i)));
+
+        selectedIsland = actionJson.getInt("selectedIsland");
     }
 
     public void applyAction(GameActionHandler handler)
     {
         checkHandler(handler);
-        handler.moveStudentFromEntranceToIsland(selectedColors);
+        handler.moveStudentFromEntranceToIsland(selectedColors, selectedIsland);
     }
 
     public BaseGameAction getBaseGameAction()

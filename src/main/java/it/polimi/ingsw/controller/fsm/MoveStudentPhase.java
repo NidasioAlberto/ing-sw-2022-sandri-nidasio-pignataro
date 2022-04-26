@@ -14,7 +14,7 @@ public class MoveStudentPhase implements Phase
 
     public MoveStudentPhase()
     {
-        this.counter = 0;
+        this.counter = 1;
     }
 
     @Override

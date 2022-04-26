@@ -85,7 +85,7 @@ public class GameActionHandler
         gamePhase.onValidAction(this);
     }
 
-    public void moveStudentFromEntranceToIsland(List<SchoolColor> selectedColors)
+    public void moveStudentFromEntranceToIsland(List<SchoolColor> selectedColors, int selectedIsland)
             throws InvalidModuleException
     {
         checkIfCharacterCardIsStillPlayable();
@@ -93,6 +93,9 @@ public class GameActionHandler
         // Select the colors
         for (SchoolColor color : selectedColors)
             game.getSelectedPlayer().get().selectColor(color);
+
+        // Select the island
+        game.getSelectedPlayer().get().selectIsland(selectedIsland);
 
         // Move the student to the selected island
         game.putStudentToIsland(game.getSelectedPlayer().get().getBoard().removeStudentFromEntrance(
@@ -102,6 +105,9 @@ public class GameActionHandler
         if (game.getCurrentCharacterCard().isPresent()
                 && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
+
+        // Clear the selections
+        game.getSelectedPlayer().get().clearSelections();
 
         // If the action goes well i trigger the FSM
         gamePhase.onValidAction(this);
@@ -128,6 +134,9 @@ public class GameActionHandler
         if (game.getCurrentCharacterCard().isPresent()
                 && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
+
+        // Clear the selections
+        game.getSelectedPlayer().get().clearSelections();
 
         // If the action goes well i trigger the FSM
         gamePhase.onValidAction(this);
@@ -167,6 +176,9 @@ public class GameActionHandler
         if (game.getCurrentCharacterCard().isPresent()
                 && game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().get().applyAction();
+
+        // Clear the selections
+        game.getSelectedPlayer().get().clearSelections();
 
         // Step the FSM
         gamePhase.onValidAction(this);
@@ -226,6 +238,9 @@ public class GameActionHandler
             currentCard.applyAction();
         else
             throw new NoLegitActionException();
+
+        // Clear the selections
+        game.getSelectedPlayer().get().clearSelections();
     }
 
     public void endTurn() throws InvalidModuleException
@@ -233,7 +248,7 @@ public class GameActionHandler
         checkIfCharacterCardIsStillPlayable();
 
         // Clear the selections and disable any character card
-        game.getSelectedPlayer().get().clearSelections();
+        game.getSelectedPlayer().get().clearSelectionsEndRound();
         game.clearTurn();
         for (CharacterCard card : game.getCharacterCards())
             card.deactivate();

@@ -557,13 +557,13 @@ public class GameTest
     public void getCurrentCharacterCardTest()
     {
         // Whit out the game set up this should return an empty optional
-        assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard());
+        assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard().get());
 
         // Setup an expert game
         game = new Game(2, GameMode.EXPERT);
 
         // This should still be true
-        assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard());
+        assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard().get());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
@@ -591,7 +591,7 @@ public class GameTest
         game.setCurrentCharacterCard(42);
 
         // This should error out
-        assertTrue(game.getCurrentCharacterCard().isEmpty());
+        assertThrows(IndexOutOfBoundsException.class, () -> game.getCurrentCharacterCard());
     }
 
     @Test

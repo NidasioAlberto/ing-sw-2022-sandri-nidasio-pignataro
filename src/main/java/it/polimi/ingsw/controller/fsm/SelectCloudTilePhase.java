@@ -19,7 +19,7 @@ public class SelectCloudTilePhase implements Phase
         if(playerIndex < handler.getGame().getPlayerTableList().size() - 1)
         {
             handler.getGame().selectPlayer(playerIndex + 1);
-            handler.setGamePhase(new MoveMotherNaturePhase());
+            handler.setGamePhase(new MoveStudentPhase());
         }
         else
         {

@@ -248,9 +248,18 @@ public class Player
     }
 
     /**
-     * Method to call at the end of the player's turn to clear all the selections
+     * Method to call after every player's action to clear island and colors selected
      */
     public void clearSelections()
+    {
+        selectedIsland = Optional.empty();
+        selectedColors.clear();
+    }
+
+    /**
+     * Method to call at the end of the round to clear all the selections
+     */
+    public void clearSelectionsEndRound()
     {
         selectedCard = Optional.empty();
         selectedIsland = Optional.empty();
