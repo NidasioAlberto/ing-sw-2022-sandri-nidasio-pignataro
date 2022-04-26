@@ -15,7 +15,7 @@ public class Server
 
     private Map<PlayerConnection, Match> playersMapMatch;
 
-    Server()
+    public Server()
     {
         serverConnection = new ServerConnection(this);
         lobby = new ArrayList<>();

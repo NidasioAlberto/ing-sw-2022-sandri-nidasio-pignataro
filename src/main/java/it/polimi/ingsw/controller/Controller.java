@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
@@ -11,7 +10,6 @@ import it.polimi.ingsw.network.Match;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * This class allows creating, starting and ending a game. The controller links the model package
@@ -49,18 +47,16 @@ public class Controller
         if (match == null)
             throw new NullPointerException("[Controller] The server is null");
 
-        this.match = match;
-
         if (mode == null)
             throw new NullPointerException("[Controller] Game mode is null");
 
+        this.match = match;
+
         // TODO: Se non facciamo la modalità a 4 giocatori bisogna cambiare questo e altro
-        if (playersNumber < 2 || playersNumber > 4)
+        if (playersNumber < 2 || playersNumber > 3)
             throw new IllegalArgumentException("[Controller] Invalid players number");
 
         game = new Game(playersNumber, mode);
-
-        actionHandler = new GameActionHandler(game);
     }
 
     /**
@@ -136,13 +132,14 @@ public class Controller
     }
 
     /**
-     * Sets up the game.
+     * Sets up the game and instantiates the GameActionHandler.
      */
     public void setupGame()
     {
         try
         {
             game.setupGame();
+            actionHandler = new GameActionHandler(game);
         } catch (NotEnoughPlayersException e)
         {
             sendAllMessage(e.getMessage());
@@ -157,7 +154,6 @@ public class Controller
      */
     public void performAction(ActionMessage message, String playerName)
     {
-        // TODO
         try
         {
             actionHandler.handleAction(message, playerName);
@@ -165,16 +161,13 @@ public class Controller
         {
             endGame();
             // se il gioco non è veramente terminato?
-            //forse conviene separare in isGameEnded and computeWinner
+            // forse conviene separare in isGameEnded and computeWinner o mi fido che il gioco sia terminato
         } catch (NoLegitActionException e)
         {
             sendMessage(getCurrentPlayer(), "You can't do this action right now.");
         } catch (WrongPlayerException e)
         {
             sendMessage(e.getPlayer(), "This is not your turn, you have to wait.");
-        } catch (NoSelectedPlayerException e)
-        {
-
         } catch (NoSelectedIslandException e)
         {
             sendMessage(getCurrentPlayer(),"You have to select an island to perform the action.");
@@ -195,7 +188,7 @@ public class Controller
             sendMessage(getCurrentPlayer(),"You have to select a character card to perform the action.");
         } catch (IslandIndexOutOfBoundsException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a character card to perform the action.");
+            sendMessage(getCurrentPlayer(),"You can't select that island.");
         } catch (NotEnoughCoinsException e)
         {
             sendMessage(getCurrentPlayer(),"You don't have enough coins to play this card.");
@@ -298,14 +291,17 @@ public class Controller
         // TODO il server dovrebbe controllare che non venga lanciata la TooManyPLayersException
 
         // Add the player to the game with the correct color of the towers
-        switch (game.getPlayersNumber())
+        switch (game.getPlayerTableList().size())
         {
             case 0:
                 game.addPlayer(new Player(nickname, TowerColor.BLACK));
+                break;
             case 1:
                 game.addPlayer(new Player(nickname, TowerColor.WHITE));
+                break;
             case 2:
                 game.addPlayer(new Player(nickname, TowerColor.GREY));
+                break;
         }
     }
 
