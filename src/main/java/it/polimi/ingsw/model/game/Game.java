@@ -10,6 +10,7 @@ public class Game
 {
     public static final int ISLAND_TILES_NUMBER = 12;
     public static final int ASSISTANT_CARDS_DECK_SIZE = 10;
+    public static final int CHARACTER_CARDS_NUMBER = 3;
 
     /**
      * List of all the players in the game in table order (as they are added to the game).
@@ -521,7 +522,7 @@ public class Game
                     new ArrayList<>(Arrays.asList(CharacterCardType.values()));
 
             // Choose 3 random cards
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < CHARACTER_CARDS_NUMBER; j++)
                 characterCards.add(CharacterCard
                         .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
         }

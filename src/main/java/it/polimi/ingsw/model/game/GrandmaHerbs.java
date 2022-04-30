@@ -17,6 +17,8 @@ import java.util.NoSuchElementException;
  */
 public class GrandmaHerbs extends CharacterCard
 {
+    public static int INITIAL_NO_ENTRY_NUMBER = 4;
+
     /**
      * No entry tiles assigned to this card
      */
@@ -35,7 +37,7 @@ public class GrandmaHerbs extends CharacterCard
         // GrandmaHerbs cost
         this.cost = 2;
         //Initial noEntryTiles
-        this.noEntryTiles = 4;
+        this.noEntryTiles = INITIAL_NO_ENTRY_NUMBER;
     }
 
     @Override
