@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.fsm.Phase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
-import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.exceptions.*;

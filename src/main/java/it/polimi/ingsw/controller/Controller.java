@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;

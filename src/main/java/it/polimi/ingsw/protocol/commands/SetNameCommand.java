@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.commands;
+package it.polimi.ingsw.protocol.commands;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.protocol.messages;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -2,7 +2,7 @@ package it.polimi.ingsw.network;
 
 import java.util.*;
 import java.util.concurrent.Executors;
-import it.polimi.ingsw.controller.messages.ActionMessage;
+import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
 
 public class Server
