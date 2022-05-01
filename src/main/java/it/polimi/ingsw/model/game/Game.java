@@ -117,8 +117,8 @@ public class Game implements Publisher<ModelUpdate>
     public Optional<Player> getSelectedPlayer()
     {
         // Check if all the players selected a card
-        //TODO CHECK THAT THIS MODIFY DIDN'T AFFECT OTHER CODE
-        for(Player player : players)
+        // TODO CHECK THAT THIS MODIFY DIDN'T AFFECT OTHER CODE
+        for (Player player : players)
         {
             if (player.getSelectedCard().isEmpty())
             {
@@ -129,8 +129,8 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
-     * @return The currently selected player index referred to the tableList OR the sortedList
-     * the controller will handle the difference and the game must refer to sortedList
+     * @return The currently selected player index referred to the tableList OR the sortedList the
+     *         controller will handle the difference and the game must refer to sortedList
      */
     public Optional<Integer> getSelectedPlayerIndex()
     {
@@ -178,8 +178,7 @@ public class Game implements Publisher<ModelUpdate>
         try
         {
             islands.get(getSelectedPlayer()
-                    .orElseThrow(() -> new NoSelectedPlayerException("[Game]"))
-                    .getSelectedIsland()
+                    .orElseThrow(() -> new NoSelectedPlayerException("[Game]")).getSelectedIsland()
                     .orElseThrow(() -> new NoSelectedIslandException("[Game]")))
                     .addStudent(student);
         } catch (IndexOutOfBoundsException e)
@@ -188,9 +187,11 @@ public class Game implements Publisher<ModelUpdate>
         }
 
         // After the model update i have to notify the observer with island update
-        if(subscriber.isPresent())
-            subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex
-                    .orElseThrow(() -> new NoSuchElementException("[Game] No mother neture index, is the game setup?"))));
+        if (subscriber.isPresent())
+            subscriber.get()
+                    .onNext(new IslandsUpdate(new ArrayList<Island>(islands),
+                            motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                                    "[Game] No mother neture index, is the game setup?"))));
     }
 
     /**
@@ -204,18 +205,18 @@ public class Game implements Publisher<ModelUpdate>
             throws NoSuchElementException, NullPointerException
     {
         // Move the student
-        getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"))
-                .getBoard().addStudentToDiningRoom(student);
+        getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Game]")).getBoard()
+                .addStudentToDiningRoom(student);
 
         conquerProfessors();
 
         // After the model update i have to notify the observer with the schoolboards update
         // and i need to send all of them because of conquer professors
-        if(subscriber.isPresent())
+        if (subscriber.isPresent())
         {
-            for(Player player : players)
-                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+            for (Player player : players)
+                subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
         }
     }
 
@@ -227,27 +228,28 @@ public class Game implements Publisher<ModelUpdate>
     public Student pickStudentFromEntrance() throws NoSuchElementException
     {
         // Get the selected player
-        Player selectedPlayer = getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
+        Player selectedPlayer =
+                getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
 
         // Get the player selected color
-        SchoolColor selectedColor = selectedPlayer
-                .getSelectedColors().stream().findFirst()
+        SchoolColor selectedColor = selectedPlayer.getSelectedColors().stream().findFirst()
                 .orElseThrow(() -> new NoSelectedColorException("[Game]"));
 
         // Get the student instance to be removed and returned
         Student result = getSelectedPlayer().get().getBoard().getStudentsInEntrance().stream()
-                .filter(s -> s.getColor() == selectedColor).findFirst().orElseThrow(
-                        () -> new NoSuchStudentInEntranceException("[Game]"));
+                .filter(s -> s.getColor() == selectedColor).findFirst()
+                .orElseThrow(() -> new NoSuchStudentInEntranceException("[Game]"));
 
         // Remove the instance from the entrance
         getSelectedPlayer().get().getBoard().removeStudentFromEntrance(result);
 
         // After the model update i have to notify the observer with the schoolboard.
-        // i must do it also in here because if the students goes into an island we should have notification
+        // i must do it also in here because if the students goes into an island we should have
+        // notification
         // of the schoolboard where it was before.
-        if(subscriber.isPresent())
-            subscriber.get().onNext(new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname()));
+        if (subscriber.isPresent())
+            subscriber.get().onNext(
+                    new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname()));
 
         return result;
     }
@@ -256,7 +258,7 @@ public class Game implements Publisher<ModelUpdate>
      * This method regulates the conquer of professors and should be called when a player moves some
      * student into his dining room.
      * 
-     * @throws NoSuchElementException When no player is selected
+     * @throws NoSuchElementException When no player is selected or no professor is found
      */
     public void conquerProfessors() throws NoSuchElementException
     {
@@ -289,7 +291,7 @@ public class Game implements Publisher<ModelUpdate>
             {
                 // Look for the player that has that professor
                 Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(color))
-                        .findFirst().orElse(null);
+                        .findFirst().orElseThrow(() -> new NoSuchElementException("[Game] No professor everywhere, is the game setup?"));
 
                 // Get the player with more students of the current color
                 Player wannaBeKing =
@@ -339,8 +341,9 @@ public class Game implements Publisher<ModelUpdate>
         motherNatureMoved = true;
 
         // After moving mother nature we need to notify the observer
-        if(subscriber.isPresent())
-            subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+        if (subscriber.isPresent())
+            subscriber.get().onNext(
+                    new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
     }
 
     /**
@@ -353,11 +356,10 @@ public class Game implements Publisher<ModelUpdate>
     public boolean isValidMotherNatureMovement(int steps)
     {
         // I have to check if the current player can do this movement
-        Player currentPlayer = getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
-        AssistantCard selectedCard =
-                currentPlayer.getSelectedCard().orElseThrow(() -> new NoSelectedAssistantCardException(
-                        "[Game]"));
+        Player currentPlayer =
+                getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
+        AssistantCard selectedCard = currentPlayer.getSelectedCard()
+                .orElseThrow(() -> new NoSelectedAssistantCardException("[Game]"));
 
         return selectedCard.getSteps() >= steps && steps >= 1;
     }
@@ -416,14 +418,16 @@ public class Game implements Publisher<ModelUpdate>
             });
 
             // After moving the towers we need to notify the observer
-            if(subscriber.isPresent())
+            if (subscriber.isPresent())
             {
                 // I do that for all the players and not just the 2 because it is much simpler
                 // and in the bast case we send 2 boards instead of 4
-                for(Player player: players)
-                    subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                for (Player player : players)
+                    subscriber.get()
+                            .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
 
-                subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+                subscriber.get().onNext(
+                        new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             }
         }
     }
@@ -476,11 +480,10 @@ public class Game implements Publisher<ModelUpdate>
     public void moveStudentsFromCloudTile() throws NoSuchElementException
     {
         // Take the selected player
-        Player selectedPlayer = getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
+        Player selectedPlayer =
+                getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
 
-        CloudTile cloudTile = cloudTiles.get(selectedPlayer
-                .getSelectedCloudTile()
+        CloudTile cloudTile = cloudTiles.get(selectedPlayer.getSelectedCloudTile()
                 .orElseThrow(() -> new NoSelectedCloudTileException("[Game]")));
 
         // Remove the students from the cloud tile
@@ -491,9 +494,10 @@ public class Game implements Publisher<ModelUpdate>
         students.forEach(s -> getSelectedPlayer().get().getBoard().addStudentToEntrance(s));
 
         // At the end i notify the observer
-        if(subscriber.isPresent())
+        if (subscriber.isPresent())
         {
-            subscriber.get().onNext(new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname()));
+            subscriber.get().onNext(
+                    new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname()));
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
         }
     }
@@ -536,9 +540,9 @@ public class Game implements Publisher<ModelUpdate>
             IntStream.range(0, 24).forEach(i -> addStudentToBag(new Student(color)));
 
         // 5. Place the cloud tiles
-        IntStream.range(0, players.size())
-                .forEach(i -> cloudTiles.add(playersNumber == 3 ?
-                        new CloudTile(CloudTileType.TILE_3) : new CloudTile(CloudTileType.TILE_2_4)));
+        IntStream.range(0, players.size()).forEach(
+                i -> cloudTiles.add(playersNumber == 3 ? new CloudTile(CloudTileType.TILE_3)
+                        : new CloudTile(CloudTileType.TILE_2_4)));
 
         // 6. Place the professors
         for (SchoolColor color : SchoolColor.values())
@@ -573,14 +577,17 @@ public class Game implements Publisher<ModelUpdate>
         });
 
         // At the end of setup phase i notify the observer
-        if(subscriber.isPresent())
+        if (subscriber.isPresent())
         {
-            subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+            subscriber.get().onNext(
+                    new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
-            for(Player player: players)
+            for (Player player : players)
             {
-                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
-                subscriber.get().onNext(new AssistantCardsUpdate(player.getNickname(), new ArrayList<AssistantCard>(player.getCards())));
+                subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                subscriber.get().onNext(new AssistantCardsUpdate(player.getNickname(),
+                        new ArrayList<AssistantCard>(player.getCards())));
             }
         }
 
@@ -596,11 +603,12 @@ public class Game implements Publisher<ModelUpdate>
                         .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
 
             // If we are in expert mode i can send notify the observer
-            if(subscriber.isPresent())
+            if (subscriber.isPresent())
             {
-                subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCards)));
+                subscriber.get().onNext(
+                        new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCards)));
                 // Notify eventually about the payload situation
-                for(CharacterCard card : characterCards)
+                for (CharacterCard card : characterCards)
                     card.notifySubscriber();
             }
         }
@@ -639,8 +647,8 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
-     * Fills all the cloud tiles with students from the bag.
-     * It should be called at the beginning of each round.
+     * Fills all the cloud tiles with students from the bag. It should be called at the beginning of
+     * each round.
      */
     public void fillClouds()
     {
@@ -655,7 +663,7 @@ public class Game implements Publisher<ModelUpdate>
         }
 
         // At the end i notify the observer
-        if(subscriber.isPresent())
+        if (subscriber.isPresent())
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
     }
 
@@ -674,8 +682,8 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
-     * This method clears the things that have to be cleared when a new turn begins
-     * such as currentCharacterCard
+     * This method clears the things that have to be cleared when a new turn begins such as
+     * currentCharacterCard
      */
     public void clearTurn()
     {
@@ -708,8 +716,8 @@ public class Game implements Publisher<ModelUpdate>
     {
         try
         {
-            return Optional.of(characterCards.get(currentCharacterCardIndex.orElseThrow(
-                    () -> new NoSelectedCharacterCardException("[Game]"))));
+            return Optional.of(characterCards.get(currentCharacterCardIndex
+                    .orElseThrow(() -> new NoSelectedCharacterCardException("[Game]"))));
         } catch (NoSelectedCharacterCardException e)
         {
             return Optional.empty();
@@ -763,11 +771,11 @@ public class Game implements Publisher<ModelUpdate>
     @Override
     public void subscribe(Subscriber<? super ModelUpdate> subscriber)
     {
-        if(subscriber == null)
+        if (subscriber == null)
             throw new NullPointerException("[Game] Null subscriber");
 
         // I subscribe the observer to the observable only if doesn't already exist one
-        if(this.subscriber.isEmpty())
+        if (this.subscriber.isEmpty())
             this.subscriber = Optional.of(subscriber);
     }
 }

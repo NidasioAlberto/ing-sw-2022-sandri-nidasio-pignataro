@@ -63,15 +63,15 @@ public class CharacterCardTest
         assertEquals(color, game.getIslands().get(islandIndex).getStudents().get(1).getColor());
         assertEquals(2, game.getIslands().get(islandIndex).getStudents().size());
 
+        // Check that nobody has a professor
+        assertEquals(0, player1.getBoard().getProfessors().size());
+        assertEquals(0, player2.getBoard().getProfessors().size());
         // Put a student to dining
         assertEquals(0, player1.getBoard().getStudentsNumber(color));
         thief.putStudentToDining(student);
         assertEquals(1, player1.getBoard().getStudentsNumber(color));
 
         // Conquer professors
-        assertEquals(0, player1.getBoard().getProfessors().size());
-        assertEquals(0, player2.getBoard().getProfessors().size());
-        thief.conquerProfessors();
         assertEquals(1, player1.getBoard().getProfessors().size());
         assertEquals(0, player2.getBoard().getProfessors().size());
         assertEquals(color, player1.getBoard().getProfessors().get(0).getColor());
@@ -81,7 +81,7 @@ public class CharacterCardTest
         player2.selectCard(10);
         assertEquals(player1, thief.getSortedPlayerList().get(0));
         assertEquals(player2, thief.getSortedPlayerList().get(1));
-        assertTrue(((CharacterCard)thief).isValidMotherNatureMovement(3));
+        assertTrue(((CharacterCard) thief).isValidMotherNatureMovement(3));
         int index = game.getMotherNatureIndex().get();
         thief.moveMotherNature(3);
         assertEquals((index + 3) % game.getIslands().size(), game.getMotherNatureIndex().get());
@@ -89,17 +89,22 @@ public class CharacterCardTest
         // Compute player influence
         if (game.getIslands().get(islandIndex).getStudents().get(0).getColor() == color)
             assertEquals(2, thief.computePlayerInfluence(player1, islandIndex));
-        else assertEquals(1, thief.computePlayerInfluence(player1, islandIndex));
+        else
+            assertEquals(1, thief.computePlayerInfluence(player1, islandIndex));
 
         // Compute influence
         assertEquals(0, game.getIslands().get(islandIndex).getTowers().size());
         thief.computeInfluence(islandIndex);
         assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
-        assertEquals(TowerColor.WHITE, game.getIslands().get(islandIndex).getTowers().get(0).getColor());
+        assertEquals(TowerColor.WHITE,
+                game.getIslands().get(islandIndex).getTowers().get(0).getColor());
         thief.computeInfluence();
         if (game.getMotherNatureIndex().get() == islandIndex)
-            assertEquals(1, game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
-        else assertEquals(0, game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
+            assertEquals(1,
+                    game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
+        else
+            assertEquals(0,
+                    game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
 
         // Move students from cloud tile
         CloudTile cloud = game.getCloudTiles().get(0);

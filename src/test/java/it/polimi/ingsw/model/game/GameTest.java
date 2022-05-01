@@ -191,11 +191,11 @@ public class GameTest
         assertThrows(NoSuchElementException.class,
                 () -> game.putStudentToDining(new Student(SchoolColor.GREEN)));
 
-        // Select the a player
+        // Select a player
         game.selectPlayer(1);
 
-        // Now it should work (even if the game is not setup)
-        assertDoesNotThrow(() -> game.putStudentToDining(new Student(SchoolColor.YELLOW)));
+        // It shouldn't work because the game hasn't been initialized
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToDining(new Student(SchoolColor.YELLOW)));
 
         // There should be a student in the selected island
         assertEquals(player2.getBoard().getStudentsNumber(SchoolColor.YELLOW), 1);
