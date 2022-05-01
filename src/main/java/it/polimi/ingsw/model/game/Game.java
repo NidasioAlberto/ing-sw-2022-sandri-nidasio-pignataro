@@ -653,6 +653,10 @@ public class Game implements Publisher<ModelUpdate>
             for (int i = 0; i < studentsToPut; i++)
                 cloud.addStudent(getStudentFromBag());
         }
+
+        // At the end i notify the observer
+        if(subscriber.isPresent())
+            subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
     }
 
     /**
