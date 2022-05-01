@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.game.Game;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * This class represents the collection of methods and game finite state machine that allow the
@@ -85,14 +86,13 @@ public class GameActionHandler
         gamePhase.onValidAction(this);
     }
 
-    public void moveStudentFromEntranceToIsland(List<SchoolColor> selectedColors, int selectedIsland)
+    public void moveStudentFromEntranceToIsland(SchoolColor selectedColor, int selectedIsland)
             throws InvalidModuleException
     {
         checkIfCharacterCardIsStillPlayable();
 
-        // Select the colors
-        for (SchoolColor color : selectedColors)
-            game.getSelectedPlayer().get().selectColor(color);
+        // Select the color
+        game.getSelectedPlayer().get().selectColor(selectedColor);
 
         // Select the island
         game.getSelectedPlayer().get().selectIsland(selectedIsland);
@@ -113,14 +113,13 @@ public class GameActionHandler
         gamePhase.onValidAction(this);
     }
 
-    public void moveStudentFromEntranceToDining(List<SchoolColor> selectedColors)
+    public void moveStudentFromEntranceToDining(SchoolColor selectedColor)
             throws InvalidModuleException
     {
         checkIfCharacterCardIsStillPlayable();
 
-        // Select the colors
-        for (SchoolColor color : selectedColors)
-            game.getSelectedPlayer().get().selectColor(color);
+        // Select the color
+        game.getSelectedPlayer().get().selectColor(selectedColor);
 
         // Move the student to dining
         game.getSelectedPlayer().get().getBoard()
@@ -223,7 +222,8 @@ public class GameActionHandler
         // IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD'S PLAY
     }
 
-    public void characterCardAction(ExpertGameAction action)
+    public void characterCardAction(ExpertGameAction action, Optional<Integer> selectedIsland,
+                                    Optional<List<SchoolColor>> selectedColors)
             throws NullPointerException, NoSuchElementException
     {
         if (action == null)
@@ -232,6 +232,13 @@ public class GameActionHandler
         // Get the current card if activated
         CharacterCard currentCard = game.getCurrentCharacterCard().filter(c -> c.isActivated())
                 .orElseThrow(() -> new NoSelectedCharacterCardException("[GameActionHandler]"));
+
+        // Select the island
+        selectedIsland.ifPresent((island) -> game.getSelectedPlayer().get().selectIsland(island));
+
+        // Select the colors
+        selectedColors.ifPresent((colors) -> colors.stream().forEach(
+                (color) -> game.getSelectedPlayer().get().selectColor(color)));
 
         // If the action is valid i execute the action
         if (currentCard.isValidAction(action))

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.protocol.messages;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
@@ -10,11 +8,11 @@ import it.polimi.ingsw.model.BaseGameAction;
  */
 public class SelectCloudTileMessage extends ActionMessage
 {
-    int selectedCloudTile;
+    private int selectedCloudTile;
 
-    protected SelectCloudTileMessage(JSONObject actionJson) throws JSONException
+    public SelectCloudTileMessage(int selectedCloudTile)
     {
-        selectedCloudTile = actionJson.getInt("selectedCloudTile");
+        this.selectedCloudTile =selectedCloudTile;
     }
 
     public void applyAction(GameActionHandler handler)

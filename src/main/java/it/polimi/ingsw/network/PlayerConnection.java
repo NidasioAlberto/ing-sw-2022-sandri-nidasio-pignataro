@@ -127,7 +127,7 @@ public class PlayerConnection implements Runnable
 
     public void handleAction(JSONObject actionJson)
     {
-        ActionMessage action = ActionMessage.buildActionMessage(actionJson);
-        server.actionCall(action, this);
+        //ActionMessage action = ActionMessage.buildActionMessage(actionJson);
+        //server.actionCall(action, this);
     }
 }

@@ -5,33 +5,29 @@ import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Message related to the movement of a student from entrance to an island.
  */
 public class MoveStudentFromEntranceToIslandMessage extends ActionMessage
 {
-    List<SchoolColor> selectedColors;
-    int selectedIsland;
+    private SchoolColor selectedColor;
+    private int selectedIsland;
 
-    protected MoveStudentFromEntranceToIslandMessage(JSONObject actionJson) throws JSONException
+    public MoveStudentFromEntranceToIslandMessage(SchoolColor selectedColor, int selectedIsland)
     {
-        selectedColors = new ArrayList<>();
+        if (selectedColor == null)
+            throw new NullPointerException("[ActionMessage] The selected color is null");
 
-        JSONArray colors = actionJson.getJSONArray("selectedColors");
-        for (int i = 0; i < colors.length(); i++)
-            selectedColors.add(SchoolColor.valueOf(colors.getString(i)));
+        this.selectedColor = selectedColor;
 
-        selectedIsland = actionJson.getInt("selectedIsland");
+        this.selectedIsland = selectedIsland;
     }
 
     public void applyAction(GameActionHandler handler)
     {
         checkHandler(handler);
-        handler.moveStudentFromEntranceToIsland(selectedColors, selectedIsland);
+        handler.moveStudentFromEntranceToIsland(selectedColor, selectedIsland);
     }
 
     public BaseGameAction getBaseGameAction()

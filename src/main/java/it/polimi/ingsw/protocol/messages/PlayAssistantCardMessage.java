@@ -1,7 +1,5 @@
 package it.polimi.ingsw.protocol.messages;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
@@ -10,11 +8,11 @@ import it.polimi.ingsw.model.BaseGameAction;
  */
 public class PlayAssistantCardMessage extends ActionMessage
 {
-    int selectedCard;
+    private int selectedCard;
 
-    PlayAssistantCardMessage(JSONObject actionJson) throws JSONException
+    public PlayAssistantCardMessage(int selectedCard)
     {
-        selectedCard = actionJson.getInt("selectedCard");
+        this.selectedCard = selectedCard;
     }
 
     @Override
