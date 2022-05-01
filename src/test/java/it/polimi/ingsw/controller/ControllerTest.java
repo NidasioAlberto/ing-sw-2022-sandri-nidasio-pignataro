@@ -1,7 +1,9 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.GameMode;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;
+import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
@@ -147,6 +149,26 @@ public class ControllerTest
     @Test
     public void endGameTest()
     {
+        // Set up a game
+        try
+        {
+            controller.addPlayer("player1");
+            controller.addPlayer("player2");
+            controller.addPlayer("player3");
+        } catch (TooManyPlayersException e)
+        {
+            e.printStackTrace();
+        }
+        controller.setupGame();
+
+        // A player has built all the towers
+        Player winner = controller.getGameHandler().getGame().getSelectedPlayer().get();
+        assertEquals("player1", winner.getNickname());
+        for (int i = 0; i < 6; i++)
+            winner.getBoard().removeTower(winner.getColor());
+        assertThrows(EndGameException.class, () -> winner.getBoard().removeTower(winner.getColor()));
+
+
 
     }
 

@@ -139,6 +139,7 @@ public class Controller
         try
         {
             game.setupGame();
+            game.fillClouds();
             actionHandler = new GameActionHandler(game);
         } catch (NotEnoughPlayersException e)
         {

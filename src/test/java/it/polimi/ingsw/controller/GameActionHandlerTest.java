@@ -174,8 +174,10 @@ public class GameActionHandlerTest
         assertEquals(9, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
         assertEquals(0, game.getCloudTiles().get(0).getStudents().size());
 
-        //TODO cancellare quando modificato end turn phase
-        handler.endTurn();
+        // We now move to EndTurnPhase
+        assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
+        assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player1"));
+
         // We now move to MoveStudentPhase of the next player, which is player3
         assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
         assertEquals("player3", game.getSelectedPlayer().get().getNickname());
@@ -246,5 +248,18 @@ public class GameActionHandlerTest
                 new MoveMotherNatureMessage((game.getMotherNatureIndex().get() + game.getSelectedPlayer().get().
                         getSelectedCard().get().getSteps()) % game.getIslands().size()), "player3"));
 
+        // player3 selects a cloud tile
+        assertDoesNotThrow(() -> handler.handleAction(
+                new SelectCloudTileMessage(1),"player3"));
+        assertEquals(9, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        assertEquals(0, game.getCloudTiles().get(1).getStudents().size());
+
+        // We now move to EndTurnPhase
+        assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
+        assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player3"));
+
+        // We now move to MoveStudentPhase of the next player, which is player2
+        assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
+        assertEquals("player2", game.getSelectedPlayer().get().getNickname());
     }
 }
