@@ -684,12 +684,21 @@ public class Game implements Publisher<ModelUpdate>
 
     /**
      * This method clears the things that have to be cleared when a new turn begins such as
-     * currentCharacterCard
+     * currentCharacterCard and the fact that mother nature has moved.
      */
     public void clearTurn()
     {
-        this.currentCharacterCardIndex = Optional.empty();
+        clearCharacterCard();
         this.motherNatureMoved = false;
+    }
+
+    /**
+     * Method to clear the current character card. It is used by the controller when a player tries
+     * to activate two character cards in the same turn.
+     */
+    public void clearCharacterCard()
+    {
+        this.currentCharacterCardIndex = Optional.empty();
     }
 
     /**

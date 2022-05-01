@@ -1,15 +1,20 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.GameMode;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoLegitActionException;
+import it.polimi.ingsw.model.game.CharacterCard;
+import it.polimi.ingsw.model.game.Monk;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.model.TowerColor;
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
+import it.polimi.ingsw.protocol.messages.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,16 +31,16 @@ public class ControllerTest
     public void init()
     {
         Server server = new Server();
-        server.createMatch("Game1", 3, GameMode.CLASSIC);
+        server.createMatch("Game1", 3, GameMode.EXPERT);
         match = server.getMatchById("Game1");
-        controller = new Controller(match, 3, GameMode.CLASSIC);
+        controller = new Controller(match, 3, GameMode.EXPERT);
     }
 
     @Test
     public void constructorTest()
     {
         // Check the game mode and the number of players
-        assertEquals(GameMode.CLASSIC, controller.getGameMode());
+        assertEquals(GameMode.EXPERT, controller.getGameMode());
         assertEquals(3, controller.getPlayersNumber());
 
         // Create a controller with a null server
@@ -186,6 +191,92 @@ public class ControllerTest
     @Test
     public void performActionTest()
     {
+        // Set up a game
+        try
+        {
+            controller.addPlayer("player1");
+            controller.addPlayer("player2");
+            controller.addPlayer("player3");
+        } catch (TooManyPlayersException e)
+        {
+            e.printStackTrace();
+        }
+        controller.setupGame();
+        GameActionHandler handler = controller.getGameHandler();
+        Game game = handler.getGame();
 
+        // player1 selects an assistant card
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(1), "player1"));
+        assertEquals(1, game.getPlayerTableList().get(0).getSelectedCard().get().getTurnOrder());
+
+        // player3 selects an assistant card, so a WrongPlayerException is caught by the controller
+        // because player2 should play
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(2), "player3"));
+        assertTrue(game.getPlayerTableList().get(2).getSelectedCard().isEmpty());
+
+        // player2 moves mother nature, so a NoLegitActionException is caught by the controller
+        // because player2 should play an assistant card
+        assertDoesNotThrow(() -> controller.performAction(
+                new MoveMotherNatureMessage(2), "player2"));
+
+        // player2 selects an assistant card
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(2), "player2"));
+        assertEquals(2, game.getPlayerTableList().get(1).getSelectedCard().get().getTurnOrder());
+
+        // player3 selects an assistant card
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(3), "player3"));
+        assertEquals(3, game.getPlayerTableList().get(2).getSelectedCard().get().getTurnOrder());
+
+        // player1 moves a student to an island with a wrong index,
+        // so an IslandIndexOutOfBounds is caught by the controller
+        SchoolColor color1 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> controller.performAction(
+                new MoveStudentFromEntranceToIslandMessage(color1, 13), "player1"));
+        assertEquals(9, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+
+        for (CharacterCard card : game.getCharacterCards())
+        {
+            if (card instanceof Monk)
+            {
+                // player3 activate the monk card but hasn't enough coins,
+                // so a NotEnoughCoins is caught by the player
+                assertDoesNotThrow(() -> controller.performAction(
+                        new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player1"));
+                assertFalse(card.isActivated());
+
+                game.getSelectedPlayer().get().getBoard().addCoins(2);
+                // player3 activate the monk card
+                assertDoesNotThrow(() -> controller.performAction(
+                        new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player1"));
+                assertTrue(card.isActivated());
+
+                // Search a student color not present on the card
+                int counter;
+                SchoolColor color2 = null;
+                for (SchoolColor color : SchoolColor.values()) {
+                    counter = 0;
+                    for (Student student : ((Monk) card).getStudents()) {
+                        if (student.getColor() != color)
+                            counter++;
+                    }
+                    if (counter == ((Monk) card).getStudents().size()) {
+                        color2 = color;
+                        break;
+                    }
+                }
+
+                //player3 applies the action of the monk
+                List colors = new ArrayList<SchoolColor>();
+                colors.add(color2);
+                assertDoesNotThrow(() -> controller.performAction(
+                        new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
+                                5, colors),"player1"));
+
+            }
+        }
     }
 }

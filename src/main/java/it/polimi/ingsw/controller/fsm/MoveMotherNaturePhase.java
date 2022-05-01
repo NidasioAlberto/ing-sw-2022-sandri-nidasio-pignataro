@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 
 public class MoveMotherNaturePhase implements Phase
 {
@@ -29,9 +30,10 @@ public class MoveMotherNaturePhase implements Phase
         Player currentPlayer = handler.getGame().getSelectedPlayer()
                 .orElseThrow(() -> new NoSelectedPlayerException("[MoveMotherNaturePhase]"));
 
-        return currentPlayer.getNickname().equals(playerName) &&
-                (baseAction == BaseGameAction.MOVE_MOTHER_NATURE ||
+        if (!currentPlayer.getNickname().equals(playerName))
+            throw new WrongPlayerException();
+        return baseAction == BaseGameAction.MOVE_MOTHER_NATURE ||
                  baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
-                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD);
+                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD;
     }
 }

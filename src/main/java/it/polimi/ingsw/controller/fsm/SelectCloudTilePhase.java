@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 
 public class SelectCloudTilePhase implements Phase
 {
@@ -29,9 +30,10 @@ public class SelectCloudTilePhase implements Phase
         Player currentPlayer = handler.getGame().getSelectedPlayer()
                 .orElseThrow(() -> new NoSelectedPlayerException("[SelectCloudTilePhase]"));
 
-        return currentPlayer.getNickname().equals(playerName) &&
-                (baseAction == BaseGameAction.SELECT_CLOUD_TILE ||
+        if (!currentPlayer.getNickname().equals(playerName))
+            throw new WrongPlayerException();
+        return baseAction == BaseGameAction.SELECT_CLOUD_TILE ||
                  baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
-                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD);
+                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD;
     }
 }

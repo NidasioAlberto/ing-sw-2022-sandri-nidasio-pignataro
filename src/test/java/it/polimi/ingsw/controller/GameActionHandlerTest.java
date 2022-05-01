@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.fsm.*;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoLegitActionException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Monk;
@@ -74,7 +75,7 @@ public class GameActionHandlerTest
                 assertEquals("[GameActionHandler] Null action message", e1.getMessage());
 
                 // The action isn't legit because player1 should play and not player2
-                assertThrows(NoLegitActionException.class, () -> handler
+                assertThrows(WrongPlayerException.class, () -> handler
                                 .handleAction(new PlayAssistantCardMessage(1), "player2"));
 
                 // The action isn't legit because the action should be an assistant card selection

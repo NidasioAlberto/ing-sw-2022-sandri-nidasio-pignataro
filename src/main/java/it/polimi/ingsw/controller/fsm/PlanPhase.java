@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.BaseGameAction;
+import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 
 import java.util.List;
 
@@ -62,7 +63,8 @@ public class PlanPhase implements Phase
 
         // I accept the action if and only if the player is correct and the action is an assistant
         // card play
-        return orderList.get(playerIndex).getNickname().equals(playerName) &&
-                baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
+        if (!orderList.get(playerIndex).getNickname().equals(playerName))
+            throw new WrongPlayerException();
+        return baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
     }
 }

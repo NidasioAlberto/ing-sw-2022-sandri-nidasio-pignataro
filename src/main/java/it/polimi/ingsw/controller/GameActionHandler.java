@@ -94,6 +94,8 @@ public class GameActionHandler
         game.getSelectedPlayer().get().selectColor(selectedColor);
 
         // Select the island
+        if (selectedIsland < 0 || selectedIsland >= game.getIslands().size())
+            throw new IslandIndexOutOfBoundsException("[GameActionHandler]");
         game.getSelectedPlayer().get().selectIsland(selectedIsland);
 
         // Move the student to the selected island

@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 
 public class EndTurnPhase implements Phase
 {
@@ -43,9 +44,10 @@ public class EndTurnPhase implements Phase
         Player currentPlayer = handler.getGame().getSelectedPlayer()
                 .orElseThrow(() -> new NoSelectedPlayerException("[EndTurnPhase]"));
 
-        return currentPlayer.getNickname().equals(playerName) &&
-                (baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
+        if (!currentPlayer.getNickname().equals(playerName))
+            throw new WrongPlayerException();
+        return baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD ||
-                baseAction == BaseGameAction.END_TURN);
+                baseAction == BaseGameAction.END_TURN;
     }
 }

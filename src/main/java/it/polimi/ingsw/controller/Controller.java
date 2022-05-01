@@ -169,7 +169,7 @@ public class Controller
             sendError(getCurrentPlayer(), "You can't do this action right now.");
         } catch (WrongPlayerException e)
         {
-            sendError(e.getPlayer(), "This is not your turn, you have to wait.");
+            sendError(playerName, "This is not your turn, you have to wait.");
         } catch (NoSelectedIslandException e)
         {
             sendError(getCurrentPlayer(), "You have to select an island to perform the action.");
@@ -195,6 +195,7 @@ public class Controller
             sendError(getCurrentPlayer(), "You can't select that island.");
         } catch (NotEnoughCoinsException e)
         {
+            game.clearCharacterCard();
             sendError(getCurrentPlayer(), "You don't have enough coins to play this card.");
         } catch (NoSuchStudentOnCardException e)
         {
@@ -215,8 +216,9 @@ public class Controller
             sendError(getCurrentPlayer(), e.getMessage());
         } catch (InvalidCharacterCardException e)
         {
-            sendError(getCurrentPlayer(), e.getMessage());
-        } catch (NoMoreNoEntryTilesException e)
+            sendError(getCurrentPlayer(), "You can't play two character cards in the same turn.");
+        }
+        catch (NoMoreNoEntryTilesException e)
         {
             sendError(getCurrentPlayer(),
                     "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
