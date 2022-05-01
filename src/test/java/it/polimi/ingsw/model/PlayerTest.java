@@ -336,7 +336,6 @@ public class PlayerTest
 
         // Clear the selections at the end of the turn
         player.clearSelectionsEndTurn();
-        assertTrue(player.getSelectedCard().isEmpty());
         assertTrue(player.getSelectedIsland().isEmpty());
         assertTrue(player.getSelectedColors().isEmpty());
         assertTrue(player.getSelectedCloudTile().isEmpty());

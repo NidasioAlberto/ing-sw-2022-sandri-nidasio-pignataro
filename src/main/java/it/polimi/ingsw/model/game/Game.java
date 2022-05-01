@@ -537,7 +537,8 @@ public class Game implements Publisher<ModelUpdate>
 
         // 5. Place the cloud tiles
         IntStream.range(0, players.size())
-                .forEach(i -> cloudTiles.add(new CloudTile(CloudTileType.TILE_2_4)));
+                .forEach(i -> cloudTiles.add(playersNumber == 3 ?
+                        new CloudTile(CloudTileType.TILE_3) : new CloudTile(CloudTileType.TILE_2_4)));
 
         // 6. Place the professors
         for (SchoolColor color : SchoolColor.values())
@@ -617,7 +618,7 @@ public class Game implements Publisher<ModelUpdate>
      * @return the student extracted from the bag.
      * @throws NoSuchElementException thrown if the student bag is empty
      */
-    public Student getStudentFromBag() throws NoSuchElementException
+    public Student getStudentFromBag() throws EndGameException
     {
         if (studentBag.size() == 0)
             throw new EndGameException("[Game] Student bag empty");
@@ -635,6 +636,23 @@ public class Game implements Publisher<ModelUpdate>
         if (student == null)
             throw new NullPointerException("[Game] Can't add a null student to the bag");
         studentBag.add(student);
+    }
+
+    /**
+     * Fills all the cloud tiles with students from the bag.
+     * It should be called at the beginning of each round.
+     */
+    public void fillClouds()
+    {
+        int studentsToPut = playersNumber == 3 ? 4 : 3;
+
+        for (CloudTile cloud : cloudTiles)
+        {
+            if (cloud.getStudents().size() != 0)
+                throw new IllegalStateException("[Game] You can't fill non empty clouds");
+            for (int i = 0; i < studentsToPut; i++)
+                cloud.addStudent(getStudentFromBag());
+        }
     }
 
     /**

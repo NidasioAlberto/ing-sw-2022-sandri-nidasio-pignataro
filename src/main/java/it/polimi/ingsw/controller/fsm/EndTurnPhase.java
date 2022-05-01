@@ -41,7 +41,7 @@ public class EndTurnPhase implements Phase
     {
         // Check if the player corresponds to the selected one in SORTED LIST
         Player currentPlayer = handler.getGame().getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[SelectCloudTilePhase]"));
+                .orElseThrow(() -> new NoSelectedPlayerException("[EndTurnPhase]"));
 
         return currentPlayer.getNickname().equals(playerName) &&
                 (baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
