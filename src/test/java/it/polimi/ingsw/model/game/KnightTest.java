@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 

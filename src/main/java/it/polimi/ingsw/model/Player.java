@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.ArrayList;
 
@@ -261,6 +260,7 @@ public class Player
      */
     public void clearSelectionsEndTurn()
     {
+        selectedCard = Optional.empty();
         selectedIsland = Optional.empty();
         selectedColors.clear();
         selectedCloudTile = Optional.empty();

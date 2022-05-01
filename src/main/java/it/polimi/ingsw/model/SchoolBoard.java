@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.EndGameException;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentInDiningException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
 
 import java.util.*;
@@ -196,8 +195,8 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null color");
 
         if (color == towerColor)
-            removeTower(towers.stream().filter(t -> t.getColor() == color).findFirst().orElseThrow(
-                () -> new EndGameException("[SchoolBoard] Towers finished")));
+            removeTower(towers.stream().filter(t -> t.getColor() == color).findFirst()
+                    .orElseThrow(() -> new EndGameException("[SchoolBoard] Towers finished")));
     }
 
     /**
@@ -331,8 +330,8 @@ public class SchoolBoard
             throw new NullPointerException("[SchoolBoard] Null color");
 
         // Save the student instance
-        Student removed = removeStudentFromEntrance(color).orElseThrow(
-                        () -> new NoSuchStudentInEntranceException("[SchoolBoard]"));
+        Student removed = removeStudentFromEntrance(color)
+                .orElseThrow(() -> new NoSuchStudentInEntranceException("[SchoolBoard]"));
 
         addStudentToDiningRoom(removed);
     }

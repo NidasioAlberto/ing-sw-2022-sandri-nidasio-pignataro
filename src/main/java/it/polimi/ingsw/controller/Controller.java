@@ -69,7 +69,7 @@ public class Controller
         {
             if (player.getBoard().getTowers().size() == 0)
             {
-                sendAllMessage("The game is ended. The winner is " + player.getNickname());
+                match.endMatch("The game is ended. The winner is " + player.getNickname());
                 return;
             }
         }
@@ -107,7 +107,7 @@ public class Controller
                             && rank.get(0).getBoard().getProfessors().size() > rank.get(1)
                                     .getBoard().getProfessors().size()))
             {
-                sendAllMessage("The game is ended. The winner is " + rank.get(0).getNickname());
+                match.endMatch("The game is ended. The winner is " + rank.get(0).getNickname());
                 return;
             }
             // Case of a three players game and a tie between the first two
@@ -118,14 +118,14 @@ public class Controller
                             && rank.get(0).getBoard().getProfessors().size() > rank.get(2)
                                     .getBoard().getProfessors().size())))
             {
-                sendAllMessage("The game is ended. It is a tie between " + rank.get(0).getNickname()
+                match.endMatch("The game is ended. It is a tie between " + rank.get(0).getNickname()
                         + " and " + rank.get(1).getNickname());
                 return;
             }
             // Otherwise, it is a tie between all the players
             else
             {
-                sendAllMessage("The game is ended. It is a tie between all the players.");
+                match.endMatch("The game is ended. It is a tie between all the players.");
                 return;
             }
         }
@@ -142,7 +142,8 @@ public class Controller
             actionHandler = new GameActionHandler(game);
         } catch (NotEnoughPlayersException e)
         {
-            sendAllMessage(e.getMessage());
+            // TODO: Review how this should happen
+            match.endMatch(e.getMessage());
         }
     }
 
@@ -161,78 +162,70 @@ public class Controller
         {
             endGame();
             // se il gioco non è veramente terminato?
-            // forse conviene separare in isGameEnded and computeWinner o mi fido che il gioco sia terminato
+            // forse conviene separare in isGameEnded and computeWinner o mi fido che il gioco sia
+            // terminato
         } catch (NoLegitActionException e)
         {
-            sendMessage(getCurrentPlayer(), "You can't do this action right now.");
+            sendError(getCurrentPlayer(), "You can't do this action right now.");
         } catch (WrongPlayerException e)
         {
-            sendMessage(e.getPlayer(), "This is not your turn, you have to wait.");
+            sendError(e.getPlayer(), "This is not your turn, you have to wait.");
         } catch (NoSelectedIslandException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select an island to perform the action.");
+            sendError(getCurrentPlayer(), "You have to select an island to perform the action.");
         } catch (NoSelectedColorException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a color to perform the action.");
+            sendError(getCurrentPlayer(), "You have to select a color to perform the action.");
         } catch (NoSelectedAssistantCardException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select an assistant card to perform the action.");
+            sendError(getCurrentPlayer(),
+                    "You have to select an assistant card to perform the action.");
         } catch (NoSelectedStudentsException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select the students to perform the action.");
+            sendError(getCurrentPlayer(), "You have to select the students to perform the action.");
         } catch (NoSelectedCloudTileException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a cloud tile to perform the action.");
+            sendError(getCurrentPlayer(), "You have to select a cloud tile to perform the action.");
         } catch (NoSelectedCharacterCardException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a character card to perform the action.");
+            sendError(getCurrentPlayer(),
+                    "You have to select a character card to perform the action.");
         } catch (IslandIndexOutOfBoundsException e)
         {
-            sendMessage(getCurrentPlayer(),"You can't select that island.");
+            sendError(getCurrentPlayer(), "You can't select that island.");
         } catch (NotEnoughCoinsException e)
         {
-            sendMessage(getCurrentPlayer(),"You don't have enough coins to play this card.");
+            sendError(getCurrentPlayer(), "You don't have enough coins to play this card.");
         } catch (NoSuchStudentOnCardException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a student present on the card.");
+            sendError(getCurrentPlayer(), "You have to select a student present on the card.");
         } catch (NoSuchStudentInEntranceException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a student present in your entrance room.");
+            sendError(getCurrentPlayer(),
+                    "You have to select a student present in your entrance room.");
         } catch (NoSuchStudentInDiningException e)
         {
-            sendMessage(getCurrentPlayer(),"You have to select a student present in your dining room.");
+            sendError(getCurrentPlayer(),
+                    "You have to select a student present in your dining room.");
         } catch (NoSuchAssistantCardException e)
         {
-            sendMessage(getCurrentPlayer(),"You don't have the assistant card you selected.");
+            sendError(getCurrentPlayer(), "You don't have the assistant card you selected.");
         } catch (InvalidMovementException e)
         {
-            sendMessage(getCurrentPlayer(),e.getMessage());
+            sendError(getCurrentPlayer(), e.getMessage());
         } catch (InvalidCharacterCardException e)
         {
-            sendMessage(getCurrentPlayer(), e.getMessage());
+            sendError(getCurrentPlayer(), e.getMessage());
         } catch (NoMoreNoEntryTilesException e)
         {
-            sendMessage(getCurrentPlayer(),
+            sendError(getCurrentPlayer(),
                     "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
         } catch (Exception e)
         {
-            sendAllMessage("Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible");
-            //TODO va chiusa la partita, servirebbe un metodo del tipo closeGame in match
+            match.endMatch(
+                    "Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible");
+            // TODO va chiusa la partita, servirebbe un metodo del tipo closeGame in match
         }
-    }
-
-    /**
-     * Sends a message to all the players.
-     * 
-     * @param message The message to send.
-     * @throws NullPointerException If the message is null.
-     */
-    public void sendAllMessage(String message) throws NullPointerException
-    {
-        if (message == null)
-            throw new NullPointerException("[Controller] Message is null");
-
-        match.sendAllMessage(message);
     }
 
     /**
@@ -243,7 +236,7 @@ public class Controller
      * @throws NullPointerException If the player or message are null.
      * @throws IllegalArgumentException If the player doesn't exist.
      */
-    public void sendMessage(String player, String message)
+    public void sendError(String player, String message)
             throws NullPointerException, IllegalArgumentException
     {
         if (message == null)
@@ -258,7 +251,7 @@ public class Controller
             // If the player exists, the message is sent
             if (existingPlayer.getNickname().equals(player))
             {
-                match.sendMessage(player, message);
+                match.sendError(player, message);
                 return;
             }
         }
@@ -325,7 +318,7 @@ public class Controller
 
     public String getCurrentPlayer()
     {
-        return game.getSelectedPlayer().orElseThrow(
-                () -> new NoSelectedPlayerException("[Controller]")).getNickname();
+        return game.getSelectedPlayer()
+                .orElseThrow(() -> new NoSelectedPlayerException("[Controller]")).getNickname();
     }
 }

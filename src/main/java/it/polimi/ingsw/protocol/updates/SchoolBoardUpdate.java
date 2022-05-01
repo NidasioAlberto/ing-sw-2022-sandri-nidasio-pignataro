@@ -16,18 +16,29 @@ public class SchoolBoardUpdate extends ModelUpdate
 
     /**
      * Constructor
+     * 
      * @param board The modified board
      * @param player The player that owns the board
      */
     public SchoolBoardUpdate(SchoolBoard board, String player)
     {
-        if(board == null)
+        if (board == null)
             throw new NullPointerException("[SchoolBoardUpdate] Null board");
-        if(player == null)
+        if (player == null)
             throw new NullPointerException("[SchoolBoardUpdate] Null player name");
 
-        this.board  = board;
+        this.board = board;
         this.player = player;
+    }
+
+    public SchoolBoard getBoard()
+    {
+        return board;
+    }
+
+    public String getPlayer()
+    {
+        return player;
     }
 
     @Override

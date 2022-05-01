@@ -13,17 +13,24 @@ public class AssistantCardsUpdate extends ModelUpdate
 
     /**
      * Constructor
+     * 
      * @param cards Collection of specific player cards
      */
     public AssistantCardsUpdate(List<AssistantCard> cards)
     {
-        if(cards == null)
+        if (cards == null)
             throw new NullPointerException("[AssistantCardsUpdate] Null cards list");
         // It is possible according to Java 8 documentation
-        if(cards.contains(null))
-            throw new NullPointerException("[AssistantCardsUpdate] Null assistant card inside the list");
+        if (cards.contains(null))
+            throw new NullPointerException(
+                    "[AssistantCardsUpdate] Null assistant card inside the list");
 
         this.cards = cards;
+    }
+
+    public List<AssistantCard> getCards()
+    {
+        return cards;
     }
 
     @Override

@@ -30,8 +30,7 @@ public class GrandmaHerbsTest
         {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        }
-        catch (TooManyPlayersException e)
+        } catch (TooManyPlayersException e)
         {
             e.printStackTrace();
         }
@@ -82,8 +81,7 @@ public class GrandmaHerbsTest
             {
                 grandmaHerbs.activate();
                 grandmaHerbs.applyAction();
-            }
-            catch (NotEnoughCoinsException e)
+            } catch (NotEnoughCoinsException e)
             {
                 e.printStackTrace();
             }
@@ -112,15 +110,16 @@ public class GrandmaHerbsTest
             player1.addCoins(2);
             grandmaHerbs.activate();
             assertEquals(0, player1.getCoins());
-            for (ExpertGameAction action: ExpertGameAction.values())
+            for (ExpertGameAction action : ExpertGameAction.values())
             {
-                // When GrandmaHerbs is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
+                // When GrandmaHerbs is active the only valid action is
+                // MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
                 if (action == ExpertGameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND)
                     assertTrue(grandmaHerbs.isValidAction(action));
-                else assertFalse(grandmaHerbs.isValidAction(action));
+                else
+                    assertFalse(grandmaHerbs.isValidAction(action));
             }
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -140,8 +139,7 @@ public class GrandmaHerbsTest
             player1.addCoins(3);
             grandmaHerbs.activate();
             assertEquals(0, player1.getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -157,7 +155,8 @@ public class GrandmaHerbsTest
     {
         // An exception is thrown if I call the method without a selected player
         grandmaHerbs.activated = true;
-        NoSuchElementException e4 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
+        NoSuchElementException e4 =
+                assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
         assertEquals("[GrandmaHerbs] No player selected", e4.getMessage());
 
         grandmaHerbs.activated = false;
@@ -174,14 +173,13 @@ public class GrandmaHerbsTest
         try
         {
             grandmaHerbs.activate();
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
 
         // If the player hasn't selected an island, an exception is thrown
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
+        assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
 
         // Select an island
         player1.selectIsland(0);
@@ -218,8 +216,7 @@ public class GrandmaHerbsTest
                 assertEquals(1 + i, game.getIslands().get(0).getNoEntryTiles());
                 assertEquals(3 - i, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
                 assertEquals(20 - 3 * i, player1.getCoins());
-            }
-            catch (NotEnoughCoinsException e1)
+            } catch (NotEnoughCoinsException e1)
             {
                 e1.printStackTrace();
             }
@@ -229,14 +226,14 @@ public class GrandmaHerbsTest
         try
         {
             grandmaHerbs.activate();
-        }
-        catch (NotEnoughCoinsException e2)
+        } catch (NotEnoughCoinsException e2)
         {
             e2.printStackTrace();
         }
 
         // When there aren't noEntryTiles on the card an exception is thrown
-        NoSuchElementException e3 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
+        NoSuchElementException e3 =
+                assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
         assertEquals("[GrandmaHerbs] No more no entry tiles", e3.getMessage());
     }
 
@@ -244,9 +241,11 @@ public class GrandmaHerbsTest
     public void computeInfluenceTest()
     {
         // An exception is thrown when the island index is wrong
-        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, () -> grandmaHerbs.computeInfluence(-1));
+        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
+                () -> grandmaHerbs.computeInfluence(-1));
         assertEquals("[GrandmaHerbs] Island index out of bounds", e.getMessage());
-        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class, () -> grandmaHerbs.computeInfluence(12));
+        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class,
+                () -> grandmaHerbs.computeInfluence(12));
         assertEquals("[GrandmaHerbs] Island index out of bounds", e1.getMessage());
 
         // Select a player
@@ -260,14 +259,14 @@ public class GrandmaHerbsTest
         player1.selectIsland(islandIndex);
 
         // Imagine the player1 owns the professor of the only student present on the selected island
-        player1.getBoard().addProfessor(new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
+        player1.getBoard().addProfessor(
+                new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
 
         // Activate the card
         try
         {
             grandmaHerbs.activate();
-        }
-        catch (NotEnoughCoinsException e2)
+        } catch (NotEnoughCoinsException e2)
         {
             e2.printStackTrace();
         }
@@ -299,7 +298,8 @@ public class GrandmaHerbsTest
         assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
         assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
-        assertEquals(player1.getColor(), game.getIslands().get(islandIndex).getTowers().get(0).getColor());
+        assertEquals(player1.getColor(),
+                game.getIslands().get(islandIndex).getTowers().get(0).getColor());
         assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
     }
 }

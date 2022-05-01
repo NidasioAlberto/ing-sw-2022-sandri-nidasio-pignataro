@@ -3,8 +3,6 @@ package it.polimi.ingsw.protocol.messages;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.SchoolColor;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Message related to the movement of a student from entrance to an island.

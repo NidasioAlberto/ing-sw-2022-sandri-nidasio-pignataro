@@ -369,7 +369,8 @@ public class GameTest
         List<Tower> towers = island.getTowers();
 
         // The game is set up and mother nature has been positioned
-        // Each player should have the same influence, hence no tower movement has to be performed
+        // Each player should have the same influence, hence no tower movement has to be
+        // performed
         assertDoesNotThrow(() -> game.computeInfluence());
         for (int i = 0; i < towers.size(); i++)
             assertEquals(towers.get(i), game.getCurrentIsland().getTowers().get(i));
@@ -409,13 +410,15 @@ public class GameTest
         // Select a player
         game.selectPlayer(1);
 
-        // This should still fail because the current player has not selected a cloud tile
+        // This should still fail because the current player has not selected a cloud
+        // tile
         assertThrows(NoSuchElementException.class, () -> game.moveStudentsFromCloudTile());
 
         // Make the player select the second cloud tile
         player2.selectCloudTile(1);
 
-        // This should still fail because the game is not set up and there are no cloud tiles
+        // This should still fail because the game is not set up and there are no cloud
+        // tiles
         assertThrows(IndexOutOfBoundsException.class, () -> game.moveStudentsFromCloudTile());
 
         // Setup the game

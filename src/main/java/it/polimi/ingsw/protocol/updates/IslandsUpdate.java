@@ -18,21 +18,33 @@ public class IslandsUpdate extends ModelUpdate
 
     /**
      * Constructor
+     * 
      * @param islands Collection of all the islands
      * @param motherNatureIndex Index of mother nature position inside the collection
      */
     public IslandsUpdate(List<Island> islands, int motherNatureIndex)
     {
-        if(islands == null)
+        if (islands == null)
             throw new NullPointerException("[IslandsUpdate] Null island list");
         // It is possible according to java 8 documentation
-        if(islands.contains(null))
+        if (islands.contains(null))
             throw new NullPointerException("[IslandsUpdate] Null island inside the list");
-        if(motherNatureIndex < 0 || motherNatureIndex >= islands.size())
-            throw new IndexOutOfBoundsException("[IslandsUpdate] Mother nature index out of bounds");
+        if (motherNatureIndex < 0 || motherNatureIndex >= islands.size())
+            throw new IndexOutOfBoundsException(
+                    "[IslandsUpdate] Mother nature index out of bounds");
 
-        this.islands            = islands;
-        this.motherNatureIndex  = motherNatureIndex;
+        this.islands = islands;
+        this.motherNatureIndex = motherNatureIndex;
+    }
+
+    public List<Island> getIslands()
+    {
+        return islands;
+    }
+
+    public int getMotherNatureIndex()
+    {
+        return motherNatureIndex;
     }
 
     @Override
