@@ -6,6 +6,7 @@ public class QuitGameCommand extends Command
 {
     public void applyCommand(PlayerConnection connection) throws NullPointerException
     {
+        checkPlayerConnection(connection);
         connection.close();
     }
 }

@@ -16,7 +16,7 @@ public class ServerConnection implements Runnable
 
     private ExecutorService executor;
 
-    private int port = 1234;
+    private int port = 2345;
 
     private boolean active = true;
 

@@ -7,14 +7,12 @@ import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 
-import java.util.NoSuchElementException;
-
 /**
  * Character card Grandma Herbs. Effect: Place a No Entry tile on an Island of your choice. The
  * first time Mother Nature ends her movement there, put the No Entry Tile back onto this card DO
- * NOT calculate influence on that Island, or place any Towers.
- * IMPORTANT: THIS CARD IS THE ONLY ONE THAT IS ALWAYS REPLACING A METHOD: computeInfluence, TO MONITOR IF A NO ENTRY TILE
- * MUST RETURN TO THE CARD ITSELF.
+ * NOT calculate influence on that Island, or place any Towers. IMPORTANT: THIS CARD IS THE ONLY ONE
+ * THAT IS ALWAYS REPLACING A METHOD: computeInfluence, TO MONITOR IF A NO ENTRY TILE MUST RETURN TO
+ * THE CARD ITSELF.
  */
 public class GrandmaHerbs extends CharacterCard
 {
@@ -37,7 +35,7 @@ public class GrandmaHerbs extends CharacterCard
 
         // GrandmaHerbs cost
         this.cost = 2;
-        //Initial noEntryTiles
+        // Initial noEntryTiles
         this.noEntryTiles = INITIAL_NO_ENTRY_NUMBER;
     }
 
@@ -63,49 +61,48 @@ public class GrandmaHerbs extends CharacterCard
     public void applyAction()
     {
         // If the card is not currently activated I do nothing
-        if(!activated)
+        if (!activated)
             return;
 
         // If there aren't noEntryTiles an exception is thrown
         if (noEntryTiles <= 0)
             throw new NoMoreNoEntryTilesException("[GrandmaHerbs]");
 
-        //Put the no entry tile on the selected island
-        int island = instance.getSelectedPlayer().orElseThrow(
-                () -> new NoSelectedPlayerException("[GrandmaHerbs]")
-        ).getSelectedIsland().orElseThrow(
-                () -> new NoSelectedIslandException("[GrandmaHerbs]")
-        );
+        // Put the no entry tile on the selected island
+        int island = instance.getSelectedPlayer()
+                .orElseThrow(() -> new NoSelectedPlayerException("[GrandmaHerbs]"))
+                .getSelectedIsland()
+                .orElseThrow(() -> new NoSelectedIslandException("[GrandmaHerbs]"));
 
-        //Add the noEntryTile to the selected island
+        // Add the noEntryTile to the selected island
         instance.islands.get(island).addNoEntryTile();
 
-        //Remove the noEntryTile from the card
+        // Remove the noEntryTile from the card
         noEntryTiles--;
 
-        //Then disable the card
+        // Then disable the card
         deactivate();
     }
 
     @Override
     public void computeInfluence(int island)
     {
-        //I check if the index is correct
-        if(island < 0 || island >= instance.islands.size())
+        // I check if the index is correct
+        if (island < 0 || island >= instance.islands.size())
             throw new IslandIndexOutOfBoundsException("[GrandmaHerbs]");
 
-        //I check if on the island there is a no entry tile
-        if(instance.islands.get(island).getNoEntryTiles() > 0)
+        // I check if on the island there is a no entry tile
+        if (instance.islands.get(island).getNoEntryTiles() > 0)
         {
-            //If so I return it back to the card and remove it from the island
+            // If so I return it back to the card and remove it from the island
             noEntryTiles++;
             instance.islands.get(island).removeNoEntryTile();
 
-            //The influence is not calculated
+            // The influence is not calculated
             return;
         }
 
-        //Then I compute the normal influence
+        // Then I compute the normal influence
         instance.computeInfluence(island);
     }
 

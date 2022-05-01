@@ -20,6 +20,7 @@ public class MoveMotherNatureMessage extends ActionMessage
         checkHandler(handler);
         handler.moveMotherNature(selectedIsland);
     }
+
     public BaseGameAction getBaseGameAction()
     {
         return BaseGameAction.MOVE_MOTHER_NATURE;

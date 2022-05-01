@@ -12,38 +12,24 @@ public class CloudTilesUpdate extends ModelUpdate
     private List<CloudTile> cloudTiles;
 
     /**
-     * Constructor with player destination
-     * @param playerDestination The player that has to receive the message
+     * Constructor
+     * 
      * @param cloudTiles Collection of all the cloud tiles
      */
-    public CloudTilesUpdate(String playerDestination, List<CloudTile> cloudTiles)
+    public CloudTilesUpdate(List<CloudTile> cloudTiles)
     {
-        super(playerDestination);
-
-        if(cloudTiles == null)
+        if (cloudTiles == null)
             throw new NullPointerException("[CloudTilesUpdate] Null cloud tiles list");
         // It is possible according to Java 8 documentation
-        if(cloudTiles.contains(null))
+        if (cloudTiles.contains(null))
             throw new NullPointerException("[CloudTilesUpdate] Null cloud tile inside the list");
 
         this.cloudTiles = cloudTiles;
     }
 
-    /**
-     * Constructor without player destination
-     * @param cloudTiles Collection of all the cloud tiles
-     */
-    public CloudTilesUpdate(List<CloudTile> cloudTiles)
+    public List<CloudTile> getCloudTiles()
     {
-        super();
-
-        if(cloudTiles == null)
-            throw new NullPointerException("[CloudTilesUpdate] Null cloud tiles list");
-        // It is possible according to Java 8 documentation
-        if(cloudTiles.contains(null))
-            throw new NullPointerException("[CloudTilesUpdate] Null cloud tile inside the list");
-
-        this.cloudTiles = cloudTiles;
+        return cloudTiles;
     }
 
     @Override

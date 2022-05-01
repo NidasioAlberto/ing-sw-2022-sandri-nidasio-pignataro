@@ -3,13 +3,12 @@ package it.polimi.ingsw.controller;
 import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.fsm.Phase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
-import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
-
+import it.polimi.ingsw.protocol.messages.ActionMessage;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -153,8 +152,8 @@ public class GameActionHandler
                 game.getMotherNatureIndex().orElseThrow(() -> new NoSuchElementException(
                         "[GameActionHandler] No mother nature position, is the game setup?"));
 
-        int wantedPosition = game.getSelectedPlayer().get().getSelectedIsland().orElseThrow(
-                () -> new NoSelectedIslandException("[GameActionHandler]"));
+        int wantedPosition = game.getSelectedPlayer().get().getSelectedIsland()
+                .orElseThrow(() -> new NoSelectedIslandException("[GameActionHandler]"));
 
         // Calculate the difference from the indexed island and the current one
         // Based on the actual difference i move mother nature of the calculated steps
@@ -223,7 +222,7 @@ public class GameActionHandler
     }
 
     public void characterCardAction(ExpertGameAction action, Optional<Integer> selectedIsland,
-                                    Optional<List<SchoolColor>> selectedColors)
+            Optional<List<SchoolColor>> selectedColors)
             throws NullPointerException, NoSuchElementException
     {
         if (action == null)
@@ -237,8 +236,8 @@ public class GameActionHandler
         selectedIsland.ifPresent((island) -> game.getSelectedPlayer().get().selectIsland(island));
 
         // Select the colors
-        selectedColors.ifPresent((colors) -> colors.stream().forEach(
-                (color) -> game.getSelectedPlayer().get().selectColor(color)));
+        selectedColors.ifPresent((colors) -> colors.stream()
+                .forEach((color) -> game.getSelectedPlayer().get().selectColor(color)));
 
         // If the action is valid i execute the action
         if (currentCard.isValidAction(action))
@@ -261,11 +260,11 @@ public class GameActionHandler
             card.deactivate();
 
         // If all the players have done their turn, I fill up the clouds
-        if(game.getSelectedPlayerIndex().get() == game.getPlayerTableList().size() - 1)
+        if (game.getSelectedPlayerIndex().get() == game.getPlayerTableList().size() - 1)
             game.fillClouds();
 
         // If all goes correctly i step the FSM
-        gamePhase.onValidAction(this);
+        // gamePhase.onValidAction(this);
     }
 
     public Phase getGamePhase()
@@ -287,7 +286,8 @@ public class GameActionHandler
 
     private void checkIfCharacterCardIsStillPlayable() throws InvalidModuleException
     {
-        // If there is still an active character card which is has not been played the turn can't end
+        // If there is still an active character card which is has not been played the turn can't
+        // end
         if (game.getCurrentCharacterCard().isPresent()
                 && game.getCurrentCharacterCard().get().isActivated()
                 && !game.getCurrentCharacterCard().get()

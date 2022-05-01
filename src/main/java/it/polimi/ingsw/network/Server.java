@@ -2,8 +2,8 @@ package it.polimi.ingsw.network;
 
 import java.util.*;
 import java.util.concurrent.Executors;
-import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.model.GameMode;
+import it.polimi.ingsw.protocol.messages.ActionMessage;
 
 public class Server
 {
@@ -63,19 +63,20 @@ public class Server
         return matches.get(id);
     }
 
-    public void createMatch(String id, int playersNumber, GameMode mode)
+    public void createMatch(String matchId, int playersNumber, GameMode mode)
             throws IllegalArgumentException
     {
         // Check if a match with the same id already exists
-        if (matches.containsKey(id))
+        if (matches.containsKey(matchId))
             throw new IllegalArgumentException(
-                    "[Server] A match with id " + id + " already exists");
+                    "[Server] A match with id " + matchId + " already exists");
 
         // Create the match
-        matches.put(id, new Match(playersNumber, mode));
+        matches.put(matchId, new Match(playersNumber, mode));
     }
 
-    public void addPlayerToMatch(String id, PlayerConnection player) throws IllegalArgumentException
+    public void addPlayerToMatch(String matchId, PlayerConnection player)
+            throws IllegalArgumentException
     {
         // Check if the player has a name
         if (player.getPlayerName().isEmpty())
@@ -88,11 +89,11 @@ public class Server
                     "[Server] The player is already participating in a match");
 
         // Find the match with the given id
-        Match match = matches.get(id);
+        Match match = matches.get(matchId);
 
         // Check if the match isn't null
         if (match == null)
-            throw new IllegalArgumentException("[Server] There is no match with id " + id);
+            throw new IllegalArgumentException("[Server] There is no match with id " + matchId);
 
         // Add the player to the match
         match.addPlayer(player);
@@ -113,7 +114,7 @@ public class Server
         lobby.remove(player);
     }
 
-    public void actionCall(ActionMessage action, PlayerConnection player)
+    public void applyAction(ActionMessage action, PlayerConnection player)
             throws IllegalArgumentException
     {
         // Check if the player is part of a match
@@ -126,7 +127,7 @@ public class Server
         Match match = playersMapMatch.get(player);
 
         // Perform the action
-        match.actionCall(action, player);
+        match.applyAction(action, player);
     }
 
     public static void main(String[] args)

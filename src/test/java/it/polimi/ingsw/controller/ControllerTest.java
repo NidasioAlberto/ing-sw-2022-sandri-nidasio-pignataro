@@ -2,12 +2,12 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.model.TowerColor;
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
-import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,17 +39,21 @@ public class ControllerTest
         assertEquals(3, controller.getPlayersNumber());
 
         // Create a controller with a null server
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> new Controller(null, 2, GameMode.EXPERT));
+        NullPointerException e1 = assertThrows(NullPointerException.class,
+                () -> new Controller(null, 2, GameMode.EXPERT));
         assertEquals("[Controller] The server is null", e1.getMessage());
 
         // Create a controller with a null mode
-        NullPointerException e2 = assertThrows(NullPointerException.class, () -> new Controller(match, 2, null));
+        NullPointerException e2 =
+                assertThrows(NullPointerException.class, () -> new Controller(match, 2, null));
         assertEquals("[Controller] Game mode is null", e2.getMessage());
 
         // Create a controller with an invalid player number
-        IllegalArgumentException e3 = assertThrows(IllegalArgumentException.class, () -> new Controller(match, 1, GameMode.EXPERT));
+        IllegalArgumentException e3 = assertThrows(IllegalArgumentException.class,
+                () -> new Controller(match, 1, GameMode.EXPERT));
         assertEquals("[Controller] Invalid players number", e3.getMessage());
-        IllegalArgumentException e4 = assertThrows(IllegalArgumentException.class, () -> new Controller(match, 4, GameMode.EXPERT));
+        IllegalArgumentException e4 = assertThrows(IllegalArgumentException.class,
+                () -> new Controller(match, 4, GameMode.EXPERT));
         assertEquals("[Controller] Invalid players number", e4.getMessage());
     }
 
@@ -57,7 +61,8 @@ public class ControllerTest
     public void addPlayerTest()
     {
         // Add a player with a null nickname
-        NullPointerException e1 = assertThrows(NullPointerException.class, () -> controller.addPlayer(null));
+        NullPointerException e1 =
+                assertThrows(NullPointerException.class, () -> controller.addPlayer(null));
         assertEquals("[Controller] The nickname is null", e1.getMessage());
 
         // Add the first player with a correct nickname
@@ -78,7 +83,8 @@ public class ControllerTest
             e.printStackTrace();
         } catch (IllegalArgumentException e)
         {
-            assertEquals("[Controller] Already existing a player with such nickname", e.getMessage());
+            assertEquals("[Controller] Already existing a player with such nickname",
+                    e.getMessage());
         }
 
         // Add the second player with a correct nickname
@@ -117,21 +123,25 @@ public class ControllerTest
     }
 
     @Test
-    public void sendMessageTest()
+    public void sendErrorTest()
     {
         // Send a null message
-        NullPointerException e1 = assertThrows(NullPointerException.class,  () -> controller.sendAllMessage(null));
+        NullPointerException e1 =
+                assertThrows(NullPointerException.class, () -> controller.sendError(null, null));
         assertEquals("[Controller] Message is null", e1.getMessage());
-        NullPointerException e2 = assertThrows(NullPointerException.class,  () -> controller.sendMessage("player1", null));
+        NullPointerException e2 = assertThrows(NullPointerException.class,
+                () -> controller.sendError("player1", null));
         assertEquals("[Controller] Message is null", e2.getMessage());
 
         // Send a message to a null player
-        NullPointerException e3 = assertThrows(NullPointerException.class,  () -> controller.sendMessage(null, "message"));
+        NullPointerException e3 = assertThrows(NullPointerException.class,
+                () -> controller.sendError(null, "message"));
         assertEquals("[Controller] Player is null", e3.getMessage());
 
         // Send a message to a player that doesn't exist
-        IllegalArgumentException e4 = assertThrows(IllegalArgumentException.class,  () -> controller.sendMessage("player4", "message"));
-        assertEquals( "[Controller] It doesn't exist a player with such nickname", e4.getMessage());
+        IllegalArgumentException e4 = assertThrows(IllegalArgumentException.class,
+                () -> controller.sendError("player4", "message"));
+        assertEquals("[Controller] It doesn't exist a player with such nickname", e4.getMessage());
 
         // Add two players with a correct nickname
         try
@@ -143,7 +153,7 @@ public class ControllerTest
             e.printStackTrace();
         }
         // Send a correct message
-        controller.sendMessage("player2", "message");
+        controller.sendError("player2", "message");
     }
 
     @Test
@@ -166,7 +176,8 @@ public class ControllerTest
         assertEquals("player1", winner.getNickname());
         for (int i = 0; i < 6; i++)
             winner.getBoard().removeTower(winner.getColor());
-        assertThrows(EndGameException.class, () -> winner.getBoard().removeTower(winner.getColor()));
+        assertThrows(EndGameException.class,
+                () -> winner.getBoard().removeTower(winner.getColor()));
 
 
 

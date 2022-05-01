@@ -291,7 +291,8 @@ public class Game implements Publisher<ModelUpdate>
             {
                 // Look for the player that has that professor
                 Player currentKing = players.stream().filter(p -> p.getBoard().hasProfessor(color))
-                        .findFirst().orElseThrow(() -> new NoSuchElementException("[Game] No professor everywhere, is the game setup?"));
+                        .findFirst().orElseThrow(() -> new NoSuchElementException(
+                                "[Game] No professor everywhere, is the game setup?"));
 
                 // Get the player with more students of the current color
                 Player wannaBeKing =

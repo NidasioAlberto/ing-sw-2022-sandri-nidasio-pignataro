@@ -17,47 +17,34 @@ public class IslandsUpdate extends ModelUpdate
     private int motherNatureIndex;
 
     /**
-     * Constructor with player destination
-     * @param playerDestination The player that has to receive the message
-     * @param islands Collection of all the islands
-     * @param motherNatureIndex Index of mother nature position inside the collection
-     */
-    public IslandsUpdate(String playerDestination, List<Island> islands, int motherNatureIndex)
-    {
-        super(playerDestination);
-
-        if(islands == null)
-            throw new NullPointerException("[IslandsUpdate] Null island list");
-        // It is possible according to java 8 documentation
-        if(islands.contains(null))
-            throw new NullPointerException("[IslandsUpdate] Null island inside the list");
-        if(motherNatureIndex < 0 || motherNatureIndex >= islands.size())
-            throw new IndexOutOfBoundsException("[IslandsUpdate] Mother nature index out of bounds");
-
-        this.islands            = islands;
-        this.motherNatureIndex  = motherNatureIndex;
-    }
-
-
-    /**
-     * Constructor without player destination
+     * Constructor
+     * 
      * @param islands Collection of all the islands
      * @param motherNatureIndex Index of mother nature position inside the collection
      */
     public IslandsUpdate(List<Island> islands, int motherNatureIndex)
     {
-        super();
-
-        if(islands == null)
+        if (islands == null)
             throw new NullPointerException("[IslandsUpdate] Null island list");
         // It is possible according to java 8 documentation
-        if(islands.contains(null))
+        if (islands.contains(null))
             throw new NullPointerException("[IslandsUpdate] Null island inside the list");
-        if(motherNatureIndex < 0 || motherNatureIndex >= islands.size())
-            throw new IndexOutOfBoundsException("[IslandsUpdate] Mother nature index out of bounds");
+        if (motherNatureIndex < 0 || motherNatureIndex >= islands.size())
+            throw new IndexOutOfBoundsException(
+                    "[IslandsUpdate] Mother nature index out of bounds");
 
-        this.islands            = islands;
-        this.motherNatureIndex  = motherNatureIndex;
+        this.islands = islands;
+        this.motherNatureIndex = motherNatureIndex;
+    }
+
+    public List<Island> getIslands()
+    {
+        return islands;
+    }
+
+    public int getMotherNatureIndex()
+    {
+        return motherNatureIndex;
     }
 
     @Override

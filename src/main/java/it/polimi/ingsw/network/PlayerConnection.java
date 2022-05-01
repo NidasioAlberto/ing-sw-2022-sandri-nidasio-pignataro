@@ -2,9 +2,10 @@ package it.polimi.ingsw.network;
 
 import java.net.Socket;
 import java.util.Optional;
-import org.json.JSONObject;
-import it.polimi.ingsw.protocol.messages.ActionMessage;
+import it.polimi.ingsw.protocol.answers.Answer;
+import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
+import it.polimi.ingsw.protocol.messages.ActionMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,9 +14,9 @@ public class PlayerConnection implements Runnable
 {
     private Socket playerSocket;
 
-    ObjectInputStream inputStream;
+    private ObjectInputStream inputStream;
 
-    ObjectOutputStream outputStream;
+    private ObjectOutputStream outputStream;
 
     private Server server;
 
@@ -34,8 +35,8 @@ public class PlayerConnection implements Runnable
             outputStream = new ObjectOutputStream(playerSocket.getOutputStream());
         } catch (IOException e)
         {
-            System.err.println("Error during initialization of the client!");
-            System.err.println(e.getMessage());
+            System.err.println("[PlayerConnection] Error during initialization of the client: "
+                    + e.getMessage());
         }
     }
 
@@ -79,21 +80,19 @@ public class PlayerConnection implements Runnable
         } catch (IOException e)
         {
             System.err.println(
-                    "[Player connection] An error occurred while closing the player's connection");
-            System.err.println("[Player connection] " + e.getMessage());
+                    "[PlayerConnection] An error occurred while closing the player's connection");
+            System.err.println("[PlayerConnection] " + e.getMessage());
         }
     }
 
     @Override
     public void run()
     {
+        System.out.println("[PlayerConnection] New player connected");
         try
         {
             while (isActive())
-            {
-                String rawData = (String) inputStream.readObject();
-                handlePacket(rawData);
-            }
+                handlePacket(inputStream.readObject());
         } catch (IOException e)
         {
             // The player suddenly disconnected, remove it from the server
@@ -105,29 +104,39 @@ public class PlayerConnection implements Runnable
         }
     }
 
-    public void handlePacket(String rawData)
+    public void handlePacket(Object rawPacket)
     {
-        // Decode the json
-        JSONObject packet = new JSONObject(rawData);
+        System.out.println(
+                "[PlayerConnection] New packet received: " + rawPacket.getClass().getName());
 
-        // If the packet contains an action handle it
-        if (packet.has("command"))
-            handleCommand(packet.getJSONObject("command"));
+        try
+        {
+            // If the packet contains an action handle it
+            if (rawPacket instanceof Command)
+                ((Command) rawPacket).applyCommand(this);
 
-        // If the packet contains an action handle it
-        if (packet.has("action"))
-            handleAction(packet.getJSONObject("action"));
+            // If the packet contains an action handle it
+            else if (rawPacket instanceof ActionMessage)
+                server.applyAction((ActionMessage) rawPacket, this);
+
+            // If the packet isn't recognized, this is a major error
+            else
+                System.err.println("[PlayerConnection] Packet not recognized!");
+        } catch (Exception e)
+        {
+            sendAnswer(new ErrorAnswer(e.getMessage()));
+        }
     }
 
-    public void handleCommand(JSONObject commandJson)
+    public void sendAnswer(Answer answer)
     {
-        Command command = Command.buildCommand(commandJson);
-        command.applyCommand(this);
-    }
-
-    public void handleAction(JSONObject actionJson)
-    {
-        //ActionMessage action = ActionMessage.buildActionMessage(actionJson);
-        //server.actionCall(action, this);
+        try
+        {
+            outputStream.writeObject(answer);
+        } catch (IOException e)
+        {
+            System.err.println("[PlayerConnection] Error while writing answer: " + e.getMessage());
+            close();
+        }
     }
 }

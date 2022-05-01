@@ -12,38 +12,24 @@ public class CharacterCardsUpdate extends ModelUpdate
     private List<CharacterCard> cards;
 
     /**
-     * Constructor with player destination
-     * @param playerDestination The player that has to receive the message
+     * Constructor
+     * 
      * @param cards Collection of all the character cards
      */
-    public CharacterCardsUpdate(String playerDestination, List<CharacterCard> cards)
+    public CharacterCardsUpdate(List<CharacterCard> cards)
     {
-        super(playerDestination);
-
-        if(cards == null)
+        if (cards == null)
             throw new NullPointerException("[CharacterCardsUpdate] Null cards list");
         // It is possible according to Java 8 documentation
-        if(cards.contains(null))
+        if (cards.contains(null))
             throw new NullPointerException("[CharacterCardsUpdate] Null card inside the list");
 
         this.cards = cards;
     }
 
-    /**
-     * Constructor without player destination
-     * @param cards Collection of all the character cards
-     */
-    public CharacterCardsUpdate(List<CharacterCard> cards)
+    public List<CharacterCard> getCards()
     {
-        super();
-
-        if(cards == null)
-            throw new NullPointerException("[CharacterCardsUpdate] Null cards list");
-        // It is possible according to Java 8 documentation
-        if(cards.contains(null))
-            throw new NullPointerException("[CharacterCardsUpdate] Null card inside the list");
-
-        this.cards = cards;
+        return cards;
     }
 
     @Override

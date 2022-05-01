@@ -1,13 +1,10 @@
 package it.polimi.ingsw.model;
 
-import com.sun.source.tree.Scope;
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,12 +38,10 @@ public class PlayerTest
                 () -> new Player(null, new SchoolBoard(TowerColor.WHITE)));
 
         // Color can't be null
-        assertThrows(NullPointerException.class,
-                () -> new Player("Player1", (TowerColor) null));
+        assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null));
 
         // SchoolBoard can't be null
-        assertThrows(NullPointerException.class,
-                () -> new Player("Player1", (SchoolBoard) null));
+        assertThrows(NullPointerException.class, () -> new Player("Player1", (SchoolBoard) null));
 
         // Check the initialization values
         assertEquals("Player1", player.getNickname());
@@ -67,12 +62,10 @@ public class PlayerTest
     public void constructorTest2()
     {
         // Nickname can't be null
-        assertThrows(NullPointerException.class,
-                () -> new Player(null, TowerColor.WHITE));
+        assertThrows(NullPointerException.class, () -> new Player(null, TowerColor.WHITE));
 
         // Color can't be null
-        assertThrows(NullPointerException.class,
-                () -> new Player("Player1", (TowerColor) null));
+        assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null));
 
         // Check the initialization values
         Player player1 = new Player("Player1", TowerColor.BLACK);

@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public abstract class ActionMessage implements Serializable
 {
-     /**
+    /**
      * Checks if the given game action handler is valid.
      * 
      * @throws NullPointerException Thrown if the handler is null.

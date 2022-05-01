@@ -1,16 +1,14 @@
 package it.polimi.ingsw.protocol.commands;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import it.polimi.ingsw.network.PlayerConnection;
 
 public class SetNameCommand extends Command
 {
     String playerName;
 
-    SetNameCommand(JSONObject commandJson) throws JSONException
+    public SetNameCommand(String playerName)
     {
-        playerName = commandJson.getString("playerName");
+        this.playerName = playerName;
     }
 
     public void applyCommand(PlayerConnection connection) throws NullPointerException

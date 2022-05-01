@@ -12,7 +12,7 @@ public class SelectCloudTileMessage extends ActionMessage
 
     public SelectCloudTileMessage(int selectedCloudTile)
     {
-        this.selectedCloudTile =selectedCloudTile;
+        this.selectedCloudTile = selectedCloudTile;
     }
 
     public void applyAction(GameActionHandler handler)
