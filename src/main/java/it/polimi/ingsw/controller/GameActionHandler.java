@@ -264,7 +264,7 @@ public class GameActionHandler
             game.fillClouds();
 
         // If all goes correctly i step the FSM
-        // gamePhase.onValidAction(this);
+         gamePhase.onValidAction(this);
     }
 
     public Phase getGamePhase()
