@@ -2,11 +2,14 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.protocol.updates.ModelUpdate;
 
 import java.util.*;
+import java.util.concurrent.Flow.Subscriber;
+import java.util.concurrent.Flow.Publisher;
 import java.util.stream.*;
 
-public class Game
+public class Game implements Publisher<ModelUpdate>
 {
     public static final int ISLAND_TILES_NUMBER = 12;
     public static final int ASSISTANT_CARDS_DECK_SIZE = 10;
@@ -42,6 +45,8 @@ public class Game
 
     protected boolean motherNatureMoved;
 
+    protected Optional<Subscriber<? super ModelUpdate>> subscriber;
+
     public Game() throws NullPointerException
     {
         this(2, GameMode.CLASSIC);
@@ -72,6 +77,7 @@ public class Game
         motherNatureIndex = Optional.empty();
         currentCharacterCardIndex = Optional.empty();
         motherNatureMoved = false;
+        subscriber = Optional.empty();
     }
 
     /**
@@ -659,5 +665,16 @@ public class Game
     public int getPlayersNumber()
     {
         return playersNumber;
+    }
+
+    @Override
+    public void subscribe(Subscriber<? super ModelUpdate> subscriber)
+    {
+        if(subscriber == null)
+            throw new NullPointerException("[Game] Null subscriber");
+
+        // I subscribe the observer to the observable only if doesn't already exist one
+        if(this.subscriber.isEmpty())
+            this.subscriber = Optional.of(subscriber);
     }
 }

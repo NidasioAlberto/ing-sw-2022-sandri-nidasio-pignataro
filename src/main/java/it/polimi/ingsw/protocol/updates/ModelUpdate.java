@@ -1,5 +1,7 @@
 package it.polimi.ingsw.protocol.updates;
 
+import java.util.Optional;
+
 /**
  * This class represents the abstraction of a typical model update message
  * from server to clients. It is part of the command pattern, which is the
@@ -11,9 +13,36 @@ package it.polimi.ingsw.protocol.updates;
 public abstract class ModelUpdate
 {
     /**
+     * In case we want to define the single player that has to receive the message
+     */
+    protected Optional<String> playerDestination;
+
+    /**
+     * Constructor that allows the player destination
+     * @param playerDestination Name of the player that has to receive the message
+     */
+    protected ModelUpdate(String playerDestination)
+    {
+        if(playerDestination == null)
+            throw new NullPointerException("[ModelUpdate] Null player destination");
+
+        this.playerDestination = Optional.of(playerDestination);
+    }
+
+    /**
+     * Constructor without a player destination
+     */
+    protected ModelUpdate()
+    {
+        this.playerDestination = Optional.empty();
+    }
+
+    /**
      * This method is part of the command pattern
      * TODO replace Object with the correct type
      * @param handler The handler class to modify client side
      */
     public abstract void handleUpdate(Object handler);
+
+    public Optional<String> getPlayerDestination() { return playerDestination; }
 }

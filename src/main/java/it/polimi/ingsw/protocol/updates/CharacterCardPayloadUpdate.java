@@ -29,12 +29,36 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     private Optional<Integer> noEntryTiles;
 
     /**
-     * Students payload constructor
+     * Students payload constructor with player destination
+     * @param playerDestination Name of the player that has to receive the message
+     * @param index The character card index
+     * @param students Collection of students over the card
+     */
+    public CharacterCardPayloadUpdate(String playerDestination, int index, List<Student> students)
+    {
+        super(playerDestination);
+
+        if(students == null)
+            throw new NullPointerException("[CharacterCardPayloadUpdate] Null students list");
+        if(students.contains(null))
+            throw new NullPointerException("[CharacterCardPayloadUpdate] Null student inside list");
+        if(index < 0 || index >= Game.CHARACTER_CARDS_NUMBER)
+            throw new IndexOutOfBoundsException("[CharacterCardPayloadUpdate] Character card index out of bounds");
+
+        this.index          = index;
+        this.students       = Optional.of(students);
+        this.noEntryTiles   = Optional.empty();
+    }
+
+    /**
+     * Students payload constructor without player destination
      * @param index The character card index
      * @param students Collection of students over the card
      */
     public CharacterCardPayloadUpdate(int index, List<Student> students)
     {
+        super();
+
         if(students == null)
             throw new NullPointerException("[CharacterCardPayloadUpdate] Null students list");
         if(students.contains(null))
