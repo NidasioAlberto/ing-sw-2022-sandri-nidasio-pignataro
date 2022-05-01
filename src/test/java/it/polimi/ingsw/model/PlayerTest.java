@@ -57,7 +57,7 @@ public class PlayerTest
         assertTrue(player.getSelectedCloudTile().isEmpty());
         assertTrue(player.getCards().isEmpty());
         assertEquals(TowerColor.WHITE, player.getColor());
-        assertEquals(0, player.getCoins());
+        assertEquals(0, player.getBoard().getCoins());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class PlayerTest
         assertTrue(player1.getSelectedCloudTile().isEmpty());
         assertTrue(player1.getCards().isEmpty());
         assertEquals(TowerColor.BLACK, player1.getColor());
-        assertEquals(0, player1.getCoins());
+        assertEquals(0, player1.getBoard().getCoins());
     }
 
     @Test
@@ -93,15 +93,15 @@ public class PlayerTest
     public void addCoinsTest()
     {
         // The parameter must be positive
-        assertThrows(IllegalArgumentException.class, () -> player.addCoins(-1));
+        assertThrows(IllegalArgumentException.class, () -> player.getBoard().addCoins(-1));
 
         // Add 0 coins
-        player.addCoins(0);
-        assertEquals(0, player.getCoins());
+        player.getBoard().addCoins(0);
+        assertEquals(0, player.getBoard().getCoins());
 
         // Add a positive number of coins
-        player.addCoins(1);
-        assertEquals(1, player.getCoins());
+        player.getBoard().addCoins(1);
+        assertEquals(1, player.getBoard().getCoins());
     }
 
     @Test
@@ -112,16 +112,16 @@ public class PlayerTest
     public void removeCoinsTest()
     {
         // The parameter must be positive
-        assertThrows(IllegalArgumentException.class, () -> player.removeCoins(-1));
+        assertThrows(IllegalArgumentException.class, () -> player.getBoard().removeCoins(-1));
 
         // The number of player's coins can't be negative
-        assertThrows(NotEnoughCoinsException.class, () -> player.removeCoins(1));
+        assertThrows(NotEnoughCoinsException.class, () -> player.getBoard().removeCoins(1));
 
         // Add and remove 3 coins
-        player.addCoins(3);
-        assertEquals(3, player.getCoins());
-        player.removeCoins(3);
-        assertEquals(0, player.getCoins());
+        player.getBoard().addCoins(3);
+        assertEquals(3, player.getBoard().getCoins());
+        player.getBoard().removeCoins(3);
+        assertEquals(0, player.getBoard().getCoins());
     }
 
     @Test

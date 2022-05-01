@@ -81,9 +81,9 @@ public class MonkTest
         try
         {
             // Activate the card
-            player1.addCoins(1);
+            player1.getBoard().addCoins(1);
             monk.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             for (ExpertGameAction action: ExpertGameAction.values())
             {
                 // When Monk is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
@@ -109,9 +109,9 @@ public class MonkTest
         try
         {
             // Activate the card
-            player1.addCoins(2);
+            player1.getBoard().addCoins(2);
             monk.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
         }
         catch (NotEnoughCoinsException e)
         {
@@ -135,7 +135,7 @@ public class MonkTest
         monk.activated = false;
 
         // Select a player
-        player1.addCoins(1);
+        player1.getBoard().addCoins(1);
         game.selectPlayer(0);
 
         // Get the students on the card

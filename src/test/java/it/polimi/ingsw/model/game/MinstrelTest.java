@@ -98,7 +98,7 @@ public class MinstrelTest
         assertThrows(NotEnoughCoinsException.class, () -> minstrel.activate());
 
         // Add the coins to activate the card
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
 
         try
         {
@@ -108,7 +108,7 @@ public class MinstrelTest
         }
 
         // After activation the player should have 1 coin less
-        assertEquals(9, player1.getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, minstrel.firstUsed);
@@ -127,7 +127,7 @@ public class MinstrelTest
         assertEquals(true, minstrel.firstUsed);
         assertEquals(true, minstrel.isActivated());
         assertEquals(2, minstrel.cost);
-        assertEquals(9, player1.getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 2 coins
         minstrel.deactivate();
@@ -142,7 +142,7 @@ public class MinstrelTest
         assertEquals(true, minstrel.firstUsed);
         assertEquals(true, minstrel.isActivated());
         assertEquals(2, minstrel.cost);
-        assertEquals(7, player1.getCoins());
+        assertEquals(7, player1.getBoard().getCoins());
     }
 
     @Test

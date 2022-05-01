@@ -88,9 +88,9 @@ public class ShamanTest
         try
         {
             // Activate the card
-            player1.addCoins(2);
+            player1.getBoard().addCoins(2);
             shaman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
 
             // The card doesn't intercept any action, so it accepts only ACTION_BASE
             for (ExpertGameAction action: ExpertGameAction.values())
@@ -117,9 +117,9 @@ public class ShamanTest
         try
         {
             // Activate the card
-            player1.addCoins(3);
+            player1.getBoard().addCoins(3);
             shaman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
         }
         catch (NotEnoughCoinsException e)
         {
@@ -139,9 +139,9 @@ public class ShamanTest
         {
             // Activate the card
             game.selectPlayer(0);
-            player1.addCoins(2);
+            player1.getBoard().addCoins(2);
             shaman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(shaman.activated);
         }
         catch (NotEnoughCoinsException e)
@@ -165,7 +165,7 @@ public class ShamanTest
     {
         // Select a player
         game.selectPlayer(0);
-        player1.addCoins(2);
+        player1.getBoard().addCoins(2);
 
         // Player2 has 2 green students
         player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
@@ -193,7 +193,7 @@ public class ShamanTest
         try {
             // Activate the card
             shaman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(shaman.activated);
         } catch (NotEnoughCoinsException e) {
             e.printStackTrace();
@@ -215,12 +215,12 @@ public class ShamanTest
 
         // Select Player2
         game.selectPlayer(1);
-        player2.addCoins(3);
+        player2.getBoard().addCoins(3);
 
         try {
             // Activate the card
             shaman.activate();
-            assertEquals(0, player2.getCoins());
+            assertEquals(0, player2.getBoard().getCoins());
             assertTrue(shaman.activated);
         } catch (NotEnoughCoinsException e) {
             e.printStackTrace();
@@ -239,12 +239,12 @@ public class ShamanTest
 
         // Select Player1
         game.selectPlayer(1);
-        player2.addCoins(3);
+        player2.getBoard().addCoins(3);
 
         try {
             // Activate the card
             shaman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(shaman.activated);
         } catch (NotEnoughCoinsException e) {
             e.printStackTrace();

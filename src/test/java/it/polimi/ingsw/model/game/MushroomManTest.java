@@ -85,7 +85,7 @@ public class MushroomManTest
         assertThrows(NotEnoughCoinsException.class, () -> mushroomMan.activate());
 
         // Add the coins to activate the card
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
 
         try
         {
@@ -95,7 +95,7 @@ public class MushroomManTest
         }
 
         // After activation the player should have 3 coin less
-        assertEquals(7, player1.getCoins());
+        assertEquals(7, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, mushroomMan.firstUsed);
@@ -114,7 +114,7 @@ public class MushroomManTest
         assertEquals(true, mushroomMan.firstUsed);
         assertEquals(true, mushroomMan.isActivated());
         assertEquals(4, mushroomMan.cost);
-        assertEquals(7, player1.getCoins());
+        assertEquals(7, player1.getBoard().getCoins());
 
         // Finally, if I deactivate the card the cost will be 4 coins
         mushroomMan.deactivate();
@@ -129,7 +129,7 @@ public class MushroomManTest
         assertEquals(true, mushroomMan.firstUsed);
         assertEquals(true, mushroomMan.isActivated());
         assertEquals(4, mushroomMan.cost);
-        assertEquals(3, player1.getCoins());
+        assertEquals(3, player1.getBoard().getCoins());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class MushroomManTest
 
         // I active the card
         game.selectPlayer(0);
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
         mushroomMan.activated = true;
 
         // I expect to receive a NoSelectedStudentsException because of no selected student color

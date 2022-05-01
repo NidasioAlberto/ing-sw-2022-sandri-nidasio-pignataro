@@ -84,7 +84,7 @@ public class KnightTest
         assertThrows(NotEnoughCoinsException.class, () -> knight.activate());
 
         // Add the coins to activate the card
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
 
         try
         {
@@ -94,7 +94,7 @@ public class KnightTest
         }
 
         // After activation the player should have 2 coin less
-        assertEquals(8, player1.getCoins());
+        assertEquals(8, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, knight.firstUsed);
@@ -113,7 +113,7 @@ public class KnightTest
         assertEquals(true, knight.firstUsed);
         assertEquals(true, knight.isActivated());
         assertEquals(3, knight.cost);
-        assertEquals(8, player1.getCoins());
+        assertEquals(8, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 3 coins
         knight.deactivate();
@@ -128,7 +128,7 @@ public class KnightTest
         assertEquals(true, knight.firstUsed);
         assertEquals(true, knight.isActivated());
         assertEquals(3, knight.cost);
-        assertEquals(5, player1.getCoins());
+        assertEquals(5, player1.getBoard().getCoins());
     }
 
 
@@ -165,7 +165,7 @@ public class KnightTest
 
         // I active the card
         game.selectPlayer(0);
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
         knight.activated = true;
 
         // Now the card should be active and i can call applyAction.
@@ -205,7 +205,7 @@ public class KnightTest
 
         // Now i activate the card and check again
         game.selectPlayer(0);
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
         knight.activated = true;
 
         // If i deselect the player the card should give me an error

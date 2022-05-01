@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
 import it.polimi.ingsw.model.exceptions.NoMoreNoEntryTilesException;
 import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 
 import java.util.NoSuchElementException;
 
@@ -106,6 +107,17 @@ public class GrandmaHerbs extends CharacterCard
 
         //Then I compute the normal influence
         instance.computeInfluence(island);
+    }
+
+    @Override
+    public void notifySubscriber()
+    {
+        // I have to find this character card index inside the list
+        int index = 0;
+        for(index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
+
+        if(instance.subscriber.isPresent())
+            instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, noEntryTiles));
     }
 
     @Override

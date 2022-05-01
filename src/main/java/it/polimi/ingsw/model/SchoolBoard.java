@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInDiningException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 
 import java.util.*;
 
@@ -47,6 +48,11 @@ public class SchoolBoard
     private TowerColor towerColor;
 
     /**
+     * The number of coins that player has in order to play character cards.
+     */
+    private int coins;
+
+    /**
      * Constructor.
      *
      * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9
@@ -59,6 +65,9 @@ public class SchoolBoard
 
         // Assign the tower color
         towerColor = color;
+
+        // Set the initial coins to 0
+        coins = 0;
 
         // Instantiate all the things
         entrance = new ArrayList<Student>();
@@ -280,6 +289,38 @@ public class SchoolBoard
     }
 
     /**
+     * Method to add coins to the schoolBoard.
+     *
+     * @param coins The number of coins to be added.
+     * @throws IllegalArgumentException Thrown if the parameter is negative.
+     */
+    public void addCoins(int coins) throws IllegalArgumentException
+    {
+        if (coins < 0)
+            throw new IllegalArgumentException("[SchoolBoard] The number of coins must be positive");
+
+        this.coins += coins;
+    }
+
+    /**
+     * Method to remove coins from the schoolBoard.
+     *
+     * @param coins The number of coins to remove.
+     * @throws IllegalArgumentException Thrown if the parameter is higher than the player's coins.
+     */
+    public void removeCoins(int coins) throws IllegalArgumentException
+    {
+        if (coins < 0)
+            throw new IllegalArgumentException(
+                    "[Player] You can't remove a negative number of coins");
+
+        if (this.coins < coins)
+            throw new NotEnoughCoinsException();
+
+        this.coins -= coins;
+    }
+
+    /**
      * Removes the student from the dining room.
      *
      * @param color the color of the student that has to be removed from the dining room
@@ -386,4 +427,8 @@ public class SchoolBoard
         return towerColor;
     }
 
+    public int getCoins()
+    {
+        return coins;
+    }
 }

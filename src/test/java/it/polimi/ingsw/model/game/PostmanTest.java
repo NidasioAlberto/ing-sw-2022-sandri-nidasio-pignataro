@@ -90,9 +90,9 @@ public class PostmanTest
         try
         {
             // Activate the card
-            player1.addCoins(1);
+            player1.getBoard().addCoins(1);
             postman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(postman.activated);
 
             // The card doesn't intercept any action, so it accepts only ACTION_BASE
@@ -119,9 +119,9 @@ public class PostmanTest
         try
         {
             // Activate the card
-            player1.addCoins(2);
+            player1.getBoard().addCoins(2);
             postman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
         } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
@@ -140,9 +140,9 @@ public class PostmanTest
         {
             // Activate the card
             game.selectPlayer(0);
-            player1.addCoins(1);
+            player1.getBoard().addCoins(1);
             postman.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(postman.activated);
         } catch (NotEnoughCoinsException e)
         {
@@ -169,7 +169,7 @@ public class PostmanTest
         try
         {
             // Activate the card
-            player1.addCoins(1);
+            player1.getBoard().addCoins(1);
             postman.activate();
         } catch (NotEnoughCoinsException e)
         {

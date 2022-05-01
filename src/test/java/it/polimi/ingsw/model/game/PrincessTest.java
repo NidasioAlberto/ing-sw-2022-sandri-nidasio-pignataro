@@ -90,7 +90,7 @@ public class PrincessTest
         assertThrows(NotEnoughCoinsException.class, () -> princess.activate());
 
         // Add the coins to activate the card
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
 
         try
         {
@@ -100,7 +100,7 @@ public class PrincessTest
         }
 
         // After activation the player should have 2 coin less
-        assertEquals(8, player1.getCoins());
+        assertEquals(8, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, princess.firstUsed);
@@ -119,7 +119,7 @@ public class PrincessTest
         assertEquals(true, princess.firstUsed);
         assertEquals(true, princess.isActivated());
         assertEquals(3, princess.cost);
-        assertEquals(8, player1.getCoins());
+        assertEquals(8, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 3 coins
         princess.deactivate();
@@ -134,7 +134,7 @@ public class PrincessTest
         assertEquals(true, princess.firstUsed);
         assertEquals(true, princess.isActivated());
         assertEquals(3, princess.cost);
-        assertEquals(5, player1.getCoins());
+        assertEquals(5, player1.getBoard().getCoins());
     }
 
     @Test

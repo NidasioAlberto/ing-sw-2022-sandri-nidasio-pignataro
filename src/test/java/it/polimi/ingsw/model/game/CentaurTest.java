@@ -86,9 +86,9 @@ public class CentaurTest
         try
         {
             // Activate the card
-            player1.addCoins(3);
+            player1.getBoard().addCoins(3);
             centaur.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
 
             // The card accepts only ACTION_BASE
             for (ExpertGameAction action : ExpertGameAction.values())
@@ -115,9 +115,9 @@ public class CentaurTest
         try
         {
             // Activate the card
-            player1.addCoins(4);
+            player1.getBoard().addCoins(4);
             centaur.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
         } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
@@ -136,9 +136,9 @@ public class CentaurTest
         {
             // Activate the card
             game.selectPlayer(0);
-            player1.addCoins(3);
+            player1.getBoard().addCoins(3);
             centaur.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(centaur.activated);
         } catch (NotEnoughCoinsException e)
         {
@@ -161,13 +161,13 @@ public class CentaurTest
     {
         // Select a player
         game.selectPlayer(0);
-        player1.addCoins(3);
+        player1.getBoard().addCoins(3);
 
         try
         {
             // Activate the card
             centaur.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             assertTrue(centaur.activated);
         } catch (NotEnoughCoinsException e)
         {

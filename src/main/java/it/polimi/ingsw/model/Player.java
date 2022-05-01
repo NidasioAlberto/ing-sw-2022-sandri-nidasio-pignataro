@@ -35,11 +35,6 @@ public class Player
     private TowerColor color;
 
     /**
-     * The number of coins that player has in order to play character cards.
-     */
-    private int coins;
-
-    /**
      * The assistant card selected by the player during the planning phase.
      */
     private Optional<AssistantCard> selectedCard;
@@ -80,44 +75,11 @@ public class Player
         this.color = board.getTowerColor();
         this.board = board;
         cards = new ArrayList<AssistantCard>();
-        coins = 0;
         selectedCard = Optional.empty();
         selectedIsland = Optional.empty();
         selectedColors = new ArrayList<SchoolColor>();
         selectedCloudTile = Optional.empty();
         selectedCharacterCard = Optional.empty();
-    }
-
-    /**
-     * Method to add coins to the player.
-     * 
-     * @param coins The number of coins to be added.
-     * @throws IllegalArgumentException Thrown if the parameter is negative.
-     */
-    public void addCoins(int coins) throws IllegalArgumentException
-    {
-        if (coins < 0)
-            throw new IllegalArgumentException("[Player] The number of coins must be positive");
-
-        this.coins += coins;
-    }
-
-    /**
-     * Method to remove coins from the player.
-     * 
-     * @param coins The number of coins to remove.
-     * @throws IllegalArgumentException Thrown if the parameter is higher than the player's coins.
-     */
-    public void removeCoins(int coins) throws IllegalArgumentException
-    {
-        if (coins < 0)
-            throw new IllegalArgumentException(
-                    "[Player] You can't remove a negative number of coins");
-
-        if (this.coins < coins)
-            throw new NotEnoughCoinsException();
-
-        this.coins -= coins;
     }
 
     /**
@@ -310,10 +272,5 @@ public class Player
     public TowerColor getColor()
     {
         return color;
-    }
-
-    public int getCoins()
-    {
-        return coins;
     }
 }

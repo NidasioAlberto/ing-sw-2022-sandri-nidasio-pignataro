@@ -75,7 +75,7 @@ public class ThiefTest
         assertThrows(NotEnoughCoinsException.class, () -> thief.activate());
 
         // Add the coins to activate the card
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
 
         try
         {
@@ -85,7 +85,7 @@ public class ThiefTest
         }
 
         // After activation the player should have 3 coin less
-        assertEquals(7, player1.getCoins());
+        assertEquals(7, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, thief.firstUsed);
@@ -104,7 +104,7 @@ public class ThiefTest
         assertEquals(true, thief.firstUsed);
         assertEquals(true, thief.isActivated());
         assertEquals(4, thief.cost);
-        assertEquals(7, player1.getCoins());
+        assertEquals(7, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 3 coins
         thief.deactivate();
@@ -119,7 +119,7 @@ public class ThiefTest
         assertEquals(true, thief.firstUsed);
         assertEquals(true, thief.isActivated());
         assertEquals(4, thief.cost);
-        assertEquals(3, player1.getCoins());
+        assertEquals(3, player1.getBoard().getCoins());
     }
 
     @Test

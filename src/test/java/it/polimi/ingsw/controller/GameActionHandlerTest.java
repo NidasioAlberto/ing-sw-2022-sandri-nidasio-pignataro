@@ -221,7 +221,7 @@ public class GameActionHandlerTest
         {
             if (card instanceof Monk)
             {
-                game.getSelectedPlayer().get().addCoins(3);
+                game.getSelectedPlayer().get().getBoard().addCoins(3);
                 // player3 activate the monk card
                 assertDoesNotThrow(() -> handler.handleAction(
                         new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player3"));

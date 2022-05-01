@@ -91,7 +91,7 @@ public class JokerTest
         assertThrows(NotEnoughCoinsException.class, () -> joker.activate());
 
         // Add the coins to activate the card
-        player1.addCoins(10);
+        player1.getBoard().addCoins(10);
 
         try
         {
@@ -101,7 +101,7 @@ public class JokerTest
         }
 
         // After activation the player should have 1 coin less
-        assertEquals(9, player1.getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, joker.firstUsed);
@@ -120,7 +120,7 @@ public class JokerTest
         assertEquals(true, joker.firstUsed);
         assertEquals(true, joker.activated);
         assertEquals(2, joker.cost);
-        assertEquals(9, player1.getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 2 coins
         joker.deactivate();
@@ -135,7 +135,7 @@ public class JokerTest
         assertEquals(true, joker.firstUsed);
         assertEquals(true, joker.activated);
         assertEquals(2, joker.cost);
-        assertEquals(7, player1.getCoins());
+        assertEquals(7, player1.getBoard().getCoins());
     }
 
     @Test
@@ -198,7 +198,7 @@ public class JokerTest
         game.selectPlayer(0);
 
         // So that i don't worry about that
-        player1.addCoins(100);
+        player1.getBoard().addCoins(100);
 
         // Test with not activated card
         player1.selectColor(player1.getBoard().getStudentsInEntrance().get(0).getColor());

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
+import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,17 @@ public class Princess extends CharacterCard
         students.add(instance.getStudentFromBag());
 
         this.deactivate();
+    }
+
+    @Override
+    public void notifySubscriber()
+    {
+        // I have to find this character card index inside the list
+        int index = 0;
+        for(index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
+
+        if(instance.subscriber.isPresent())
+            instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, new ArrayList<Student>(students)));
     }
 
     @Override

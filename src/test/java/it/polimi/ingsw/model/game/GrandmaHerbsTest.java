@@ -65,7 +65,7 @@ public class GrandmaHerbsTest
     public void isPlayableTest()
     {
         // Select a player
-        player1.addCoins(20);
+        player1.getBoard().addCoins(20);
         game.selectPlayer(0);
 
         // Select an island
@@ -109,9 +109,9 @@ public class GrandmaHerbsTest
         try
         {
             // Activate the card
-            player1.addCoins(2);
+            player1.getBoard().addCoins(2);
             grandmaHerbs.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             for (ExpertGameAction action: ExpertGameAction.values())
             {
                 // When GrandmaHerbs is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
@@ -137,9 +137,9 @@ public class GrandmaHerbsTest
         try
         {
             // Activate the card
-            player1.addCoins(3);
+            player1.getBoard().addCoins(3);
             grandmaHerbs.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
         }
         catch (NotEnoughCoinsException e)
         {
@@ -163,7 +163,7 @@ public class GrandmaHerbsTest
         grandmaHerbs.activated = false;
 
         // Select a player
-        player1.addCoins(2);
+        player1.getBoard().addCoins(2);
         game.selectPlayer(0);
 
         // The card isn't active so nothing happens
@@ -205,7 +205,7 @@ public class GrandmaHerbsTest
         // 1 noEntryTile is on the selected island
 
         // Add coins to the player
-        player1.addCoins(20);
+        player1.getBoard().addCoins(20);
 
         for (int i = 1; i < 4; i++)
         {
@@ -217,7 +217,7 @@ public class GrandmaHerbsTest
 
                 assertEquals(1 + i, game.getIslands().get(0).getNoEntryTiles());
                 assertEquals(3 - i, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
-                assertEquals(20 - 3 * i, player1.getCoins());
+                assertEquals(20 - 3 * i, player1.getBoard().getCoins());
             }
             catch (NotEnoughCoinsException e1)
             {
@@ -250,7 +250,7 @@ public class GrandmaHerbsTest
         assertEquals("[GrandmaHerbs] Island index out of bounds", e1.getMessage());
 
         // Select a player
-        player1.addCoins(2);
+        player1.getBoard().addCoins(2);
         game.selectPlayer(0);
 
         // The player selects an island where there is already a student

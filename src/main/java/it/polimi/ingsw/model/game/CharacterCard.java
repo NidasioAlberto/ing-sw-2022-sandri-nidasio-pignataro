@@ -97,9 +97,9 @@ public abstract class CharacterCard extends Game
             return;
 
         // I subtract the coins only if the player can pay
-        if (instance.getSelectedPlayer().get().getCoins() >= cost)
+        if (instance.getSelectedPlayer().get().getBoard().getCoins() >= cost)
         {
-            instance.getSelectedPlayer().get().removeCoins(cost);
+            instance.getSelectedPlayer().get().getBoard().removeCoins(cost);
             this.activated = true;
             // Set the card to first used
             if (!firstUsed)
@@ -123,6 +123,11 @@ public abstract class CharacterCard extends Game
     }
 
     /**
+     * This method is used to make the cards notify the subscriber about their payload
+     */
+    public void notifySubscriber() {}
+
+    /**
      * Method that vary based on the actual card.
      * 
      * @return the enumeration of the card type
@@ -133,6 +138,8 @@ public abstract class CharacterCard extends Game
     {
         return activated;
     }
+
+    public int getCost() { return cost; }
 
     public void addPlayer(Player player) throws TooManyPlayersException
     {
