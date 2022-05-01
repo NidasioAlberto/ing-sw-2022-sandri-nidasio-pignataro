@@ -11,8 +11,14 @@ public class AssistantCardsUpdate extends ModelUpdate
      */
     private List<AssistantCard> cards;
 
+    public List<AssistantCard> getCards()
+    {
+        return cards;
+    }
+
     /**
      * Constructor that allows the player destination
+     * 
      * @param playerDestination Name of the player that has to receive the message
      * @param cards Collection of specific player cards
      */
@@ -20,28 +26,31 @@ public class AssistantCardsUpdate extends ModelUpdate
     {
         super(playerDestination);
 
-        if(cards == null)
+        if (cards == null)
             throw new NullPointerException("[AssistantCardsUpdate] Null cards list");
         // It is possible according to Java 8 documentation
-        if(cards.contains(null))
-            throw new NullPointerException("[AssistantCardsUpdate] Null assistant card inside the list");
+        if (cards.contains(null))
+            throw new NullPointerException(
+                    "[AssistantCardsUpdate] Null assistant card inside the list");
 
         this.cards = cards;
     }
 
     /**
      * Constructor that doesn't allow any player destination
+     * 
      * @param cards Collection of specific player cards
      */
     public AssistantCardsUpdate(List<AssistantCard> cards)
     {
         super();
 
-        if(cards == null)
+        if (cards == null)
             throw new NullPointerException("[AssistantCardsUpdate] Null cards list");
         // It is possible according to Java 8 documentation
-        if(cards.contains(null))
-            throw new NullPointerException("[AssistantCardsUpdate] Null assistant card inside the list");
+        if (cards.contains(null))
+            throw new NullPointerException(
+                    "[AssistantCardsUpdate] Null assistant card inside the list");
 
         this.cards = cards;
     }

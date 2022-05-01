@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 
 import java.util.List;
 import java.util.Optional;

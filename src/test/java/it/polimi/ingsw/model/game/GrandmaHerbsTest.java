@@ -109,7 +109,7 @@ public class GrandmaHerbsTest
             // Activate the card
             player1.getBoard().addCoins(2);
             grandmaHerbs.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
             for (ExpertGameAction action : ExpertGameAction.values())
             {
                 // When GrandmaHerbs is active the only valid action is
@@ -138,7 +138,7 @@ public class GrandmaHerbsTest
             // Activate the card
             player1.getBoard().addCoins(3);
             grandmaHerbs.activate();
-            assertEquals(0, player1.getCoins());
+            assertEquals(0, player1.getBoard().getCoins());
         } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
@@ -215,7 +215,7 @@ public class GrandmaHerbsTest
 
                 assertEquals(1 + i, game.getIslands().get(0).getNoEntryTiles());
                 assertEquals(3 - i, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
-                assertEquals(20 - 3 * i, player1.getCoins());
+                assertEquals(20 - 3 * i, player1.getBoard().getCoins());
             } catch (NotEnoughCoinsException e1)
             {
                 e1.printStackTrace();

@@ -1,17 +1,16 @@
 package it.polimi.ingsw.network;
 
 import java.util.List;
-import java.util.concurrent.Flow.Subscription;
 import java.util.concurrent.Flow.Subscriber;
-
+import java.util.concurrent.Flow.Subscription;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.protocol.answers.Answer;
 import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
-import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
+import it.polimi.ingsw.model.GameMode;
 
-public class Match
+public class Match implements Subscriber<ModelUpdate>
 {
     private List<PlayerConnection> players;
 
@@ -72,4 +71,43 @@ public class Match
     {
         return gameController;
     }
+
+    /**
+     * This method is invoked when the model has been changed. Observer pattern
+     * 
+     * @param update The item that has been changed
+     */
+    @Override
+    public void onNext(ModelUpdate update)
+    {
+
+    }
+
+    /**
+     * This method is called immediately when the subscription is done TODO MAYBE USEFUL, IF SO ADD
+     * IT TO UML
+     * 
+     * @param subscription a new subscription
+     */
+    @Override
+    public void onSubscribe(Subscription subscription)
+    {}
+
+    /**
+     * This method is called by the model when an error occurs TODO MAYBE USEFUL, IF SO ADD IT TO
+     * UML
+     * 
+     * @param throwable the exception
+     */
+    @Override
+    public void onError(Throwable throwable)
+    {}
+
+    /**
+     * This method is called when the model knows that nothing will change in the future anymore
+     * TODO MAYBE USEFUL, IF SO ADD IT TO UML
+     */
+    @Override
+    public void onComplete()
+    {}
 }
