@@ -18,9 +18,7 @@ public class AnswersReceiver implements Runnable
         try
         {
             while (true)
-            {
                 System.out.println(inputStream.readObject().toString());
-            }
         } catch (IOException e)
         {
             System.err
@@ -28,6 +26,9 @@ public class AnswersReceiver implements Runnable
         } catch (ClassNotFoundException e)
         {
             System.out.println("SEVERE ERROR! " + e.getMessage());
+        } catch (Error e)
+        {
+            System.out.println("[AnswersReceiver] Generic error: " + e.getMessage());
         }
     }
 }

@@ -1,20 +1,20 @@
 package it.polimi.ingsw.protocol.commands;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import it.polimi.ingsw.network.PlayerConnection;
 
 public class JoinMatchCommand extends Command
 {
     String matchId;
 
-    JoinMatchCommand(JSONObject commandJson) throws JSONException
+    public JoinMatchCommand(String matchId)
     {
-        matchId = commandJson.getString("matchId");
+        this.matchId = matchId;
     }
 
     public void applyCommand(PlayerConnection connection) throws IllegalArgumentException
     {
+        checkPlayerConnection(connection);
+
         // Check if the player has a name
         if (connection.getPlayerName().isPresent())
             connection.getServer().addPlayerToMatch(matchId, connection);

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.protocol.answers;
 
+import java.util.HashMap;
 import java.util.Map;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.network.Match;
@@ -12,6 +13,9 @@ public class MatchesListAnswer extends Answer
 
     public MatchesListAnswer(Map<String, Match> matches)
     {
+        numPlayers = new HashMap<>();
+        gameModes = new HashMap<>();
+
         for (Map.Entry<String, Match> match : matches.entrySet())
         {
             numPlayers.put(match.getKey(), match.getValue().getPlayersNumber());
@@ -32,14 +36,18 @@ public class MatchesListAnswer extends Answer
     @Override
     public String toString()
     {
-        String str = "[MatchesListCommand] Matches list:\n";
-
-        for (String key : numPlayers.keySet())
+        if (numPlayers.isEmpty())
         {
-            str += "\t" + key + ": mode = " + gameModes.get(key) + " / players = "
-                    + numPlayers.get(key);
-        }
+            return "[MatchesListCommand] There are no matches";
+        } else
+        {
+            String str = "[MatchesListCommand] Matches list:\n";
 
-        return str;
+            for (String key : numPlayers.keySet())
+                str += "\t" + key + ": mode = " + gameModes.get(key) + " / players = "
+                        + numPlayers.get(key);
+
+            return str;
+        }
     }
 }

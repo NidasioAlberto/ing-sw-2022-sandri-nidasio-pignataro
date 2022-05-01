@@ -80,20 +80,19 @@ public class PlayerConnection implements Runnable
         } catch (IOException e)
         {
             System.err.println(
-                    "[Player connection] An error occurred while closing the player's connection");
-            System.err.println("[Player connection] " + e.getMessage());
+                    "[PlayerConnection] An error occurred while closing the player's connection");
+            System.err.println("[PlayerConnection] " + e.getMessage());
         }
     }
 
     @Override
     public void run()
     {
+        System.out.println("[PlayerConnection] New player connected");
         try
         {
             while (isActive())
-            {
                 handlePacket(inputStream.readObject());
-            }
         } catch (IOException e)
         {
             // The player suddenly disconnected, remove it from the server
@@ -107,6 +106,9 @@ public class PlayerConnection implements Runnable
 
     public void handlePacket(Object rawPacket)
     {
+        System.out.println(
+                "[PlayerConnection] New packet received: " + rawPacket.getClass().getName());
+
         try
         {
             // If the packet contains an action handle it
@@ -130,11 +132,10 @@ public class PlayerConnection implements Runnable
     {
         try
         {
-            outputStream.reset();
             outputStream.writeObject(answer);
-            outputStream.flush();
         } catch (IOException e)
         {
+            System.err.println("[PlayerConnection] Error while writing answer: " + e.getMessage());
             close();
         }
     }
