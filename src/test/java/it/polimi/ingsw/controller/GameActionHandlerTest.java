@@ -261,5 +261,61 @@ public class GameActionHandlerTest
         // We now move to MoveStudentPhase of the next player, which is player2
         assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
         assertEquals("player2", game.getSelectedPlayer().get().getNickname());
+
+        // player2 performs four moves from the entrance room
+        // player2 moves a student to the dining room
+        SchoolColor color10= game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToDiningMessage(color10), "player2"));
+        assertEquals(8, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        assertEquals(1, game.getSelectedPlayer().get().getBoard().getStudentsNumber(color10));
+
+        // player2 moves a student to the dining room
+        SchoolColor color11 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToDiningMessage(color11), "player2"));
+        assertEquals(7, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        if (color10 == color11)
+            assertEquals(2, game.getSelectedPlayer().get().getBoard().getStudentsNumber(color11));
+        else assertEquals(1, game.getSelectedPlayer().get().getBoard().getStudentsNumber(color11));
+
+        // player 2 moves a student to an island
+        SchoolColor color12 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToIslandMessage(color12, 6), "player2"));
+        assertEquals(6, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        if (game.getIslands().get(6).getStudents().size() == 1)
+            assertEquals(color12, game.getIslands().get(6).getStudents().get(0).getColor());
+        else assertEquals(color12, game.getIslands().get(6).getStudents().get(1).getColor());
+
+        // player 2 moves a student to an island
+        SchoolColor color13 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToIslandMessage(color13, 7), "player2"));
+        assertEquals(5, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        if (game.getIslands().get(7).getStudents().size() == 1)
+            assertEquals(color13, game.getIslands().get(7).getStudents().get(0).getColor());
+        else assertEquals(color13, game.getIslands().get(7).getStudents().get(1).getColor());
+
+        // player2 moves mother nature
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveMotherNatureMessage((game.getMotherNatureIndex().get() + game.getSelectedPlayer().get().
+                        getSelectedCard().get().getSteps()) % game.getIslands().size()), "player2"));
+
+        // player3 selects a cloud tile
+        assertDoesNotThrow(() -> handler.handleAction(
+                new SelectCloudTileMessage(2),"player2"));
+        assertEquals(9, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        assertEquals(0, game.getCloudTiles().get(2).getStudents().size());
+
+        // We now move to EndTurnPhase
+        assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
+        assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player2"));
+
+        // We now move to PlanPhase because all the players have done their turn
+        assertTrue(handler.getGamePhase() instanceof PlanPhase);
+        // Now player1 has to play an assistant card because has played the card with the lowest turnOrder the previous round
+        assertEquals("player1", game.getSelectedPlayer().get().getNickname());
+        assertEquals(4, game.getCloudTiles().get(2).getStudents().size());
     }
 }
