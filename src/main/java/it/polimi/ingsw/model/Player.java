@@ -259,9 +259,8 @@ public class Player
     /**
      * Method to call at the end of the round to clear all the selections
      */
-    public void clearSelectionsEndRound()
+    public void clearSelectionsEndTurn()
     {
-        selectedCard = Optional.empty();
         selectedIsland = Optional.empty();
         selectedColors.clear();
         selectedCloudTile = Optional.empty();

@@ -4,12 +4,17 @@ import it.polimi.ingsw.controller.fsm.*;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoLegitActionException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.Monk;
 import it.polimi.ingsw.network.Match;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.protocol.messages.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -158,7 +163,7 @@ public class GameActionHandlerTest
         // player1 moves mother nature
         assertDoesNotThrow(() -> handler.handleAction(
                 new MoveMotherNatureMessage((game.getMotherNatureIndex().get() + game.getSelectedPlayer().get().
-                        getSelectedCard().get().getTurnOrder()) % game.getIslands().size()), "player1"));
+                        getSelectedCard().get().getSteps()) % game.getIslands().size()), "player1"));
 
         // We now move to SelectCloudTilePhase
         assertTrue(handler.getGamePhase() instanceof SelectCloudTilePhase);
@@ -169,10 +174,77 @@ public class GameActionHandlerTest
         assertEquals(9, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
         assertEquals(0, game.getCloudTiles().get(0).getStudents().size());
 
+        //TODO cancellare quando modificato end turn phase
+        handler.endTurn();
         // We now move to MoveStudentPhase of the next player, which is player3
         assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
         assertEquals("player3", game.getSelectedPlayer().get().getNickname());
 
+        // player3 performs four moves from the entrance room
+        // player3 moves a student to the dining room
+        SchoolColor color5 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToDiningMessage(color5), "player3"));
+        assertEquals(8, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        assertEquals(1, game.getSelectedPlayer().get().getBoard().getStudentsNumber(color5));
+
+        // player3 moves a student to the dining room
+        SchoolColor color6 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToDiningMessage(color6), "player3"));
+        assertEquals(7, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        if (color5 == color6)
+            assertEquals(2, game.getSelectedPlayer().get().getBoard().getStudentsNumber(color6));
+        else assertEquals(1, game.getSelectedPlayer().get().getBoard().getStudentsNumber(color6));
+
+        // player 3 moves a student to an island
+        SchoolColor color7 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToIslandMessage(color7, 3), "player3"));
+        assertEquals(6, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        if (game.getIslands().get(3).getStudents().size() == 1)
+            assertEquals(color7, game.getIslands().get(3).getStudents().get(0).getColor());
+        else assertEquals(color7, game.getIslands().get(3).getStudents().get(1).getColor());
+
+        // player 3 moves a student to an island
+        SchoolColor color8 = game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().get(0).getColor();
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveStudentFromEntranceToIslandMessage(color8, 4), "player3"));
+        assertEquals(5, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        if (game.getIslands().get(4).getStudents().size() == 1)
+            assertEquals(color8, game.getIslands().get(4).getStudents().get(0).getColor());
+        else assertEquals(color8, game.getIslands().get(4).getStudents().get(1).getColor());
         // TODO giocare una carta carattere, generare degli errori
+        // TODO manca da aggiungere le monete quando si mettono tot student in dining in modalità expert
+
+        for (CharacterCard card : game.getCharacterCards())
+        {
+            if (card instanceof Monk)
+            {
+                game.getSelectedPlayer().get().addCoins(3);
+                // player3 activate the monk card
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player3"));
+                assertEquals(card, game.getCurrentCharacterCard().get());
+                assertTrue(card.isActivated());
+
+                // player3 applies the action of the monk
+                SchoolColor color9 = ((Monk) card).getStudents().get(0).getColor();
+                List colors = new ArrayList<SchoolColor>();
+                colors.add(color9);
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND, 5, colors),
+                        "player3"));
+                if (game.getIslands().get(5).getStudents().size() == 1)
+                    assertEquals(color9, game.getIslands().get(5).getStudents().get(0).getColor());
+                else assertEquals(color9, game.getIslands().get(5).getStudents().get(1).getColor());
+
+            }
+        }
+        // player3 moves mother nature
+        assertDoesNotThrow(() -> handler.handleAction(
+                new MoveMotherNatureMessage((game.getMotherNatureIndex().get() + game.getSelectedPlayer().get().
+                        getSelectedCard().get().getSteps()) % game.getIslands().size()), "player3"));
+
     }
 }

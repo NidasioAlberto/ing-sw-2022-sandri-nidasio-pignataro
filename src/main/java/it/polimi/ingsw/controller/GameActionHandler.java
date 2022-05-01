@@ -255,13 +255,13 @@ public class GameActionHandler
         checkIfCharacterCardIsStillPlayable();
 
         // Clear the selections and disable any character card
-        game.getSelectedPlayer().get().clearSelectionsEndRound();
+        game.getSelectedPlayer().get().clearSelectionsEndTurn();
         game.clearTurn();
         for (CharacterCard card : game.getCharacterCards())
             card.deactivate();
 
         // If all goes correctly i step the FSM
-        gamePhase.onValidAction(this);
+      //  gamePhase.onValidAction(this);
     }
 
     public Phase getGamePhase()

@@ -30,6 +30,8 @@ public class MoveMotherNaturePhase implements Phase
                 .orElseThrow(() -> new NoSelectedPlayerException("[MoveMotherNaturePhase]"));
 
         return currentPlayer.getNickname().equals(playerName) &&
-                baseAction == BaseGameAction.MOVE_MOTHER_NATURE;
+                (baseAction == BaseGameAction.MOVE_MOTHER_NATURE ||
+                 baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
+                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD);
     }
 }

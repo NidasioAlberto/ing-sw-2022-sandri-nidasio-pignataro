@@ -581,6 +581,7 @@ public class Game
     public void clearTurn()
     {
         this.currentCharacterCardIndex = Optional.empty();
+        this.motherNatureMoved = false;
     }
 
     /**

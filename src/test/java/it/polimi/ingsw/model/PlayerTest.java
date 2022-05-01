@@ -335,7 +335,7 @@ public class PlayerTest
         player.selectColor(SchoolColor.GREEN);
 
         // Clear the selections at the end of the turn
-        player.clearSelectionsEndRound();
+        player.clearSelectionsEndTurn();
         assertTrue(player.getSelectedCard().isEmpty());
         assertTrue(player.getSelectedIsland().isEmpty());
         assertTrue(player.getSelectedColors().isEmpty());
