@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.EndGameException;
+import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 
@@ -182,13 +183,16 @@ public class SchoolBoard
         if (tower == null)
             throw new NullPointerException("[SchoolBoard] Null tower");
 
-        // Check if there are still towers
-        if (towers.size() == 0)
-            throw new EndGameException("[SchoolBoard] Towers finished");
-
         // Checks if the tower is present
         if (towers.contains(tower))
+        {
             towers.remove(tower);
+
+            // Check if there are still towers
+            if (towers.size() == 0)
+                throw new EndGameException("[SchoolBoard] Towers finished");
+        }
+
     }
 
     /**
@@ -261,6 +265,7 @@ public class SchoolBoard
         // Checks if not null and present in entrance
         if (entrance.contains(student))
             entrance.remove(student);
+        else throw new NoSelectedStudentsException("[SchoolBoard]");
     }
 
     /**

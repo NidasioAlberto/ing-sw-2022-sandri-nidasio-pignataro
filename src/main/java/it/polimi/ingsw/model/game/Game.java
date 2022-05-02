@@ -426,15 +426,23 @@ public class Game implements Publisher<ModelUpdate>
 
             // Move the influencer's towers to the island
             List<Tower> towersToAdd = influencer.getBoard().getTowers().subList(0,
-                    Integer.max(towersToRemove.size(), influencer.getBoard().getTowers().size()));
+                    Integer.min(towersToRemove.size(), influencer.getBoard().getTowers().size()));
 
-            towersToAdd.forEach(t -> {
-                // Remove the tower from the player's board
-                influencer.getBoard().removeTower(t);
+            if  (towersToAdd.size() == 0)
+            {
+                // The island has no tower
+                currentIsland.addTower(influencer.getBoard().getTowers().get(0));
+            }
+            else
+            {
+                towersToAdd.forEach(t -> {
+                    // Remove the tower from the player's board
+                    influencer.getBoard().removeTower(t);
 
-                // Add the tower to the island
-                currentIsland.addTower(t);
-            });
+                    // Add the tower to the island
+                    currentIsland.addTower(t);
+                });
+            }
 
             // After moving the towers we need to notify the observer
             if (subscriber.isPresent())

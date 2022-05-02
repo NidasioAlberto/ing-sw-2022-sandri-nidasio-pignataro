@@ -140,7 +140,7 @@ public class GameActionHandler
                         game.getSelectedPlayer().get().getBoard()
                                 .removeStudentFromEntrance(
                                         game.getSelectedPlayer().get().getSelectedColors().get(0))
-                                .get());
+                                .orElseThrow(() -> new NoSuchStudentInEntranceException("[GameActionHandler]")));
 
         // If the current card is activated i can apply the action
         if (game.getCurrentCharacterCard().isPresent()

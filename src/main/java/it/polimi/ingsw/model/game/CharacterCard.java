@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -176,6 +177,11 @@ public abstract class CharacterCard extends Game
         return instance.getSelectedPlayer();
     }
 
+    public Optional<Integer> getSelectedPlayerIndex()
+    {
+        return instance.getSelectedPlayerIndex();
+    }
+
     public List<Player> getSortedPlayerList()
     {
         return instance.getSortedPlayerList();
@@ -246,12 +252,53 @@ public abstract class CharacterCard extends Game
         return instance.getCharacterCards();
     }
 
+    public Optional<CharacterCard> getCurrentCharacterCard()
+    {
+        return instance.getCurrentCharacterCard();
+    }
+
+    public List<Island> getIslands()
+    {
+        return instance.getIslands();
+    }
+
     public List<Student> getStudentBag()
     {
         return instance.getStudentBag();
     }
 
     public Game getInstance() { return instance; }
+
+    public List<Professor> getProfessors()
+    {
+        return instance.getProfessors();
+    }
+
+    public List<CloudTile> getCloudTiles()
+    {
+        return instance.getCloudTiles();
+    }
+
+    public Island getCurrentIsland() throws NoSuchElementException
+    {
+        return islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
+                "[Game] No mother nature index, is the game initialized?")));
+    }
+
+    public Optional<Integer> getMotherNatureIndex()
+    {
+        return instance.getMotherNatureIndex();
+    }
+
+    public int getPlayersNumber()
+    {
+        return instance.getPlayersNumber();
+    }
+
+    public GameMode getGameMode()
+    {
+        return instance.getGameMode();
+    }
 
     public static CharacterCard createCharacterCard(CharacterCardType type, Game game)
             throws NullPointerException

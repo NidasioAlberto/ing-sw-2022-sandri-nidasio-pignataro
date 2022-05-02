@@ -103,8 +103,16 @@ public class CharacterCardTest
             assertEquals(1,
                     game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
         else
-            assertEquals(0,
-                    game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
+        {
+            if (game.getIslands().get(game.getMotherNatureIndex().get()).getStudents().size() == 1 &&
+                    game.getIslands().get(game.getMotherNatureIndex().get()).getStudents().get(0).getColor() == color)
+                assertEquals(1,
+                        game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
+            else
+                assertEquals(0,
+                        game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
+
+        }
 
         // Move students from cloud tile
         CloudTile cloud = game.getCloudTiles().get(0);

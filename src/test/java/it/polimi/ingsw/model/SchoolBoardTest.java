@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.EndGameException;
+import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import org.junit.jupiter.api.*;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -261,12 +262,8 @@ public class SchoolBoardTest
         assertEquals(false, board.getTowers().contains(firstTower));
 
         // Remove the last tower
-        board.removeTower(secondTower);
+        assertThrows(EndGameException.class, () -> board.removeTower(secondTower));
         assertEquals(0, board.getTowers().size());
-
-        // There are no more towers so if I try to remove another one, EndGameException is thrown
-        assertThrows(EndGameException.class, () -> board.removeTower(new Tower(TowerColor.BLACK)));
-        assertThrows(EndGameException.class, () -> board.removeTower(TowerColor.BLACK));
     }
 
     @Test
@@ -383,7 +380,7 @@ public class SchoolBoardTest
                 () -> board.removeStudentFromEntrance((SchoolColor) null));
 
         // Remove a non present object
-        board.removeStudentFromEntrance(new Student(SchoolColor.YELLOW));
+        assertThrows(NoSelectedStudentsException.class, () -> board.removeStudentFromEntrance(new Student(SchoolColor.YELLOW)));
         assertEquals(2, board.getStudentsInEntrance().size());
         assertEquals(true, board.getStudentsInEntrance().contains(firstStudent));
         assertEquals(true, board.getStudentsInEntrance().contains(secondStudent));

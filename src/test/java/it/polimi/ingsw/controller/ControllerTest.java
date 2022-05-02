@@ -175,16 +175,28 @@ public class ControllerTest
             e.printStackTrace();
         }
         controller.setupGame();
+        Game game = controller.getGameHandler().getGame();
 
         // A player has built all the towers
         Player winner = controller.getGameHandler().getGame().getSelectedPlayer().get();
-        assertEquals("player1", winner.getNickname());
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
             winner.getBoard().removeTower(winner.getColor());
         assertThrows(EndGameException.class,
                 () -> winner.getBoard().removeTower(winner.getColor()));
+        // Check the endGame method
+        controller.endGame();
 
+        // Add a tower to the previous winner
+        winner.getBoard().addTower(new Tower(TowerColor.BLACK));
+        assertEquals(1, winner.getBoard().getTowers().size());
 
+        // A player has finished the assistant cards
+        for (int turnOrder = 1; turnOrder < 10; turnOrder++)
+            winner.removeCard(turnOrder);
+        assertThrows(EndGameException.class,
+                () -> winner.removeCard(10));
+        // Check the endGame method
+        controller.endGame();
 
     }
 
@@ -242,14 +254,32 @@ public class ControllerTest
         {
             if (card instanceof Monk)
             {
+                // player3 applies the action of the monk, but hasn't activated the card,
+                // so a NoSelectedCharacterCardException is caught by the controller
+                int studentsOnIsland = game.getIslands().get(5).getStudents().size();
+                List colors = new ArrayList<SchoolColor>();
+                SchoolColor color4 = ((Monk) card).getStudents().get(0).getColor();
+                colors.add(color4);
+                assertDoesNotThrow(() -> controller.performAction(
+                        new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
+                                5, colors),"player1"));
+                assertEquals(studentsOnIsland, game.getIslands().get(5).getStudents().size());
+                colors.clear();
+
                 // player3 activate the monk card but hasn't enough coins,
-                // so a NotEnoughCoins is caught by the player
+                // so a NotEnoughCoins is caught by the controller
                 assertDoesNotThrow(() -> controller.performAction(
                         new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player1"));
                 assertFalse(card.isActivated());
 
-                game.getSelectedPlayer().get().getBoard().addCoins(2);
+                game.getSelectedPlayer().get().getBoard().addCoins(5);
                 // player3 activate the monk card
+                assertDoesNotThrow(() -> controller.performAction(
+                        new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player1"));
+                assertTrue(card.isActivated());
+
+                // player3 activate the monk card again,
+                // so a InvalidCharacterCardException is caught by the controller
                 assertDoesNotThrow(() -> controller.performAction(
                         new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)), "player1"));
                 assertTrue(card.isActivated());
@@ -269,14 +299,49 @@ public class ControllerTest
                     }
                 }
 
-                //player3 applies the action of the monk
-                List colors = new ArrayList<SchoolColor>();
+                // player3 applies the action of the monk, but has selected a student that is not
+                // present in the card, so a NoSuchStudentOnCardException is caught by the controller
                 colors.add(color2);
                 assertDoesNotThrow(() -> controller.performAction(
                         new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
                                 5, colors),"player1"));
+                colors.clear();
 
+                // player3 applies the action of the monk with a student present on the card
+                SchoolColor color3 = ((Monk) card).getStudents().get(0).getColor();
+                colors.add(color3);
+                assertDoesNotThrow(() -> controller.performAction(
+                        new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
+                                5, colors),"player1"));
+                assertEquals(studentsOnIsland + 1, game.getIslands().get(5).getStudents().size());
+                colors.clear();
             }
         }
+
+        // Search a student color not present in the entrance of player1
+        int counter;
+        SchoolColor color2 = null;
+        for (SchoolColor color : SchoolColor.values()) {
+            counter = 0;
+            for (Student student : game.getSelectedPlayer().get().getBoard().getStudentsInEntrance()) {
+                if (student.getColor() != color)
+                    counter++;
+            }
+            if (counter == game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size()) {
+                color2 = color;
+                break;
+            }
+        }
+
+        // player1 moves a student to the dining room, but doesn't have the selected color in the entrance,
+        // so a NoSuchStudentInEntranceException is caught by the controller
+        if (color2 != null)
+        {
+            final SchoolColor color3 = color2;
+            assertDoesNotThrow(() -> controller.performAction(
+                    new MoveStudentFromEntranceToDiningMessage(color3), "player1"));
+            assertEquals(9, game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
+        }
+
     }
 }

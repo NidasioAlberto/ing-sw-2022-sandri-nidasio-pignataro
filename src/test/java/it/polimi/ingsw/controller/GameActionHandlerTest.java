@@ -246,6 +246,7 @@ public class GameActionHandlerTest
 
                         }
                 }
+
                 // player3 moves mother nature
                 assertDoesNotThrow(() -> handler.handleAction(
                         new MoveMotherNatureMessage((game.getMotherNatureIndex().get() + game.getSelectedPlayer().get().

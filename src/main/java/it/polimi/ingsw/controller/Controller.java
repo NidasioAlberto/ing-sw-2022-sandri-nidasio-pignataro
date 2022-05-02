@@ -61,7 +61,7 @@ public class Controller
     /**
      * The method is called when the game is ended. It determines the winner.
      */
-    private void endGame()
+    public void endGame()
     {
         // Check if there is a player that has built all the towers
         for (Player player : game.getPlayerTableList())
@@ -95,11 +95,11 @@ public class Controller
                     (a, b) -> a.getBoard().getTowers().size() == b.getBoard().getTowers().size()
                             ? a.getBoard().getProfessors().size()
                                     - b.getBoard().getProfessors().size()
-                            : a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
+                            : b.getBoard().getTowers().size() - a.getBoard().getTowers().size());
 
             // The first player in the rank has the most tower or has the same tower as the second,
             // but the first has more professors, so the first wins
-            if (rank.get(0).getBoard().getTowers().size() > rank.get(1).getBoard().getTowers()
+            if (rank.get(0).getBoard().getTowers().size() < rank.get(1).getBoard().getTowers()
                     .size()
                     || (rank.get(0).getBoard().getTowers().size() == rank.get(1).getBoard()
                             .getTowers().size()
@@ -110,7 +110,7 @@ public class Controller
                 return;
             }
             // Case of a three players game and a tie between the first two
-            else if (rank.size() == 3 && (rank.get(0).getBoard().getTowers().size() > rank.get(2)
+            else if (rank.size() == 3 && (rank.get(0).getBoard().getTowers().size() < rank.get(2)
                     .getBoard().getTowers().size()
                     || (rank.get(0).getBoard().getTowers().size() == rank.get(2).getBoard()
                             .getTowers().size()
@@ -166,61 +166,71 @@ public class Controller
             // terminato
         } catch (NoLegitActionException e)
         {
-            sendError(getCurrentPlayer(), "You can't do this action right now.");
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), "You can't do this action right now.");
         } catch (WrongPlayerException e)
         {
             sendError(playerName, "This is not your turn, you have to wait.");
         } catch (NoSelectedIslandException e)
         {
-            sendError(getCurrentPlayer(), "You have to select an island to perform the action.");
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), "You have to select an island to perform the action.");
         } catch (NoSelectedColorException e)
         {
-            sendError(getCurrentPlayer(), "You have to select a color to perform the action.");
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), "You have to select a color to perform the action.");
         } catch (NoSelectedAssistantCardException e)
         {
-            sendError(getCurrentPlayer(),
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(),
                     "You have to select an assistant card to perform the action.");
         } catch (NoSelectedStudentsException e)
         {
-            sendError(getCurrentPlayer(), "You have to select the students to perform the action.");
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), "You have to select the students to perform the action.");
         } catch (NoSelectedCloudTileException e)
         {
-            sendError(getCurrentPlayer(), "You have to select a cloud tile to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a cloud tile to perform the action.");
         } catch (NoSelectedCharacterCardException e)
         {
-            sendError(getCurrentPlayer(),
+            sendError(getCurrentPlayer().getNickname(),
                     "You have to select a character card to perform the action.");
         } catch (IslandIndexOutOfBoundsException e)
         {
-            sendError(getCurrentPlayer(), "You can't select that island.");
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), "You can't select that island.");
         } catch (NotEnoughCoinsException e)
         {
             game.clearCharacterCard();
-            sendError(getCurrentPlayer(), "You don't have enough coins to play this card.");
+            sendError(getCurrentPlayer().getNickname(), "You don't have enough coins to play this card.");
         } catch (NoSuchStudentOnCardException e)
         {
-            sendError(getCurrentPlayer(), "You have to select a student present on the card.");
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), "You have to select a student present on the card.");
         } catch (NoSuchStudentInEntranceException e)
         {
-            sendError(getCurrentPlayer(),
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(),
                     "You have to select a student present in your entrance room.");
         } catch (NoSuchStudentInDiningException e)
         {
-            sendError(getCurrentPlayer(),
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(),
                     "You have to select a student present in your dining room.");
         } catch (NoSuchAssistantCardException e)
         {
-            sendError(getCurrentPlayer(), "You don't have the assistant card you selected.");
+            sendError(getCurrentPlayer().getNickname(),
+                    "You don't have the assistant card you selected.");
         } catch (InvalidMovementException e)
         {
-            sendError(getCurrentPlayer(), e.getMessage());
+            getCurrentPlayer().clearSelections();
+            sendError(getCurrentPlayer().getNickname(), e.getMessage());
         } catch (InvalidCharacterCardException e)
         {
-            sendError(getCurrentPlayer(), "You can't play two character cards in the same turn.");
-        }
-        catch (NoMoreNoEntryTilesException e)
+            sendError(getCurrentPlayer().getNickname(), "You can't play two character cards in the same turn.");
+        } catch (NoMoreNoEntryTilesException e)
         {
-            sendError(getCurrentPlayer(),
+            sendError(getCurrentPlayer().getNickname(),
                     "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
         } catch (Exception e)
         {
@@ -318,9 +328,9 @@ public class Controller
         return game.getPlayersNumber();
     }
 
-    public String getCurrentPlayer()
+    public Player getCurrentPlayer()
     {
         return game.getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Controller]")).getNickname();
+                .orElseThrow(() -> new NoSelectedPlayerException("[Controller]"));
     }
 }
