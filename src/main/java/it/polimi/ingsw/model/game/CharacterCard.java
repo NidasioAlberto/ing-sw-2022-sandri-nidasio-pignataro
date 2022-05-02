@@ -251,6 +251,8 @@ public abstract class CharacterCard extends Game
         return instance.getStudentBag();
     }
 
+    public Game getInstance() { return instance; }
+
     public static CharacterCard createCharacterCard(CharacterCardType type, Game game)
             throws NullPointerException
     {

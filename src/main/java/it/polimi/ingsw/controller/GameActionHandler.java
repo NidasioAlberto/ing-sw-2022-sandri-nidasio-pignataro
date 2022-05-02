@@ -4,6 +4,7 @@ import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.fsm.Phase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
 import it.polimi.ingsw.model.ExpertGameAction;
+import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.game.CharacterCard;
@@ -71,6 +72,17 @@ public class GameActionHandler
 
         if (!gamePhase.isLegitAction(this, playerName, message.getBaseGameAction()))
             throw new NoLegitActionException();
+
+        if(game.getGameMode() == GameMode.EXPERT)
+        {
+            // Before calling the action, if the current card is activated i substitute
+            // the game instance with it, else i take the instance of one of the character cards
+            if (game.getCurrentCharacterCard().isPresent() &&
+                    game.getCurrentCharacterCard().get().isActivated())
+                game = game.getCurrentCharacterCard().get();
+            else
+                game = game.getCharacterCards().get(0).getInstance();
+        }
 
         // Call the correct method (Command pattern)
         message.applyAction(this);
@@ -206,6 +218,9 @@ public class GameActionHandler
     public void playCharacterCard(int selectedCharacterCard)
             throws InvalidModuleException, NoSuchElementException, NotEnoughCoinsException
     {
+        if(game.getGameMode() != GameMode.EXPERT)
+            throw new NoLegitActionException();
+
         if (game.getCurrentCharacterCard().isPresent())
             throw new InvalidCharacterCardException(
                     "[GameActionHandler] A character card was already played");
@@ -227,6 +242,9 @@ public class GameActionHandler
             Optional<List<SchoolColor>> selectedColors)
             throws NullPointerException, NoSuchElementException
     {
+        if(game.getGameMode() != GameMode.EXPERT)
+            throw new NoLegitActionException();
+
         if (action == null)
             throw new NullPointerException("[GameActionHandler] Null expert game action");
 
