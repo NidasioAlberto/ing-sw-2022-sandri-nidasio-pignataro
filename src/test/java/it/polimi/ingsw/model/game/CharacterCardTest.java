@@ -118,4 +118,29 @@ public class CharacterCardTest
         // The game is in classic mode so there are no character cards
         assertEquals(0, thief.getCharacterCards().size());
     }
+
+    @Test
+    public void cloneTest()
+    {
+        Game game = new Game();
+        CharacterCard card = CharacterCard.createCharacterCard(CharacterCardType.THIEF, game);
+
+        // Tweak a little the card values
+        card.activated = true;
+        card.cost = 1000;
+
+        // Now i clone the card
+        CharacterCard cloned = card.clone();
+
+        // Verify that nothing changed except the instance pointer
+        assertEquals(cloned.cost, card.cost);
+        assertEquals(cloned.activated, card.activated);
+        assertEquals(cloned.firstUsed, card.firstUsed);
+        assertEquals(cloned.instance, null);
+
+        // Verify that it isn't the same object
+        card.firstUsed = true;
+
+        assertEquals(cloned.firstUsed, false);
+    }
 }

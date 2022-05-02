@@ -395,7 +395,6 @@ public class Game implements Publisher<ModelUpdate>
                 for (CharacterCard card : characterCards)
                     card.notifySubscriber();
             }
-
             return;
         }
 
@@ -632,8 +631,7 @@ public class Game implements Publisher<ModelUpdate>
                 for(CharacterCard card : characterCards)
                 {
                     // I clone all the character card to avoid serializing the game instance
-                    try {characterCardsList.add((CharacterCard) card.clone()); }
-                    catch(Exception e){}
+                    characterCardsList.add((CharacterCard) card.clone());
                 }
 
                 subscriber.get().onNext(

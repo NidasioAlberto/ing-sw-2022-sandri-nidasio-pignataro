@@ -243,10 +243,10 @@ public class GrandmaHerbsTest
         // An exception is thrown when the island index is wrong
         IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
                 () -> grandmaHerbs.computeInfluence(-1));
-        assertEquals("[GrandmaHerbs] Island index out of bounds", e.getMessage());
+        assertEquals("[Game] Island index out of bounds", e.getMessage());
         IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class,
                 () -> grandmaHerbs.computeInfluence(12));
-        assertEquals("[GrandmaHerbs] Island index out of bounds", e1.getMessage());
+        assertEquals("[Game] Island index out of bounds", e1.getMessage());
 
         // Select a player
         player1.getBoard().addCoins(2);
@@ -287,6 +287,7 @@ public class GrandmaHerbsTest
         // The noEntryTile is removed from the island
         assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
         // The noEntryTile returns to the card
+        grandmaHerbs.isPlayable();  // This method updates the number of entrys
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
         // The influence isn't calculated
         assertEquals(0, game.getIslands().get(islandIndex).getTowers().size());
