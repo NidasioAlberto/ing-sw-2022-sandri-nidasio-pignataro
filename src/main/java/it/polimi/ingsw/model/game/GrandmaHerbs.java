@@ -114,20 +114,6 @@ public class GrandmaHerbs extends CharacterCard
     }
 
     @Override
-    public CharacterCard clone()
-    {
-        // Create a clone object with null instance to avoid Game serialization
-        GrandmaHerbs cloned = new GrandmaHerbs(instance);
-        cloned.instance = null;
-        cloned.noEntryTiles = noEntryTiles;
-        cloned.activated = activated;
-        cloned.cost = cost;
-        cloned.firstUsed = firstUsed;
-
-        return cloned;
-    }
-
-    @Override
     public CharacterCardType getCardType()
     {
         return CharacterCardType.GRANDMA_HERBS;

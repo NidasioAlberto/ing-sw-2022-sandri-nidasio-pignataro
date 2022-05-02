@@ -132,7 +132,20 @@ public abstract class CharacterCard extends Game
      * @return
      */
     @Override
-    public abstract CharacterCard clone();
+    public CharacterCard clone()
+    {
+        // Create a new card
+        CharacterCard cloned = createCharacterCard(this.getCardType(), instance);
+
+        // Null the instance
+        cloned.instance  = null;
+        // Copy the properties
+        cloned.cost      = this.cost;
+        cloned.activated = this.activated;
+        cloned.firstUsed = this.firstUsed;
+
+        return cloned;
+    }
 
     /**
      * Method that vary based on the actual card.
