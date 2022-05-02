@@ -8,19 +8,20 @@ public class EndGamePhase implements Phase
     @Override
     public void onValidAction(GameActionHandler handler)
     {
-
+        // Nothing is done in the game end state
     }
 
     @Override
     public void onEndGame(GameActionHandler handler)
     {
-
+        // Stay on this state
     }
 
     @Override
     public boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction)
     {
+        // When the game is at the end, no action can be done
         return false;
     }
 }

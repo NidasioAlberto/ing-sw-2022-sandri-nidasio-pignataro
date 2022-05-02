@@ -10,19 +10,15 @@ import java.util.List;
 
 public class PlanPhase implements Phase
 {
-
     /**
-     * List that represents the player order that needs to be followed.
-     * This is because at the very beginning, the players in table order
-     * place an assistant card, whereas for the rest of the match players
-     * in play order place an assistant card.
+     * We need to maintain some counting about the players that already played an assistant card
      */
-    private List<Player> orderList;
+    private int count;
 
     //TODO UNDERSTAND THE PLAYER ORDER
-    public PlanPhase(List<Player> orderList)
+    public PlanPhase()
     {
-        this.orderList = orderList;
+        this.count = 0;
     }
 
     @Override
@@ -35,9 +31,11 @@ public class PlanPhase implements Phase
                 .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
 
         // If we are not dealing with the last one i switch player and maintain the current state
-        if (playerIndex < orderList.size() - 1)
+        if (count < handler.getGame().getPlayersNumber() - 1)
         {
-            handler.getGame().selectPlayer(playerIndex + 1);
+            // In case of a non 0 starting index, i have to use the module
+            handler.getGame().selectPlayer((playerIndex + 1) % handler.getGame().getPlayersNumber());
+            count++;
         } else
         {
             // If not i select the first player (now about the sorted list)
@@ -63,7 +61,7 @@ public class PlanPhase implements Phase
 
         // I accept the action if and only if the player is correct and the action is an assistant
         // card play
-        if (!orderList.get(playerIndex).getNickname().equals(playerName))
+        if (!handler.getGame().getPlayerTableList().get(playerIndex).getNickname().equals(playerName))
             throw new WrongPlayerException();
         return baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
     }

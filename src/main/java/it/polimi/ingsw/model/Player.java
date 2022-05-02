@@ -88,15 +88,13 @@ public class Player
      */
     public void selectCard(int turnOrder) throws NoSuchAssistantCardException
     {
-        // Set the current card to used
-        if (selectedCard.isPresent())
-            selectedCard.get().toggleUsed();
-
         for (int i = 0; i < cards.size(); i++)
         {
             if (cards.get(i).getTurnOrder() == turnOrder && !cards.get(i).isUsed())
             {
                 selectedCard = Optional.of(cards.get(i));
+                // Toggle the selected card to be used
+                cards.get(i).toggleUsed();
                 return;
             }
         }
