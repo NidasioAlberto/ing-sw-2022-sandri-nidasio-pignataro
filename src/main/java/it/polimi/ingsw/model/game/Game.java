@@ -600,8 +600,13 @@ public class Game implements Publisher<ModelUpdate>
 
             // Choose 3 random cards
             for (int j = 0; j < CHARACTER_CARDS_NUMBER; j++)
-                characterCards.add(CharacterCard
-                        .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
+            {
+                if(j == 0)
+                    characterCards.add(CharacterCard
+                            .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
+                else
+                    characterCards.add(CharacterCard.createCharacterCard(types.remove(getRandomNumber(0, types.size())), characterCards.get(j - 1)));
+            }
 
             // If we are in expert mode i can send notify the observer
             if (subscriber.isPresent())
