@@ -138,9 +138,9 @@ public class PlayerTest
         assertEquals(card1, player.getSelectedCard().get());
 
         // Select another card, so the previous one is now used
-        assertFalse(card1.isUsed());
-        player.selectCard(2);
         assertTrue(card1.isUsed());
+        player.selectCard(2);
+        assertTrue(card2.isUsed());
         assertEquals(card2, player.getSelectedCard().get());
     }
 

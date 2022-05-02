@@ -49,7 +49,7 @@ public class GameActionHandler
         game.selectPlayer(0);
 
         // Instantiate the FSM (I want the initial phase to be in table order)
-        gamePhase = new PlanPhase(game.getPlayerTableList());
+        gamePhase = new PlanPhase();
     }
 
     /**
