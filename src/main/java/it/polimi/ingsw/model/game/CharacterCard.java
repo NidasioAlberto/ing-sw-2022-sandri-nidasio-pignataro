@@ -128,6 +128,13 @@ public abstract class CharacterCard extends Game
     public void notifySubscriber() {}
 
     /**
+     * This method clones the current object avoiding Game instance clone
+     * @return
+     */
+    @Override
+    public abstract CharacterCard clone();
+
+    /**
      * Method that vary based on the actual card.
      * 
      * @return the enumeration of the card type

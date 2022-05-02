@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.ExpertGameAction;
+import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
 import it.polimi.ingsw.model.exceptions.NoMoreNoEntryTilesException;
 import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
@@ -42,6 +43,15 @@ public class GrandmaHerbs extends CharacterCard
     @Override
     public boolean isPlayable()
     {
+        // Before checking how many entry tiles are on this card, we check
+        // how many tiles are not on the card
+        int count = 0;
+        for(Island island : instance.islands)
+            count += island.getNoEntryTiles();
+
+        // Update the counter
+        noEntryTiles = INITIAL_NO_ENTRY_NUMBER - count;
+
         // If there aren't noEntryTiles the card isn't playable
         if (noEntryTiles <= 0)
             return false;
@@ -85,36 +95,36 @@ public class GrandmaHerbs extends CharacterCard
     }
 
     @Override
-    public void computeInfluence(int island)
-    {
-        // I check if the index is correct
-        if (island < 0 || island >= instance.islands.size())
-            throw new IslandIndexOutOfBoundsException("[GrandmaHerbs]");
-
-        // I check if on the island there is a no entry tile
-        if (instance.islands.get(island).getNoEntryTiles() > 0)
-        {
-            // If so I return it back to the card and remove it from the island
-            noEntryTiles++;
-            instance.islands.get(island).removeNoEntryTile();
-
-            // The influence is not calculated
-            return;
-        }
-
-        // Then I compute the normal influence
-        instance.computeInfluence(island);
-    }
-
-    @Override
     public void notifySubscriber()
     {
         // I have to find this character card index inside the list
         int index = 0;
         for(index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
 
+        // Before the notification i update also the number of no entry tiles
+        int count = 0;
+        for(Island island : instance.islands)
+            count += island.getNoEntryTiles();
+
+        // Update the counter
+        noEntryTiles = INITIAL_NO_ENTRY_NUMBER - count;
+
         if(instance.subscriber.isPresent())
             instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, noEntryTiles));
+    }
+
+    @Override
+    public CharacterCard clone()
+    {
+        // Create a clone object with null instance to avoid Game serialization
+        GrandmaHerbs cloned = new GrandmaHerbs(instance);
+        cloned.instance = null;
+        cloned.noEntryTiles = noEntryTiles;
+        cloned.activated = activated;
+        cloned.cost = cost;
+        cloned.firstUsed = firstUsed;
+
+        return cloned;
     }
 
     @Override

@@ -380,6 +380,25 @@ public class Game implements Publisher<ModelUpdate>
 
         Island currentIsland = islands.get(island);
 
+        // Check if the island has a no entry tile
+        // and if so i delete it and update the virtual view
+        if (currentIsland.getNoEntryTiles() > 0)
+        {
+            currentIsland.removeNoEntryTile();
+
+            // If the subscriber is present i have to notify
+            if(subscriber.isPresent())
+            {
+                subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+
+                // I update also all the character cards payload
+                for (CharacterCard card : characterCards)
+                    card.notifySubscriber();
+            }
+
+            return;
+        }
+
         // TODO: Use Pair
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream().sorted(
@@ -601,18 +620,24 @@ public class Game implements Publisher<ModelUpdate>
             // Choose 3 random cards
             for (int j = 0; j < CHARACTER_CARDS_NUMBER; j++)
             {
-                if(j == 0)
-                    characterCards.add(CharacterCard
-                            .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
-                else
-                    characterCards.add(CharacterCard.createCharacterCard(types.remove(getRandomNumber(0, types.size())), characterCards.get(j - 1)));
+                characterCards.add(CharacterCard
+                        .createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
             }
 
             // If we are in expert mode i can send notify the observer
             if (subscriber.isPresent())
             {
+                List<CharacterCard> characterCardsList = new ArrayList<>();
+
+                for(CharacterCard card : characterCards)
+                {
+                    // I clone all the character card to avoid serializing the game instance
+                    try {characterCardsList.add((CharacterCard) card.clone()); }
+                    catch(Exception e){}
+                }
+
                 subscriber.get().onNext(
-                        new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCards)));
+                        new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
                 // Notify eventually about the payload situation
                 for (CharacterCard card : characterCards)
                     card.notifySubscriber();
