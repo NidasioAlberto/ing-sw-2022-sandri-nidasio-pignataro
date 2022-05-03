@@ -81,6 +81,7 @@ public class Controller
             if (player.getCards().size() == 0)
             {
                 runOutOfCards = true;
+                break;
             }
         }
 
@@ -91,12 +92,12 @@ public class Controller
 
             // The winner is the player who has built the most towers.
             // In case of a tie, the winner is the player who controls the most professors
-            rank.stream().sorted(
+            rank.sort(
                     (a, b) -> a.getBoard().getTowers().size() == b.getBoard().getTowers().size()
-                            ? a.getBoard().getProfessors().size()
-                                    - b.getBoard().getProfessors().size()
-                            : b.getBoard().getTowers().size() - a.getBoard().getTowers().size());
-
+                            ? b.getBoard().getProfessors().size()
+                                    - a.getBoard().getProfessors().size()
+                            : a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
+            rank.stream().forEach((p) -> System.out.println(p.getNickname() + " " + p.getBoard().getTowers().size()));
             // The first player in the rank has the most tower or has the same tower as the second,
             // but the first has more professors, so the first wins
             if (rank.get(0).getBoard().getTowers().size() < rank.get(1).getBoard().getTowers()
@@ -125,7 +126,7 @@ public class Controller
             else
             {
                 match.endMatch("The game is ended. It is a tie between all the players.");
-                return;
+                 return;
             }
         }
     }
