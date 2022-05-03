@@ -11,11 +11,8 @@ public class GetMatchesListCommand extends Command
     {
         checkPlayerConnection(connection);
 
-        System.out.println("[GetMatchesListCommand] Sending matches list...");
-
         Map<String, Match> matches = connection.getServer().getAllMatches();
         MatchesListAnswer answer = new MatchesListAnswer(matches);
-        System.out.println("List: " + answer.toString());
         connection.sendAnswer(answer);
     }
 }

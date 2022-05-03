@@ -8,4 +8,10 @@ public class EndMatchAnswer extends Answer
     {
         this.message = message;
     }
+
+    @Override
+    public String toString()
+    {
+        return "[EndMatchAnswer] " + message;
+    }
 }

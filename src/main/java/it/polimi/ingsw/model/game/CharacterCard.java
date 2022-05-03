@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -84,7 +83,8 @@ public abstract class CharacterCard extends Game
     /**
      * Method to activate the card effect. Activated => the methods are not pass through.
      *
-     * @throws NotEnoughCoinsException if the player hasn't got enough coins to activate the selected card.
+     * @throws NotEnoughCoinsException if the player hasn't got enough coins to activate the
+     *         selected card.
      * @throws NoSelectedPlayerException if there isn't a selected player.
      */
     public void activate() throws NotEnoughCoinsException, NoSelectedPlayerException
@@ -126,10 +126,12 @@ public abstract class CharacterCard extends Game
     /**
      * This method is used to make the cards notify the subscriber about their payload
      */
-    public void notifySubscriber() {}
+    public void notifySubscriber()
+    {}
 
     /**
      * This method clones the current object avoiding Game instance clone
+     * 
      * @return
      */
     @Override
@@ -139,9 +141,9 @@ public abstract class CharacterCard extends Game
         CharacterCard cloned = createCharacterCard(this.getCardType(), instance);
 
         // Null the instance
-        cloned.instance  = null;
+        cloned.instance = null;
         // Copy the properties
-        cloned.cost      = this.cost;
+        cloned.cost = this.cost;
         cloned.activated = this.activated;
         cloned.firstUsed = this.firstUsed;
 
@@ -160,7 +162,10 @@ public abstract class CharacterCard extends Game
         return activated;
     }
 
-    public int getCost() { return cost; }
+    public int getCost()
+    {
+        return cost;
+    }
 
     public void addPlayer(Player player) throws TooManyPlayersException
     {
@@ -267,7 +272,10 @@ public abstract class CharacterCard extends Game
         return instance.getStudentBag();
     }
 
-    public Game getInstance() { return instance; }
+    public Game getInstance()
+    {
+        return instance;
+    }
 
     public List<Professor> getProfessors()
     {

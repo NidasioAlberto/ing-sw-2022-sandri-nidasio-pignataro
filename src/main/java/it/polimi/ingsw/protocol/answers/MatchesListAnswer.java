@@ -45,7 +45,7 @@ public class MatchesListAnswer extends Answer
 
             for (String key : numPlayers.keySet())
                 str += "\t" + key + ": mode = " + gameModes.get(key) + " / players = "
-                        + numPlayers.get(key);
+                        + numPlayers.get(key) + "\n";
 
             return str;
         }

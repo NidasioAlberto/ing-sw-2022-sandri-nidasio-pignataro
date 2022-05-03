@@ -11,14 +11,12 @@ public class JoinMatchCommand extends Command
         this.matchId = matchId;
     }
 
-    public void applyCommand(PlayerConnection connection) throws IllegalArgumentException
+    public void applyCommand(PlayerConnection connection) throws Exception
     {
         checkPlayerConnection(connection);
 
         // Check if the player has a name
         if (connection.getPlayerName().isPresent())
             connection.getServer().addPlayerToMatch(matchId, connection);
-        // else
-        // TODO: Notify the player
     }
 }

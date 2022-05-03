@@ -20,7 +20,7 @@ public abstract class Command implements Serializable
      * Method that has to be called to handle the command.
      * 
      * @param connection The player's connection used to apply the command.
-     * @throws NullPointerException Thrown if handler is null.
+     * @throws Exception Every possible exception thrown while applying the command.
      */
-    abstract public void applyCommand(PlayerConnection connection) throws NullPointerException;
+    abstract public void applyCommand(PlayerConnection connection) throws Exception;
 }

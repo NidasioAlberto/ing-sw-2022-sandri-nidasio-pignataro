@@ -6,6 +6,7 @@ import it.polimi.ingsw.protocol.answers.Answer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
+import it.polimi.ingsw.protocol.updates.ModelUpdate;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -72,7 +73,7 @@ public class PlayerConnection implements Runnable
 
     public void close()
     {
-        server.removePlayer(this);
+        server.removePlayerFromServer(this);
 
         try
         {
@@ -88,7 +89,9 @@ public class PlayerConnection implements Runnable
     @Override
     public void run()
     {
-        System.out.println("[PlayerConnection] New player connected");
+        // Register the player into the server
+        server.addPlayerToLobby(this);
+
         try
         {
             while (isActive())
@@ -96,7 +99,7 @@ public class PlayerConnection implements Runnable
         } catch (IOException e)
         {
             // The player suddenly disconnected, remove it from the server
-            server.removePlayer(this);
+            server.removePlayerFromServer(this);
         } catch (ClassNotFoundException e)
         {
             System.out.println("SERVER ERROR!");
@@ -107,7 +110,7 @@ public class PlayerConnection implements Runnable
     public void handlePacket(Object rawPacket)
     {
         System.out.println(
-                "[PlayerConnection] New packet received: " + rawPacket.getClass().getName());
+                "[PlayerConnection] New packet received: " + rawPacket.getClass().getSimpleName());
 
         try
         {
@@ -130,12 +133,24 @@ public class PlayerConnection implements Runnable
 
     public void sendAnswer(Answer answer)
     {
+        sendObject(answer);
+    }
+
+    public void sendModelUpdate(ModelUpdate update)
+    {
+        sendObject(update);
+    }
+
+    private void sendObject(Object object)
+    {
+        System.out.println(
+                "[PlayerConnection] Sending " + object.getClass().getSimpleName() + " to player");
         try
         {
-            outputStream.writeObject(answer);
+            outputStream.writeObject(object);
         } catch (IOException e)
         {
-            System.err.println("[PlayerConnection] Error while writing answer: " + e.getMessage());
+            System.err.println("[PlayerConnection] Error while writing: " + e.getMessage());
             close();
         }
     }

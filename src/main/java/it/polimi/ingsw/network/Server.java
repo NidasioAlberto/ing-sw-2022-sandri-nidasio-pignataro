@@ -3,6 +3,11 @@ package it.polimi.ingsw.network;
 import java.util.*;
 import java.util.concurrent.Executors;
 import it.polimi.ingsw.model.GameMode;
+import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.protocol.answers.Answer;
+import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
+import it.polimi.ingsw.protocol.answers.JoinedMatchAnswer;
+import it.polimi.ingsw.protocol.answers.MatchesListAnswer;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 
 public class Server
@@ -20,6 +25,7 @@ public class Server
         serverConnection = new ServerConnection(this);
         lobby = new ArrayList<>();
         matches = new HashMap<>();
+        playersMapMatch = new HashMap<>();
 
         // Start a thread that controls when to close the server
         Thread quiThread = new Thread(this::waitToQuit);
@@ -72,12 +78,69 @@ public class Server
                     "[Server] A match with id " + matchId + " already exists");
 
         // Create the match
-        matches.put(matchId, new Match(playersNumber, mode));
+        matches.put(matchId, new Match(this, playersNumber, mode));
     }
 
-    public void addPlayerToMatch(String matchId, PlayerConnection player)
-            throws IllegalArgumentException
+    /**
+     * Creates a new match and adds the player to it
+     * 
+     * @param matchId New match id.
+     * @param playersNumber Number of players for the new match.
+     * @param mode Game mode for the new match.
+     * @param player Player who created the match and needs to be included.
+     * @throws NullPointerException If the player is null.
+     * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in
+     *         another match, if there is already a player with such nickname of if there is no
+     *         match with the given id.
+     * @throws TooManyPlayersException If there are too many players.
+     */
+    public void createMatch(String matchId, int playersNumber, GameMode mode,
+            PlayerConnection player)
+            throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
+        createMatch(matchId, playersNumber, mode);
+
+        // Add the player to the match
+        addPlayerToMatch(matchId, player);
+
+        // Update all the players in the lobby with the new list of matches
+        sendToLobby(new MatchesListAnswer(matches));
+    }
+
+    public void removeMatch(Match match, String message) throws NullPointerException
+    {
+        if (match == null)
+            throw new NullPointerException("[Server] Attempting to remove a null Match");
+
+        // Notify all the players
+        match.sendAllAnswer(new EndMatchAnswer(message));
+
+        // Move all the players to the lobby
+        for (PlayerConnection player : match.getPlayers())
+            movePlayerToMatch(player);
+
+        // Delete the match
+        matches.entrySet().removeIf(entry -> entry.getValue() == match);
+    }
+
+    /**
+     * Adds a player to the match identified with the given match id.
+     * 
+     * @param nickname The player's nickname.
+     * @throws NullPointerException If the player is null.
+     * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in
+     *         another match, if there is already a player with such nickname of if there is no
+     *         match with the given id.
+     * @throws TooManyPlayersException If there are too many players.
+     */
+    public void addPlayerToMatch(String matchId, PlayerConnection player)
+            throws NullPointerException, IllegalArgumentException, TooManyPlayersException
+    {
+        // Check if the player is in the lobby
+        if (!lobby.contains(player))
+            throw new IllegalArgumentException(
+                    "[Server] The player must be in the lobby to be included in a game");
+
         // Check if the player has a name
         if (player.getPlayerName().isEmpty())
             throw new IllegalArgumentException(
@@ -95,12 +158,28 @@ public class Server
         if (match == null)
             throw new IllegalArgumentException("[Server] There is no match with id " + matchId);
 
+        // Remove the player from the lobby
+        lobby.remove(player);
+
         // Add the player to the match
         match.addPlayer(player);
         playersMapMatch.put(player, match);
+
+        // Notify the player
+        player.sendAnswer(new JoinedMatchAnswer(matchId));
     }
 
-    public void removePlayer(PlayerConnection player)
+    public void addPlayerToLobby(PlayerConnection player) throws NullPointerException
+    {
+        if (player == null)
+            throw new NullPointerException(
+                    "[Server] Attempting to add a null PlayerConnection to the lobby");
+
+        lobby.add(player);
+        System.out.println("[Server] Added new player to lobby");
+    }
+
+    public void removePlayerFromMatch(PlayerConnection player)
     {
         // If the player is part of a match remove it
         if (playersMapMatch.containsKey(player))
@@ -108,11 +187,22 @@ public class Server
             Match match = playersMapMatch.get(player);
             match.removePlayer(player);
             playersMapMatch.remove(player);
+
+            // And add him to the lobby
+            lobby.add(player);
         }
+    }
+
+    public void removePlayerFromServer(PlayerConnection player)
+    {
+        removePlayerFromMatch(player);
 
         // If the player is in the lobby remove it
         lobby.remove(player);
     }
+
+    public void movePlayerToMatch(PlayerConnection player)
+    {}
 
     public void applyAction(ActionMessage action, PlayerConnection player)
             throws IllegalArgumentException
@@ -128,6 +218,18 @@ public class Server
 
         // Perform the action
         match.applyAction(action, player);
+    }
+
+    /**
+     * Send the given answer to all the players in the lobby.
+     */
+    public void sendToLobby(Answer answer)
+    {
+        System.out.println("[Server] Sending answer " + answer.getClass().getSimpleName()
+                + " to the whole lobby");
+
+        for (PlayerConnection player : lobby)
+            player.sendAnswer(answer);
     }
 
     public static void main(String[] args)

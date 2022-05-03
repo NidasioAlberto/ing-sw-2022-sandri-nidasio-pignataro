@@ -40,7 +40,6 @@ public class MockClient
                     System.out.println("Unable to parse parse the input: " + e.toString());
                 }
             }
-            // scanner.close();
         } catch (Exception e)
         {
             System.err.println("[Main] Error: " + e.getMessage());
@@ -72,8 +71,9 @@ public class MockClient
         System.out.println("\t1 - Create match");
         System.out.println("\t2 - Get matches list");
         System.out.println("\t3 - Join match");
-        System.out.println("\t4 - Quit game");
-        System.out.println("\t5 - Set name");
+        System.out.println("\t4 - Set name");
+        System.out.println("\t5 - Quit match");
+        System.out.println("\t6 - Quit game");
 
         int choice = Integer.parseInt(scanner.nextLine());
         scanner.reset();
@@ -87,7 +87,9 @@ public class MockClient
                 System.out.print("Game mode [" + GameMode.CLASSIC.toString() + ","
                         + GameMode.EXPERT.toString() + "]: ");
                 GameMode gameMode = GameMode.valueOf(scanner.nextLine());
-                outputStream.writeObject(new CreateMatchCommand(matchId, gameMode));
+                System.out.print("Players number [2-3]: ");
+                int playersNumber = Integer.parseInt(scanner.nextLine());
+                outputStream.writeObject(new CreateMatchCommand(matchId, playersNumber, gameMode));
                 break;
             }
             case 2:
@@ -104,14 +106,19 @@ public class MockClient
             }
             case 4:
             {
-                outputStream.writeObject(new QuitGameCommand());
+                System.out.println("Player name: ");
+                String playerName = scanner.nextLine();
+                outputStream.writeObject(new SetNameCommand(playerName));
                 break;
             }
             case 5:
             {
-                System.out.println("Player name: ");
-                String playerName = scanner.nextLine();
-                outputStream.writeObject(new SetNameCommand(playerName));
+                outputStream.writeObject(new QuitMatchCommand());
+                break;
+            }
+            case 6:
+            {
+                outputStream.writeObject(new QuitGameCommand());
                 break;
             }
         }
@@ -198,11 +205,12 @@ public class MockClient
     {
         List<SchoolColor> selectedColors = new ArrayList<>();
 
-        do
-        {
-            selectedColors.add(selectSchoolColors(scanner));
-            System.out.println("Type 'Y' to select another");
-        } while (scanner.nextLine() == "Y" && selectedColors.size() < SchoolColor.values().length);
+        // do
+        // {
+        selectedColors.add(selectSchoolColors(scanner));
+        System.out.println("Type 'Y' to select another");
+        // } while (scanner.nextLine().equals("Y")
+        // && selectedColors.size() < SchoolColor.values().length);
 
         return selectedColors;
     }
@@ -211,7 +219,7 @@ public class MockClient
     {
         System.out.println("Choose a color:");
         for (int i = 0; i < SchoolColor.values().length; i++)
-            System.out.println(i + " - " + ExpertGameAction.values()[i]);
+            System.out.println(i + " - " + SchoolColor.values()[i]);
         return SchoolColor.values()[Integer.parseInt(scanner.nextLine())];
     }
 

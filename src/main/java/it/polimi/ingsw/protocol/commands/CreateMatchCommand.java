@@ -2,36 +2,34 @@ package it.polimi.ingsw.protocol.commands;
 
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.network.PlayerConnection;
-import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 
+/**
+ * Command used to create and join a match.
+ */
 public class CreateMatchCommand extends Command
 {
     String matchId;
 
-    GameMode gameMode;
-
     int playersNumber;
 
-    public CreateMatchCommand(String matchId, GameMode gameMode)
+    GameMode gameMode;
+
+    public CreateMatchCommand(String matchId, int playersNumber, GameMode gameMode)
     {
         this.matchId = matchId;
+        this.playersNumber = playersNumber;
         this.gameMode = gameMode;
-        playersNumber = 0;
     }
 
-    public void applyCommand(PlayerConnection connection) throws IllegalArgumentException
+    public void applyCommand(PlayerConnection connection) throws Exception
     {
         checkPlayerConnection(connection);
 
         // Check if the player has a name
-        if (connection.getPlayerName().isPresent())
-        {
-            connection.getServer().createMatch(matchId, playersNumber, gameMode);
-            connection.getServer().addPlayerToMatch(matchId, connection);
-        } else
-        {
-            connection.sendAnswer(new ErrorAnswer(
-                    "A match can't be created until the username has been configured"));
-        }
+        if (!connection.getPlayerName().isPresent())
+            throw new Exception("A match can't be created until the username has been configured");
+
+        // Create a match and add a player to it
+        connection.getServer().createMatch(matchId, playersNumber, gameMode, connection);
     }
 }

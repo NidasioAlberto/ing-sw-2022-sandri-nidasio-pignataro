@@ -1,12 +1,9 @@
 package it.polimi.ingsw.controller.fsm;
 
 import it.polimi.ingsw.controller.GameActionHandler;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.exceptions.WrongPlayerException;
-
-import java.util.List;
 
 public class PlanPhase implements Phase
 {
@@ -15,7 +12,7 @@ public class PlanPhase implements Phase
      */
     private int count;
 
-    //TODO UNDERSTAND THE PLAYER ORDER
+    // TODO UNDERSTAND THE PLAYER ORDER
     public PlanPhase()
     {
         this.count = 0;
@@ -34,7 +31,8 @@ public class PlanPhase implements Phase
         if (count < handler.getGame().getPlayersNumber() - 1)
         {
             // In case of a non 0 starting index, i have to use the module
-            handler.getGame().selectPlayer((playerIndex + 1) % handler.getGame().getPlayersNumber());
+            handler.getGame()
+                    .selectPlayer((playerIndex + 1) % handler.getGame().getPlayersNumber());
             count++;
         } else
         {
@@ -61,7 +59,8 @@ public class PlanPhase implements Phase
 
         // I accept the action if and only if the player is correct and the action is an assistant
         // card play
-        if (!handler.getGame().getPlayerTableList().get(playerIndex).getNickname().equals(playerName))
+        if (!handler.getGame().getPlayerTableList().get(playerIndex).getNickname()
+                .equals(playerName))
             throw new WrongPlayerException();
         return baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
     }

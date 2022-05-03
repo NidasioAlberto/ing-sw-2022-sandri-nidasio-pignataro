@@ -4,7 +4,7 @@ import it.polimi.ingsw.network.PlayerConnection;
 
 public class QuitGameCommand extends Command
 {
-    public void applyCommand(PlayerConnection connection) throws NullPointerException
+    public void applyCommand(PlayerConnection connection) throws Exception
     {
         checkPlayerConnection(connection);
         connection.close();

@@ -1,60 +1,71 @@
 package it.polimi.ingsw.network;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.GameMode;
+import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.Answer;
-import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
+import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
-import it.polimi.ingsw.model.GameMode;
 
 public class Match implements Subscriber<ModelUpdate>
 {
+    private Server server;
+
     private List<PlayerConnection> players;
 
     private Controller gameController;
 
-    Match(int playersNumber, GameMode mode)
+    Match(Server server, int playersNumber, GameMode mode)
     {
-        // TODO
+        this.server = server;
+        players = new ArrayList<>();
+        gameController = new Controller(this, playersNumber, mode);
     }
 
+    /**
+     * Adds a player to the match.
+     * 
+     * @param nickname The player's nickname.
+     * @throws NullPointerException If the nickname is null.
+     * @throws IllegalArgumentException If already exists a player with such nickname.
+     * @throws TooManyPlayersException If there are too many players.
+     */
     public void addPlayer(PlayerConnection player)
+            throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
-        // TODO
+        players.add(player);
+        gameController.addPlayer(player.getPlayerName().get());
     }
 
     public void removePlayer(PlayerConnection player)
     {
-        // TODO
+        players.remove(player);
     }
 
-    public void sendErrorMessage(String player, String message)
+    public void sendAllAnswer(Answer answer)
     {
-        // Create and ErrorAnswer
+        for (PlayerConnection player : players)
+            player.sendAnswer(answer);
     }
 
-    public void sendAllErrorMessage(String message)
+    public void sendError(String playerName, String message)
     {
-        // Create and ErrorAnswer
-    }
-
-    public void sendAllAnswer(Answer command)
-    {
-        // TODO
-    }
-
-    public void sendError(String player, String message)
-    {
-        // TODO
+        // Find the player with the given name
+        players.forEach((player) -> {
+            if (player.getPlayerName().isPresent())
+                if (player.getPlayerName().get() == playerName)
+                    player.sendAnswer(new ErrorAnswer(message));
+        });
     }
 
     public void endMatch(String message)
     {
-        sendAllAnswer(new EndMatchAnswer(message));
-        // TODO: Remove all players from the match
+        server.removeMatch(this, message);
     }
 
     public void applyAction(ActionMessage action, PlayerConnection player)
@@ -72,6 +83,11 @@ public class Match implements Subscriber<ModelUpdate>
         return gameController;
     }
 
+    public List<PlayerConnection> getPlayers()
+    {
+        return players;
+    }
+
     /**
      * This method is invoked when the model has been changed. Observer pattern
      * 
@@ -80,32 +96,32 @@ public class Match implements Subscriber<ModelUpdate>
     @Override
     public void onNext(ModelUpdate update)
     {
-
+        for (PlayerConnection player : players)
+            player.sendModelUpdate(update);
     }
 
     /**
-     * This method is called immediately when the subscription is done TODO MAYBE USEFUL, IF SO ADD
-     * IT TO UML
+     * This method is called immediately when the subscription is done.
      * 
-     * @param subscription a new subscription
+     * TODO: Maybe usefule, if so add it to UML.
      */
     @Override
     public void onSubscribe(Subscription subscription)
     {}
 
     /**
-     * This method is called by the model when an error occurs TODO MAYBE USEFUL, IF SO ADD IT TO
-     * UML
+     * This method is called by the model when an error occurs.
      * 
-     * @param throwable the exception
+     * TODO: Maybe useful, if so add it to UML.
      */
     @Override
     public void onError(Throwable throwable)
     {}
 
     /**
-     * This method is called when the model knows that nothing will change in the future anymore
-     * TODO MAYBE USEFUL, IF SO ADD IT TO UML
+     * This method is called when the model knows that nothing will change in the future anymore.
+     * 
+     * TODO: Maybe useful, if so add it to UML.
      */
     @Override
     public void onComplete()
