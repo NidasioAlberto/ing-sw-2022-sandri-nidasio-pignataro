@@ -148,6 +148,8 @@ public class PlayerConnection implements Runnable
         try
         {
             outputStream.writeObject(object);
+            outputStream.flush();
+            outputStream.reset();
         } catch (IOException e)
         {
             System.err.println("[PlayerConnection] Error while writing: " + e.getMessage());
