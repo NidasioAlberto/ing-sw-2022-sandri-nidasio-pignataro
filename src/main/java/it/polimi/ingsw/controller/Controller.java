@@ -237,7 +237,6 @@ public class Controller
         {
             match.endMatch(
                     "Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible");
-            // TODO va chiusa la partita, servirebbe un metodo del tipo closeGame in match
         }
     }
 

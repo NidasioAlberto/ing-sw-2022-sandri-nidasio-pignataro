@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.fsm.MoveMotherNaturePhase;
+import it.polimi.ingsw.controller.fsm.MoveStudentPhase;
+import it.polimi.ingsw.controller.fsm.PlanPhase;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Monk;
@@ -428,6 +431,24 @@ public class ControllerTest
             assertEquals(9,
                     game.getSelectedPlayer().get().getBoard().getStudentsInEntrance().size());
         }
+
+        // player1 moves mother nature with a wrong number of steps,
+        // so a InvalidMovementException is caught by the controller
+        handler.setGamePhase(new MoveMotherNaturePhase());
+        int motherNatureIndex = game.getMotherNatureIndex().get();
+        assertDoesNotThrow(() -> controller.performAction(
+                new MoveMotherNatureMessage(motherNatureIndex + 2), "player1"));
+        assertEquals(motherNatureIndex, game.getMotherNatureIndex().get());
+
+        game.clearTurn();
+        game.getSelectedPlayer().get().clearSelectionsEndTurn();
+
+        handler.setGamePhase(new PlanPhase());
+
+        // player1 selects an assistant card that has already played,
+        // so a NoSuchAssistantCardException is caught by the controller
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(1), "player1"));
 
     }
 }
