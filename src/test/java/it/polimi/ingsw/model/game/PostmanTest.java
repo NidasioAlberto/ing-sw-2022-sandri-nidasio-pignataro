@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.ExpertGameAction;
+import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;
 import it.polimi.ingsw.model.exceptions.NoSelectedAssistantCardException;
@@ -22,8 +23,8 @@ public class PostmanTest
     // Setup
     CharacterCard postman;
     Game game;
-    Player player1 = new Player("Player1", TowerColor.WHITE);
-    Player player2 = new Player("Player2", TowerColor.BLACK);
+    Player player1 = new Player("Player1", TowerColor.WHITE, GameMode.EXPERT);
+    Player player2 = new Player("Player2", TowerColor.BLACK, GameMode.EXPERT);
 
     @BeforeEach
     public void init()

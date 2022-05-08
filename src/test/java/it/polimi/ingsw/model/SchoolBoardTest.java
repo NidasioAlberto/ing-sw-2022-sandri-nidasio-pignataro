@@ -13,7 +13,7 @@ public class SchoolBoardTest
     @BeforeEach
     public void init()
     {
-        board = new SchoolBoard(TowerColor.BLACK);
+        board = new SchoolBoard(TowerColor.BLACK, GameMode.CLASSIC);
         board.setPlayersNumber(2);
     }
 
@@ -24,7 +24,10 @@ public class SchoolBoardTest
     public void wrongParametersTest()
     {
         // Null color parameter
-        assertThrows(NullPointerException.class, () -> board = new SchoolBoard(null));
+        assertThrows(NullPointerException.class, () -> board = new SchoolBoard(null, GameMode.CLASSIC));
+
+        // Null mode parameter
+        assertThrows(NullPointerException.class, () -> board = new SchoolBoard(TowerColor.BLACK, null));
 
         // Invalid players number
         assertThrows(IllegalArgumentException.class, () -> board.setPlayersNumber(1));
@@ -40,21 +43,21 @@ public class SchoolBoardTest
     @Test
     public void correctParametersTest()
     {
-        board = new SchoolBoard(TowerColor.BLACK);
+        board = new SchoolBoard(TowerColor.BLACK, GameMode.CLASSIC);
         board.setPlayersNumber(2);
 
         // With 2 players the board has 7 students and 6 towers
         assertEquals(7, board.getMaxStudentsInEntrance());
         assertEquals(8, board.getMaxTowers());
 
-        board = new SchoolBoard(TowerColor.GREY);
+        board = new SchoolBoard(TowerColor.GREY, GameMode.CLASSIC);
         board.setPlayersNumber(3);
 
         // With 3 players the board has 9 students and 8 towers
         assertEquals(9, board.getMaxStudentsInEntrance());
         assertEquals(6, board.getMaxTowers());
 
-        board = new SchoolBoard(TowerColor.WHITE);
+        board = new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC);
         board.setPlayersNumber(4);
 
         // With 4 players the board has 7 students and 6 towers
@@ -194,7 +197,7 @@ public class SchoolBoardTest
     public void addTowerTest()
     {
         // The attribute maxTower is null, so an exception is thrown
-        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE);
+        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC);
         NullPointerException e = assertThrows(NullPointerException.class, () -> board1.addTower(new Tower(TowerColor.WHITE)));
         assertEquals("[SchoolBoard] Undefined max number of towers", e.getMessage());
 
@@ -270,7 +273,7 @@ public class SchoolBoardTest
     public void addStudentToEntranceTest()
     {
         // The attribute maxStudentsInEntrance is null, so an exception is thrown
-        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE);
+        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC);
         NullPointerException e = assertThrows(NullPointerException.class, () -> board1.addStudentToEntrance(new Student(SchoolColor.GREEN)));
         assertEquals("[SchoolBoard] Undefined max number of students", e.getMessage());
 
@@ -492,7 +495,7 @@ public class SchoolBoardTest
         }
 
         // Now the same but I use the color method (I RESET ALL FIRST)
-        board = new SchoolBoard(TowerColor.BLACK);
+        board = new SchoolBoard(TowerColor.BLACK, GameMode.CLASSIC);
         board.setPlayersNumber(2);
 
         // Add the students to the entrance
@@ -511,13 +514,24 @@ public class SchoolBoardTest
             assertEquals(board.getStudentsNumber(color),
                     students.stream().filter(s -> s.getColor() == color).count());
         }
+
+        // Expert board
+        SchoolBoard expertBoard = new SchoolBoard(TowerColor.BLACK, GameMode.EXPERT);
+        assertEquals(0, expertBoard.getCoins());
+        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(0, expertBoard.getCoins());
+        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(0, expertBoard.getCoins());
+        // The player adds the 3rd student, so gains a coin
+        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(1, expertBoard.getCoins());
     }
 
     @Test
     public void getRemainingMovableStudentsInEntrance()
     {
         // The attribute maxStudentsInEntrance is null, so an exception is thrown
-        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE);
+        SchoolBoard board1 = new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC);
         NullPointerException e = assertThrows(NullPointerException.class, () -> board1.getRemainingMovableStudentsInEntrance());
         assertEquals("[SchoolBoard] Undefined max number of students", e.getMessage());
 

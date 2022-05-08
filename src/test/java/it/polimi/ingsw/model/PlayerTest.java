@@ -19,7 +19,7 @@ public class PlayerTest
     @BeforeEach
     public void init()
     {
-        board = new SchoolBoard(TowerColor.WHITE);
+        board = new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC);
         board.setPlayersNumber(2);
         for (int i = 0; i < 8; i++)
             board.addTower(new Tower(TowerColor.WHITE));
@@ -35,10 +35,10 @@ public class PlayerTest
     {
         // Nickname can't be null
         assertThrows(NullPointerException.class,
-                () -> new Player(null, new SchoolBoard(TowerColor.WHITE)));
+                () -> new Player(null, new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC)));
 
         // Color can't be null
-        assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null));
+        assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null, GameMode.CLASSIC));
 
         // SchoolBoard can't be null
         assertThrows(NullPointerException.class, () -> new Player("Player1", (SchoolBoard) null));
@@ -62,13 +62,13 @@ public class PlayerTest
     public void constructorTest2()
     {
         // Nickname can't be null
-        assertThrows(NullPointerException.class, () -> new Player(null, TowerColor.WHITE));
+        assertThrows(NullPointerException.class, () -> new Player(null, TowerColor.WHITE, GameMode.CLASSIC));
 
         // Color can't be null
-        assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null));
+        assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null, GameMode.CLASSIC));
 
         // Check the initialization values
-        Player player1 = new Player("Player1", TowerColor.BLACK);
+        Player player1 = new Player("Player1", TowerColor.BLACK, GameMode.CLASSIC);
         assertEquals("Player1", player1.getNickname());
         assertTrue(player1.getSelectedCard().isEmpty());
         assertTrue(player1.getSelectedIsland().isEmpty());

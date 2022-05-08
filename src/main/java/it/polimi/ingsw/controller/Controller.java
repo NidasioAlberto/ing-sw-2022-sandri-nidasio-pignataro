@@ -299,13 +299,13 @@ public class Controller
         switch (game.getPlayerTableList().size())
         {
             case 0:
-                game.addPlayer(new Player(nickname, TowerColor.BLACK));
+                game.addPlayer(new Player(nickname, TowerColor.BLACK, getGameMode()));
                 break;
             case 1:
-                game.addPlayer(new Player(nickname, TowerColor.WHITE));
+                game.addPlayer(new Player(nickname, TowerColor.WHITE, getGameMode()));
                 break;
             case 2:
-                game.addPlayer(new Player(nickname, TowerColor.GREY));
+                game.addPlayer(new Player(nickname, TowerColor.GREY, getGameMode()));
                 break;
         }
     }

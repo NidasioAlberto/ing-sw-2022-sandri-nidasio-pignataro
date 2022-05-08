@@ -48,6 +48,11 @@ public class SchoolBoard
     private TowerColor towerColor;
 
     /**
+     * The modality of the game.
+     */
+    private GameMode mode;
+
+    /**
      * The number of coins that player has in order to play character cards.
      */
     private int coins;
@@ -58,13 +63,19 @@ public class SchoolBoard
      * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9
      * @throws NullPointerException Thrown if the color passed is null
      */
-    public SchoolBoard(TowerColor color) throws NullPointerException
+    public SchoolBoard(TowerColor color, GameMode mode) throws NullPointerException
     {
         if (color == null)
             throw new NullPointerException("[SchoolBoard] Null tower color");
 
+        if (mode == null)
+            throw new NullPointerException("[SchoolBoard] Game mode is null");
+
         // Assign the tower color
         towerColor = color;
+
+        // Assign the mode
+        this.mode = mode;
 
         // Set the initial coins to 0
         coins = 0;
@@ -243,13 +254,21 @@ public class SchoolBoard
      */
     public void addStudentToDiningRoom(Student student) throws NullPointerException
     {
+        // Check if the student is null
         if (student == null)
             throw new NullPointerException("[SchoolBoard] Null student");
-        // Check if it is not already present and not null and if the dining room is not full
+
+        // Check if it is not already present and if the dining room is not full
         if (!diningRoom.get(student.getColor()).contains(student)
                 && diningRoom.get(student.getColor()).size() < MAX_STUDENTS_PER_ROOM)
+        {
             // Add the student to the map
             diningRoom.get(student.getColor()).add(student);
+
+            // In expert mode the player receives a coin when the 3rd, 6th, 9th students are added
+            if (mode == GameMode.EXPERT && diningRoom.get(student.getColor()).size() % 3 == 0)
+                addCoins(1);
+        }
     }
 
     /**

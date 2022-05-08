@@ -29,8 +29,8 @@ public class PrincessTest
         studentsOnCard = new ArrayList<Student>();
         // I have to initialize a Game, a Player and a School Board to ensure
         // the character card can behave correctly
-        board1 = new SchoolBoard(TowerColor.BLACK);
-        board2 = new SchoolBoard(TowerColor.WHITE);
+        board1 = new SchoolBoard(TowerColor.BLACK, GameMode.EXPERT);
+        board2 = new SchoolBoard(TowerColor.WHITE, GameMode.EXPERT);
         player1 = new Player("pippo", board1);
         player2 = new Player("peppo", board2);
         game = new Game();

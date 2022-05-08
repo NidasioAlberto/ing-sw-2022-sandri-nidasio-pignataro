@@ -25,8 +25,8 @@ public class MinstrelTest
     {
         // I have to initialize a Game, a Player and a School Board to ensure
         // the character card can behave correctly
-        board1 = new SchoolBoard(TowerColor.BLACK);
-        board2 = new SchoolBoard(TowerColor.WHITE);
+        board1 = new SchoolBoard(TowerColor.BLACK, GameMode.EXPERT);
+        board2 = new SchoolBoard(TowerColor.WHITE, GameMode.EXPERT);
         player1 = new Player("pippo", board1);
         player2 = new Player("peppo", board2);
         game = new Game();
@@ -93,6 +93,9 @@ public class MinstrelTest
 
         // Player selection and card activation
         game.selectPlayer(0);
+
+        // player1 has 1 coin because there are 3 green students in dining, so I remove it
+        player1.getBoard().removeCoins(1);
 
         // If i activate the card with no coins i should get an error
         assertThrows(NotEnoughCoinsException.class, () -> minstrel.activate());

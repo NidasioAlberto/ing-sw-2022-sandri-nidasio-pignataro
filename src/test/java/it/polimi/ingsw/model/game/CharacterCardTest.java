@@ -20,8 +20,8 @@ public class CharacterCardTest
         // Set up a game and a random card
         CharacterCard thief;
         Game game;
-        Player player1 = new Player("Player1", TowerColor.WHITE);
-        Player player2 = new Player("Player2", TowerColor.BLACK);
+        Player player1 = new Player("Player1", TowerColor.WHITE, GameMode.CLASSIC);
+        Player player2 = new Player("Player2", TowerColor.BLACK, GameMode.CLASSIC);
 
         game = new Game();
         thief = CharacterCard.createCharacterCard(CharacterCardType.THIEF, game);
@@ -31,7 +31,7 @@ public class CharacterCardTest
         {
             game.addPlayer(player1);
             thief.addPlayer(player2);
-            game.addPlayer(new Player("Player3", TowerColor.GREY));
+            game.addPlayer(new Player("Player3", TowerColor.GREY, GameMode.CLASSIC));
         } catch (TooManyPlayersException e)
         {
             assertEquals(2, e.getCurrentPlayersNumber());

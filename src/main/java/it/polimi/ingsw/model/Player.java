@@ -57,9 +57,9 @@ public class Player
      */
     private Optional<Integer> selectedCharacterCard;
 
-    public Player(String nickname, TowerColor color)
+    public Player(String nickname, TowerColor color, GameMode mode)
     {
-        this(nickname, new SchoolBoard(color));
+        this(nickname, new SchoolBoard(color, mode));
     }
 
     public Player(String nickname, SchoolBoard board) throws NullPointerException

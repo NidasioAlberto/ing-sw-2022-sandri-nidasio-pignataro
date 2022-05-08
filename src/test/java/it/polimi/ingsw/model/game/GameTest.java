@@ -32,11 +32,11 @@ public class GameTest
     public void addPlayerTest()
     {
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
-        Player player3 = new Player("Player3", TowerColor.WHITE);
-        Player player4 = new Player("Player4", TowerColor.BLACK);
-        Player player5 = new Player("Player5", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
+        Player player3 = new Player("Player3", TowerColor.WHITE, game.getGameMode());
+        Player player4 = new Player("Player4", TowerColor.BLACK, game.getGameMode());
+        Player player5 = new Player("Player5", TowerColor.GREY, game.getGameMode());
 
         // The game should accept 2 players
         game = new Game(2, GameMode.CLASSIC);
@@ -67,8 +67,8 @@ public class GameTest
     public void selectPlayerTest()
     {
         // Create the two players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -99,8 +99,8 @@ public class GameTest
     public void getPlayerListTest()
     {
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -135,8 +135,8 @@ public class GameTest
                 () -> game.putStudentToIsland(new Student(SchoolColor.BLUE)));
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -180,8 +180,8 @@ public class GameTest
                 () -> game.putStudentToIsland(new Student(SchoolColor.BLUE)));
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -208,8 +208,8 @@ public class GameTest
         assertThrows(NoSuchElementException.class, () -> game.pickStudentFromEntrance());
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -237,8 +237,8 @@ public class GameTest
     public void conquerProfessorsTest()
     {
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -287,8 +287,8 @@ public class GameTest
         assertThrows(NoSuchElementException.class, () -> game.moveMotherNature(3));
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -310,8 +310,8 @@ public class GameTest
         assertThrows(NoSuchElementException.class, () -> game.isValidMotherNatureMovement(3));
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -340,8 +340,8 @@ public class GameTest
     public void computeInfluenceTest()
     {
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // This should not accept a null student and invalid island indexes
         assertThrows(NullPointerException.class, () -> game.computePlayerInfluence(null, 0));
@@ -397,8 +397,8 @@ public class GameTest
         assertThrows(NoSuchElementException.class, () -> game.moveStudentsFromCloudTile());
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -446,8 +446,8 @@ public class GameTest
         assertThrows(EndGameException.class, () -> game.getStudentFromBag());
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -467,8 +467,8 @@ public class GameTest
         assertThrows(NullPointerException.class, () -> game.addStudentToBag(null));
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -499,8 +499,8 @@ public class GameTest
         assertThrows(IndexOutOfBoundsException.class, () -> game.removeProfessor(0));
 
         // Create the players
-        Player player1 = new Player("Player1", TowerColor.BLACK);
-        Player player2 = new Player("Player2", TowerColor.GREY);
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
 
         // Add the players to the game
         assertDoesNotThrow(() -> game.addPlayer(player1));
@@ -525,8 +525,8 @@ public class GameTest
     public void getCharacterCardsTest()
     {
         // Add the players to the game
-        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
-        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY)));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK, game.getGameMode())));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY, game.getGameMode())));
 
         // Setup the game
         game.setupGame();
@@ -538,8 +538,8 @@ public class GameTest
         game = new Game(2, GameMode.EXPERT);
 
         // Add the players to the game
-        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
-        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY)));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK, game.getGameMode())));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY, game.getGameMode())));
 
         // Setup the game
         game.setupGame();
@@ -554,6 +554,9 @@ public class GameTest
                 if (card1 != card2)
                     assertNotEquals(card1.getCardType(), card2.getCardType());
 
+        // Each player should have 1 coin
+        for (Player player : game.players)
+            assertEquals(1, player.getBoard().getCoins());
     }
 
     @Test
@@ -569,8 +572,8 @@ public class GameTest
         assertThrows(NoSuchElementException.class, () -> game.getCurrentCharacterCard().get());
 
         // Add the players to the game
-        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK)));
-        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY)));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player1", TowerColor.BLACK, game.getGameMode())));
+        assertDoesNotThrow(() -> game.addPlayer(new Player("Player2", TowerColor.GREY, game.getGameMode())));
 
         // Setup the game
         game.setupGame();

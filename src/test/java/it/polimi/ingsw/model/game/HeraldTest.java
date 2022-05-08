@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.ExpertGameAction;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Professor;
-import it.polimi.ingsw.model.TowerColor;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +19,8 @@ public class HeraldTest
     // Setup
     CharacterCard herald;
     Game game;
-    Player player1 = new Player("Player1", TowerColor.WHITE);
-    Player player2 = new Player("Player2", TowerColor.BLACK);
+    Player player1 = new Player("Player1", TowerColor.WHITE, GameMode.EXPERT);
+    Player player2 = new Player("Player2", TowerColor.BLACK, GameMode.EXPERT);
 
     @BeforeEach
     public void init()

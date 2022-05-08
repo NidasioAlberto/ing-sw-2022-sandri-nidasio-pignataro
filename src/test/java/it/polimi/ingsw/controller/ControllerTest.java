@@ -325,7 +325,7 @@ public class ControllerTest
         {
             if (card instanceof Monk)
             {
-                // player3 applies the action of the monk, but hasn't activated the
+                // player1 applies the action of the monk, but hasn't activated the
                 // card,
                 // so a NoSelectedCharacterCardException is caught by the controller
                 int studentsOnIsland = game.getIslands().get(5).getStudents().size();
@@ -338,7 +338,10 @@ public class ControllerTest
                 assertEquals(studentsOnIsland, game.getIslands().get(5).getStudents().size());
                 colors.clear();
 
-                // player3 activate the monk card but hasn't enough coins,
+                // Player1 has 0 coins
+                game.getSelectedPlayer().get().getBoard().removeCoins(1);
+
+                // player1 activates the monk card but hasn't enough coins,
                 // so a NotEnoughCoins is caught by the controller
                 assertDoesNotThrow(() -> controller.performAction(
                         new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)),
@@ -346,13 +349,13 @@ public class ControllerTest
                 assertFalse(card.isActivated());
 
                 game.getSelectedPlayer().get().getBoard().addCoins(5);
-                // player3 activate the monk card
+                // player1 activates the monk card
                 assertDoesNotThrow(() -> controller.performAction(
                         new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)),
                         "player1"));
                 assertTrue(card.isActivated());
 
-                // player3 activate the monk card again,
+                // player1 activates the monk card again,
                 // so a InvalidCharacterCardException is caught by the controller
                 assertDoesNotThrow(() -> controller.performAction(
                         new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)),
@@ -377,7 +380,7 @@ public class ControllerTest
                     }
                 }
 
-                // player3 applies the action of the monk, but has selected a
+                // player1 applies the action of the monk, but has selected a
                 // student that is not
                 // present in the card, so a NoSuchStudentOnCardException is caught
                 // by the
@@ -388,7 +391,7 @@ public class ControllerTest
                         "player1"));
                 colors.clear();
 
-                // player3 applies the action of the monk with a student present on
+                // player1 applies the action of the monk with a student present on
                 // the card
                 SchoolColor color3 = ((Monk) card).getStudents().get(0).getColor();
                 colors.add(color3);

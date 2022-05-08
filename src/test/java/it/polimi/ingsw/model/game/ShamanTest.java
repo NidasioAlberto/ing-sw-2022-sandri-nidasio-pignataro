@@ -19,8 +19,8 @@ public class ShamanTest
     // Setup
     CharacterCard shaman;
     Game game;
-    Player player1 = new Player("Player1", TowerColor.WHITE);
-    Player player2 = new Player("Player2", TowerColor.BLACK);
+    Player player1 = new Player("Player1", TowerColor.WHITE, GameMode.EXPERT);
+    Player player2 = new Player("Player2", TowerColor.BLACK, GameMode.EXPERT);
 
     @BeforeEach
     public void init()
