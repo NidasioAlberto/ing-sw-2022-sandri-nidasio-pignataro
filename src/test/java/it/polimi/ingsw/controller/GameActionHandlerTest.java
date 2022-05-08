@@ -265,8 +265,6 @@ public class GameActionHandlerTest
                         assertEquals(color8,
                                         game.getIslands().get(4).getStudents().get(1).getColor());
                 // TODO giocare una carta carattere, generare degli errori
-                // TODO manca da aggiungere le monete quando si mettono tot student in dining in
-                // modalità expert
 
                 for (CharacterCard card : game.getCharacterCards())
                 {
@@ -394,9 +392,64 @@ public class GameActionHandlerTest
 
                 // We now move to PlanPhase because all the players have done their turn
                 assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
                 // Now player1 has to play an assistant card because has played the card with the
                 // lowest turnOrder the previous round
                 assertEquals("player1", game.getSelectedPlayer().get().getNickname());
                 assertEquals(4, game.getCloudTiles().get(2).getStudents().size());
+                assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
+                // Test the player's order during PlanPhase and EndTurnPhase
+                // The players select an assistant card according to table order
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(10),
+                        "player1"));
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(9),
+                        "player2"));
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(1),
+                        "player3"));
+
+                // Check the order
+                assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
+                assertEquals("player3", game.getSelectedPlayer().get().getNickname());
+                assertEquals("player3", game.getSortedPlayerList().get(0).getNickname());
+                assertEquals(1, game.getSortedPlayerList().get(0).getSelectedCard().get().getTurnOrder());
+                assertEquals("player2", game.getSortedPlayerList().get(1).getNickname());
+                assertEquals(9, game.getSortedPlayerList().get(1).getSelectedCard().get().getTurnOrder());
+                assertEquals("player1", game.getSortedPlayerList().get(2).getNickname());
+                assertEquals(10, game.getSortedPlayerList().get(2).getSelectedCard().get().getTurnOrder());
+
+                // Move directly to EndTurnPhase
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player3"));
+                assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
+                assertEquals("player2", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player2"));
+                assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
+                assertEquals("player1", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                for (CloudTile cloud : game.getCloudTiles())
+                        cloud.removeStudents();
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player1"));
+                assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
+                // player3 should now play an assistant card because in the previous round
+                // played the one with the lowest turnOrder
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(6),
+                        "player3"));
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(9),
+                        "player1"));
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(1),
+                        "player2"));
+
+                // Check the order
+                assertTrue(handler.getGamePhase() instanceof MoveStudentPhase);
+                assertEquals("player2", game.getSelectedPlayer().get().getNickname());
+                assertEquals("player2", game.getSortedPlayerList().get(0).getNickname());
+                assertEquals(1, game.getSortedPlayerList().get(0).getSelectedCard().get().getTurnOrder());
+                assertEquals("player3", game.getSortedPlayerList().get(1).getNickname());
+                assertEquals(6, game.getSortedPlayerList().get(1).getSelectedCard().get().getTurnOrder());
+                assertEquals("player1", game.getSortedPlayerList().get(2).getNickname());
+                assertEquals(9, game.getSortedPlayerList().get(2).getSelectedCard().get().getTurnOrder());
         }
 }
