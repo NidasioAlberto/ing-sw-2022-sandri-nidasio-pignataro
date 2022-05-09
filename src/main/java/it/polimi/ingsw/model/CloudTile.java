@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * This class represents the cloud tile. During the setup phase, these tiles are positioned with
  * some students on them depending on the actual game players.
  */
-public class CloudTile
+public class CloudTile implements Serializable
 {
     /**
      * List of student discs on the tile.

@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 /**
  * This class represents the tower object. Each player/team has 6 or 8 different colored towers in
  * total and the amount of the "island positioned" ones determines the winner of the match.
  */
-public class Tower
+public class Tower implements Serializable
 {
     private TowerColor color;
 

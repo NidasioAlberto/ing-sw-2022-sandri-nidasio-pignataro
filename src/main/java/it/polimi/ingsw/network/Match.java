@@ -25,6 +25,7 @@ public class Match implements Subscriber<ModelUpdate>
         this.server = server;
         players = new ArrayList<>();
         gameController = new Controller(this, playersNumber, mode);
+        gameController.getGame().subscribe(this);
     }
 
     /**

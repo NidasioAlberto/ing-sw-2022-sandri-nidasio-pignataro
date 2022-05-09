@@ -448,9 +448,9 @@ public class Game implements Publisher<ModelUpdate>
             {
                 Island currIsland = islands.get(i);
                 Island nextIsland = islands.get((i + 1) % islands.size());
-                if (currIsland.getTowers().size() > 0 &&
-                    nextIsland.getTowers().size() > 0 &&
-                    currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0).getColor())
+                if (currIsland.getTowers().size() > 0 && nextIsland.getTowers().size() > 0
+                        && currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0)
+                                .getColor())
                 {
                     currIsland.mergeIsland(nextIsland);
                     islands.remove(nextIsland);
@@ -688,7 +688,7 @@ public class Game implements Publisher<ModelUpdate>
     public Student getStudentFromBag()
     {
         if (studentBag.size() == 0)
-            throw new EndGameException("[Game] Student bag empty"); //TODO non deve lanciarla
+            throw new EndGameException("[Game] Student bag empty"); // TODO non deve lanciarla
 
         return studentBag.remove(getRandomNumber(0, studentBag.size()));
     }

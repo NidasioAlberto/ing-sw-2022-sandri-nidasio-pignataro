@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 /**
  * This class represents the professor pawn. Each colored professor is contended between the players
  * inside their school boards. It is one of the three main elements of the game along with students
  * and towers.
  */
-public class Professor
+public class Professor implements Serializable
 {
     private SchoolColor color;
 

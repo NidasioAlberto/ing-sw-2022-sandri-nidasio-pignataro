@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-
+import java.io.Serializable;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
  * is played). The card affects the game flow, the game mechanics or both of them, so it is
  * implemented using a decorator pattern of the Game class.
  */
-public abstract class CharacterCard extends Game
+public abstract class CharacterCard extends Game implements Serializable
 {
     /**
      * Card cost (increased once the card is first used)

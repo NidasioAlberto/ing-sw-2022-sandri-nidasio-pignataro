@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
  * 1 to 1 with islands and island tiles, but as the game keeps going the island tiles accumulate
  * into bigger islands.
  */
-public class Island
+public class Island implements Serializable
 {
     /**
      * Collection of tiles

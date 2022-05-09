@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
-
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,7 +12,7 @@ import java.util.*;
  * state of each single player and his capabilities to "beat" or not other players during professors
  * and islands exchanges.
  */
-public class SchoolBoard
+public class SchoolBoard implements Serializable
 {
     public static final int MAX_STUDENTS_PER_ROOM = 10;
 
@@ -283,7 +283,8 @@ public class SchoolBoard
         // Checks if not null and present in entrance
         if (entrance.contains(student))
             entrance.remove(student);
-        else throw new NoSelectedStudentsException("[SchoolBoard]");
+        else
+            throw new NoSelectedStudentsException("[SchoolBoard]");
     }
 
     /**
@@ -319,7 +320,8 @@ public class SchoolBoard
     public void addCoins(int coins) throws IllegalArgumentException
     {
         if (coins < 0)
-            throw new IllegalArgumentException("[SchoolBoard] The number of coins must be positive");
+            throw new IllegalArgumentException(
+                    "[SchoolBoard] The number of coins must be positive");
 
         this.coins += coins;
     }

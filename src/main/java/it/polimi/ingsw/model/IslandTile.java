@@ -1,14 +1,16 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import it.polimi.ingsw.model.exceptions.NoLegitActionException;
 
 /**
  * This class represents the physical island tile displayed in the game. It differs from the island
  * because the last one can actually be the composition of more tiles.
  */
-public class IslandTile
+public class IslandTile implements Serializable
 {
     /**
      * List of students positioned on this tile
@@ -16,9 +18,9 @@ public class IslandTile
     private List<Student> students;
 
     /**
-     * The optional tower that can be or not on the island
+     * The tower that can be or not on the island
      */
-    private Optional<Tower> tower;
+    private Tower tower;
 
     /**
      * Constructor
@@ -29,7 +31,7 @@ public class IslandTile
         students = new ArrayList<Student>();
 
         // At first there is no tower on the tile
-        tower = Optional.empty();
+        tower = null;
     }
 
     /**
@@ -57,16 +59,16 @@ public class IslandTile
      * @param tower The tower (not null) to be added
      * @throws NullPointerException if the tower is null
      */
-    public void addTower(Tower tower) throws NullPointerException
+    public void addTower(Tower tower) throws NullPointerException, NoLegitActionException
     {
         if (tower == null)
             throw new NullPointerException("[IslandTile] Null tower");
 
         // Check if the optional is empty
-        if (this.tower.isEmpty())
-        {
-            this.tower = Optional.of(tower);
-        }
+        if (this.tower == null)
+            this.tower = tower;
+        else
+            throw new NoLegitActionException();
     }
 
     /**
@@ -75,7 +77,7 @@ public class IslandTile
      */
     public void removeTower()
     {
-        this.tower = Optional.empty();
+        this.tower = null;
     }
 
     /**
@@ -86,9 +88,9 @@ public class IslandTile
     public void removeTower(Tower tower)
     {
         // Delete the tower only if they are the same object
-        if (this.tower.isPresent() && this.tower.get().equals(tower))
+        if (this.tower != null && this.tower.equals(tower))
         {
-            this.tower = Optional.empty();
+            this.tower = null;
         }
     }
 
@@ -99,6 +101,6 @@ public class IslandTile
 
     public Optional<Tower> getTower()
     {
-        return tower;
+        return tower == null ? Optional.empty() : Optional.of(tower);
     }
 }

@@ -83,7 +83,7 @@ public class Controller
 
         for (Player player : game.getPlayerTableList())
         {
-            if(player.getCards().stream().filter(c -> !c.isUsed()).findFirst().isEmpty())
+            if (player.getCards().stream().filter(c -> !c.isUsed()).findFirst().isEmpty())
             {
                 runOutOfCards = true;
                 break;
@@ -140,12 +140,12 @@ public class Controller
     {
         try
         {
+            // Notify the match's players
+            match.sendAllAnswer(new StartMatchAnswer());
+
             game.setupGame();
             game.fillClouds();
             actionHandler = new GameActionHandler(game);
-
-            // Notify the match's players
-            match.sendAllAnswer(new StartMatchAnswer());
         } catch (NotEnoughPlayersException e)
         {
             // TODO: Review how this should happen
@@ -329,7 +329,9 @@ public class Controller
 
         // If all the players are in the game, setup it
         if (game.getPlayerTableList().size() == game.getPlayersNumber())
+        {
             setupGame();
+        }
     }
 
     /**
@@ -354,5 +356,10 @@ public class Controller
     {
         return game.getSelectedPlayer()
                 .orElseThrow(() -> new NoSelectedPlayerException("[Controller]"));
+    }
+
+    public Game getGame()
+    {
+        return game;
     }
 }

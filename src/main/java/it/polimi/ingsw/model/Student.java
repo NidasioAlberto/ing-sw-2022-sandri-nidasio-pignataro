@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 /**
  * This class represents the student disc. Each student has its own color which is assigned once and
  * can't be modified. Students can be assigned to islands and boards and are one of the three main
  * elements of the game along with professors and towers.
  */
-public class Student
+public class Student implements Serializable
 {
     private SchoolColor color;
 

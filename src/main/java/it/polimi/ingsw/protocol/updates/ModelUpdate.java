@@ -1,7 +1,7 @@
 package it.polimi.ingsw.protocol.updates;
 
-import java.util.Optional;
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * This class represents the abstraction of a typical model update message from server to clients.
@@ -15,7 +15,7 @@ public abstract class ModelUpdate implements Serializable
     /**
      * In case we want to define the single player that has to receive the message.
      */
-    protected Optional<String> playerDestination;
+    protected String playerDestination;
 
     /**
      * Constructor that allows the player destination.
@@ -27,7 +27,7 @@ public abstract class ModelUpdate implements Serializable
         if (playerDestination == null)
             throw new NullPointerException("[ModelUpdate] Null player destination");
 
-        this.playerDestination = Optional.of(playerDestination);
+        this.playerDestination = playerDestination;
     }
 
     /**
@@ -35,7 +35,7 @@ public abstract class ModelUpdate implements Serializable
      */
     protected ModelUpdate()
     {
-        this.playerDestination = Optional.empty();
+        this.playerDestination = null;
     }
 
     /**
@@ -49,6 +49,6 @@ public abstract class ModelUpdate implements Serializable
 
     public Optional<String> getPlayerDestination()
     {
-        return playerDestination;
+        return playerDestination == null ? Optional.empty() : Optional.of(playerDestination);
     }
 }

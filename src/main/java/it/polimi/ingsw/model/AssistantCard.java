@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 /**
  * This class represents the assistant card. Each assistant card has a value, used to determine the
  * turn order, and a number that specifies the maximum moves the player can make mother nature do.
  */
-public class AssistantCard
+public class AssistantCard implements Serializable
 {
     public static final int MAX_TURN_ORDER = 10;
 
@@ -58,10 +60,10 @@ public class AssistantCard
             throw new IllegalArgumentException(
                     "[AssistantCard] Turn value and steps number are not compatible");
 
-        this.wizard     = wizard;
-        this.turnOrder  = turnOrder;
-        this.steps      = steps;
-        this.used       = false;
+        this.wizard = wizard;
+        this.turnOrder = turnOrder;
+        this.steps = steps;
+        this.used = false;
     }
 
     public Wizard getWizard()
@@ -79,7 +81,13 @@ public class AssistantCard
         return steps;
     }
 
-    public boolean isUsed() { return used; }
+    public boolean isUsed()
+    {
+        return used;
+    }
 
-    public void toggleUsed() { this.used = true; }
+    public void toggleUsed()
+    {
+        this.used = true;
+    }
 }
