@@ -140,8 +140,6 @@ public class Player
             if (cards.get(i).getTurnOrder() == turnOrder)
             {
                 cards.remove(i);
-                if (cards.size() == 0)
-                    throw new EndGameException("Assistant cards finished");
                 return;
             }
         }

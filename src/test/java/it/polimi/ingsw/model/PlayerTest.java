@@ -203,10 +203,6 @@ public class PlayerTest
         player.removeCard(1);
         assertEquals(1, player.getCards().size());
         assertEquals(card1, player.getCards().get(0));
-
-        // Remove the last card, so EndGameException is thrown
-        assertThrows(EndGameException.class, () -> player.removeCard(2));
-        assertEquals(0, player.getCards().size());
     }
 
     @Test

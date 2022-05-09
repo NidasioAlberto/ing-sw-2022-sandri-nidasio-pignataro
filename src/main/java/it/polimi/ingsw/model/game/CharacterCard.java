@@ -267,6 +267,41 @@ public abstract class CharacterCard extends Game
         return instance.getIslands();
     }
 
+    public Student getStudentFromBag()
+    {
+        return instance.getStudentFromBag();
+    }
+
+    public void addStudentToBag(Student student)
+    {
+        instance.addStudentToBag(student);
+    }
+
+    public void fillClouds()
+    {
+        instance.fillClouds();
+    }
+
+    public Professor removeProfessor(int index)
+    {
+        return instance.removeProfessor(index);
+    }
+
+    public void clearTurn()
+    {
+        instance.clearTurn();
+    }
+
+    public void clearCharacterCard()
+    {
+        instance.clearCharacterCard();
+    }
+
+    public void setCurrentCharacterCard(Integer characterCardIndex)
+    {
+        instance.setCurrentCharacterCard(characterCardIndex);
+    }
+
     public List<Student> getStudentBag()
     {
         return instance.getStudentBag();

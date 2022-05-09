@@ -203,7 +203,6 @@ public class SchoolBoard
             if (towers.size() == 0)
                 throw new EndGameException("[SchoolBoard] Towers finished");
         }
-
     }
 
     /**

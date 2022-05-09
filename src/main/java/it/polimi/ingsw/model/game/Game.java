@@ -372,7 +372,6 @@ public class Game implements Publisher<ModelUpdate>
      * @param island the island index where we compute the influence
      * @throws IndexOutOfBoundsException thrown when the island index is out of bounds
      */
-    // TODO manca il merge delle isole quando possibile
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
         if (island < 0 || island >= islands.size())
@@ -444,6 +443,21 @@ public class Game implements Publisher<ModelUpdate>
                 });
             }
 
+            // Check if there are islands that can be merged
+            for (int i = 0; i < islands.size(); i++)
+            {
+                Island currIsland = islands.get(i);
+                Island nextIsland = islands.get((i + 1) % islands.size());
+                if (currIsland.getTowers().size() > 0 &&
+                    nextIsland.getTowers().size() > 0 &&
+                    currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0).getColor())
+                {
+                    currIsland.mergeIsland(nextIsland);
+                    islands.remove(nextIsland);
+                    i--;
+                }
+            }
+
             // After moving the towers we need to notify the observer
             if (subscriber.isPresent())
             {
@@ -456,6 +470,10 @@ public class Game implements Publisher<ModelUpdate>
                 subscriber.get().onNext(
                         new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             }
+
+            // There are only 3 islands so the game ends
+            if (islands.size() <= 3)
+                throw new EndGameException("[Game]");
         }
     }
 
@@ -667,10 +685,10 @@ public class Game implements Publisher<ModelUpdate>
      * @return the student extracted from the bag.
      * @throws NoSuchElementException thrown if the student bag is empty
      */
-    public Student getStudentFromBag() throws EndGameException
+    public Student getStudentFromBag()
     {
         if (studentBag.size() == 0)
-            throw new EndGameException("[Game] Student bag empty");
+            throw new EndGameException("[Game] Student bag empty"); //TODO non deve lanciarla
 
         return studentBag.remove(getRandomNumber(0, studentBag.size()));
     }

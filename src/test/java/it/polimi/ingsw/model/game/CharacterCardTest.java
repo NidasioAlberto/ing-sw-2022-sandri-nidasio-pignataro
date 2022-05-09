@@ -44,9 +44,13 @@ public class CharacterCardTest
         assertTrue(thief.getPlayerTableList().contains(player1));
         assertEquals(player2, thief.getPlayerTableList().get(1));
 
+        // Check the cost
+        assertEquals(3, thief.getCost());
+
         // Select a player
         thief.selectPlayer(0);
         assertEquals(player1, thief.getSelectedPlayer().get());
+        assertEquals(0, thief.getSelectedPlayerIndex().get());
 
         // Pick a student from the entrance
         SchoolColor color = player1.getBoard().getStudentsInEntrance().get(0).getColor();
@@ -56,7 +60,7 @@ public class CharacterCardTest
 
         // Put student to an island
         int islandIndex = 0;
-        if (game.getIslands().get(islandIndex).getStudents().size() == 0)
+        if (thief.getIslands().get(islandIndex).getStudents().size() == 0)
             islandIndex++;
         player1.selectIsland(islandIndex);
         thief.putStudentToIsland(new Student(color));
@@ -76,7 +80,7 @@ public class CharacterCardTest
         assertEquals(0, player2.getBoard().getProfessors().size());
         assertEquals(color, player1.getBoard().getProfessors().get(0).getColor());
 
-        // Move mother nature
+       // Move mother nature
         player1.selectCard(9);
         player2.selectCard(10);
         assertEquals(player1, thief.getSortedPlayerList().get(0));
@@ -114,6 +118,14 @@ public class CharacterCardTest
 
         }
 
+        // Conquer professor
+        if (color == SchoolColor.GREEN)
+            thief.getPlayerTableList().get(0).getBoard().addStudentToDiningRoom(new Student(SchoolColor.PINK));
+        else thief.getPlayerTableList().get(0).getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        thief.conquerProfessors();
+        assertEquals(2, player1.getBoard().getProfessors().size());
+        assertEquals(0, player2.getBoard().getProfessors().size());
+
         // Move students from cloud tile
         CloudTile cloud = game.getCloudTiles().get(0);
         assertEquals(0, cloud.getStudents().size());
@@ -123,8 +135,15 @@ public class CharacterCardTest
         thief.moveStudentsFromCloudTile();
         assertEquals(7, player1.getBoard().getStudentsInEntrance().size());
 
+        // Fill clouds
+        thief.fillClouds();
+        assertEquals(3, thief.getCloudTiles().get(0).getStudents().size());
+
         // The game is in classic mode so there are no character cards
         assertEquals(0, thief.getCharacterCards().size());
+        assertDoesNotThrow(() -> thief.clearTurn());
+        assertDoesNotThrow(() -> thief.clearCharacterCard());
+        assertDoesNotThrow(() -> thief.setCurrentCharacterCard(0));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.fsm.EndGamePhase;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TowerColor;
@@ -64,6 +65,9 @@ public class Controller
      */
     public void endGame()
     {
+        // Set the phase to EndGamePhase
+        actionHandler.setGamePhase(new EndGamePhase());
+
         // Check if there is a player that has built all the towers
         for (Player player : game.getPlayerTableList())
         {
@@ -79,7 +83,7 @@ public class Controller
 
         for (Player player : game.getPlayerTableList())
         {
-            if (player.getCards().size() == 0)
+            if(player.getCards().stream().filter(c -> !c.isUsed()).findFirst().isEmpty())
             {
                 runOutOfCards = true;
                 break;
@@ -96,8 +100,6 @@ public class Controller
             rank.sort((a, b) -> a.getBoard().getTowers().size() == b.getBoard().getTowers().size()
                     ? b.getBoard().getProfessors().size() - a.getBoard().getProfessors().size()
                     : a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
-            rank.stream().forEach((p) -> System.out
-                    .println(p.getNickname() + " " + p.getBoard().getTowers().size()));
             // The first player in the rank has the most tower or has the same tower as the second,
             // but the first has more professors, so the first wins
             if (rank.get(0).getBoard().getTowers().size() < rank.get(1).getBoard().getTowers()

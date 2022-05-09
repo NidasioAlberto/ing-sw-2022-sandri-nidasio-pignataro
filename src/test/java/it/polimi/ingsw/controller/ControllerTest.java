@@ -117,7 +117,6 @@ public class ControllerTest
         }
 
         // Set up a game
-        controller.setupGame();
         Game game = controller.getGameHandler().getGame();
 
         // Check the player are created accurately
@@ -176,7 +175,6 @@ public class ControllerTest
         {
             e.printStackTrace();
         }
-        controller.setupGame();
         Game game = controller.getGameHandler().getGame();
         Player player1 = controller.getGameHandler().getGame().getPlayerTableList().get(0);
         Player player2 = controller.getGameHandler().getGame().getPlayerTableList().get(1);
@@ -195,17 +193,16 @@ public class ControllerTest
         assertEquals(1, player1.getBoard().getTowers().size());
 
         // player1 has finished the assistant cards
-        for (int turnOrder = 1; turnOrder < 10; turnOrder++)
-            player1.removeCard(turnOrder);
-        assertThrows(EndGameException.class, () -> player1.removeCard(10));
+        for (int turnOrder = 1; turnOrder <= 10; turnOrder++)
+            player1.selectCard(turnOrder);
 
         // Check the endGame method, the winner is player1 because has built the most
         // towers.
         controller.endGame();
 
         // Add a card to player1
+        player1.removeCard(1);
         player1.addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
-        assertEquals(1, player1.getCards().size());
 
         // player2 has built the same towers number as player1
         for (int i = 0; i < 5; i++)
@@ -216,28 +213,28 @@ public class ControllerTest
         player1.getBoard().addProfessor(new Professor(SchoolColor.GREEN));
 
         // player1 plays the last card so the game ends
-        assertThrows(EndGameException.class, () -> player1.removeCard(1));
+        player1.selectCard(1);
         // Check the endGame method, the winner is player1 because has built the same towers
         // as player2 but has more professors.
         controller.endGame();
 
         // Add a card to player1
+        player1.removeCard(1);
         player1.addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
-        assertEquals(1, player1.getCards().size());
 
         // player2 gets a professor
         player2.getBoard().addProfessor(new Professor(SchoolColor.BLUE));
 
         // player1 plays the last card so the game ends
-        assertThrows(EndGameException.class, () -> player1.removeCard(1));
+        player1.selectCard(1);
 
         // Check the endGame method, it is a tie between player1 and player2
         // because both have built the same towers and have the same number of professors.
         controller.endGame();
 
         // Add a card to player1
+        player1.removeCard(1);
         player1.addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
-        assertEquals(1, player1.getCards().size());
 
         // player3 has built the same towers number as player1 and player2
         for (int i = 0; i < 5; i++)
@@ -245,23 +242,22 @@ public class ControllerTest
         assertEquals(1, player3.getBoard().getTowers().size());
 
         // player1 plays the last card so the game ends
-        assertThrows(EndGameException.class, () -> player1.removeCard(1));
+        player1.selectCard(1);
         // Check the endGame method, it is a tie between player1 and player2
         // because both have built the same towers and have the same number of professors,
         // and player3 has built the same towers but has fewer professors
         controller.endGame();
 
         // Add a card to player1
+        player1.removeCard(1);
         player1.addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
-        assertEquals(1, player1.getCards().size());
 
         // player3 gets a professor
         player3.getBoard().addProfessor(new Professor(SchoolColor.PINK));
 
-        // player1 has finished the assistant cards
-        for (int turnOrder = 1; turnOrder < 10; turnOrder++)
-            player2.removeCard(turnOrder);
-        assertThrows(EndGameException.class, () -> player2.removeCard(10));
+        // player2 has finished the assistant cards
+        for (int turnOrder = 1; turnOrder <= 10; turnOrder++)
+            player2.selectCard(turnOrder);
 
         // Check the endGame method, it is a tie between player1, player2 and player3
         // because all have built the same towers and have the same number of professors.
@@ -281,7 +277,6 @@ public class ControllerTest
         {
             e.printStackTrace();
         }
-        controller.setupGame();
         GameActionHandler handler = controller.getGameHandler();
         Game game = handler.getGame();
 
@@ -452,6 +447,5 @@ public class ControllerTest
         // so a NoSuchAssistantCardException is caught by the controller
         assertDoesNotThrow(() -> controller.performAction(
                 new PlayAssistantCardMessage(1), "player1"));
-
     }
 }
