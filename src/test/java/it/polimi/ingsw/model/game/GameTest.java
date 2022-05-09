@@ -388,6 +388,23 @@ public class GameTest
         for (int i = 0; i < towers.size(); i++)
             assertEquals(towers.get(i).getColor(),
                     game.getCurrentIsland().getTowers().get(i).getColor());
+
+        // At the beginning there are 12 islands
+        assertEquals(12, game.getIslands().size());
+
+        // Put a tower on island next to the current one
+        Island nextIsland = game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ?
+                0 : game.getMotherNatureIndex().get() + 1);
+        nextIsland.addTower(new Tower(TowerColor.BLACK));
+
+        game.computeInfluence();
+        islandIndex = islandIndex == 11 ? 10 : islandIndex;
+        // Check the influences
+        assertEquals(2, game.computePlayerInfluence(player1, islandIndex));
+        assertEquals(0, game.computePlayerInfluence(player2, islandIndex));
+
+        assertEquals(11, game.getIslands().size());
+
     }
 
     @Test

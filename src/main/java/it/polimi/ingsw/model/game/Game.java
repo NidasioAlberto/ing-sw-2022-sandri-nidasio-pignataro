@@ -453,6 +453,9 @@ public class Game implements Publisher<ModelUpdate>
                                 .getColor())
                 {
                     currIsland.mergeIsland(nextIsland);
+                    if (motherNatureIndex.get() == (i + 1) % islands.size())
+                        motherNatureIndex.of(getMotherNatureIndex().get() == 0 ?
+                                islands.size() - 2 : getMotherNatureIndex().get() - 1);
                     islands.remove(nextIsland);
                     i--;
                 }

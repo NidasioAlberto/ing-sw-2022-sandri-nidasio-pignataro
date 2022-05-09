@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.NoLegitActionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -68,11 +69,11 @@ public class IslandTileTest
         assertEquals(tower, island.getTower().get());
 
         // Add another tower
-        island.addTower(new Tower(TowerColor.BLACK));
+        assertThrows(NoLegitActionException.class, () -> island.addTower(new Tower(TowerColor.BLACK)));
         assertEquals(tower, island.getTower().get());
 
         // Add a duplicate tower
-        island.addTower(tower);
+        assertThrows(NoLegitActionException.class, () -> island.addTower(tower));
         assertEquals(tower, island.getTower().get());
     }
 
