@@ -46,7 +46,6 @@ public class GameActionHandlerTest
                 {
                         e.printStackTrace();
                 }
-                controller.setupGame();
                 handler = controller.getGameHandler();
                 game = handler.getGame();
         }
