@@ -29,6 +29,10 @@ public class CreateMatchCommand extends Command
         if (!connection.getPlayerName().isPresent())
             throw new Exception("A match can't be created until the username has been configured");
 
+        // Check if the player is in another game
+        if (connection.isInAMatch())
+            throw new Exception("The player is already in a match");
+
         // Create a match and add a player to it
         connection.getServer().createMatch(matchId, playersNumber, gameMode, connection);
     }
