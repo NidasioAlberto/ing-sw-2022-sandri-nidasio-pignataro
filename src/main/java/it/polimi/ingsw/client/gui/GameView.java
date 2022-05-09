@@ -5,8 +5,11 @@ import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 
 /**
@@ -83,7 +86,7 @@ public class GameView extends Application
         group.getChildren().add(ambient);
 
         // Set the scene background
-        scene.setFill(Color.rgb(105, 186, 233));
+        scene.setFill(Color.rgb(129, 202, 241));
 
         // Set the camera
         camera = new PerspectiveCamera(true);
@@ -94,10 +97,19 @@ public class GameView extends Application
         // Create all the game components
         motherNature = new DrawableMotherNature(3, 20, 4);
 
+        Box box = new Box(100, 100, 2);
+        PhongMaterial boxMaterial = new PhongMaterial();
+        boxMaterial.setSpecularColor(Color.BLACK);
+        System.out.println(getClass().getPackage());
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        boxMaterial.setDiffuseMap(new Image(classloader.getResourceAsStream("Island1.png")));
+        box.setMaterial(boxMaterial);
+        box.setRotationAxis(new Point3D(1, 0, 0));
+        box.rotateProperty().set(90);
+
         // Add all the game components to the group
         motherNature.addToGroup(group);
-
-        motherNature.setY(100);
+        group.getChildren().add(box);
     }
 
     /**
@@ -114,7 +126,7 @@ public class GameView extends Application
         }
         else if(viewMode == ViewMode.MODE_3D)
         {
-            int angle = 0;
+            int angle = 30;
             //camera.translateYProperty().set(-1000 * Math.sin(angle));
             //camera.translateZProperty().set(-1000 * Math.cos(angle));
 
