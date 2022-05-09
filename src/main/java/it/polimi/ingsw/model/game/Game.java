@@ -445,10 +445,12 @@ public class Game implements Publisher<ModelUpdate>
                         && currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0)
                                 .getColor())
                 {
+                    if (motherNatureIndex.get() > islands.indexOf(currIsland) ||
+                            (motherNatureIndex.get() == islands.indexOf(currIsland)) && motherNatureIndex.get() == (islands.size() - 1))
+                    {
+                       motherNatureIndex = Optional.of(getMotherNatureIndex().get() - 1);
+                    }
                     currIsland.mergeIsland(nextIsland);
-                    if (motherNatureIndex.get() == (i + 1) % islands.size())
-                        motherNatureIndex.of(getMotherNatureIndex().get() == 0 ?
-                                islands.size() - 2 : getMotherNatureIndex().get() - 1);
                     islands.remove(nextIsland);
                     i--;
                 }

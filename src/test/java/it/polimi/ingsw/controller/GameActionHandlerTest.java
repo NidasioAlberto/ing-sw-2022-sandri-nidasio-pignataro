@@ -99,8 +99,6 @@ public class GameActionHandlerTest
                 // assistant card
                 assertTrue(handler.getGamePhase() instanceof PlanPhase);
 
-                // TODO controllare che non giochi una carta già giocata
-
                 // player2 selects an assistant card
                 assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(10),
                                 "player2"));
@@ -263,7 +261,6 @@ public class GameActionHandlerTest
                 else
                         assertEquals(color8,
                                         game.getIslands().get(4).getStudents().get(1).getColor());
-                // TODO giocare una carta carattere, generare degli errori
 
                 for (CharacterCard card : game.getCharacterCards())
                 {

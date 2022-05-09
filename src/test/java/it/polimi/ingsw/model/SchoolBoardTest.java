@@ -31,7 +31,7 @@ public class SchoolBoardTest
 
         // Invalid players number
         assertThrows(IllegalArgumentException.class, () -> board.setPlayersNumber(1));
-        assertThrows(IllegalArgumentException.class, () -> board.setPlayersNumber(5));
+        assertThrows(IllegalArgumentException.class, () -> board.setPlayersNumber(4));
 
         // The player number should not be modifiable
         assertThrows(IllegalStateException.class, () -> board.setPlayersNumber(3));
@@ -56,13 +56,6 @@ public class SchoolBoardTest
         // With 3 players the board has 9 students and 8 towers
         assertEquals(9, board.getMaxStudentsInEntrance());
         assertEquals(6, board.getMaxTowers());
-
-        board = new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC);
-        board.setPlayersNumber(4);
-
-        // With 4 players the board has 7 students and 6 towers
-        assertEquals(7, board.getMaxStudentsInEntrance());
-        assertEquals(8, board.getMaxTowers());
     }
 
     /**
