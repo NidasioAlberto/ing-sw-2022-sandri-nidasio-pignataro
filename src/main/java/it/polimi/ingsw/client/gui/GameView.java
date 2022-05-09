@@ -1,9 +1,12 @@
 package it.polimi.ingsw.client.gui;
 
+import it.polimi.ingsw.client.gui.objects.DrawableMotherNature;
 import javafx.application.Application;
-import javafx.scene.Camera;
-import javafx.scene.Scene;
+import javafx.geometry.Point3D;
+import javafx.scene.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -12,8 +15,8 @@ import javafx.stage.Stage;
  */
 public class GameView extends Application
 {
-    public static final int WIDTH = 300;
-    public static final int HEIGHT = 300;
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 720;
 
     /**
      * This is the camera view, it can be moved around (switch from 3D to 2D)
@@ -29,6 +32,11 @@ public class GameView extends Application
      * This is the window scene. It contains all the components
      */
     private Scene scene;
+
+    /**
+     * Game objects
+     */
+    private DrawableMotherNature motherNature;
 
     /**
      * Constructor
@@ -56,7 +64,40 @@ public class GameView extends Application
      */
     private void setup()
     {
+        // Create the group and the scene
+        Group group = new Group();
+        scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
 
+        // Create a mix with ambient and point light
+        AmbientLight ambient = new AmbientLight();
+        ambient.setColor(Color.WHITE);
+        PointLight light = new PointLight();
+        light.setColor(Color.WHITE);
+        light.translateYProperty().set(-1000);
+        light.setRotationAxis(new Point3D(1, 0 ,0));
+        light.rotateProperty().set(90);
+        light.setLinearAttenuation(-0.0003);
+
+        // Add the lights to the view
+        group.getChildren().add(light);
+        group.getChildren().add(ambient);
+
+        // Set the scene background
+        scene.setFill(Color.rgb(105, 186, 233));
+
+        // Set the camera
+        camera = new PerspectiveCamera(true);
+        camera.setNearClip(0.1);
+        camera.setFarClip(2000.0);
+        scene.setCamera(camera);
+
+        // Create all the game components
+        motherNature = new DrawableMotherNature(3, 20, 4);
+
+        // Add all the game components to the group
+        motherNature.addToGroup(group);
+
+        motherNature.setY(100);
     }
 
     /**
@@ -64,7 +105,24 @@ public class GameView extends Application
      */
     private void updateCameraView()
     {
+        // Depending on the position i rotate and traslate the camera
+        if(viewMode == ViewMode.MODE_2D)
+        {
+            camera.translateYProperty().set(-1000);
+            camera.setRotationAxis(new Point3D(1, 0, 0));
+            camera.rotateProperty().set(-90);
+        }
+        else if(viewMode == ViewMode.MODE_3D)
+        {
+            int angle = 0;
+            //camera.translateYProperty().set(-1000 * Math.sin(angle));
+            //camera.translateZProperty().set(-1000 * Math.cos(angle));
 
+            camera.translateYProperty().set(-1000 * Math.sin(Math.toRadians(angle)));
+            camera.translateZProperty().set(-1000 * Math.cos(Math.toRadians(angle)));
+            camera.setRotationAxis(new Point3D(1, 0, 0));
+            camera.rotateProperty().set(-angle);
+        }
     }
 
     /**
@@ -90,17 +148,15 @@ public class GameView extends Application
         // I need to think that this method is our main.
         // It has all the references to this object, and can pass it as argument
         // to all the needed objects
-        StackPane root = new StackPane();
-        scene = new Scene(root, WIDTH, HEIGHT);
+        setup();
+        viewMode = ViewMode.MODE_3D;
+        updateCameraView();
 
+        // Show the window with the correct title
         stage.setTitle("Eriantys Game");
         // Set the scene
         stage.setScene(scene);
         stage.show();
-
-
-        // I need to set the default params
-        viewMode = ViewMode.MODE_2D;
     }
 
     /**
