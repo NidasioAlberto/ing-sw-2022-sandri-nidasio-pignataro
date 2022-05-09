@@ -441,17 +441,24 @@ public class Game implements Publisher<ModelUpdate>
             {
                 Island currIsland = islands.get(i);
                 Island nextIsland = islands.get((i + 1) % islands.size());
-                if (currIsland.getTowers().size() > 0 && nextIsland.getTowers().size() > 0
-                        && currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0)
-                                .getColor())
+
+                // Check if two consecutive islands have the same color of towers
+                if (currIsland.getTowers().size() > 0 && nextIsland.getTowers().size() > 0 &&
+                        currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0).getColor())
                 {
+                    // Mother must step back if it is placed after the current island or
+                    // if it is in the last island
                     if (motherNatureIndex.get() > islands.indexOf(currIsland) ||
-                            (motherNatureIndex.get() == islands.indexOf(currIsland)) && motherNatureIndex.get() == (islands.size() - 1))
+                           motherNatureIndex.get() == (islands.size() - 1))
                     {
                        motherNatureIndex = Optional.of(getMotherNatureIndex().get() - 1);
                     }
+
+                    // Merge the two islands and remove one
                     currIsland.mergeIsland(nextIsland);
                     islands.remove(nextIsland);
+
+                    // There could be three consecutive islands that could be merged
                     i--;
                 }
             }
@@ -469,7 +476,7 @@ public class Game implements Publisher<ModelUpdate>
                         new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             }
 
-            // There are only 3 islands so the game ends
+            // If there are only 3 islands so the game ends
             if (islands.size() <= 3)
                 throw new EndGameException("[Game]");
         }

@@ -8,6 +8,8 @@ import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.lang.module.FindException;
 import java.util.*;
 
 public class GameTest
@@ -397,6 +399,39 @@ public class GameTest
 
         assertEquals(11, game.getIslands().size());
 
+    }
+
+    @Test
+    public void mergeIslandTest()
+    {
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Setup the game
+        game.setupGame();
+
+        int motherIndex = game.getMotherNatureIndex().get();
+        int islandIndex = (int) Math.round(0 + Math.random() * (11 - 0) - 0.5);
+
+        // Set two consecutive islands with the same color of towers
+        game.getIslands().get(islandIndex).addStudent(new Student(SchoolColor.PINK));
+        player1.getBoard().addProfessor(new Professor(SchoolColor.PINK));
+        game.getIslands().get(islandIndex + 1).addTower(new Tower(TowerColor.BLACK));
+
+        game.computeInfluence(islandIndex);
+
+        // Two islands can merge
+        assertEquals(11, game.getIslands().size());
+
+        // Check the position of mother nature
+        if (motherIndex != 11 && motherIndex <= islandIndex)
+            assertEquals(motherIndex, game.getMotherNatureIndex().get());
+        else assertEquals(motherIndex - 1, game.getMotherNatureIndex().get());
     }
 
     @Test
