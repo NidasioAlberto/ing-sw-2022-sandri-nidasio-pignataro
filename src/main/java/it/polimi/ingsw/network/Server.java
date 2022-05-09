@@ -158,12 +158,12 @@ public class Server
         if (match == null)
             throw new IllegalArgumentException("[Server] There is no match with id " + matchId);
 
-        // Remove the player from the lobby
-        lobby.remove(player);
-
         // Add the player to the match
         match.addPlayer(player);
         playersMapMatch.put(player, match);
+
+        // Remove the player from the lobby
+        lobby.remove(player);
 
         // Notify the player
         player.sendAnswer(new JoinedMatchAnswer(matchId));
@@ -230,6 +230,11 @@ public class Server
 
         for (PlayerConnection player : lobby)
             player.sendAnswer(answer);
+    }
+
+    public boolean isPlayerInAMatch(PlayerConnection player)
+    {
+        return playersMapMatch.get(player) != null;
     }
 
     public static void main(String[] args)

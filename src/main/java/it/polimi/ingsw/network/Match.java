@@ -28,7 +28,7 @@ public class Match implements Subscriber<ModelUpdate>
     }
 
     /**
-     * Adds a player to the match.
+     * Adds a player to the match. If all the players are connected the game is setup.
      * 
      * @param nickname The player's nickname.
      * @throws NullPointerException If the nickname is null.
@@ -38,8 +38,8 @@ public class Match implements Subscriber<ModelUpdate>
     public void addPlayer(PlayerConnection player)
             throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
-        players.add(player);
         gameController.addPlayer(player.getPlayerName().get());
+        players.add(player);
     }
 
     public void removePlayer(PlayerConnection player)

@@ -387,9 +387,10 @@ public class Game implements Publisher<ModelUpdate>
             currentIsland.removeNoEntryTile();
 
             // If the subscriber is present i have to notify
-            if(subscriber.isPresent())
+            if (subscriber.isPresent())
             {
-                subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+                subscriber.get().onNext(
+                        new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
 
                 // I update also all the character cards payload
                 for (CharacterCard card : characterCards)
@@ -428,12 +429,11 @@ public class Game implements Publisher<ModelUpdate>
             List<Tower> towersToAdd = influencer.getBoard().getTowers().subList(0,
                     Integer.min(towersToRemove.size(), influencer.getBoard().getTowers().size()));
 
-            if  (towersToAdd.size() == 0)
+            if (towersToAdd.size() == 0)
             {
                 // The island has no tower
                 currentIsland.addTower(influencer.getBoard().getTowers().get(0));
-            }
-            else
+            } else
             {
                 towersToAdd.forEach(t -> {
                     // Remove the tower from the player's board
@@ -640,7 +640,7 @@ public class Game implements Publisher<ModelUpdate>
             {
                 List<CharacterCard> characterCardsList = new ArrayList<>();
 
-                for(CharacterCard card : characterCards)
+                for (CharacterCard card : characterCards)
                 {
                     // I clone all the character card to avoid serializing the game instance
                     characterCardsList.add((CharacterCard) card.clone());

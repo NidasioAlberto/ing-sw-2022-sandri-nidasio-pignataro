@@ -71,6 +71,11 @@ public class PlayerConnection implements Runnable
         this.playerName = Optional.of(playerName);
     }
 
+    public boolean isInAMatch()
+    {
+        return server.isPlayerInAMatch(this);
+    }
+
     public void close()
     {
         server.removePlayerFromServer(this);

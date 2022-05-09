@@ -119,6 +119,7 @@ public class MockClient
             case 6:
             {
                 outputStream.writeObject(new QuitGameCommand());
+                System.exit(0);
                 break;
             }
         }
@@ -205,12 +206,12 @@ public class MockClient
     {
         List<SchoolColor> selectedColors = new ArrayList<>();
 
-        // do
-        // {
-        selectedColors.add(selectSchoolColors(scanner));
-        System.out.println("Type 'Y' to select another");
-        // } while (scanner.nextLine().equals("Y")
-        // && selectedColors.size() < SchoolColor.values().length);
+        do
+        {
+            selectedColors.add(selectSchoolColors(scanner));
+            System.out.println("Type 'Y' to select another");
+        } while (scanner.nextLine().equals("Y")
+                && selectedColors.size() < SchoolColor.values().length);
 
         return selectedColors;
     }
