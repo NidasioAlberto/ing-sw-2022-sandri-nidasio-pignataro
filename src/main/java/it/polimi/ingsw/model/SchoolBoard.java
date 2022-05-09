@@ -97,8 +97,8 @@ public class SchoolBoard implements Serializable
     public void setPlayersNumber(Integer playersNumber)
             throws IllegalArgumentException, IllegalStateException
     {
-        // The number of players must be between 2 and 4
-        if (playersNumber < 2 || playersNumber > 4)
+        // The number of players must be 2 or 3
+        if (playersNumber < 2 || playersNumber > 3)
             throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
 
         // The number of players must not be modifiable

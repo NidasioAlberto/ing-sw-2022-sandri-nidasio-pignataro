@@ -27,7 +27,7 @@ public class CloudTileTest
     @Test
     public void addStudentNull()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
 
         // Add a normal student
         cloud.addStudent(new Student(SchoolColor.GREEN));
@@ -45,7 +45,7 @@ public class CloudTileTest
     @Test
     public void addStudentDuplicate()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
         Student student = new Student(SchoolColor.RED);
 
         // Add a normal student
@@ -64,7 +64,7 @@ public class CloudTileTest
     @Test
     public void addStudentMaxDimension()
     {
-        CloudTile cloud_2_4 = new CloudTile(CloudTileType.TILE_2_4);
+        CloudTile cloud_2_4 = new CloudTile(CloudTileType.TILE_2);
         CloudTile cloud_3 = new CloudTile(CloudTileType.TILE_3);
         Student student1 = new Student(SchoolColor.RED);
         Student student2 = new Student(SchoolColor.BLUE);
@@ -125,7 +125,7 @@ public class CloudTileTest
     @Test
     public void removeStudentNull()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
         Student student = new Student(SchoolColor.GREEN);
 
         // Add a normal student
@@ -153,7 +153,7 @@ public class CloudTileTest
     @Test
     public void removeStudents()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
         Student student1 = new Student(SchoolColor.GREEN);
         Student student2 = new Student(SchoolColor.BLUE);
 

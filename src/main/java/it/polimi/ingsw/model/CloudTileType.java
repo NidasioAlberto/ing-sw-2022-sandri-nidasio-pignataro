@@ -7,7 +7,7 @@ package it.polimi.ingsw.model;
  */
 public enum CloudTileType
 {
-    TILE_2_4(3), TILE_3(4);
+    TILE_2(3), TILE_3(4);
 
     private int studentCapacity;
 

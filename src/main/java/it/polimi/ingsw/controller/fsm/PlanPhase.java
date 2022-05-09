@@ -12,7 +12,6 @@ public class PlanPhase implements Phase
      */
     private int count;
 
-    // TODO UNDERSTAND THE PLAYER ORDER
     public PlanPhase()
     {
         this.count = 0;

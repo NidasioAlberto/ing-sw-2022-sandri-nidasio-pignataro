@@ -62,7 +62,7 @@ public class Game implements Publisher<ModelUpdate>
     {
         if (playersNumber == null)
             throw new NullPointerException("[SchoolBoard] Null players number");
-        if (playersNumber < 2 || playersNumber > 4)
+        if (playersNumber < 2 || playersNumber > 3)
             throw new IllegalArgumentException("[SchoolBoard] Invalid players number");
 
         players = new ArrayList<>();
@@ -84,7 +84,6 @@ public class Game implements Publisher<ModelUpdate>
      * Adds a player to the current game. If the game already contains the maximum number of players
      * possible, an exception is thrown.
      */
-    // TODO: Check the player's color against other players
     public void addPlayer(Player player) throws TooManyPlayersException
     {
         if (players.size() >= playersNumber)
@@ -110,9 +109,6 @@ public class Game implements Publisher<ModelUpdate>
 
     /**
      * Returns the currently selected player, if any.
-     * 
-     * TODO: Forse non è il caso di esporre il player direttamente, e una copia non mi sembra il
-     * caso. Magari dobbiamo ritornare il nickname?
      */
     public Optional<Player> getSelectedPlayer()
     {
@@ -140,8 +136,6 @@ public class Game implements Publisher<ModelUpdate>
     /**
      * Return the players list sorted by their turn order based on the played assistant cards.
      */
-    // TODO: Ci deve essere un modo più bello per fare il sort e ritornare una nuova
-    // lista.
     public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
         List<Player> sortedList = new ArrayList<>(players);
@@ -338,7 +332,7 @@ public class Game implements Publisher<ModelUpdate>
         index %= islands.size();
         motherNatureIndex = Optional.of(index);
 
-        // TODO va messo a false alla fine del turno
+        // It is set to false at the end of each turn
         motherNatureMoved = true;
 
         // After moving mother nature we need to notify the observer
@@ -398,7 +392,6 @@ public class Game implements Publisher<ModelUpdate>
             return;
         }
 
-        // TODO: Use Pair
         // Get the player with more influence, if there is any
         List<Player> sortedPlayers = players.stream().sorted(
                 (p1, p2) -> computePlayerInfluence(p2, island) - computePlayerInfluence(p1, island))
@@ -590,7 +583,7 @@ public class Game implements Publisher<ModelUpdate>
         // 5. Place the cloud tiles
         IntStream.range(0, players.size()).forEach(
                 i -> cloudTiles.add(playersNumber == 3 ? new CloudTile(CloudTileType.TILE_3)
-                        : new CloudTile(CloudTileType.TILE_2_4)));
+                        : new CloudTile(CloudTileType.TILE_2)));
 
         // 6. Place the professors
         for (SchoolColor color : SchoolColor.values())
@@ -691,7 +684,7 @@ public class Game implements Publisher<ModelUpdate>
     public Student getStudentFromBag()
     {
         if (studentBag.size() == 0)
-            throw new EndGameException("[Game] Student bag empty"); // TODO non deve lanciarla
+            throw new EndGameException("[Game] Student bag empty");
 
         return studentBag.remove(getRandomNumber(0, studentBag.size()));
     }

@@ -53,7 +53,6 @@ public class Controller
 
         this.match = match;
 
-        // TODO: Se non facciamo la modalità a 4 giocatori bisogna cambiare questo e altro
         if (playersNumber < 2 || playersNumber > 3)
             throw new IllegalArgumentException("[Controller] Invalid players number");
 
@@ -310,8 +309,6 @@ public class Controller
             if (player.getNickname().equals(nickname))
                 throw new IllegalArgumentException(
                         "[Controller] Already existing a player with such nickname");
-
-        // TODO il server dovrebbe controllare che non venga lanciata la TooManyPLayersException
 
         // Add the player to the game with the correct color of the towers
         switch (game.getPlayerTableList().size())
