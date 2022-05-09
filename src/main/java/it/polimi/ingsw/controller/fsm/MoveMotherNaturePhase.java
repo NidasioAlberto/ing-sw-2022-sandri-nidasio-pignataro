@@ -8,18 +8,39 @@ import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 
 public class MoveMotherNaturePhase implements Phase
 {
-    @Override
-    public void onValidAction(GameActionHandler handler)
+    /**
+     * This method returns true only when the game is in the last round
+     * @return Boolean that represents the game ending state
+     */
+    private boolean isGameEnding(GameActionHandler handler)
     {
-        // On valid action i only have to switch to cloud tile selection phase
-        handler.setGamePhase(new SelectCloudTilePhase());
+        // If the student bag is empty i return immediately true
+        if(handler.getGame().getStudentBag().size() == 0)
+            return true;
+
+        // I can return true if i find a player with no assistant cards available anymore
+        for(Player player : handler.getGame().getPlayerTableList())
+        {
+            if(player.getCards().stream().filter(c -> !c.isUsed()).findFirst().isEmpty())
+                return true;
+        }
+
+        return false;
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler)
+    public void onValidAction(GameActionHandler handler)
     {
-        // On game end i switch to the corresponding phase
-        handler.setGamePhase(new EndGamePhase());
+        if(!isGameEnding(handler))
+        {
+            // On valid action i only have to switch to cloud tile selection phase
+            handler.setGamePhase(new SelectCloudTilePhase());
+        }
+        else
+        {
+            // If it is the last turn i skip the cloud tile selection
+            handler.setGamePhase(new EndTurnPhase());
+        }
     }
 
     @Override

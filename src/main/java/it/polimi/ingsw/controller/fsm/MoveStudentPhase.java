@@ -33,13 +33,6 @@ public class MoveStudentPhase implements Phase
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler)
-    {
-        // On end game i switch to endPhase
-        handler.setGamePhase(new EndGamePhase());
-    }
-
-    @Override
     public boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction)
     {

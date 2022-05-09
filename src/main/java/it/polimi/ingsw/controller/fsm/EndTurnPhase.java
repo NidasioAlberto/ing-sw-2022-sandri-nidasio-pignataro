@@ -68,13 +68,6 @@ public class EndTurnPhase implements Phase
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler)
-    {
-        // I only switch to the end game phase
-        handler.setGamePhase(new EndGamePhase());
-    }
-
-    @Override
     public boolean isLegitAction(GameActionHandler handler, String playerName, BaseGameAction baseAction)
     {
         // Check if the player corresponds to the selected one in SORTED LIST

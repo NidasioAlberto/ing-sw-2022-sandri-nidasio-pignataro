@@ -90,7 +90,8 @@ public class Princess extends CharacterCard
         instance.conquerProfessors();
 
         // Add a new student on the card
-        students.add(instance.getStudentFromBag());
+        try{ students.add(instance.getStudentFromBag());}
+        catch(Exception e){}
 
         this.deactivate();
     }

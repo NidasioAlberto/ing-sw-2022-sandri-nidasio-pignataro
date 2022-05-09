@@ -84,7 +84,8 @@ public class Monk extends CharacterCard
         //Remove the previous student from the card
         students.remove(selectedStudent);
         //Pick another student from the bag
-        students.add(instance.getStudentFromBag());
+        try{ students.add(instance.getStudentFromBag());}
+        catch(Exception e){}
 
         //Disable the card
         this.deactivate();

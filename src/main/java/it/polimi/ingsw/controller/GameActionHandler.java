@@ -279,12 +279,18 @@ public class GameActionHandler
         for (CharacterCard card : game.getCharacterCards())
             card.deactivate();
 
-        // If all the players have done their turn, I fill up the clouds
-        if (game.getSelectedPlayerIndex().get() == game.getPlayerTableList().size() - 1)
-            game.fillClouds();
+        // Save the previous index of the last player
+        int previousIndex = game.getSelectedPlayerIndex().get();
 
         // If all goes correctly i step the FSM
-         gamePhase.onValidAction(this);
+        gamePhase.onValidAction(this);
+
+        // If all the players have done their turn, I fill up the clouds
+        if (previousIndex == game.getPlayerTableList().size() - 1)
+        {
+            try {game.fillClouds();}
+            catch (Exception e){}
+        }
     }
 
     public Phase getGamePhase()

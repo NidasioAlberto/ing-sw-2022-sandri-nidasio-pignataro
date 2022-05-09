@@ -16,13 +16,6 @@ public class SelectCloudTilePhase implements Phase
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler)
-    {
-        // On end game i switch to the corresponding state
-        handler.setGamePhase(new EndGamePhase());
-    }
-
-    @Override
     public boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction)
     {

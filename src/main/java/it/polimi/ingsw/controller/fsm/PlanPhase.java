@@ -43,13 +43,6 @@ public class PlanPhase implements Phase
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler)
-    {
-        // On this event i just switch to the end state
-        handler.setGamePhase(new EndGamePhase());
-    }
-
-    @Override
     public boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction)
     {

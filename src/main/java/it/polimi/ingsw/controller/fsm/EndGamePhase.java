@@ -12,12 +12,6 @@ public class EndGamePhase implements Phase
     }
 
     @Override
-    public void onEndGame(GameActionHandler handler)
-    {
-        // Stay on this state
-    }
-
-    @Override
     public boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction)
     {

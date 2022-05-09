@@ -20,14 +20,6 @@ public interface Phase
     void onValidAction(GameActionHandler handler);
 
     /**
-     * This method is called when an end game exception is thrown. It brings the FSM to the end game
-     * state.
-     * 
-     * @param handler The game handler that contains the FSM state
-     */
-    void onEndGame(GameActionHandler handler);
-
-    /**
      * This method decides based on the actual state if the arrived action should be executed or
      * not.
      */
