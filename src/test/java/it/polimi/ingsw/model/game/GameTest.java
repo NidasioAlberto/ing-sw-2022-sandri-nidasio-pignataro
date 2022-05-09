@@ -50,14 +50,6 @@ public class GameTest
         assertDoesNotThrow(() -> game.addPlayer(player2));
         assertDoesNotThrow(() -> game.addPlayer(player3));
         assertThrows(TooManyPlayersException.class, () -> game.addPlayer(player4));
-
-        // The game should accept 4 players
-        game = new Game(4, GameMode.CLASSIC);
-        assertDoesNotThrow(() -> game.addPlayer(player1));
-        assertDoesNotThrow(() -> game.addPlayer(player2));
-        assertDoesNotThrow(() -> game.addPlayer(player4));
-        assertDoesNotThrow(() -> game.addPlayer(player5));
-        assertThrows(TooManyPlayersException.class, () -> game.addPlayer(player3));
     }
 
     @Test

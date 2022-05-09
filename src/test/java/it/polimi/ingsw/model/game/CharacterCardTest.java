@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -102,21 +104,9 @@ public class CharacterCardTest
         assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
         assertEquals(TowerColor.WHITE,
                 game.getIslands().get(islandIndex).getTowers().get(0).getColor());
+        game.motherNatureIndex = Optional.of(islandIndex);
         thief.computeInfluence();
-        if (game.getMotherNatureIndex().get() == islandIndex)
-            assertEquals(1,
-                    game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
-        else
-        {
-            if (game.getIslands().get(game.getMotherNatureIndex().get()).getStudents().size() == 1 &&
-                    game.getIslands().get(game.getMotherNatureIndex().get()).getStudents().get(0).getColor() == color)
-                assertEquals(1,
-                        game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
-            else
-                assertEquals(0,
-                        game.getIslands().get(game.getMotherNatureIndex().get()).getTowers().size());
-
-        }
+        assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
 
         // Conquer professor
         if (color == SchoolColor.GREEN)
