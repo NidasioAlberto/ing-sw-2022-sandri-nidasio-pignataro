@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import javafx.scene.Group;
+import javafx.scene.PointLight;
+import javafx.scene.effect.Light;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -12,7 +14,7 @@ import javax.swing.text.html.HTMLDocument;
  * This class represents the drawable object of mother nature
  * aka 3 spheres one on top of another
  */
-public class DrawableMotherNature
+public class DrawableMotherNature implements DrawableObject
 {
 
     /**
@@ -73,6 +75,7 @@ public class DrawableMotherNature
      * Adds all the mother nature spheres inside the group vision
      * @param group The root scene
      */
+    @Override
     public void addToGroup(Group group)
     {
         if(group == null)
@@ -84,8 +87,31 @@ public class DrawableMotherNature
     }
 
     /**
+     * Subscribes every sphere to the lighting
+     */
+    @Override
+    public void subscribeToLight(PointLight light)
+    {
+        for(Sphere sphere : spheres)
+            light.getScope().add(sphere);
+    }
+
+    @Override
+    public void updateAnimation()
+    {
+
+    }
+
+    /**
      * Position setters
      */
+    @Override
+    public void translate(float x, float y, float z)
+    {
+        setX(x);
+        setY(y);
+        setZ(z);
+    }
 
     public void setX(float x)
     {

@@ -1,7 +1,11 @@
 package it.polimi.ingsw.client.gui;
 
-import it.polimi.ingsw.client.gui.objects.DrawableMotherNature;
+import it.polimi.ingsw.client.gui.objects.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.effect.ColorAdjust;
@@ -11,6 +15,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents the game window and draws all the needed stuff that
@@ -42,6 +51,11 @@ public class GameView extends Application
     private DrawableMotherNature motherNature;
 
     /**
+     * Collection of all the drawable objects, useful to the Animation Updates
+     */
+    private List<DrawableObject> drawableObjects;
+
+    /**
      * Constructor
      * @param mode The view mode that we want the game to start with
      */
@@ -54,7 +68,6 @@ public class GameView extends Application
             throw new NullPointerException("[GameView] Null view mode");
 
         this.viewMode = mode;
-        setup();
     }
 
     /**
@@ -67,6 +80,9 @@ public class GameView extends Application
      */
     private void setup()
     {
+        // Create the collection of all the drawable objects
+        drawableObjects = new ArrayList<DrawableObject>();
+
         // Create the group and the scene
         Group group = new Group();
         scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
@@ -80,6 +96,7 @@ public class GameView extends Application
         light.setRotationAxis(new Point3D(1, 0 ,0));
         light.rotateProperty().set(90);
         light.setLinearAttenuation(-0.0003);
+
 
         // Add the lights to the view
         group.getChildren().add(light);
@@ -96,20 +113,39 @@ public class GameView extends Application
 
         // Create all the game components
         motherNature = new DrawableMotherNature(3, 20, 4);
+        DrawableIslandCollection collection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
 
-        Box box = new Box(100, 100, 2);
-        PhongMaterial boxMaterial = new PhongMaterial();
-        boxMaterial.setSpecularColor(Color.BLACK);
-        System.out.println(getClass().getPackage());
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        boxMaterial.setDiffuseMap(new Image(classloader.getResourceAsStream("Island1.png")));
-        box.setMaterial(boxMaterial);
-        box.setRotationAxis(new Point3D(1, 0, 0));
-        box.rotateProperty().set(90);
+        // Add all the created objects to the collection of drawable objects
+        drawableObjects.add(motherNature);
+        drawableObjects.add(collection);
 
         // Add all the game components to the group
-        motherNature.addToGroup(group);
-        group.getChildren().add(box);
+        //motherNature.addToGroup(group);
+        motherNature.subscribeToLight(light);
+        collection.addToGroup(group);
+
+        // Start the time scheduled animations
+        startAnimationUpdates();
+    }
+
+    /**
+     * Method that sets periodically updates about Graphical objects
+     */
+    private void startAnimationUpdates()
+    {
+        Timeline animationUpdates = new Timeline(
+                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event)
+                    {
+                        // To handle the animations update i call every drawable object
+                        for(DrawableObject object : drawableObjects)
+                            object.updateAnimation();
+                    }
+                })
+        );
+        animationUpdates.setCycleCount(Timeline.INDEFINITE);
+        animationUpdates.play();
     }
 
     /**
@@ -126,7 +162,7 @@ public class GameView extends Application
         }
         else if(viewMode == ViewMode.MODE_3D)
         {
-            int angle = 30;
+            int angle = 55;
             //camera.translateYProperty().set(-1000 * Math.sin(angle));
             //camera.translateZProperty().set(-1000 * Math.cos(angle));
 
