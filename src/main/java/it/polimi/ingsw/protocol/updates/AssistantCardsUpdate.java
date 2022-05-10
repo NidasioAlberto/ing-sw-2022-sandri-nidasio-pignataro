@@ -4,15 +4,13 @@ import it.polimi.ingsw.model.AssistantCard;
 
 import java.util.List;
 
-public class AssistantCardsUpdate extends ModelUpdate
-{
+public class AssistantCardsUpdate extends ModelUpdate {
     /**
      * List of a single player assistant cards
      */
     private List<AssistantCard> cards;
 
-    public List<AssistantCard> getCards()
-    {
+    public List<AssistantCard> getCards() {
         return cards;
     }
 
@@ -20,10 +18,9 @@ public class AssistantCardsUpdate extends ModelUpdate
      * Constructor that allows the player destination
      * 
      * @param playerDestination Name of the player that has to receive the message
-     * @param cards Collection of specific player cards
+     * @param cards             Collection of specific player cards
      */
-    public AssistantCardsUpdate(String playerDestination, List<AssistantCard> cards)
-    {
+    public AssistantCardsUpdate(String playerDestination, List<AssistantCard> cards) {
         super(playerDestination);
 
         if (cards == null)
@@ -41,8 +38,7 @@ public class AssistantCardsUpdate extends ModelUpdate
      * 
      * @param cards Collection of specific player cards
      */
-    public AssistantCardsUpdate(List<AssistantCard> cards)
-    {
+    public AssistantCardsUpdate(List<AssistantCard> cards) {
         super();
 
         if (cards == null)
@@ -56,8 +52,7 @@ public class AssistantCardsUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Object handler)
-    {
+    public void handleUpdate(Object handler) {
 
     }
 }
