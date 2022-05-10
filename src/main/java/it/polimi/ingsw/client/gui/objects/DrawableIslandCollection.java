@@ -63,7 +63,6 @@ public class DrawableIslandCollection implements DrawableObject
         for(int i = 0; i < islands.length; i++)
         {
             islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)]);
-            float correction = X_MULTIPLY;
             float angle = i * ((float)360.0 / NUMBER_OF_ISLANDS);
             float coordX = (float)Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY;
             float coordY = (float)Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY;
@@ -82,12 +81,6 @@ public class DrawableIslandCollection implements DrawableObject
             island.addToGroup(group);
     }
 
-    @Override
-    public void translate(float x, float y, float z)
-    {
-
-    }
-
     // Does nothing
     @Override
     public void subscribeToLight(PointLight light) {}
@@ -98,5 +91,22 @@ public class DrawableIslandCollection implements DrawableObject
         // Updates the animation of all the islands
         for(DrawableIsland island : islands)
             island.updateAnimation();
+    }
+
+    /**
+     * Position setters, needs to be synchronized to handle the scheduled task
+     */
+    @Override
+    public synchronized void translate(float x, float y, float z)
+    {
+        // For every island i set the position according to the ellipsis and traslate it
+        for(int i = 0; i < islands.length; i++)
+        {
+            islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)]);
+            float angle = i * ((float)360.0 / NUMBER_OF_ISLANDS);
+            float coordX = (float)Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY + x;
+            float coordZ = (float)Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY + z;
+            islands[i].translate(coordX, y, coordZ);
+        }
     }
 }

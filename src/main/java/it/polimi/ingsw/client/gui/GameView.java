@@ -112,15 +112,15 @@ public class GameView extends Application
         scene.setCamera(camera);
 
         // Create all the game components
-        motherNature = new DrawableMotherNature(3, 20, 4);
+        motherNature = new DrawableMotherNature(3, 10, 2);
         DrawableIslandCollection collection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
-
+        collection.translate(0, 0, 150);
         // Add all the created objects to the collection of drawable objects
         drawableObjects.add(motherNature);
         drawableObjects.add(collection);
 
         // Add all the game components to the group
-        //motherNature.addToGroup(group);
+        motherNature.addToGroup(group);
         motherNature.subscribeToLight(light);
         collection.addToGroup(group);
 
@@ -133,6 +133,7 @@ public class GameView extends Application
      */
     private void startAnimationUpdates()
     {
+        // Create the scheduled task
         Timeline animationUpdates = new Timeline(
                 new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
                     @Override
@@ -144,6 +145,7 @@ public class GameView extends Application
                     }
                 })
         );
+        // Set the task as infinite and start the task
         animationUpdates.setCycleCount(Timeline.INDEFINITE);
         animationUpdates.play();
     }
@@ -157,6 +159,7 @@ public class GameView extends Application
         if(viewMode == ViewMode.MODE_2D)
         {
             camera.translateYProperty().set(-1000);
+            camera.translateZProperty().set(30);
             camera.setRotationAxis(new Point3D(1, 0, 0));
             camera.rotateProperty().set(-90);
         }
