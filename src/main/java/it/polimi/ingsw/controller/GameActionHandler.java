@@ -3,14 +3,13 @@ package it.polimi.ingsw.controller;
 import com.sun.jdi.InvalidModuleException;
 import it.polimi.ingsw.controller.fsm.Phase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
-import it.polimi.ingsw.model.ExpertGameAction;
-import it.polimi.ingsw.model.GameMode;
-import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -90,6 +89,46 @@ public class GameActionHandler
 
     public void playAssistantCard(int selectedCard) throws NoSuchAssistantCardException
     {
+        //TODO gestire la sorted player table list in base ai doppioni
+
+        // Check that the current player doesn't play a card that another player
+        // has already played in this turn, unless obligated
+
+        // Get the current player
+        Player currentPlayer = game.getPlayerTableList().get(game.getSelectedPlayerIndex().get());
+
+        // Get the cards that the current player can still play
+        List<AssistantCard> usableCards = new ArrayList<AssistantCard>(currentPlayer.getCards()).
+                stream().filter((card) -> !card.isUsed()).toList();
+
+        // Flag to check if the current player has played a card already played by another player
+        boolean sameCard = false;
+
+        // For each player that has already played a card during this round
+        for (int i = 0; i < ((PlanPhase) gamePhase).getCount(); i++)
+        {
+            // Get a previous player
+            Player previousPlayer = game.getPlayerTableList().get(
+                    game.getSelectedPlayerIndex().get() - i - 1 < 0 ?
+                    game.getPlayersNumber() + game.getSelectedPlayerIndex().get() - i - 1 :
+                    game.getSelectedPlayerIndex().get() - i - 1);
+
+            // Remove from usableCards the card with the same turnOrder as the one
+            // played by the previous player
+            usableCards = usableCards.stream().filter((card) ->
+                    card.getTurnOrder() != previousPlayer.getSelectedCard().get().getTurnOrder()).toList();
+
+            // Check if the current player has played a card with the same turnOrder
+            // as the card played by the previous player
+            if (selectedCard == previousPlayer.getSelectedCard().get().getTurnOrder())
+                sameCard = true;
+        }
+
+        // If the current player has played a card already played in this turn and
+        // has at least one usable card, an exception is thrown
+        if (sameCard && usableCards.size() > 0)
+            throw new InvalidAssistantCardException("[GameActionHandler]");
+
         // The player selection at assistant card stage is about table order
         game.getPlayerTableList().get(game.getSelectedPlayerIndex().get()).selectCard(selectedCard);
 

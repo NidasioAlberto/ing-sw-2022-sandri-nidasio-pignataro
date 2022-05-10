@@ -246,6 +246,11 @@ public class Controller
         {
             sendError(getCurrentPlayer().getNickname(),
                     "You can't play two character cards in the same turn.");
+        }catch (InvalidAssistantCardException e)
+        {
+            sendError(getCurrentPlayer().getNickname(),
+                    "You can't play this card, another player has already played it " +
+                            "in this round and you have other cards you can play.");
         } catch (NoMoreNoEntryTilesException e)
         {
             sendError(getCurrentPlayer().getNickname(),

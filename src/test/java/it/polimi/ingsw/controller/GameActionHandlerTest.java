@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.fsm.*;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.InvalidAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NoLegitActionException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.model.exceptions.WrongPlayerException;
@@ -447,5 +448,45 @@ public class GameActionHandlerTest
                 assertEquals(6, game.getSortedPlayerList().get(1).getSelectedCard().get().getTurnOrder());
                 assertEquals("player1", game.getSortedPlayerList().get(2).getNickname());
                 assertEquals(9, game.getSortedPlayerList().get(2).getSelectedCard().get().getTurnOrder());
+        }
+
+        @Test
+        public void matchingCardsTest()
+        {
+                // player1 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(1),
+                        "player1"));
+                assertEquals(1, game.getPlayerTableList().get(0).getSelectedCard().get()
+                        .getTurnOrder());
+
+                // player2 selects the same assistant card as player1, so an exception is thrown
+                assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
+                        (new PlayAssistantCardMessage(1),"player2"));
+
+                // player2 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(2),
+                        "player2"));
+
+                // player3 selects the same assistant card as player1, so an exception is thrown
+                assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
+                        (new PlayAssistantCardMessage(1),"player3"));
+
+                // player3 selects the same assistant card as player2, so an exception is thrown
+                assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
+                        (new PlayAssistantCardMessage(2),"player3"));
+
+                Player player3 = game.getPlayerTableList().get(2);
+                for (AssistantCard card : player3.getCards())
+                {
+                        if (card.getTurnOrder() != 1 && card.getTurnOrder() != 2)
+                                card.toggleUsed();
+                }
+
+                // player3 selects the same assistant card as player2, but hasn't other cards, so
+                // no exception are thrown
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(2),
+                        "player3"));
+                assertEquals(2, game.getPlayerTableList().get(2).getSelectedCard().get()
+                        .getTurnOrder());
         }
 }

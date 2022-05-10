@@ -125,8 +125,7 @@ public class Server
 
     /**
      * Adds a player to the match identified with the given match id.
-     * 
-     * @param nickname The player's nickname.
+     *
      * @throws NullPointerException If the player is null.
      * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in
      *         another match, if there is already a player with such nickname of if there is no

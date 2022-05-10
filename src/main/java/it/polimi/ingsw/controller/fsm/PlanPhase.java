@@ -56,4 +56,9 @@ public class PlanPhase implements Phase
             throw new WrongPlayerException();
         return baseAction == BaseGameAction.PLAY_ASSISTANT_CARD;
     }
+
+    public int getCount()
+    {
+        return count;
+    }
 }
