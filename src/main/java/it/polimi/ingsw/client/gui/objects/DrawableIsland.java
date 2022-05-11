@@ -12,7 +12,7 @@ import javafx.scene.transform.Rotate;
 import java.util.Objects;
 import java.util.Random;
 
-public class DrawableIsland implements DrawableObject
+public class DrawableIsland extends DrawableObject
 {
     /**
      * Island square dimensions
@@ -110,14 +110,17 @@ public class DrawableIsland implements DrawableObject
      * Position setters. Needs to be synchronized for animations handling
      */
     @Override
-    public synchronized void translate(float x, float y, float z)
+    public synchronized void translate(Point3D point)
     {
-        box.translateXProperty().set(x);
-        box.translateYProperty().set(y);
-        box.translateZProperty().set(z);
+        box.translateXProperty().set(point.getX());
+        box.translateYProperty().set(point.getY());
+        box.translateZProperty().set(point.getZ());
     }
 
     public synchronized void setX(float x) { box.translateXProperty().set(x); }
+
     public synchronized void setY(float y) { box.translateYProperty().set(y); }
     public synchronized void setZ(float z) { box.translateZProperty().set(z); }
+    @Override
+    public Point3D getPosition() { return new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ()); }
 }

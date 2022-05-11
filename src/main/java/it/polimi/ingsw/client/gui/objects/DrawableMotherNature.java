@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.effect.Light;
@@ -14,7 +15,7 @@ import javax.swing.text.html.HTMLDocument;
  * This class represents the drawable object of mother nature
  * aka 3 spheres one on top of another
  */
-public class DrawableMotherNature implements DrawableObject
+public class DrawableMotherNature extends DrawableObject
 {
 
     /**
@@ -25,12 +26,12 @@ public class DrawableMotherNature implements DrawableObject
     /**
      * Initial radius
      */
-    private final int STARTING_RADIUS;
+    private final float STARTING_RADIUS;
 
     /**
      * Delta of radius between a sphere and the next one
      */
-    private final int DELTA_RADIUS;
+    private final float DELTA_RADIUS;
 
     /**
      * Set of spheres that compose mother nature
@@ -40,7 +41,7 @@ public class DrawableMotherNature implements DrawableObject
     /**
      * Constructor
      */
-    public DrawableMotherNature(int number_of_spheres, int starting_radius, int delta_radius)
+    public DrawableMotherNature(int number_of_spheres, float starting_radius, float delta_radius)
     {
         if(number_of_spheres < 0 || starting_radius < 0 || delta_radius < 0)
             throw new IllegalArgumentException("[DrawableMotherNature] Invalid mother nature dimensions");
@@ -110,28 +111,31 @@ public class DrawableMotherNature implements DrawableObject
      * Position setters
      */
     @Override
-    public void translate(float x, float y, float z)
+    public void translate(Point3D point)
     {
-        setX(x);
-        setY(y);
-        setZ(z);
+        setX(point.getX());
+        setY(point.getY());
+        setZ(point.getZ());
     }
 
-    public void setX(float x)
+    public void setX(double x)
     {
         for(Sphere sphere : spheres)
             sphere.translateXProperty().set(x);
     }
 
-    public void setY(float y)
+    public void setY(double y)
     {
         for(int i = 0; i < spheres.length; i++)
             spheres[i].setTranslateY(y - (i * STARTING_RADIUS - i * DELTA_RADIUS));
     }
 
-    public void setZ(float z)
+    public void setZ(double z)
     {
         for(Sphere sphere : spheres)
             sphere.translateZProperty().set(z);
     }
+
+    @Override
+    public Point3D getPosition() { return new Point3D(spheres[0].getTranslateX(), spheres[0].getTranslateY(), spheres[0].getTranslateZ()); }
 }

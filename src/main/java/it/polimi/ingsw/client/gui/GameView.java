@@ -56,8 +56,8 @@ public class GameView extends Application
      * Game objects
      */
     private DrawableMotherNature motherNature;
-
     private DrawableIslandCollection islandCollection;
+    private DrawableSchoolBoard schoolBoard;
 
     /**
      * Collection of all the drawable objects, useful to the Animation Updates
@@ -82,7 +82,7 @@ public class GameView extends Application
     /**
      * Void constructor
      */
-    public GameView() { this(ViewMode.MODE_2D); }
+    public GameView() { this(ViewMode.MODE_3D); }
 
     /**
      * This method is used to instantiate all the useful things
@@ -104,15 +104,18 @@ public class GameView extends Application
         setupCamera();
 
         // Create all the game components
-        motherNature = new DrawableMotherNature(3, 10, 2);
+        motherNature = new DrawableMotherNature(3, 7.5f, 1.5f);
         islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
+        schoolBoard = new DrawableSchoolBoard(350, 350 / DrawableSchoolBoard.SCALE_FACTOR);
 
         // Eventually modify the single objects for window design things
-        islandCollection.translate(0, 0, 150);
+        islandCollection.translate(new Point3D(0, 0, 150));
+        schoolBoard.translate(new Point3D(0, 0, -175));
 
         // Add all the created objects to the collection of drawable objects
         drawableObjects.add(motherNature);
         drawableObjects.add(islandCollection);
+        drawableObjects.add(schoolBoard);
 
         // Add the lights to the view
         group.getChildren().add(pointLight);
@@ -236,7 +239,6 @@ public class GameView extends Application
         setup();
 
         // Set the current visualization and position the camera according to that
-        viewMode = ViewMode.MODE_3D;
         updateCameraView();
 
         // Show the window with the correct title
