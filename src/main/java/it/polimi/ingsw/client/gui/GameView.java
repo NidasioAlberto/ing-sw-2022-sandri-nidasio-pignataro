@@ -30,7 +30,7 @@ public class GameView extends Application
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
 
-    public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 100;
+    public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 50;
     /**
      * This is the camera view, it can be moved around (switch from 3D to 2D)
      */
@@ -127,6 +127,11 @@ public class GameView extends Application
             object.addToGroup(group);
             object.subscribeToLight(pointLight);
         }
+
+        motherNature.addAnimationPosition(schoolBoard.getPosition(), 10);
+        motherNature.addAnimationPosition(islandCollection.getPosition(), 10);
+        motherNature.addAnimationPosition(schoolBoard.getPosition(), 10);
+        motherNature.addAnimationPosition(islandCollection.getPosition(), 10);
 
         // Start the time scheduled animations
         startAnimationUpdates();

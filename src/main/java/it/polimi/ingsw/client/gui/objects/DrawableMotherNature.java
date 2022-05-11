@@ -101,12 +101,6 @@ public class DrawableMotherNature extends DrawableObject
             light.getScope().add(sphere);
     }
 
-    @Override
-    public void updateAnimation()
-    {
-
-    }
-
     /**
      * Position setters
      */
