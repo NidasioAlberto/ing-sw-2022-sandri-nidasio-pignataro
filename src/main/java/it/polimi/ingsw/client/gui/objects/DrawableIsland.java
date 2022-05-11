@@ -76,10 +76,20 @@ public class DrawableIsland implements DrawableObject
     public void addToGroup(Group group)
     {
         if(group == null)
-            throw new NullPointerException("[DrawableMotherNature] Null group scene");
+            throw new NullPointerException("[DrawableIsland] Null group scene");
 
         // Add the box to the group
         group.getChildren().add(box);
+    }
+
+    @Override
+    public void removeFromGroup(Group group)
+    {
+        if(group == null)
+            throw new NullPointerException("[DrawableIsland] Null group scene");
+
+        // Remove the box
+        group.getChildren().remove(box);
     }
 
     // Does nothing because i don't want reflections

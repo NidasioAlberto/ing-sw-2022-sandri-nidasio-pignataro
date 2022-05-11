@@ -11,6 +11,11 @@ public interface DrawableObject
     void addToGroup(Group group);
 
     /**
+     * Method to remove the object from a group
+     */
+    void removeFromGroup(Group group);
+
+    /**
      * Method to translate the object in X, Y and Z axes
      */
     void translate(float x, float y, float z);

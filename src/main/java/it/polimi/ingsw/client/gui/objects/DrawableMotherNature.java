@@ -71,10 +71,6 @@ public class DrawableMotherNature implements DrawableObject
         }
     }
 
-    /**
-     * Adds all the mother nature spheres inside the group vision
-     * @param group The root scene
-     */
     @Override
     public void addToGroup(Group group)
     {
@@ -86,9 +82,17 @@ public class DrawableMotherNature implements DrawableObject
             group.getChildren().add(sphere);
     }
 
-    /**
-     * Subscribes every sphere to the lighting
-     */
+    @Override
+    public void removeFromGroup(Group group)
+    {
+        if(group == null)
+            throw new NullPointerException("[DrawableMotherNature] Null group scene");
+
+        // Remove all the spheres
+        for(Sphere sphere : spheres)
+            group.getChildren().remove(sphere);
+    }
+
     @Override
     public void subscribeToLight(PointLight light)
     {

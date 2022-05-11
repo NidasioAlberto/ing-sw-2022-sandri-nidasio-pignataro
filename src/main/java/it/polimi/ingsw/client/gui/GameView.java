@@ -30,6 +30,7 @@ public class GameView extends Application
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
 
+    public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 100;
     /**
      * This is the camera view, it can be moved around (switch from 3D to 2D)
      */
@@ -46,9 +47,17 @@ public class GameView extends Application
     private Scene scene;
 
     /**
+     * Scene lights
+     */
+    private AmbientLight ambientLight;
+    private PointLight pointLight;
+
+    /**
      * Game objects
      */
     private DrawableMotherNature motherNature;
+
+    private DrawableIslandCollection islandCollection;
 
     /**
      * Collection of all the drawable objects, useful to the Animation Updates
@@ -86,46 +95,71 @@ public class GameView extends Application
         // Create the group and the scene
         Group group = new Group();
         scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
-
-        // Create a mix with ambient and point light
-        AmbientLight ambient = new AmbientLight();
-        ambient.setColor(Color.WHITE);
-        PointLight light = new PointLight();
-        light.setColor(Color.WHITE);
-        light.translateYProperty().set(-1000);
-        light.setRotationAxis(new Point3D(1, 0 ,0));
-        light.rotateProperty().set(90);
-        light.setLinearAttenuation(-0.0003);
-
-
-        // Add the lights to the view
-        group.getChildren().add(light);
-        group.getChildren().add(ambient);
-
         // Set the scene background
         scene.setFill(Color.rgb(129, 202, 241));
 
-        // Set the camera
-        camera = new PerspectiveCamera(true);
-        camera.setNearClip(0.1);
-        camera.setFarClip(2000.0);
-        scene.setCamera(camera);
+        // Create a mix with ambient and point light
+        setupLights();
+        // Set the camera up in perspective mode
+        setupCamera();
 
         // Create all the game components
         motherNature = new DrawableMotherNature(3, 10, 2);
-        DrawableIslandCollection collection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
-        collection.translate(0, 0, 150);
+        islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
+
+        // Eventually modify the single objects for window design things
+        islandCollection.translate(0, 0, 150);
+
         // Add all the created objects to the collection of drawable objects
         drawableObjects.add(motherNature);
-        drawableObjects.add(collection);
+        drawableObjects.add(islandCollection);
 
-        // Add all the game components to the group
-        motherNature.addToGroup(group);
-        motherNature.subscribeToLight(light);
-        collection.addToGroup(group);
+        // Add the lights to the view
+        group.getChildren().add(pointLight);
+        group.getChildren().add(ambientLight);
+
+        // Add all the game components to the group and subscribe them to the point light
+        for(DrawableObject object : drawableObjects)
+        {
+            object.addToGroup(group);
+            object.subscribeToLight(pointLight);
+        }
 
         // Start the time scheduled animations
         startAnimationUpdates();
+    }
+
+    /**
+     * This method setups all the camera stuff. It is a perspective camera
+     * and also it is based on an object attribute, so there is no need
+     * to return something.
+     */
+    private void setupCamera()
+    {
+        // Set the camera to perspective and to look constantly to the correct point
+        // without any adjustment.
+        camera = new PerspectiveCamera(true);
+        // Adjusting clipping properties
+        camera.setNearClip(0.1);
+        camera.setFarClip(2000.0);
+        scene.setCamera(camera);
+    }
+
+    /**
+     * This method setups all the lights (ambient and point) to be used
+     * in the scene. The lights are actually object private attributes
+     * so the method returns nothing.
+     */
+    private void setupLights()
+    {
+        ambientLight = new AmbientLight();
+        ambientLight.setColor(Color.WHITE);
+        pointLight = new PointLight();
+        pointLight.setColor(Color.WHITE);
+        pointLight.translateYProperty().set(-1000);
+        pointLight.setRotationAxis(new Point3D(1, 0 ,0));
+        pointLight.rotateProperty().set(90);
+        pointLight.setLinearAttenuation(-0.0003);
     }
 
     /**
@@ -135,7 +169,7 @@ public class GameView extends Application
     {
         // Create the scheduled task
         Timeline animationUpdates = new Timeline(
-                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                new KeyFrame(Duration.millis(ANIMATION_UPDATE_PERIOD_MILLIS), new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event)
                     {
@@ -200,6 +234,8 @@ public class GameView extends Application
         // It has all the references to this object, and can pass it as argument
         // to all the needed objects
         setup();
+
+        // Set the current visualization and position the camera according to that
         viewMode = ViewMode.MODE_3D;
         updateCameraView();
 

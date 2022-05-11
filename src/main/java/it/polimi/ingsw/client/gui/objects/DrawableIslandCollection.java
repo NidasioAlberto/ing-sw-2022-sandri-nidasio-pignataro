@@ -74,11 +74,22 @@ public class DrawableIslandCollection implements DrawableObject
     public void addToGroup(Group group)
     {
         if(group == null)
-            throw new NullPointerException("[DrawableMotherNature] Null group scene");
+            throw new NullPointerException("[DrawableIslandCollection] Null group scene");
 
         // Add the box to the group
         for(DrawableIsland island : islands)
             island.addToGroup(group);
+    }
+
+    @Override
+    public void removeFromGroup(Group group)
+    {
+        if(group == null)
+            throw new NullPointerException("[DrawableIslandCollection] Null group scene");
+
+        // Remove all the boxes
+        for(DrawableIsland island : islands)
+            island.removeFromGroup(group);
     }
 
     // Does nothing
