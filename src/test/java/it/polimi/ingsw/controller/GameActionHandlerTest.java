@@ -454,14 +454,14 @@ public class GameActionHandlerTest
         public void matchingCardsTest()
         {
                 // player1 selects an assistant card
-                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(1),
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(10),
                         "player1"));
-                assertEquals(1, game.getPlayerTableList().get(0).getSelectedCard().get()
+                assertEquals(10, game.getPlayerTableList().get(0).getSelectedCard().get()
                         .getTurnOrder());
 
                 // player2 selects the same assistant card as player1, so an exception is thrown
                 assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
-                        (new PlayAssistantCardMessage(1),"player2"));
+                        (new PlayAssistantCardMessage(10),"player2"));
 
                 // player2 selects an assistant card
                 assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(2),
@@ -469,7 +469,7 @@ public class GameActionHandlerTest
 
                 // player3 selects the same assistant card as player1, so an exception is thrown
                 assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
-                        (new PlayAssistantCardMessage(1),"player3"));
+                        (new PlayAssistantCardMessage(10),"player3"));
 
                 // player3 selects the same assistant card as player2, so an exception is thrown
                 assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
@@ -478,7 +478,7 @@ public class GameActionHandlerTest
                 Player player3 = game.getPlayerTableList().get(2);
                 for (AssistantCard card : player3.getCards())
                 {
-                        if (card.getTurnOrder() != 1 && card.getTurnOrder() != 2)
+                        if (card.getTurnOrder() != 10 && card.getTurnOrder() != 2)
                                 card.toggleUsed();
                 }
 
@@ -488,5 +488,83 @@ public class GameActionHandlerTest
                         "player3"));
                 assertEquals(2, game.getPlayerTableList().get(2).getSelectedCard().get()
                         .getTurnOrder());
+
+                // Move to the next plan phase
+                assertEquals("player2", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player2"));
+                assertEquals("player3", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player3"));
+                assertEquals("player1", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player1"));
+                assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
+                // player2 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(8),
+                        "player2"));
+
+                // Add a card to player3
+                game.getPlayerTableList().get(2).removeCard(8);
+                game.getPlayerTableList().get(2).addCard(new AssistantCard(Wizard.WIZARD_3, 8, 4));
+
+                // player3 selects the same assistant card as player2, so an exception is thrown
+                assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
+                        (new PlayAssistantCardMessage(8),"player3"));
+
+                // player3 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(10),
+                        "player3"));
+
+                // player1 selects the same assistant card as player2, so an exception is thrown
+                assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
+                        (new PlayAssistantCardMessage(8),"player1"));
+
+                // player1 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction
+                        (new PlayAssistantCardMessage(9),"player1"));
+
+                // Move to the next plan phase
+                assertEquals("player2", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player2"));
+                assertEquals("player1", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player1"));
+                assertEquals("player3", game.getSelectedPlayer().get().getNickname());
+                handler.setGamePhase(new EndTurnPhase());
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player3"));
+                assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
+                // player2 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(3),
+                        "player2"));
+
+                // Add a card to player3
+                game.getPlayerTableList().get(2).removeCard(1);
+                game.getPlayerTableList().get(2).addCard(new AssistantCard(Wizard.WIZARD_3, 1, 1));
+
+                // player3 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(1),
+                        "player3"));
+
+                // player1 selects the same assistant card as player2, so an exception is thrown
+                assertThrows(InvalidAssistantCardException.class, () -> handler.handleAction
+                        (new PlayAssistantCardMessage(3),"player1"));
+
+                Player player1 = game.getPlayerTableList().get(0);
+                for (AssistantCard card : player1.getCards())
+                {
+                        if (card.getTurnOrder() != 1 && card.getTurnOrder() != 3)
+                                card.toggleUsed();
+                }
+                // player1 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction
+                        (new PlayAssistantCardMessage(3),"player1"));
+
+                assertEquals("player3", game.getSortedPlayerList().get(0).getNickname());
+                assertEquals("player2", game.getSortedPlayerList().get(1).getNickname());
+                assertEquals("player1", game.getSortedPlayerList().get(2).getNickname());
         }
 }

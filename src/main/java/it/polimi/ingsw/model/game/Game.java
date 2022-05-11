@@ -25,6 +25,12 @@ public class Game implements Publisher<ModelUpdate>
      */
     private Integer playersNumber;
 
+    /**
+     * It is used to sort accurately the players based on turnOrder when two players
+     * play the same card.
+     */
+    private int bestPreviousPlayerIndex;
+
     protected GameMode gameMode;
 
     protected List<Island> islands;
@@ -78,6 +84,7 @@ public class Game implements Publisher<ModelUpdate>
         currentCharacterCardIndex = Optional.empty();
         motherNatureMoved = false;
         subscriber = Optional.empty();
+        bestPreviousPlayerIndex = 0;
     }
 
     /**
@@ -135,6 +142,7 @@ public class Game implements Publisher<ModelUpdate>
 
     /**
      * Return the players list sorted by their turn order based on the played assistant cards.
+     * In case of same turnOrder plays first the player that has played that card first.
      */
     public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
@@ -143,12 +151,30 @@ public class Game implements Publisher<ModelUpdate>
         try
         {
             sortedList.sort((a, b) -> a.getSelectedCard().orElseThrow().getTurnOrder()
+                            == b.getSelectedCard().orElseThrow().getTurnOrder() ?
+                    computeDistance(a) - computeDistance(b)
+                    : a.getSelectedCard().orElseThrow().getTurnOrder()
                     - b.getSelectedCard().orElseThrow().getTurnOrder());
         } catch (NoSuchElementException e)
         {
             throw new NoSelectedAssistantCardException("[Game]");
         }
         return sortedList;
+    }
+
+    /**
+     * Compute the clockwise distance of the given player from the player that plays the
+     * first assistant card in this turn.
+     * @param player whose distance you want to calculate.
+     * @return the distance.
+     */
+    private int computeDistance(Player player)
+    {
+        int currIndex = getPlayerTableList().indexOf(player);
+
+        return currIndex - bestPreviousPlayerIndex >= 0 ?
+                currIndex - bestPreviousPlayerIndex :
+                playersNumber - bestPreviousPlayerIndex + currIndex;
     }
 
     /**
@@ -753,6 +779,7 @@ public class Game implements Publisher<ModelUpdate>
     {
         clearCharacterCard();
         this.motherNatureMoved = false;
+        bestPreviousPlayerIndex = getPlayerTableList().indexOf(getSortedPlayerList().get(0));
     }
 
     /**

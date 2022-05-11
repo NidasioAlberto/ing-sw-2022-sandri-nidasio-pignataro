@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.EndGameException;
-import it.polimi.ingsw.model.exceptions.IslandIndexOutOfBoundsException;
-import it.polimi.ingsw.model.exceptions.NotEnoughPlayersException;
-import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.model.exceptions.*;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -634,7 +631,7 @@ public class GameTest
 
         // Clear selection
         assertFalse(game.currentCharacterCardIndex.isEmpty());
-        game.clearTurn();
+        assertThrows(NoSelectedAssistantCardException.class, () -> game.clearTurn());
         assertTrue(game.currentCharacterCardIndex.isEmpty());
 
         // Select an out of bound card
