@@ -211,7 +211,7 @@ public class Game implements Publisher<ModelUpdate>
             subscriber.get()
                     .onNext(new IslandsUpdate(new ArrayList<Island>(islands),
                             motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                                    "[Game] No mother neture index, is the game setup?"))));
+                                    "[Game] No mother nature index, is the game setup?"))));
     }
 
     /**

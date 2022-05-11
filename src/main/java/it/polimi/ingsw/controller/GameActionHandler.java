@@ -89,8 +89,6 @@ public class GameActionHandler
 
     public void playAssistantCard(int selectedCard) throws NoSuchAssistantCardException
     {
-        //TODO gestire la sorted player table list in base ai doppioni
-
         // Check that the current player doesn't play a card that another player
         // has already played in this turn, unless obligated
 

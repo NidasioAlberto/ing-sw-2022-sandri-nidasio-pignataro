@@ -1,8 +1,10 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class AssistantCardsUpdate extends ModelUpdate {
     /**
@@ -54,5 +56,64 @@ public class AssistantCardsUpdate extends ModelUpdate {
     @Override
     public void handleUpdate(Object handler) {
 
+    }
+
+    @Override
+    public String toString()
+    {
+        //⮊ ⬢ ⬣ ⬡
+        String rep = "";
+
+        for (AssistantCard card : cards)
+        {
+            rep += CardPiece.TOP_ROW.toString();
+        }
+        rep += "\n";
+        for (AssistantCard card : cards)
+        {
+            rep += "║ ◯        ║ ";
+        }
+        rep += "\n";
+
+        for (AssistantCard card : cards)
+        {
+            rep += "║ " + card.getTurnOrder();
+            rep += ((Integer) card.getTurnOrder()).toString().length() == 1 ?
+                    "      " : "     ";
+
+           rep += card.getSteps() + " ║ ";
+        }
+        rep += "\n";
+
+        for (AssistantCard card : cards)
+        {
+            rep += CardPiece.MIDDLE_ROW.toString();
+        }
+        rep += "\n";
+
+        for (AssistantCard card : cards)
+        {
+            rep += CardPiece.MIDDLE_ROW.toString();
+        }
+        rep += "\n";
+
+        for (AssistantCard card : cards)
+        {
+            rep += CardPiece.BOTTOM_ROW.toString();
+        }
+        rep += "\n";
+
+        return rep;
+    }
+
+    public static void main(String[] args)
+    {
+        Player player = new Player("pla", TowerColor.BLACK, GameMode.EXPERT);
+        IntStream.range(0, 10).forEach(i -> {
+                player.addCard(new AssistantCard(Wizard.WIZARD_3, i + 1, i / 2 + 1));
+            });
+        AssistantCardsUpdate update = new AssistantCardsUpdate("", player.getCards());
+
+        System.out.println(update.toString());
     }
 }
