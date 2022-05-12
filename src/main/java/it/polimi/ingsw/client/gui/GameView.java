@@ -107,15 +107,18 @@ public class GameView extends Application
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f);
         islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
         schoolBoard = new DrawableSchoolBoard(350, 350 / DrawableSchoolBoard.SCALE_FACTOR);
+        DrawableStudent student = new DrawableStudent(30, 20, StudentType.RED);
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
         schoolBoard.translate(new Point3D(0, 0, -175));
+        student.translate(new Point3D(0, 0, 100));
 
         // Add all the created objects to the collection of drawable objects
         drawableObjects.add(motherNature);
         drawableObjects.add(islandCollection);
         drawableObjects.add(schoolBoard);
+        drawableObjects.add(student);
 
         // Add the lights to the view
         group.getChildren().add(pointLight);
