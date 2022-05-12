@@ -1,6 +1,8 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.*;
+
+import java.util.stream.IntStream;
 
 public class PlayedAssistantCardUpdate extends ModelUpdate
 {
@@ -45,5 +47,36 @@ public class PlayedAssistantCardUpdate extends ModelUpdate
     public void handleUpdate(Object handler)
     {
 
+    }
+
+    @Override
+    public String toString()
+    {
+        String rep = "";
+
+        rep += player + "\n";
+
+        rep += CardPiece.TOP_ROW + "\n";
+
+        rep += CardPiece.MIDDLE_ROW_WITH_CIRCLE + "\n";
+
+        rep += "║ " + card.getTurnOrder();
+        rep += ((Integer) card.getTurnOrder()).toString().length() == 1 ? "      " : "     ";
+        rep += card.getSteps() + " ║ \n";
+
+        rep += CardPiece.MIDDLE_ROW + "\n";
+
+        rep += CardPiece.MIDDLE_ROW + "\n";
+
+        rep += CardPiece.BOTTOM_ROW + "\n";
+
+        return rep;
+    }
+
+    public static void main(String[] args)
+    {
+        PlayedAssistantCardUpdate update = new PlayedAssistantCardUpdate(new AssistantCard(Wizard.WIZARD_3, 1, 1), "player");
+
+        System.out.println(update);
     }
 }

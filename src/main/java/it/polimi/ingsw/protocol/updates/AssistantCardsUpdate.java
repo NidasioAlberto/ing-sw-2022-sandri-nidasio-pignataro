@@ -61,17 +61,16 @@ public class AssistantCardsUpdate extends ModelUpdate {
     @Override
     public String toString()
     {
-        //⮊ ⬢ ⬣ ⬡
-        String rep = "";
+        String rep = "ASSISTANT CARDS\n";
 
         for (AssistantCard card : cards)
         {
-            rep += CardPiece.TOP_ROW.toString();
+            rep += CardPiece.TOP_ROW + "  ";
         }
         rep += "\n";
         for (AssistantCard card : cards)
         {
-            rep += "║ ◯        ║ ";
+            rep += CardPiece.MIDDLE_ROW_WITH_CIRCLE + "  ";
         }
         rep += "\n";
 
@@ -81,25 +80,25 @@ public class AssistantCardsUpdate extends ModelUpdate {
             rep += ((Integer) card.getTurnOrder()).toString().length() == 1 ?
                     "      " : "     ";
 
-           rep += card.getSteps() + " ║ ";
+           rep += card.getSteps() + " ║  ";
         }
         rep += "\n";
 
         for (AssistantCard card : cards)
         {
-            rep += CardPiece.MIDDLE_ROW.toString();
+            rep += CardPiece.MIDDLE_ROW + "  ";
         }
         rep += "\n";
 
         for (AssistantCard card : cards)
         {
-            rep += CardPiece.MIDDLE_ROW.toString();
+            rep += CardPiece.MIDDLE_ROW + "  ";
         }
         rep += "\n";
 
         for (AssistantCard card : cards)
         {
-            rep += CardPiece.BOTTOM_ROW.toString();
+            rep += CardPiece.BOTTOM_ROW + "  ";
         }
         rep += "\n";
 
@@ -114,6 +113,6 @@ public class AssistantCardsUpdate extends ModelUpdate {
             });
         AssistantCardsUpdate update = new AssistantCardsUpdate("", player.getCards());
 
-        System.out.println(update.toString());
+        System.out.println(update);
     }
 }
