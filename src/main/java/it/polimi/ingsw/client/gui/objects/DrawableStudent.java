@@ -1,11 +1,15 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import javafx.geometry.Point3D;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
+import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.*;
+import javafx.scene.transform.Rotate;
 
 import java.util.Objects;
 
@@ -28,9 +32,10 @@ public class DrawableStudent extends DrawableObject
     private final StudentType TYPE;
 
     /**
-     * Main cylinder that represents the student
+     * Object mesh
      */
-    private Cylinder cylinder;
+    private final TriangleMesh triangleMesh;
+    private final MeshView studentMesh;
 
     /**
      * Constructor
@@ -51,18 +56,29 @@ public class DrawableStudent extends DrawableObject
         HEIGHT = height;
         TYPE = type;
 
-        // Create the cylinder 3D object
-        cylinder = new Cylinder(RADIUS, HEIGHT);
+        // Create the mesh referring to the Object file
+        triangleMesh = new TriangleMesh();
 
-        // Create the correct texture material
+        // Set all the vertices, textures, faces and normals
+        triangleMesh.setVertexFormat(VertexFormat.POINT_NORMAL_TEXCOORD);
+        triangleMesh.getNormals().addAll(type.getParser().getNormals());
+        triangleMesh.getFaces().addAll(type.getParser().getFaces());
+        triangleMesh.getPoints().addAll(type.getParser().getVertices());
+        triangleMesh.getTexCoords().addAll(type.getParser().getTextures());
+
+        // Now i create the actual node with the mesh
+        studentMesh = new MeshView(triangleMesh);
+
+        // I create the material
         PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(Color.RED);
+        material.setSpecularColor(Color.WHITE);
 
-        // Depending on the color i load a different texture
-        material.setDiffuseMap(new Image(Objects.requireNonNull(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(TYPE.getFilename()))));
+        // Rotate the student of 180 degrees on the y axis
+        studentMesh.getTransforms().add(new Rotate(180, new Point3D(0, 1, 0)));
 
         // Apply the material
-        cylinder.setMaterial(material);
+        studentMesh.setMaterial(material);
     }
 
     @Override
@@ -72,7 +88,7 @@ public class DrawableStudent extends DrawableObject
             throw new NullPointerException("[DrawableStudent] Null group");
 
         // Add the cylinder to the group
-        group.getChildren().add(cylinder);
+        group.getChildren().add(studentMesh);
     }
 
     @Override
@@ -82,27 +98,31 @@ public class DrawableStudent extends DrawableObject
             throw new NullPointerException("[DrawableStudent] Null group");
 
         // Remove the cylinder from the group
-        group.getChildren().remove(cylinder);
+        group.getChildren().remove(studentMesh);
     }
 
     @Override
-    public void subscribeToLight(PointLight light)
+    public void subscribeToPointLight(PointLight light)
     {
         // The students should be under the light so i subscribe it
-        light.getScope().add(cylinder);
+        light.getScope().add(studentMesh);
     }
+
+    // This method does nothing because i don't want light from everywhere
+    @Override
+    public void subscribeToAmbientLight(AmbientLight light){}
 
     @Override
     public void translate(Point3D point)
     {
-        cylinder.translateXProperty().set(point.getX());
-        cylinder.translateYProperty().set(point.getY());
-        cylinder.translateZProperty().set(point.getZ());
+        studentMesh.translateXProperty().set(point.getX());
+        studentMesh.translateYProperty().set(point.getY());
+        studentMesh.translateZProperty().set(point.getZ());
     }
 
     @Override
     public Point3D getPosition()
     {
-        return new Point3D(cylinder.getTranslateX(), cylinder.getTranslateY(), cylinder.getTranslateZ());
+        return new Point3D(studentMesh.getTranslateX(), studentMesh.getTranslateY(), studentMesh.getTranslateZ());
     }
 }

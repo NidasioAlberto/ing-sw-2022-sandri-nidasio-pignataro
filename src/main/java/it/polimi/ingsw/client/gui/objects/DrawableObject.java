@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import javafx.geometry.Point3D;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
+import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.util.Pair;
 
@@ -47,7 +49,13 @@ public abstract class DrawableObject
      * Method to subscribe to an eventual point light if necessary
      * @param light The light that the object has to subscribe to
      */
-    public abstract void subscribeToLight(PointLight light);
+    public abstract void subscribeToPointLight(PointLight light);
+
+    /**
+     * Method to subscribe to an eventual ambient light if necessary
+     * @param light The light that the object has to subscribe to
+     */
+    public abstract void subscribeToAmbientLight(AmbientLight light);
 
     public void addAnimationPosition(Point3D point, double speed)
     {

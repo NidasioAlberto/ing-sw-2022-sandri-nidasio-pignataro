@@ -19,6 +19,11 @@ public class ObjectModelParser
     private final String filename;
 
     /**
+     * Multiplication factor of the coordinates
+     */
+    private final float MULTIPLICATION_FACTOR;
+
+    /**
      * Vertices
      */
     private List<Float> vertices;
@@ -41,14 +46,18 @@ public class ObjectModelParser
     /**
      * Constructor
      * @param filename The file to parse
+     * @param multiplication_factor How much scale the model
      */
-    public ObjectModelParser(String filename)
+    public ObjectModelParser(String filename, float multiplication_factor)
     {
         if(filename == null)
-            throw new NullPointerException("[ObjectmodelParser] Null filename");
+            throw new NullPointerException("[ObjectModelParser] Null filename");
+        if(multiplication_factor <= 0)
+            throw new IllegalArgumentException("[ObjectModelParser] Zero or less multiplication factor");
 
         // I assign the filename and parse it to vertices and faces
         this.filename = filename;
+        MULTIPLICATION_FACTOR = multiplication_factor;
 
         // Create the arrays
         vertices    = new ArrayList<>();
@@ -58,6 +67,15 @@ public class ObjectModelParser
 
         // Parse the file
         parse();
+    }
+
+    /**
+     * Constructor
+     * @param filename The file to parse
+     */
+    public ObjectModelParser(String filename)
+    {
+        this(filename, 1);
     }
 
     /**
@@ -90,9 +108,9 @@ public class ObjectModelParser
             if(splitString[0].equals("v"))
             {
                 // It is a vertex
-                vertices.add(Float.parseFloat(splitString[1]) * 10);
-                vertices.add(Float.parseFloat(splitString[2]) * 10);
-                vertices.add(Float.parseFloat(splitString[3]) * 10);
+                vertices.add(Float.parseFloat(splitString[1]) * MULTIPLICATION_FACTOR);
+                vertices.add(Float.parseFloat(splitString[2]) * MULTIPLICATION_FACTOR);
+                vertices.add(Float.parseFloat(splitString[3]) * MULTIPLICATION_FACTOR);
             }
             else if(splitString[0].equals("vn"))
             {

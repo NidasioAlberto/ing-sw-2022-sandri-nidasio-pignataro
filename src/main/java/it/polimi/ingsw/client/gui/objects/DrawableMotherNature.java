@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import javafx.geometry.Point3D;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
+import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.effect.Light;
 import javafx.scene.layout.StackPane;
@@ -95,8 +97,23 @@ public class DrawableMotherNature extends DrawableObject
     }
 
     @Override
-    public void subscribeToLight(PointLight light)
+    public void subscribeToPointLight(PointLight light)
     {
+        if(light == null)
+            throw new NullPointerException("[DrawableMotherNature] Null point light");
+
+        // Add the light for all spheres
+        for(Sphere sphere : spheres)
+            light.getScope().add(sphere);
+    }
+
+    @Override
+    public void subscribeToAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableMotherNature] Null ambient light");
+
+        // Add the light for all spheres
         for(Sphere sphere : spheres)
             light.getScope().add(sphere);
     }

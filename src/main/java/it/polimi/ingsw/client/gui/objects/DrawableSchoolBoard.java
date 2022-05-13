@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import javafx.geometry.Point3D;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
+import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
@@ -83,13 +85,19 @@ public class DrawableSchoolBoard extends DrawableObject
     }
 
     // This method does nothing because i don't want reflections
+    @Override
+    public void subscribeToPointLight(PointLight light) {}
 
     @Override
-    public void subscribeToLight(PointLight light) {}
-    // This method does nothing becase the schoolboard is not animated
+    public void subscribeToAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null ambient light");
 
-    @Override
-    public void updateAnimation() {}
+        // Add the box to the light
+        light.getScope().add(box);
+    }
+
     /**
      * Position setters need to be synchronized
      */

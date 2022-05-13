@@ -1,28 +1,26 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ObjectModelParser;
+
 /**
  * Enumerates all the students and correlates them with the corresponding texture
  */
 public enum StudentType
 {
-    BLUE("blueStudent.png"),
-    GREEN("greenStudent.png"),
-    PINK("pinkStudent.png"),
-    RED("redStudent.png"),
-    YELLOW("yellowStudent.png");
+    RED("Models/redStudent.obj");
 
     /**
-     * Texture filename
+     * Object file parser
      */
-    private String filename;
+    private ObjectModelParser parser;
 
     /**
      * Constructor
      */
-    private StudentType(String filename) { this.filename = filename; }
+    private StudentType(String filename) { this.parser = new ObjectModelParser(filename, 15); }
 
     /**
-     * Filename getter
+     * Parser getter
      */
-    public String getFilename() { return filename; }
+    public ObjectModelParser getParser() { return parser; }
 }

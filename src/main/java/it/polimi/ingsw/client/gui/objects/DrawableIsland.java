@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import javafx.geometry.Point3D;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
+import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
@@ -94,7 +96,17 @@ public class DrawableIsland extends DrawableObject
 
     // Does nothing because i don't want reflections
     @Override
-    public void subscribeToLight(PointLight light) {}
+    public void subscribeToPointLight(PointLight light) {}
+
+    @Override
+    public void subscribeToAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableIsland] Null ambient light");
+
+        // Subscribe the island to the light
+        light.getScope().add(box);
+    }
 
     @Override
     public void updateAnimation()

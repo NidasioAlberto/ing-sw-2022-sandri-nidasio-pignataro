@@ -2,7 +2,9 @@ package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.model.Island;
 import javafx.geometry.Point3D;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
+import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 
 import java.util.Random;
@@ -103,7 +105,18 @@ public class DrawableIslandCollection extends DrawableObject
 
     // Does nothing
     @Override
-    public void subscribeToLight(PointLight light) {}
+    public void subscribeToPointLight(PointLight light) {}
+
+    @Override
+    public void subscribeToAmbientLight(AmbientLight light)
+    {
+        if (light == null)
+            throw new NullPointerException("[DrawableIslandCollection] Null ambient light");
+
+        // Add the light to all the islands
+        for(DrawableIsland island : islands)
+            island.subscribeToAmbientLight(light);
+    }
 
     @Override
     public void updateAnimation()

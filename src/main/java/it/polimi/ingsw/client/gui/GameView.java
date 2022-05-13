@@ -122,7 +122,7 @@ public class GameView extends Application
 
         // Add all the created objects to the collection of drawable objects
         drawableObjects.add(motherNature);
-        drawableObjects.add(islandCollection);
+        //drawableObjects.add(islandCollection);
         drawableObjects.add(schoolBoard);
         drawableObjects.add(student);
 
@@ -134,7 +134,8 @@ public class GameView extends Application
         for(DrawableObject object : drawableObjects)
         {
             object.addToGroup(group);
-            object.subscribeToLight(pointLight);
+            object.subscribeToPointLight(pointLight);
+            object.subscribeToAmbientLight(ambientLight);
         }
 
         motherNature.addAnimationPosition(schoolBoard.getPosition(), 10);
@@ -174,6 +175,7 @@ public class GameView extends Application
         pointLight = new PointLight();
         pointLight.setColor(Color.WHITE);
         pointLight.translateYProperty().set(-1000);
+        pointLight.translateZProperty().set(-400);
         pointLight.setRotationAxis(new Point3D(1, 0 ,0));
         pointLight.rotateProperty().set(90);
         pointLight.setLinearAttenuation(-0.0003);
