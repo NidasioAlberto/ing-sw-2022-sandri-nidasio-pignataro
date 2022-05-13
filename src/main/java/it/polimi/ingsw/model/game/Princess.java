@@ -112,4 +112,9 @@ public class Princess extends CharacterCard
     {
         return CharacterCardType.PRINCESS;
     }
+
+    public List<Student> getStudents()
+    {
+        return new ArrayList<>(students);
+    }
 }

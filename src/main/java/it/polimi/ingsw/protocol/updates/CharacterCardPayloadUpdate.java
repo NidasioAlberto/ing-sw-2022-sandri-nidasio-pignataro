@@ -1,8 +1,12 @@
 package it.polimi.ingsw.protocol.updates;
 
 import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.game.CharacterCard;
+import it.polimi.ingsw.model.game.CharacterCardType;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GrandmaHerbs;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +22,14 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     private int index;
 
     /**
-     * Optional of students payload
+     * List of students payload, could be null
      */
-    private Optional<List<Student>> students;
+    private List<Student> students;
 
     /**
-     * Optional number of no entry over this card
+     * Number of no entry over this card, could be null
      */
-    private Optional<Integer> noEntryTiles;
+    private Integer noEntryTiles;
 
     /**
      * Students payload constructor
@@ -44,8 +48,8 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
                     "[CharacterCardPayloadUpdate] Character card index out of bounds");
 
         this.index = index;
-        this.students = Optional.of(students);
-        this.noEntryTiles = Optional.empty();
+        this.students = new ArrayList<>(students);
+        this.noEntryTiles = null;
     }
 
     /**
@@ -64,8 +68,8 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
                     "[CharacterCardPayloadUpdate] Number of noEntryTiles out of bounds");
 
         this.index = index;
-        this.noEntryTiles = Optional.of(noEntryTiles);
-        this.students = Optional.empty();
+        this.noEntryTiles = noEntryTiles;
+        this.students = null;
     }
 
     public int getIndex()
@@ -73,12 +77,12 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
         return index;
     }
 
-    public Optional<List<Student>> getStudents()
+    public List<Student> getStudents()
     {
         return students;
     }
 
-    public Optional<Integer> getNoEntryTiles()
+    public Integer getNoEntryTiles()
     {
         return noEntryTiles;
     }
@@ -87,5 +91,63 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     public void handleUpdate(Object handler)
     {
 
+    }
+
+    @Override
+    public String toString()
+    {
+        String rep = "";
+
+        /*rep += card.getCardType();
+
+            for (int i = 0; i < 14 - card.getCardType().toString().length(); i++)
+                rep += " ";
+
+        rep += "\n";
+
+        for (CharacterCard card : cards)
+        {
+            rep += CardPiece.TOP_ROW + "  ";
+        }
+        rep += "\n";
+        for (CharacterCard card : cards)
+        {
+            rep += "║ $" + card.getCost() + "       ║  ";
+            //rep += "║ " + coinsSign[card.getCost() - 1] + "        ║ ";
+        }
+        rep += "\n";
+
+        for (CharacterCard card : cards)
+        {
+
+            rep += "║  "  + drawStudentCard(card, 0) + "    " + drawStudentCard(card, 1) + "  ║  ";
+        }
+        rep += "\n";
+
+        for (CharacterCard card : cards)
+        {
+            // ⦻ ⨂ ⨷ ⌧ ⮿ ⮾ ⮽ 🚫
+            if (card.getCardType() == CharacterCardType.GRANDMA_HERBS)
+            {
+                rep += "║  "  +  ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ";
+            }
+            else rep += "║  "  + drawStudentCard(card, 2) + "    " + drawStudentCard(card, 3) + "  ║  ";
+
+        }
+        rep += "\n";
+
+        for (CharacterCard card : cards)
+        {
+            rep += "║  "  + drawStudentCard(card, 4) + "    " + drawStudentCard(card, 5) + "  ║  ";
+        }
+        rep += "\n";
+
+        for (CharacterCard card : cards)
+        {
+            rep += CardPiece.BOTTOM_ROW + "  ";
+        }
+        rep += "\n";*/
+
+        return rep;
     }
 }

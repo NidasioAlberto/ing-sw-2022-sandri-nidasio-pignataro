@@ -1,9 +1,7 @@
 package it.polimi.ingsw.protocol.updates;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.game.CharacterCard;
-import it.polimi.ingsw.model.game.CharacterCardType;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.*;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -16,6 +14,16 @@ public class CharacterCardsUpdate extends ModelUpdate
      * List of all the character cards
      */
     private List<CharacterCard> cards;
+
+    /**
+     * Color of active card (red)
+     */
+    private final String ACTIVE = "\u001B[31m";
+
+    /**
+     * Reset the color
+     */
+    private final String DEACTIVE = "\u001B[97m";
 
     /**
      * Constructor
@@ -47,12 +55,12 @@ public class CharacterCardsUpdate extends ModelUpdate
     @Override
     public String toString()
     {
-        String[] coinsSign = new String[]{"\u2780", "\u2777", "\u2778", "\u2779", "\u2780"};
+        //String[] coinsSign = new String[]{"\u2780", "\u2777", "\u2778", "\u2779", "\u2780"};
         String rep = "CHARACTER CARDS\n";
 
         for (CharacterCard card : cards)
         {
-            rep += card.getCardType();
+            rep += paintIfActive(card, card.getCardType().toString());
 
             for (int i = 0; i < 14 - card.getCardType().toString().length(); i++)
                 rep += " ";
@@ -61,41 +69,132 @@ public class CharacterCardsUpdate extends ModelUpdate
 
         for (CharacterCard card : cards)
         {
-            rep += CardPiece.TOP_ROW + "  ";
+            rep += paintIfActive(card, CardPiece.TOP_ROW.toString()) + "  ";
         }
         rep += "\n";
         for (CharacterCard card : cards)
         {
-            rep += "║ " + card.getCost() + "        ║  ";
+            rep += paintIfActive(card, "║ $" + card.getCost() + "       ║  ");
              //rep += "║ " + coinsSign[card.getCost() - 1] + "        ║ ";
         }
         rep += "\n";
 
         for (CharacterCard card : cards)
         {
-            rep += CardPiece.MIDDLE_ROW  + "  ";
+
+            rep += paintIfActive(card, "║  "  + drawStudentCard(card, 0) + "    " +
+                    drawStudentCard(card, 1)) + paintIfActive(card,"  ║  ");
         }
         rep += "\n";
 
         for (CharacterCard card : cards)
         {
-            rep += CardPiece.MIDDLE_ROW  + "  ";
+            // ⦻ ⨂ ⨷ ⌧ ⮿ ⮾ ⮽ 🚫
+            if (card.getCardType() == CharacterCardType.GRANDMA_HERBS)
+            {
+                rep += paintIfActive(card, "║  "  +  ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ");
+            }
+            else rep += paintIfActive(card, "║  "  + drawStudentCard(card, 2) + "    " +
+                    drawStudentCard(card, 3)) + paintIfActive(card,"  ║  ");
+
         }
         rep += "\n";
 
         for (CharacterCard card : cards)
         {
-            rep += CardPiece.MIDDLE_ROW + "  ";
+            rep += paintIfActive(card, "║  "  + drawStudentCard(card, 4) + "    " +
+                    drawStudentCard(card, 5)) + paintIfActive(card,"  ║  ");
         }
         rep += "\n";
 
         for (CharacterCard card : cards)
         {
-            rep += CardPiece.BOTTOM_ROW + "  ";
+            rep += paintIfActive(card, CardPiece.BOTTOM_ROW.toString()) + "  ";
         }
         rep += "\n";
 
         return rep;
+    }
+
+    /**
+     * Allow to paint a string.
+     * @param color to paint the string.
+     * @param content the string to paint.
+     * @return the painted string.
+     */
+    private String drawColor(SchoolColor color, String content) {
+
+        String rep = "\u001B[";
+
+        switch (color) {
+            case BLUE:
+                rep += "34";
+                break;
+            case GREEN:
+                rep += "32";
+                break;
+            case PINK:
+                rep += "35";
+                break;
+            case RED:
+                rep += "31";
+                break;
+            case YELLOW:
+                rep += "33";
+                break;
+        }
+
+        rep += "m" + content;
+
+        // Reset the color
+        rep += "\u001B[97m";
+
+        return rep;
+    }
+
+    /**
+     * Allow to paint a student.
+     * @param student to paint.
+     * @return the painted student.
+     */
+    private String drawStudent(Student student) {
+        return drawColor(student.getColor(), "▪");
+    }
+
+    /**
+     * Allow to paint a student of a CharacterCard.
+     * @param card could contain a student to paint.
+     * @param index of the student to paint.
+     * @return the painted student if present.
+     */
+    private String drawStudentCard(CharacterCard card, int index)
+    {
+        if (card.getCardType() == CharacterCardType.JOKER && index < 6)
+        {
+            return drawStudent(((Joker) card).getStudents().get(index));
+        }
+        else if (card.getCardType() == CharacterCardType.MONK && index < 4)
+        {
+            return drawStudent(((Monk) card).getStudents().get(index));
+        }
+        else if (card.getCardType() == CharacterCardType.PRINCESS && index < 4)
+        {
+            return drawStudent(((Princess) card).getStudents().get(index));
+        }
+        else return " ";
+    }
+
+    /**
+     * Allow to paint the string if the card is active.
+     * @param card to check if active.
+     * @param rep the string that could be painted.
+     * @return the final string.
+     */
+    private String paintIfActive(CharacterCard card, String rep)
+    {
+        if (card.isActivated())
+            return ACTIVE + rep + DEACTIVE;
+        else return rep;
     }
 
     public static void main(String[] args)
@@ -118,12 +217,15 @@ public class CharacterCardsUpdate extends ModelUpdate
 
         }
         game1.setupGame();
-        cards.add(CharacterCard.createCharacterCard(CharacterCardType.PRINCESS, game1));
+        cards.add(CharacterCard.createCharacterCard(CharacterCardType.JOKER, game1));
         cards.add(CharacterCard.createCharacterCard(CharacterCardType.GRANDMA_HERBS, game1));
-        cards.add(CharacterCard.createCharacterCard(CharacterCardType.MUSHROOM_MAN, game1));
+        cards.add(CharacterCard.createCharacterCard(CharacterCardType.PRINCESS, game1));
         CharacterCardsUpdate update = new CharacterCardsUpdate(game.getCharacterCards());
         CharacterCardsUpdate update1 = new CharacterCardsUpdate(cards);
 
+        game.selectPlayer(0);
+        game.getSelectedPlayer().get().getBoard().addCoins(5);
+        game.getCharacterCards().get(1).activate();
         System.out.println(update);
         System.out.println(update1);
     }

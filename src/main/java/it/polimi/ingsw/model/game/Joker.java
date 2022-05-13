@@ -148,4 +148,9 @@ public class Joker extends CharacterCard
         exchangeCounter = 0;
         super.deactivate();
     }
+
+    public List<Student> getStudents()
+    {
+        return new ArrayList<>(students);
+    }
 }
