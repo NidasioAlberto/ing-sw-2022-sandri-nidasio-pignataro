@@ -36,7 +36,7 @@ public class GameView extends Application
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
 
-    public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 50;
+    public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 20;
     /**
      * This is the camera view, it can be moved around (switch from 3D to 2D)
      */
@@ -113,7 +113,7 @@ public class GameView extends Application
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f);
         islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
         schoolBoard = new DrawableSchoolBoard(350, 350 / DrawableSchoolBoard.SCALE_FACTOR);
-        DrawableStudent student = new DrawableStudent(30, 20, StudentType.RED);
+        DrawableStudent student = new DrawableStudent(30, 20, StudentType.YELLOW);
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
@@ -122,7 +122,7 @@ public class GameView extends Application
 
         // Add all the created objects to the collection of drawable objects
         drawableObjects.add(motherNature);
-        //drawableObjects.add(islandCollection);
+        drawableObjects.add(islandCollection);
         drawableObjects.add(schoolBoard);
         drawableObjects.add(student);
 
@@ -138,10 +138,10 @@ public class GameView extends Application
             object.subscribeToAmbientLight(ambientLight);
         }
 
-        motherNature.addAnimationPosition(schoolBoard.getPosition(), 10);
-        motherNature.addAnimationPosition(islandCollection.getPosition(), 10);
-        motherNature.addAnimationPosition(schoolBoard.getPosition(), 10);
-        motherNature.addAnimationPosition(islandCollection.getPosition(), 10);
+        motherNature.addAnimationPosition(schoolBoard.getPosition(), 2);
+        motherNature.addAnimationPosition(islandCollection.getPosition(), 2);
+        motherNature.addAnimationPosition(schoolBoard.getPosition(), 2);
+        motherNature.addAnimationPosition(islandCollection.getPosition(), 2);
 
         // Start the time scheduled animations
         startAnimationUpdates();

@@ -71,7 +71,7 @@ public class DrawableStudent extends DrawableObject
 
         // I create the material
         PhongMaterial material = new PhongMaterial();
-        material.setDiffuseColor(Color.RED);
+        material.setDiffuseColor(type.getColor());
         material.setSpecularColor(Color.WHITE);
 
         // Rotate the student of 180 degrees on the y axis
