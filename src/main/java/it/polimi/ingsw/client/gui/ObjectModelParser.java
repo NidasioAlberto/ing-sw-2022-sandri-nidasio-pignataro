@@ -124,7 +124,6 @@ public class ObjectModelParser
                 // It is a texture
                 texture.add(Float.parseFloat(splitString[1]));
                 texture.add(Float.parseFloat(splitString[2]));
-                texture.add(Float.parseFloat(splitString[3]));
             }
             else if(splitString[0].equals("f"))
             {
