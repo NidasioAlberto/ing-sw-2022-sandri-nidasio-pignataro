@@ -2,8 +2,6 @@ package it.polimi.ingsw.protocol.updates;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.stream.IntStream;
-
 public class PlayedAssistantCardUpdate extends ModelUpdate
 {
     /**

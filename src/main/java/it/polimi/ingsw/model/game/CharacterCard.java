@@ -4,7 +4,10 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -112,6 +115,20 @@ public abstract class CharacterCard extends Game implements Serializable
         } else
         {
             throw new NotEnoughCoinsException();
+        }
+
+        if (instance.subscriber.isPresent())
+        {
+            List<CharacterCard> characterCardsList = new ArrayList<>();
+
+            for (CharacterCard card : instance.characterCards)
+            {
+                // I clone all the character card to avoid serializing the game instance
+                characterCardsList.add((CharacterCard) card.clone());
+            }
+
+            instance.subscriber.get().onNext(
+                    new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
         }
     }
 

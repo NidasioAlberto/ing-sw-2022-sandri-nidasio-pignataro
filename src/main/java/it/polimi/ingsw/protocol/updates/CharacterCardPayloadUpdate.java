@@ -98,37 +98,34 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     public String toString()
     {
         String rep = "";
-/*
-        if ()
 
-        rep += card.getCardType();
+       /* rep += card.getCardType();
 
-            for (int i = 0; i < 14 - card.getCardType().toString().length(); i++)
-                rep += " ";
+        for (int i = 0; i < 14 - card.getCardType().toString().length(); i++)
+            rep += " ";
         rep += "\n";
-
 
         rep += CardPiece.TOP_ROW + "  ";
         rep += "\n";
 
-        rep += "║ $" + card.getCost() + "       ║  \n";
-
-
-        rep += "║  "  + drawStudent(students.get(0)) + "    " + drawStudent(students.get(1)) + "  ║  ";
+        rep += "║ $" + card.getCost() + "       ║  ";
         rep += "\n";
 
+        rep += "║  "  + drawStudent(students, 0) + "    " + drawStudent(students, 1) + "  ║  ";
+        rep += "\n";
 
-        if (card.getCardType() == CharacterCardType.GRANDMA_HERBS)
+        if (noEntryTiles != null)
         {
-            rep += "║  "  +  ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ";
+            rep += "║  "  +  noEntryTiles + " no    ║  ";
         }
-        else rep += "║  "  + drawStudentCard(card, 2) + "    " + drawStudentCard(card, 3) + "  ║  ";
+        else rep += "║  "  + drawStudent(students, 2) + "    " + drawStudent(students, 3) + "  ║  ";
         rep += "\n";
 
-        rep += "║  "  + drawStudentCard(card, 4) + "    " + drawStudentCard(card, 5) + "  ║  ";
+        rep += "║  "  + drawStudent(students, 4) + "    " + drawStudent(students, 5) + "  ║  ";
         rep += "\n";
 
-        rep += CardPiece.BOTTOM_ROW + "  \n";
+        rep += CardPiece.BOTTOM_ROW + "  ";
+        rep += "\n";
 */
         return rep;
     }
@@ -171,13 +168,14 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
 
     /**
      * Allow to paint a student.
-     * @param student to paint.
+     * @param students list of students.
+     * @param index in the list of the student to paint.
      * @return the painted student.
      */
-    private String drawStudent(Student student) {
+    private String drawStudent(List<Student> students, int index) {
 
-        if (student == null)
+        if (students == null || index >= students.size())
             return " ";
-        else return drawColor(student.getColor(), "▪");
+        else return drawColor(students.get(index).getColor(), "▪");
     }
 }

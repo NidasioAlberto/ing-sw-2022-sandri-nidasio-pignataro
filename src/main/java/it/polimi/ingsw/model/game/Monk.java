@@ -83,12 +83,19 @@ public class Monk extends CharacterCard
         instance.putStudentToIsland(selectedStudent);
         //Remove the previous student from the card
         students.remove(selectedStudent);
+
         //Pick another student from the bag
-        try{ students.add(instance.getStudentFromBag());}
+        try
+        {
+            students.add(instance.getStudentFromBag());
+        }
         catch(Exception e){}
 
         //Disable the card
         this.deactivate();
+
+        // Notify the subscriber
+        notifySubscriber();
     }
 
     @Override

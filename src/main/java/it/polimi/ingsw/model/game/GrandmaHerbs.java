@@ -91,6 +91,9 @@ public class GrandmaHerbs extends CharacterCard
 
         // Then disable the card
         deactivate();
+
+        // Notify the subscriber
+        notifySubscriber();
     }
 
     @Override

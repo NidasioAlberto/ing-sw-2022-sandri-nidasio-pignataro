@@ -120,6 +120,9 @@ public class Joker extends CharacterCard
 
         exchangeCounter += 1;
 
+        // Notify the subscriber
+        notifySubscriber();
+
         // If we hit 3 swaps i deactivate the card
         if (exchangeCounter >= 3)
             deactivate();
