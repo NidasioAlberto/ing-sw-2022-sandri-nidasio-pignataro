@@ -43,6 +43,9 @@ public class Match implements Subscriber<ModelUpdate>
         {
             players.add(player);
             gameController.addPlayer(player.getPlayerName().get());
+            gameController.getGame().getPlayerTableList().stream().filter(
+                    (p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst().
+                    ifPresent((p) -> p.subscribe(this));
         } catch (Exception e)
         {
             players.remove(player);

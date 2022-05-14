@@ -2,15 +2,20 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
+import it.polimi.ingsw.protocol.updates.AssistantCardsUpdate;
+import it.polimi.ingsw.protocol.updates.ModelUpdate;
+import it.polimi.ingsw.protocol.updates.PlayedAssistantCardUpdate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.concurrent.Flow.Subscriber;
+import java.util.concurrent.Flow.Publisher;
 
 /**
  * This class represent one of the game's player.
  */
-public class Player
+public class Player implements Publisher<ModelUpdate>
 {
     /**
      * The nickname of the player.
@@ -57,6 +62,8 @@ public class Player
      */
     private Optional<Integer> selectedCharacterCard;
 
+    protected Optional<Subscriber<? super ModelUpdate>> subscriber;
+
     public Player(String nickname, TowerColor color, GameMode mode)
     {
         this(nickname, new SchoolBoard(color, mode));
@@ -78,6 +85,7 @@ public class Player
         selectedColors = new ArrayList<SchoolColor>();
         selectedCloudTile = Optional.empty();
         selectedCharacterCard = Optional.empty();
+        subscriber = Optional.empty();
     }
 
     /**
@@ -96,6 +104,16 @@ public class Player
 
                 // Toggle the selected card to be used
                 cards.get(i).toggleUsed();
+
+                // I notify the subscriber because I have used a card
+                if (subscriber.isPresent())
+                {
+                    subscriber.get().onNext(new AssistantCardsUpdate(nickname,
+                            new ArrayList<AssistantCard>(cards)));
+                    subscriber.get().onNext(new PlayedAssistantCardUpdate(
+                            new AssistantCard(cards.get(i).getWizard(), cards.get(i).getTurnOrder(),
+                                    cards.get(i).getSteps()), nickname));
+                }
                 return;
             }
         }
@@ -267,5 +285,16 @@ public class Player
     public TowerColor getColor()
     {
         return color;
+    }
+
+    @Override
+    public void subscribe(Subscriber<? super ModelUpdate> subscriber)
+    {
+        if (subscriber == null)
+            throw new NullPointerException("[Player] Null subscriber");
+
+        // I subscribe the observer to the observable only if doesn't already exist one
+        if (this.subscriber.isEmpty())
+            this.subscriber = Optional.of(subscriber);
     }
 }

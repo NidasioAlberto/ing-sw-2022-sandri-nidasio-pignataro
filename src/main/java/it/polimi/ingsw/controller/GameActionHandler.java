@@ -172,12 +172,7 @@ public class GameActionHandler
         game.getSelectedPlayer().get().selectColor(selectedColor);
 
         // Move the student to dining
-        game.getSelectedPlayer().get().getBoard()
-                .addStudentToDiningRoom(
-                        game.getSelectedPlayer().get().getBoard()
-                                .removeStudentFromEntrance(
-                                        game.getSelectedPlayer().get().getSelectedColors().get(0))
-                                .orElseThrow(() -> new NoSuchStudentInEntranceException("[GameActionHandler]")));
+        game.putStudentToDining(game.pickStudentFromEntrance());
 
         // If the current card is activated i can apply the action
         if (game.getCurrentCharacterCard().isPresent()
@@ -216,7 +211,7 @@ public class GameActionHandler
             game.moveMotherNature(Game.ISLAND_TILES_NUMBER + wantedPosition - currentPosition);
         else
             throw new InvalidMovementException(
-                    "[GameActionHandler] Mother nature cannot stay in the same position");
+                    "[GameActionHandler] Mother nature cannot move there");
 
         // If all goes correctly i compute the influence
         game.computeInfluence();
