@@ -149,7 +149,7 @@ public class PlayerConnection implements Runnable
     private void sendObject(Object object)
     {
         System.out.println(
-                "[PlayerConnection] Sending " + object.getClass().getSimpleName() + " to player");
+                "[PlayerConnection] Sending " + object.getClass().getSimpleName() + " to player " + playerName.orElse(""));
         try
         {
             outputStream.writeObject(object);

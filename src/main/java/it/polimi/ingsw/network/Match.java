@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.Answer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
+import it.polimi.ingsw.protocol.updates.AssistantCardsUpdate;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
 
 public class Match implements Subscriber<ModelUpdate>
@@ -40,10 +41,11 @@ public class Match implements Subscriber<ModelUpdate>
     {
         try
         {
-            gameController.addPlayer(player.getPlayerName().get());
             players.add(player);
-        } catch (TooManyPlayersException e)
+            gameController.addPlayer(player.getPlayerName().get());
+        } catch (Exception e)
         {
+            players.remove(player);
             player.sendAnswer(new ErrorAnswer(e.getMessage()));
         }
     }
@@ -102,14 +104,22 @@ public class Match implements Subscriber<ModelUpdate>
     @Override
     public void onNext(ModelUpdate update)
     {
-        for (PlayerConnection player : players)
-            player.sendModelUpdate(update);
+        if (update.getPlayerDestination().isPresent())
+        {
+            players.stream().filter((player) -> player.getPlayerName().equals(update.getPlayerDestination()))
+                    .findFirst().ifPresent((player) -> player.sendModelUpdate(update));
+        }
+        else
+        {
+            for (PlayerConnection player : players)
+                player.sendModelUpdate(update);
+        }
     }
 
     /**
      * This method is called immediately when the subscription is done.
      * 
-     * TODO: Maybe usefule, if so add it to UML.
+     * TODO: Maybe useful, if so add it to UML.
      */
     @Override
     public void onSubscribe(Subscription subscription)

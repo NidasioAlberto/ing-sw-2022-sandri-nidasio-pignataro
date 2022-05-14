@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class AssistantCardsUpdate extends ModelUpdate {
+
     /**
      * List of a single player assistant cards
      */
@@ -61,6 +62,8 @@ public class AssistantCardsUpdate extends ModelUpdate {
     @Override
     public String toString()
     {
+        cards = cards.stream().filter((card) -> !card.isUsed()).toList();
+
         String rep = "ASSISTANT CARDS\n";
 
         for (AssistantCard card : cards)
@@ -111,6 +114,8 @@ public class AssistantCardsUpdate extends ModelUpdate {
         IntStream.range(0, 10).forEach(i -> {
                 player.addCard(new AssistantCard(Wizard.WIZARD_3, i + 1, i / 2 + 1));
             });
+        player.getCards().get(0).toggleUsed();
+        player.getCards().get(4).toggleUsed();
         AssistantCardsUpdate update = new AssistantCardsUpdate("", player.getCards());
 
         System.out.println(update);

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.mock;
+package it.polimi.ingsw.client.cli;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

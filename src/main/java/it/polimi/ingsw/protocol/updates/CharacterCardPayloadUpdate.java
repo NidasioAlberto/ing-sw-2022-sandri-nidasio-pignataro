@@ -1,5 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
+import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.CharacterCardType;
@@ -97,57 +98,86 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     public String toString()
     {
         String rep = "";
+/*
+        if ()
 
-        /*rep += card.getCardType();
+        rep += card.getCardType();
 
             for (int i = 0; i < 14 - card.getCardType().toString().length(); i++)
                 rep += " ";
-
         rep += "\n";
 
-        for (CharacterCard card : cards)
-        {
-            rep += CardPiece.TOP_ROW + "  ";
-        }
-        rep += "\n";
-        for (CharacterCard card : cards)
-        {
-            rep += "║ $" + card.getCost() + "       ║  ";
-            //rep += "║ " + coinsSign[card.getCost() - 1] + "        ║ ";
-        }
+
+        rep += CardPiece.TOP_ROW + "  ";
         rep += "\n";
 
-        for (CharacterCard card : cards)
-        {
+        rep += "║ $" + card.getCost() + "       ║  \n";
 
-            rep += "║  "  + drawStudentCard(card, 0) + "    " + drawStudentCard(card, 1) + "  ║  ";
-        }
+
+        rep += "║  "  + drawStudent(students.get(0)) + "    " + drawStudent(students.get(1)) + "  ║  ";
         rep += "\n";
 
-        for (CharacterCard card : cards)
-        {
-            // ⦻ ⨂ ⨷ ⌧ ⮿ ⮾ ⮽ 🚫
-            if (card.getCardType() == CharacterCardType.GRANDMA_HERBS)
-            {
-                rep += "║  "  +  ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ";
-            }
-            else rep += "║  "  + drawStudentCard(card, 2) + "    " + drawStudentCard(card, 3) + "  ║  ";
 
+        if (card.getCardType() == CharacterCardType.GRANDMA_HERBS)
+        {
+            rep += "║  "  +  ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ";
         }
+        else rep += "║  "  + drawStudentCard(card, 2) + "    " + drawStudentCard(card, 3) + "  ║  ";
         rep += "\n";
 
-        for (CharacterCard card : cards)
-        {
-            rep += "║  "  + drawStudentCard(card, 4) + "    " + drawStudentCard(card, 5) + "  ║  ";
-        }
+        rep += "║  "  + drawStudentCard(card, 4) + "    " + drawStudentCard(card, 5) + "  ║  ";
         rep += "\n";
 
-        for (CharacterCard card : cards)
-        {
-            rep += CardPiece.BOTTOM_ROW + "  ";
+        rep += CardPiece.BOTTOM_ROW + "  \n";
+*/
+        return rep;
+    }
+
+    /**
+     * Allow to paint a string.
+     * @param color to paint the string.
+     * @param content the string to paint.
+     * @return the painted string.
+     */
+    private String drawColor(SchoolColor color, String content) {
+
+        String rep = "\u001B[";
+
+        switch (color) {
+            case BLUE:
+                rep += "34";
+                break;
+            case GREEN:
+                rep += "32";
+                break;
+            case PINK:
+                rep += "35";
+                break;
+            case RED:
+                rep += "31";
+                break;
+            case YELLOW:
+                rep += "33";
+                break;
         }
-        rep += "\n";*/
+
+        rep += "m" + content;
+
+        // Reset the color
+        rep += "\u001B[97m";
 
         return rep;
+    }
+
+    /**
+     * Allow to paint a student.
+     * @param student to paint.
+     * @return the painted student.
+     */
+    private String drawStudent(Student student) {
+
+        if (student == null)
+            return " ";
+        else return drawColor(student.getColor(), "▪");
     }
 }

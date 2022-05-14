@@ -55,7 +55,7 @@ public class SchoolBoardUpdate extends ModelUpdate {
 
         rep += "╔═══╦═" + player;
 
-        for (int i = 0; i < 18 - player.length(); i++)
+        for (int i = 0; i < 19 - player.length(); i++)
             rep += "═";
 
         rep += "╤═╦═══╗\n";
@@ -172,7 +172,7 @@ public class SchoolBoardUpdate extends ModelUpdate {
                 + drawProfessor(SchoolColor.PINK) + "║" + drawTower(6) + " " + drawTower(7) + "║\n";
         rep += "║" + drawStudent(8) + "  ║" + drawDiningRoom(SchoolColor.BLUE) + "│" + drawProfessor(SchoolColor.BLUE)
                 + "║   ║\n";
-        rep += "╚═══╩═══════════════════╧═╩═══╝\n";
+        rep += "╚═══╩════════════════════╧═╩═══╝\n";
 
         return rep;
     }

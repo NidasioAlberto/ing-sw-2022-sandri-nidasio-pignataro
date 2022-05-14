@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.mock;
+package it.polimi.ingsw.client.cli;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.protocol.commands.*;
 import it.polimi.ingsw.protocol.messages.*;
 
-public class MockClient
+public class Client
 {
     public static void main(String[] args)
     {
@@ -61,6 +61,9 @@ public class MockClient
                 break;
             case 2:
                 chooseAction(outputStream, scanner);
+                break;
+            default:
+                System.out.println("You should choose a command between 1 and 2.\n");
                 break;
         }
     }
