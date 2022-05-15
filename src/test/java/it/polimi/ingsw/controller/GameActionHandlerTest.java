@@ -2,10 +2,8 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.fsm.*;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.InvalidAssistantCardException;
-import it.polimi.ingsw.model.exceptions.NoLegitActionException;
-import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import it.polimi.ingsw.model.exceptions.WrongPlayerException;
+import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.model.game.Centaur;
 import it.polimi.ingsw.model.game.CharacterCard;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Monk;
@@ -291,6 +289,19 @@ public class GameActionHandlerTest
                                         assertEquals(color9, game.getIslands().get(5).getStudents()
                                                         .get(1).getColor());
 
+                                // player3 activate the monk card again, so an exception is thrown
+                                assertThrows(InvalidCharacterCardException.class, () -> handler.handleAction(
+                                        new PlayCharacterCardMessage(game
+                                                .getCharacterCards().indexOf(card)),
+                                        "player3"));
+
+                                // player3 applies the action of the monk again
+                                SchoolColor color10 = ((Monk) card).getStudents().get(0).getColor();
+                                colors.add(color10);
+                                assertThrows(NoSelectedCharacterCardException.class, () -> handler
+                                        .handleAction(new CharacterCardActionMessage(
+                                                ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
+                                                5, colors), "player3"));
                         }
                 }
 
@@ -566,5 +577,182 @@ public class GameActionHandlerTest
                 assertEquals("player3", game.getSortedPlayerList().get(0).getNickname());
                 assertEquals("player2", game.getSortedPlayerList().get(1).getNickname());
                 assertEquals("player1", game.getSortedPlayerList().get(2).getNickname());
+        }
+
+        @Test
+        public void characterCardTest()
+        {
+                // player1 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(4),
+                        "player1"));
+
+                // player2 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(10),
+                        "player2"));
+
+                // player3 selects an assistant card
+                assertDoesNotThrow(() -> handler.handleAction(new PlayAssistantCardMessage(2),
+                        "player3"));
+
+                // player3 performs four moves from the entrance room
+                // player3 moves a student to the dining room
+                SchoolColor color1 = game.getSelectedPlayer().get().getBoard()
+                        .getStudentsInEntrance().get(0).getColor();
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new MoveStudentFromEntranceToIslandMessage(color1,
+                (game.getMotherNatureIndex().get() + 3) % game.getIslands().size()), "player3"));
+
+                // player3 moves a student to an island
+                SchoolColor color2 = game.getSelectedPlayer().get().getBoard()
+                        .getStudentsInEntrance().get(0).getColor();
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new MoveStudentFromEntranceToIslandMessage(color2,
+                (game.getMotherNatureIndex().get() + 3) % game.getIslands().size()), "player3"));
+
+                // player3 moves a student to an island
+                SchoolColor color3 = game.getSelectedPlayer().get().getBoard()
+                        .getStudentsInEntrance().get(0).getColor();
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new MoveStudentFromEntranceToIslandMessage(color3,
+                (game.getMotherNatureIndex().get() + 3) % game.getIslands().size()), "player3"));
+
+                // player3 moves a student to an island
+                SchoolColor color4 = game.getSelectedPlayer().get().getBoard()
+                        .getStudentsInEntrance().get(0).getColor();
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new MoveStudentFromEntranceToIslandMessage(color4,
+                (game.getMotherNatureIndex().get() + 3) % game.getIslands().size()), "player3"));
+
+                // We now move to MoveMotherNaturePhase because player1 has performed 4 moves
+                assertTrue(handler.getGamePhase() instanceof MoveMotherNaturePhase);
+
+                // player3 moves mother nature
+                assertDoesNotThrow(() -> handler.handleAction(new MoveMotherNatureMessage(
+                                (game.getMotherNatureIndex().get() + game.getSelectedPlayer().get()
+                                        .getSelectedCard().get().getSteps())
+                                        % game.getIslands().size()),
+                        "player3"));
+
+                // player3 selects a cloud tile
+                assertDoesNotThrow(() -> handler.handleAction(new SelectCloudTileMessage(0),
+                        "player3"));
+
+                // We now move to EndTurnPhase
+                assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player3"));
+
+                // player1 performs four moves from the entrance room
+                // player1 moves a student to the dining room
+                SchoolColor color5 = SchoolColor.GREEN;
+                for (SchoolColor color: SchoolColor.values())
+                {
+                        int counter = 0;
+                        for (Student student : game.getSelectedPlayer().get().getBoard().getStudentsInEntrance())
+                        {
+                                if (color == student.getColor())
+                                        counter++;
+                        }
+                        if (counter > 1)
+                        {
+                                color5 = color;
+                                break;
+                        }
+                }
+
+                handler.handleAction(new MoveStudentFromEntranceToDiningMessage(color5), "player1");
+
+                // player 1 moves a student to an island
+                handler.handleAction(new MoveStudentFromEntranceToIslandMessage(
+                        color5, (game.getMotherNatureIndex().get() + 1) % game.getIslands().size()), "player1");
+
+                for (CharacterCard card : game.getCharacterCards())
+                {
+                        if (card instanceof Centaur)
+                        {
+                                game.getSelectedPlayer().get().getBoard().addCoins(10);
+                                // player1 activate the centaur card
+                                assertDoesNotThrow(() -> handler.handleAction(
+                                        new PlayCharacterCardMessage(game
+                                                .getCharacterCards().indexOf(card)),
+                                        "player1"));
+                                assertEquals(card, game.getCurrentCharacterCard().get());
+                                assertTrue(card.isActivated());
+
+                               /* // player3 applies the action of the monk
+                                SchoolColor color9 = ((Monk) card).getStudents().get(0).getColor();
+                                List<SchoolColor> colors = new ArrayList<>();
+                                colors.add(color9);
+                                assertDoesNotThrow(() -> handler
+                                        .handleAction(new CharacterCardActionMessage(
+                                                ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
+                                                5, colors), "player3"));
+                                if (game.getIslands().get(5).getStudents().size() == 1)
+                                        assertEquals(color9, game.getIslands().get(5).getStudents()
+                                                .get(0).getColor());
+                                else
+                                        assertEquals(color9, game.getIslands().get(5).getStudents()
+                                                .get(1).getColor());
+
+                                // player3 activate the monk card again, so an exception is thrown
+                                assertThrows(InvalidCharacterCardException.class, () -> handler.handleAction(
+                                        new PlayCharacterCardMessage(game
+                                                .getCharacterCards().indexOf(card)),
+                                        "player3"));
+
+                                // player3 applies the action of the monk again
+                                SchoolColor color10 = ((Monk) card).getStudents().get(0).getColor();
+                                colors.add(color10);
+                                assertThrows(NoSelectedCharacterCardException.class, () -> handler
+                                        .handleAction(new CharacterCardActionMessage(
+                                                ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
+                                                5, colors), "player3")); */
+                        }
+                }
+
+                // player1 moves a student to an island
+                SchoolColor color6 = game.getSelectedPlayer().get().getBoard()
+                        .getStudentsInEntrance().get(0).getColor();
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new MoveStudentFromEntranceToIslandMessage(color6,
+                        (game.getMotherNatureIndex().get() + 3) % game.getIslands().size()), "player1"));
+
+                // player 1 moves a student to an island
+                SchoolColor color7 = game.getSelectedPlayer().get().getBoard()
+                        .getStudentsInEntrance().get(0).getColor();
+                assertDoesNotThrow(() -> handler.handleAction(
+                        new MoveStudentFromEntranceToIslandMessage(color7,
+                (game.getMotherNatureIndex().get() + 3) % game.getIslands().size()), "player1"));
+
+                // Add a tower of player3 on the island where mother nature will end in order to check if
+                // the centaur is applied accurately
+                if (game.getCurrentCharacterCard().isPresent())
+                {
+                        assertTrue(handler.getGame() instanceof Centaur);
+                        assertTrue(game.getCurrentCharacterCard().get().isActivated());
+                }
+                // player1 moves mother nature
+                assertDoesNotThrow(() -> handler.handleAction(new MoveMotherNatureMessage(
+                (game.getMotherNatureIndex().get() + 1) % game.getIslands().size()),"player1"));
+
+                if (game.getCurrentCharacterCard().isPresent())
+                {
+                        assertTrue(game.getCurrentCharacterCard().get().isActivated());
+                        assertTrue(handler.getGame() instanceof Centaur);
+                }
+
+                // player1 selects the same cloud tile as player3 so an exception is thrown
+                assertThrows(InvalidCloudTileException.class, () -> handler.handleAction(
+                        new SelectCloudTileMessage(0), "player1"));
+
+                // player1 selects a cloud tile
+                assertDoesNotThrow(() -> handler.handleAction(new SelectCloudTileMessage(1),
+                        "player1"));
+                if (game.getCurrentCharacterCard().isPresent())
+                {
+                        assertFalse(game.getCurrentCharacterCard().get().isActivated());
+                }
+
+                // We now move to EndTurnPhase
+                assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player1"));
         }
 }

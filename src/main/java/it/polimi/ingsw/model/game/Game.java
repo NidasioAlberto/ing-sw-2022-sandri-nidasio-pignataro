@@ -749,7 +749,11 @@ public class Game implements Publisher<ModelUpdate>
             if (cloud.getStudents().size() != 0)
                 throw new IllegalStateException("[Game] You can't fill non empty clouds");
             for (int i = 0; i < studentsToPut; i++)
-                cloud.addStudent(getStudentFromBag());
+                try
+                {
+                    cloud.addStudent(getStudentFromBag());
+                }
+                catch (EndGameException e) {}
         }
 
         // At the end i notify the observer

@@ -23,7 +23,7 @@ public class CloudTile implements Serializable
     /**
      * Constructor.
      * 
-     * @param type The CloudTileType (2_4 or 3).
+     * @param type The CloudTileType (2 or 3).
      * @throws NullPointerException Thrown if the specified color is invalid.
      */
     public CloudTile(CloudTileType type) throws NullPointerException
