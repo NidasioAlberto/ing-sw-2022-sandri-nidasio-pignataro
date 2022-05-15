@@ -37,17 +37,17 @@ public class DrawableTower extends DrawableObject
         TYPE = type;
 
         // Read the object file
-        ObjectModelParser parser = new ObjectModelParser("Models/tower.obj");
+        ObjectModelParser parser = new ObjectModelParser("Models/tower.obj", 1);
 
         // Create the mesh referring to the object file
         triangleMesh = new TriangleMesh();
 
         // Assign all the vertices, faces, textures and normals
         triangleMesh.setVertexFormat(VertexFormat.POINT_NORMAL_TEXCOORD);
-        triangleMesh.getFaces().addAll(parser.getFaces());
         triangleMesh.getNormals().addAll(parser.getNormals());
-        triangleMesh.getTexCoords().addAll(parser.getTextures());
         triangleMesh.getFaces().addAll(parser.getFaces());
+        triangleMesh.getPoints().addAll(parser.getVertices());
+        triangleMesh.getTexCoords().addAll(parser.getTextures());
 
         // Now i create the actual node with the mesh
         towerMesh = new MeshView(triangleMesh);

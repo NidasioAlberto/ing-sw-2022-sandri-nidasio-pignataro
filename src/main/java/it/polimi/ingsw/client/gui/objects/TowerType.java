@@ -4,9 +4,9 @@ import javafx.scene.paint.Color;
 
 public enum TowerType
 {
-    BLACK(Color.BLACK),
+    BLACK(Color.rgb(65, 68, 68)),
     WHITE(Color.WHITE),
-    GRAY(Color.GRAY);
+    GRAY(Color.rgb(113, 115, 116));
 
     /**
      * The tower color
