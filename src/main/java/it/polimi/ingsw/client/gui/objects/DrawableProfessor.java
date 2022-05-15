@@ -9,6 +9,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
+import javafx.scene.transform.Rotate;
 
 public class DrawableProfessor extends DrawableObject
 {
@@ -52,6 +53,9 @@ public class DrawableProfessor extends DrawableObject
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(TYPE.getColor());
         material.setSpecularColor(Color.WHITE);
+
+        // Rotate around the y axis of -90 degrees
+        professorMesh.getTransforms().add(new Rotate(-90, new Point3D(0, 1, 0)));
 
         // Apply the material
         professorMesh.setMaterial(material);

@@ -18,6 +18,14 @@ public class DrawableSchoolBoard extends DrawableObject
     public static final float SCALE_FACTOR = 2.30f;
 
     /**
+     * Positioning constants
+     */
+    private static final double DINING_X_STEP   = 0.04763;
+    private static final double DINING_Y_STEP   = 0.07143;
+    private static final double FIRST_DINING    = -0.29286;
+    private static final double X_PROFESSOR     = 0.22857;
+
+    /**
      * X Dimension constant
      */
     private final float X_DIMENSION;

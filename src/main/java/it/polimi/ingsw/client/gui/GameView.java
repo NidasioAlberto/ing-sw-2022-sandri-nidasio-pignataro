@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.objects.*;
+import it.polimi.ingsw.model.Student;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -120,14 +121,50 @@ public class GameView extends Application
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
-        schoolBoard.translate(new Point3D(0, 0, -175));
+        schoolBoard.translate(new Point3D(0, 0, 0));
         tower.translate(new Point3D(0,0, 100));
 
+        // Calibration
+        DrawableStudent red = new DrawableStudent(StudentType.RED);
+        DrawableStudent red2 = new DrawableStudent(StudentType.RED);
+        DrawableStudent green = new DrawableStudent(StudentType.GREEN);
+        DrawableStudent yellow = new DrawableStudent(StudentType.YELLOW);
+        DrawableStudent pink = new DrawableStudent(StudentType.PINK);
+        DrawableStudent blue = new DrawableStudent(StudentType.BLUE);
+        red.translate(new Point3D(-102.5, 0, 25));
+        red2.translate(new Point3D(-52.49, 0, 25)); // Increment of 16.67 per position
+        green.translate(new Point3D(-102.5, 0, 50));
+        yellow.translate(new Point3D(-102.5, 0, 0));
+        pink.translate(new Point3D(-102.5, 0, -25));
+        blue.translate(new Point3D(-102.5, 0, -50));
+
+        DrawableProfessor pgreen = new DrawableProfessor(ProfessorType.GREEN);
+        DrawableProfessor pred = new DrawableProfessor(ProfessorType.RED);
+        DrawableProfessor pyellow = new DrawableProfessor(ProfessorType.YELLOW);
+        DrawableProfessor ppink = new DrawableProfessor(ProfessorType.PINK);
+        DrawableProfessor pblue = new DrawableProfessor(ProfessorType.BLUE);
+        pgreen.translate(new Point3D(80, 0, 50));
+        pred.translate(new Point3D(80, 0, 25));
+        pyellow.translate(new Point3D(80, 0, 0));
+        ppink.translate(new Point3D(80, 0, -25));
+        pblue.translate(new Point3D(80, 0, -50));
+
         // Add all the created objects to the collection of drawable objects
-        drawableObjects.add(motherNature);
-        drawableObjects.add(islandCollection);
+        //drawableObjects.add(motherNature);
+        //drawableObjects.add(islandCollection);
         drawableObjects.add(schoolBoard);
-        drawableObjects.add(tower);
+        drawableObjects.add(red);
+        drawableObjects.add(red2);
+        drawableObjects.add(green);
+        drawableObjects.add(yellow);
+        drawableObjects.add(pink);
+        drawableObjects.add(blue);
+        drawableObjects.add(pgreen);
+        drawableObjects.add(pred);
+        drawableObjects.add(pyellow);
+        drawableObjects.add(ppink);
+        drawableObjects.add(pblue);
+        //drawableObjects.add(tower);
 
         // Add the lights to the view
         group.getChildren().add(pointLight);
