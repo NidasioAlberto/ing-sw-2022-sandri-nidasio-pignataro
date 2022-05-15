@@ -104,6 +104,10 @@ public class DrawableSchoolBoard extends DrawableObject
     @Override
     public synchronized void translate(Point3D point)
     {
+        if(point == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null point");
+
+        // Set the box position
         box.translateXProperty().set(point.getX());
         box.translateYProperty().set(point.getY());
         box.translateZProperty().set(point.getZ());

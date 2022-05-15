@@ -124,24 +124,27 @@ public class DrawableMotherNature extends DrawableObject
     @Override
     public void translate(Point3D point)
     {
+        if(point == null)
+            throw new NullPointerException("[DrawableMotherNature] Null point");
+
         setX(point.getX());
         setY(point.getY());
         setZ(point.getZ());
     }
 
-    public void setX(double x)
+    private void setX(double x)
     {
         for(Sphere sphere : spheres)
             sphere.translateXProperty().set(x);
     }
 
-    public void setY(double y)
+    private void setY(double y)
     {
         for(int i = 0; i < spheres.length; i++)
             spheres[i].setTranslateY(y - (i * STARTING_RADIUS - i * DELTA_RADIUS));
     }
 
-    public void setZ(double z)
+    private void setZ(double z)
     {
         for(Sphere sphere : spheres)
             sphere.translateZProperty().set(z);
