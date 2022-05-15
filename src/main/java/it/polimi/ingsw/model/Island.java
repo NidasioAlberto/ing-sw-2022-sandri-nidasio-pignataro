@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import it.polimi.ingsw.client.cli.utils.GamePieces;
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 
 /**
- * This class represents the collection of island tiles (at least 1). At first there is the relation
- * 1 to 1 with islands and island tiles, but as the game keeps going the island tiles accumulate
- * into bigger islands.
+ * This class represents the collection of island tiles (at least 1). At first there is the relation 1 to 1 with islands and island tiles, but as the
+ * game keeps going the island tiles accumulate into bigger islands.
  */
 public class Island implements Serializable
 {
@@ -70,8 +71,7 @@ public class Island implements Serializable
     }
 
     /**
-     * This method adds the tower passed via argument to one of the tiles (the first with tower
-     * free)
+     * This method adds the tower passed via argument to one of the tiles (the first with tower free)
      *
      * @param tower The tower that has to be added
      * @throws NullPointerException if the tower is null
@@ -79,8 +79,7 @@ public class Island implements Serializable
     public void addTower(Tower tower) throws NullPointerException, IllegalArgumentException
     {
         // Check if there is already a different color tower on this island
-        if (tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
-                .filter(t -> t.getColor() != tower.getColor()).count() > 0)
+        if (tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream).filter(t -> t.getColor() != tower.getColor()).count() > 0)
         {
             throw new IllegalArgumentException("[Island] The tower color is not correct");
         }
@@ -107,8 +106,7 @@ public class Island implements Serializable
     }
 
     /**
-     * Method to remove a specific tower. Keep in mind that this method does not move the removed
-     * tower its player board!
+     * Method to remove a specific tower. Keep in mind that this method does not move the removed tower its player board!
      *
      * @param tower The tower that has to be removed
      */
@@ -118,8 +116,7 @@ public class Island implements Serializable
     }
 
     /**
-     * Method to remove all the towers in the tiles. Keep in mind that this method does not move the
-     * removed towers their player board!
+     * Method to remove all the towers in the tiles. Keep in mind that this method does not move the removed towers their player board!
      */
     public void removeAllTowers()
     {
@@ -139,15 +136,12 @@ public class Island implements Serializable
         {
             throw new NullPointerException("[Island] A null island was provided");
         } else if (island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0
-                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0
-                || island.tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
-                        .filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor())
-                        .count() > 0)
+                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0 || island.tiles.stream().map(tile -> tile.getTower())
+                        .flatMap(Optional::stream).filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor()).count() > 0)
         {
             // There is at least one tile without a tower in one of the two merging islands
             // or the color of towers is different on the tiles
-            throw new IllegalArgumentException(
-                    "[Island] Not possible to merge islands, towers are not correct");
+            throw new IllegalArgumentException("[Island] Not possible to merge islands, towers are not correct");
         } else
         {
             // I add the single tile if it is not already present in the list
@@ -176,8 +170,7 @@ public class Island implements Serializable
 
     public List<Tower> getTowers()
     {
-        return tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
-                .collect(Collectors.toList());
+        return tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream).collect(Collectors.toList());
     }
 
     /**
@@ -185,8 +178,7 @@ public class Island implements Serializable
      */
     public int getStudentsByColor(SchoolColor color)
     {
-        return (int) tiles.stream().flatMap(t -> t.getStudents().stream())
-                .filter(s -> s.getColor().equals(color)).count();
+        return (int) tiles.stream().flatMap(t -> t.getStudents().stream()).filter(s -> s.getColor().equals(color)).count();
     }
 
     public int getNoEntryTiles()
@@ -207,5 +199,46 @@ public class Island implements Serializable
     public List<IslandTile> getIslands()
     {
         return new ArrayList<>(tiles);
+    }
+
+    private String drawStudentsNumber(SchoolColor color)
+    {
+        return PrintHelper.drawStudentsNumber(getStudentsByColor(color), color);
+    }
+
+    private String drawTowers()
+    {
+        if (getTowers().size() == 0)
+            return "  ";
+        else
+            return getTowers().size() + PrintHelper.drawColor(getTowers().get(0).getColor(), GamePieces.TOWER.toString());
+
+    }
+
+    private String drawNoEntryTiles()
+    {
+        if (getNoEntryTiles() == 0)
+            return "  ";
+        else
+            return getNoEntryTiles() + GamePieces.NO_ENTRY_TILE.toString();
+    }
+
+    /**
+     * Draws a 5x10 representation of the island.
+     */
+    @Override
+    public String toString()
+    {
+        String rep = "";
+
+        rep += "  ______ " + PrintHelper.moveCursorRelative(-1, -9);
+        rep += " ╱" + drawStudentsNumber(SchoolColor.BLUE) + " " + drawStudentsNumber(SchoolColor.GREEN) + " ╲"
+                + PrintHelper.moveCursorRelative(-1, -9);
+        rep += "╱" + drawStudentsNumber(SchoolColor.PINK) + " " + drawStudentsNumber(SchoolColor.RED) + " " + drawStudentsNumber(SchoolColor.YELLOW)
+                + "╲" + PrintHelper.moveCursorRelative(-1, -10);
+        rep += "╲" + drawTowers() + " " + drawNoEntryTiles() + "   ╱" + PrintHelper.moveCursorRelative(-1, -10);
+        rep += " ╲______╱ ";
+
+        return rep;
     }
 }

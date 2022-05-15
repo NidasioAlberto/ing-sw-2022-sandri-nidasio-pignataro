@@ -2,18 +2,14 @@ package it.polimi.ingsw.protocol.updates;
 
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.Student;
-import it.polimi.ingsw.model.game.CharacterCard;
-import it.polimi.ingsw.model.game.CharacterCardType;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GrandmaHerbs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * This class has 2 optionals because a character card can have as a payload a number of students or
- * a number of entry tiles.
+ * This class has 2 optionals because a character card can have as a payload a number of students or a number of entry tiles.
  */
 public class CharacterCardPayloadUpdate extends ModelUpdate
 {
@@ -45,8 +41,7 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
         if (students.contains(null))
             throw new NullPointerException("[CharacterCardPayloadUpdate] Null student inside list");
         if (index < 0 || index >= Game.CHARACTER_CARDS_NUMBER)
-            throw new IndexOutOfBoundsException(
-                    "[CharacterCardPayloadUpdate] Character card index out of bounds");
+            throw new IndexOutOfBoundsException("[CharacterCardPayloadUpdate] Character card index out of bounds");
 
         this.index = index;
         this.students = new ArrayList<>(students);
@@ -62,11 +57,9 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     public CharacterCardPayloadUpdate(int index, int noEntryTiles)
     {
         if (index < 0 || index >= Game.CHARACTER_CARDS_NUMBER)
-            throw new IndexOutOfBoundsException(
-                    "[CharacterCardPayloadUpdate] Character card index out of bounds");
+            throw new IndexOutOfBoundsException("[CharacterCardPayloadUpdate] Character card index out of bounds");
         if (noEntryTiles < 0 || noEntryTiles >= GrandmaHerbs.INITIAL_NO_ENTRY_NUMBER)
-            throw new IllegalArgumentException(
-                    "[CharacterCardPayloadUpdate] Number of noEntryTiles out of bounds");
+            throw new IllegalArgumentException("[CharacterCardPayloadUpdate] Number of noEntryTiles out of bounds");
 
         this.index = index;
         this.noEntryTiles = noEntryTiles;
@@ -99,48 +92,41 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     {
         String rep = "";
 
-       /* rep += card.getCardType();
-
-        for (int i = 0; i < 14 - card.getCardType().toString().length(); i++)
-            rep += " ";
-        rep += "\n";
-
-        rep += CardPiece.TOP_ROW + "  ";
-        rep += "\n";
-
-        rep += "║ $" + card.getCost() + "       ║  ";
-        rep += "\n";
-
-        rep += "║  "  + drawStudent(students, 0) + "    " + drawStudent(students, 1) + "  ║  ";
-        rep += "\n";
-
-        if (noEntryTiles != null)
-        {
-            rep += "║  "  +  noEntryTiles + " no    ║  ";
-        }
-        else rep += "║  "  + drawStudent(students, 2) + "    " + drawStudent(students, 3) + "  ║  ";
-        rep += "\n";
-
-        rep += "║  "  + drawStudent(students, 4) + "    " + drawStudent(students, 5) + "  ║  ";
-        rep += "\n";
-
-        rep += CardPiece.BOTTOM_ROW + "  ";
-        rep += "\n";
-*/
+        /*
+         * rep += card.getCardType();
+         * 
+         * for (int i = 0; i < 14 - card.getCardType().toString().length(); i++) rep += " "; rep += "\n";
+         * 
+         * rep += CardPiece.TOP_ROW + "  "; rep += "\n";
+         * 
+         * rep += "║ $" + card.getCost() + "       ║  "; rep += "\n";
+         * 
+         * rep += "║  " + drawStudent(students, 0) + "    " + drawStudent(students, 1) + "  ║  "; rep += "\n";
+         * 
+         * if (noEntryTiles != null) { rep += "║  " + noEntryTiles + " no    ║  "; } else rep += "║  " + drawStudent(students, 2) + "    " +
+         * drawStudent(students, 3) + "  ║  "; rep += "\n";
+         * 
+         * rep += "║  " + drawStudent(students, 4) + "    " + drawStudent(students, 5) + "  ║  "; rep += "\n";
+         * 
+         * rep += CardPiece.BOTTOM_ROW + "  "; rep += "\n";
+         */
         return rep;
     }
 
     /**
      * Allow to paint a string.
+     * 
      * @param color to paint the string.
      * @param content the string to paint.
      * @return the painted string.
      */
-    private String drawColor(SchoolColor color, String content) {
+    private String drawColor(SchoolColor color, String content)
+    {
 
         String rep = "\u001B[";
 
-        switch (color) {
+        switch (color)
+        {
             case BLUE:
                 rep += "34";
                 break;
@@ -164,18 +150,5 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
         rep += "\u001B[97m";
 
         return rep;
-    }
-
-    /**
-     * Allow to paint a student.
-     * @param students list of students.
-     * @param index in the list of the student to paint.
-     * @return the painted student.
-     */
-    private String drawStudent(List<Student> students, int index) {
-
-        if (students == null || index >= students.size())
-            return " ";
-        else return drawColor(students.get(index).getColor(), "▪");
     }
 }

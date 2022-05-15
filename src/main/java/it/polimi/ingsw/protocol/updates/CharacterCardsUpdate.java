@@ -3,10 +3,8 @@ package it.polimi.ingsw.protocol.updates;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.game.*;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CharacterCardsUpdate extends ModelUpdate
 {
@@ -55,7 +53,7 @@ public class CharacterCardsUpdate extends ModelUpdate
     @Override
     public String toString()
     {
-        //String[] coinsSign = new String[]{"\u2780", "\u2777", "\u2778", "\u2779", "\u2780"};
+        // String[] coinsSign = new String[]{"\u2780", "\u2777", "\u2778", "\u2779", "\u2780"};
         String rep = "CHARACTER CARDS\n";
 
         for (CharacterCard card : cards)
@@ -75,15 +73,14 @@ public class CharacterCardsUpdate extends ModelUpdate
         for (CharacterCard card : cards)
         {
             rep += paintIfActive(card, "║ $" + card.getCost() + "       ║  ");
-             //rep += "║ " + coinsSign[card.getCost() - 1] + "        ║ ";
+            // rep += "║ " + coinsSign[card.getCost() - 1] + " ║ ";
         }
         rep += "\n";
 
         for (CharacterCard card : cards)
         {
 
-            rep += paintIfActive(card, "║  "  + drawStudentCard(card, 0) + "    " +
-                    drawStudentCard(card, 1)) + paintIfActive(card,"  ║  ");
+            rep += paintIfActive(card, "║  " + drawStudentCard(card, 0) + "    " + drawStudentCard(card, 1)) + paintIfActive(card, "  ║  ");
         }
         rep += "\n";
 
@@ -92,18 +89,16 @@ public class CharacterCardsUpdate extends ModelUpdate
             // ⦻ ⨂ ⨷ ⌧ ⮿ ⮾ ⮽ 🚫
             if (card.getCardType() == CharacterCardType.GRANDMA_HERBS)
             {
-                rep += paintIfActive(card, "║  "  +  ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ");
-            }
-            else rep += paintIfActive(card, "║  "  + drawStudentCard(card, 2) + "    " +
-                    drawStudentCard(card, 3)) + paintIfActive(card,"  ║  ");
+                rep += paintIfActive(card, "║  " + ((GrandmaHerbs) card).getNoEntryTiles() + " no    ║  ");
+            } else
+                rep += paintIfActive(card, "║  " + drawStudentCard(card, 2) + "    " + drawStudentCard(card, 3)) + paintIfActive(card, "  ║  ");
 
         }
         rep += "\n";
 
         for (CharacterCard card : cards)
         {
-            rep += paintIfActive(card, "║  "  + drawStudentCard(card, 4) + "    " +
-                    drawStudentCard(card, 5)) + paintIfActive(card,"  ║  ");
+            rep += paintIfActive(card, "║  " + drawStudentCard(card, 4) + "    " + drawStudentCard(card, 5)) + paintIfActive(card, "  ║  ");
         }
         rep += "\n";
 
@@ -118,15 +113,18 @@ public class CharacterCardsUpdate extends ModelUpdate
 
     /**
      * Allow to paint a string.
+     * 
      * @param color to paint the string.
      * @param content the string to paint.
      * @return the painted string.
      */
-    private String drawColor(SchoolColor color, String content) {
+    private String drawColor(SchoolColor color, String content)
+    {
 
         String rep = "\u001B[";
 
-        switch (color) {
+        switch (color)
+        {
             case BLUE:
                 rep += "34";
                 break;
@@ -154,15 +152,18 @@ public class CharacterCardsUpdate extends ModelUpdate
 
     /**
      * Allow to paint a student.
+     * 
      * @param student to paint.
      * @return the painted student.
      */
-    private String drawStudent(Student student) {
+    private String drawStudent(Student student)
+    {
         return drawColor(student.getColor(), "▪");
     }
 
     /**
      * Allow to paint a student of a CharacterCard.
+     * 
      * @param card could contain a student to paint.
      * @param index of the student to paint.
      * @return the painted student if present.
@@ -172,20 +173,19 @@ public class CharacterCardsUpdate extends ModelUpdate
         if (card.getCardType() == CharacterCardType.JOKER && index < 6)
         {
             return drawStudent(((Joker) card).getStudents().get(index));
-        }
-        else if (card.getCardType() == CharacterCardType.MONK && index < 4)
+        } else if (card.getCardType() == CharacterCardType.MONK && index < 4)
         {
             return drawStudent(((Monk) card).getStudents().get(index));
-        }
-        else if (card.getCardType() == CharacterCardType.PRINCESS && index < 4)
+        } else if (card.getCardType() == CharacterCardType.PRINCESS && index < 4)
         {
             return drawStudent(((Princess) card).getStudents().get(index));
-        }
-        else return " ";
+        } else
+            return " ";
     }
 
     /**
      * Allow to paint the string if the card is active.
+     * 
      * @param card to check if active.
      * @param rep the string that could be painted.
      * @return the final string.
@@ -194,26 +194,31 @@ public class CharacterCardsUpdate extends ModelUpdate
     {
         if (card.isActivated())
             return ACTIVE + rep + DEACTIVE;
-        else return rep;
+        else
+            return rep;
     }
 
     public static void main(String[] args)
     {
         List<CharacterCard> cards = new ArrayList<CharacterCard>();
         Game game = new Game(2, GameMode.EXPERT);
-        try{
+        try
+        {
             game.addPlayer(new Player("player1", TowerColor.BLACK, GameMode.EXPERT));
             game.addPlayer(new Player("player2", TowerColor.BLACK, GameMode.EXPERT));
             game.addPlayer(new Player("player3", TowerColor.BLACK, GameMode.EXPERT));
-        } catch (Exception e){
+        } catch (Exception e)
+        {
 
         }
         game.setupGame();
         Game game1 = new Game();
-        try{
+        try
+        {
             game1.addPlayer(new Player("player1", TowerColor.BLACK, GameMode.CLASSIC));
             game1.addPlayer(new Player("player2", TowerColor.BLACK, GameMode.CLASSIC));
-        } catch (Exception e){
+        } catch (Exception e)
+        {
 
         }
         game1.setupGame();

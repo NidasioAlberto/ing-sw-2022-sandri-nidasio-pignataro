@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import java.io.Serializable;
+import it.polimi.ingsw.client.cli.utils.GamePieces;
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 
 /**
  * This class represents the student disc. Each student has its own color which is assigned once and
@@ -28,5 +30,11 @@ public class Student implements Serializable
     public SchoolColor getColor()
     {
         return color;
+    }
+
+    @Override
+    public String toString()
+    {
+        return PrintHelper.drawColor(color, GamePieces.STUDENT.toString());
     }
 }

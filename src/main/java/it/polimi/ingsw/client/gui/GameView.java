@@ -28,8 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class represents the game window and draws all the needed stuff that
- * the server updates and requests
+ * This class represents the game window and draws all the needed stuff that the server updates and requests
  */
 public class GameView extends Application
 {
@@ -72,6 +71,7 @@ public class GameView extends Application
 
     /**
      * Constructor
+     * 
      * @param mode The view mode that we want the game to start with
      */
     public GameView(ViewMode mode)
@@ -79,7 +79,7 @@ public class GameView extends Application
         // Useless
         super();
 
-        if(mode == null)
+        if (mode == null)
             throw new NullPointerException("[GameView] Null view mode");
 
         this.viewMode = mode;
@@ -88,7 +88,10 @@ public class GameView extends Application
     /**
      * Void constructor
      */
-    public GameView() { this(ViewMode.MODE_3D); }
+    public GameView()
+    {
+        this(ViewMode.MODE_3D);
+    }
 
     /**
      * This method is used to instantiate all the useful things
@@ -131,7 +134,7 @@ public class GameView extends Application
         group.getChildren().add(ambientLight);
 
         // Add all the game components to the group and subscribe them to the point light
-        for(DrawableObject object : drawableObjects)
+        for (DrawableObject object : drawableObjects)
         {
             object.addToGroup(group);
             object.subscribeToPointLight(pointLight);
@@ -148,9 +151,8 @@ public class GameView extends Application
     }
 
     /**
-     * This method setups all the camera stuff. It is a perspective camera
-     * and also it is based on an object attribute, so there is no need
-     * to return something.
+     * This method setups all the camera stuff. It is a perspective camera and also it is based on an object attribute, so there is no need to return
+     * something.
      */
     private void setupCamera()
     {
@@ -164,9 +166,8 @@ public class GameView extends Application
     }
 
     /**
-     * This method setups all the lights (ambient and point) to be used
-     * in the scene. The lights are actually object private attributes
-     * so the method returns nothing.
+     * This method setups all the lights (ambient and point) to be used in the scene. The lights are actually object private attributes so the method
+     * returns nothing.
      */
     private void setupLights()
     {
@@ -176,7 +177,7 @@ public class GameView extends Application
         pointLight.setColor(Color.WHITE);
         pointLight.translateYProperty().set(-1000);
         pointLight.translateZProperty().set(-400);
-        pointLight.setRotationAxis(new Point3D(1, 0 ,0));
+        pointLight.setRotationAxis(new Point3D(1, 0, 0));
         pointLight.rotateProperty().set(90);
         pointLight.setLinearAttenuation(-0.0003);
     }
@@ -187,17 +188,16 @@ public class GameView extends Application
     private void startAnimationUpdates()
     {
         // Create the scheduled task
-        Timeline animationUpdates = new Timeline(
-                new KeyFrame(Duration.millis(ANIMATION_UPDATE_PERIOD_MILLIS), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event)
-                    {
-                        // To handle the animations update i call every drawable object
-                        for(DrawableObject object : drawableObjects)
-                            object.updateAnimation();
-                    }
-                })
-        );
+        Timeline animationUpdates = new Timeline(new KeyFrame(Duration.millis(ANIMATION_UPDATE_PERIOD_MILLIS), new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(ActionEvent event)
+            {
+                // To handle the animations update i call every drawable object
+                for (DrawableObject object : drawableObjects)
+                    object.updateAnimation();
+            }
+        }));
         // Set the task as infinite and start the task
         animationUpdates.setCycleCount(Timeline.INDEFINITE);
         animationUpdates.play();
@@ -209,18 +209,17 @@ public class GameView extends Application
     private void updateCameraView()
     {
         // Depending on the position i rotate and traslate the camera
-        if(viewMode == ViewMode.MODE_2D)
+        if (viewMode == ViewMode.MODE_2D)
         {
             camera.translateYProperty().set(-1000);
             camera.translateZProperty().set(30);
             camera.setRotationAxis(new Point3D(1, 0, 0));
             camera.rotateProperty().set(-90);
-        }
-        else if(viewMode == ViewMode.MODE_3D)
+        } else if (viewMode == ViewMode.MODE_3D)
         {
             int angle = 55;
-            //camera.translateYProperty().set(-1000 * Math.sin(angle));
-            //camera.translateZProperty().set(-1000 * Math.cos(angle));
+            // camera.translateYProperty().set(-1000 * Math.sin(angle));
+            // camera.translateZProperty().set(-1000 * Math.cos(angle));
 
             camera.translateYProperty().set(-1000 * Math.sin(Math.toRadians(angle)));
             camera.translateZProperty().set(-1000 * Math.cos(Math.toRadians(angle)));
@@ -231,14 +230,15 @@ public class GameView extends Application
 
     /**
      * This method sets the camera view and updates the view
+     * 
      * @param mode The new view
      */
     public void setViewMode(ViewMode mode)
     {
-        if(mode == null)
+        if (mode == null)
             throw new NullPointerException("[GameView] Null view mode");
 
-        if(mode != viewMode)
+        if (mode != viewMode)
         {
             // If they differ i change the camera view
             this.viewMode = mode;

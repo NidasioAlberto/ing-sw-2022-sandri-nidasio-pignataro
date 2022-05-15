@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model;
 
 import java.io.Serializable;
+import it.polimi.ingsw.client.cli.utils.GamePieces;
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 
 /**
- * This class represents the tower object. Each player/team has 6 or 8 different colored towers in
- * total and the amount of the "island positioned" ones determines the winner of the match.
+ * This class represents the tower object. Each player/team has 6 or 8 different colored towers in total and the amount of the "island positioned"
+ * ones determines the winner of the match.
  */
 public class Tower implements Serializable
 {
@@ -27,5 +29,11 @@ public class Tower implements Serializable
     public TowerColor getColor()
     {
         return color;
+    }
+
+    @Override
+    public String toString()
+    {
+        return PrintHelper.drawColor(color, GamePieces.TOWER.toString());
     }
 }

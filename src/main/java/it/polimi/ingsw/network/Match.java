@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.Answer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
-import it.polimi.ingsw.protocol.updates.AssistantCardsUpdate;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
 
 public class Match implements Subscriber<ModelUpdate>
@@ -36,16 +35,14 @@ public class Match implements Subscriber<ModelUpdate>
      * @throws IllegalArgumentException If already exists a player with such nickname.
      * @throws TooManyPlayersException If there are too many players.
      */
-    public void addPlayer(PlayerConnection player)
-            throws NullPointerException, IllegalArgumentException, TooManyPlayersException
+    public void addPlayer(PlayerConnection player) throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
         try
         {
             players.add(player);
             gameController.addPlayer(player.getPlayerName().get());
-            gameController.getGame().getPlayerTableList().stream().filter(
-                    (p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst().
-                    ifPresent((p) -> p.subscribe(this));
+            gameController.getGame().getPlayerTableList().stream().filter((p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst()
+                    .ifPresent((p) -> p.subscribe(this));
         } catch (Exception e)
         {
             players.remove(player);
@@ -109,10 +106,9 @@ public class Match implements Subscriber<ModelUpdate>
     {
         if (update.getPlayerDestination().isPresent())
         {
-            players.stream().filter((player) -> player.getPlayerName().equals(update.getPlayerDestination()))
-                    .findFirst().ifPresent((player) -> player.sendModelUpdate(update));
-        }
-        else
+            players.stream().filter((player) -> player.getPlayerName().equals(update.getPlayerDestination())).findFirst()
+                    .ifPresent((player) -> player.sendModelUpdate(update));
+        } else
         {
             for (PlayerConnection player : players)
                 player.sendModelUpdate(update);
