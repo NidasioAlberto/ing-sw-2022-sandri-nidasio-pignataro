@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -48,6 +49,8 @@ public class Shaman extends CharacterCard
         //If so i can disable the card
         if(!activated)
             return;
+
+        conquerProfessors();
 
         if(instance.motherNatureMoved)
             this.deactivate();
@@ -139,6 +142,26 @@ public class Shaman extends CharacterCard
                     instance.getSelectedPlayer().get().getBoard().addProfessor(professor);
                 }
             }
+        }
+    }
+
+    @Override
+    public void putStudentToDining(Student student)
+            throws NoSuchElementException, NullPointerException
+    {
+        // Move the student
+        instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Shaman]")).getBoard()
+                .addStudentToDiningRoom(student);
+
+        conquerProfessors();
+
+        // After the model update i have to notify the observer with the schoolboards update
+        // and i need to send all of them because of conquer professors
+        if (instance.subscriber.isPresent())
+        {
+            for (Player player : instance.players)
+                instance.subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
         }
     }
 

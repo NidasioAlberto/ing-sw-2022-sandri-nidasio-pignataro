@@ -84,16 +84,18 @@ public class Centaur extends CharacterCard
         return influence;
     }
 
+    @Override
     public void computeInfluence() throws NoSuchElementException
     {
         computeInfluence(instance.motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                "[Game] No mother nature index, is the game initialized?")));
+                "[Centaur] No mother nature index, is the game initialized?")));
     }
 
+    @Override
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
         if (island < 0 || island >= instance.islands.size())
-            throw new IslandIndexOutOfBoundsException("[Game]");
+            throw new IslandIndexOutOfBoundsException("[Centaur]");
 
         Island currentIsland = instance.islands.get(island);
 
@@ -202,7 +204,7 @@ public class Centaur extends CharacterCard
 
             // If there are only 3 islands so the game ends
             if (instance.islands.size() <= 3)
-                throw new EndGameException("[Game]");
+                throw new EndGameException("[Centaur]");
         }
     }
 

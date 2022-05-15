@@ -677,35 +677,6 @@ public class GameActionHandlerTest
                                         "player1"));
                                 assertEquals(card, game.getCurrentCharacterCard().get());
                                 assertTrue(card.isActivated());
-
-                               /* // player3 applies the action of the monk
-                                SchoolColor color9 = ((Monk) card).getStudents().get(0).getColor();
-                                List<SchoolColor> colors = new ArrayList<>();
-                                colors.add(color9);
-                                assertDoesNotThrow(() -> handler
-                                        .handleAction(new CharacterCardActionMessage(
-                                                ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
-                                                5, colors), "player3"));
-                                if (game.getIslands().get(5).getStudents().size() == 1)
-                                        assertEquals(color9, game.getIslands().get(5).getStudents()
-                                                .get(0).getColor());
-                                else
-                                        assertEquals(color9, game.getIslands().get(5).getStudents()
-                                                .get(1).getColor());
-
-                                // player3 activate the monk card again, so an exception is thrown
-                                assertThrows(InvalidCharacterCardException.class, () -> handler.handleAction(
-                                        new PlayCharacterCardMessage(game
-                                                .getCharacterCards().indexOf(card)),
-                                        "player3"));
-
-                                // player3 applies the action of the monk again
-                                SchoolColor color10 = ((Monk) card).getStudents().get(0).getColor();
-                                colors.add(color10);
-                                assertThrows(NoSelectedCharacterCardException.class, () -> handler
-                                        .handleAction(new CharacterCardActionMessage(
-                                                ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND,
-                                                5, colors), "player3")); */
                         }
                 }
 
@@ -729,7 +700,9 @@ public class GameActionHandlerTest
                 {
                         assertTrue(handler.getGame() instanceof Centaur);
                         assertTrue(game.getCurrentCharacterCard().get().isActivated());
-                }
+                        game.getIslands().get((game.getMotherNatureIndex().get() + 1) % game.getIslands().size()).addTower(new Tower(game.getPlayerTableList().get(2).getColor()));
+               }
+
                 // player1 moves mother nature
                 assertDoesNotThrow(() -> handler.handleAction(new MoveMotherNatureMessage(
                 (game.getMotherNatureIndex().get() + 1) % game.getIslands().size()),"player1"));
@@ -738,7 +711,7 @@ public class GameActionHandlerTest
                 {
                         assertTrue(game.getCurrentCharacterCard().get().isActivated());
                         assertTrue(handler.getGame() instanceof Centaur);
-                }
+               }
 
                 // player1 selects the same cloud tile as player3 so an exception is thrown
                 assertThrows(InvalidCloudTileException.class, () -> handler.handleAction(
