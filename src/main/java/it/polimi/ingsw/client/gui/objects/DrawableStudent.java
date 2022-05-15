@@ -15,17 +15,6 @@ import java.util.Objects;
 
 public class DrawableStudent extends DrawableObject
 {
-
-    /**
-     * Radius of the cylinder
-     */
-    private final double RADIUS;
-
-    /**
-     * Height of the cylinder
-     */
-    private final double HEIGHT;
-
     /**
      * Student type (color)
      */
@@ -39,21 +28,13 @@ public class DrawableStudent extends DrawableObject
 
     /**
      * Constructor
-     * @param radius Radius of the cylinder
-     * @param height Height of the cylinder
      */
-    public DrawableStudent(double radius, double height, StudentType type)
+    public DrawableStudent( StudentType type)
     {
-        if(radius <= 0)
-            throw new IllegalArgumentException("[DrawableStudent] Less or equal to 0 cylinder radius");
-        if(height <= 0)
-            throw new IllegalArgumentException("[DrawableStudent] Less or equal to 0 cylinder height");
         if(type == null)
             throw new NullPointerException("[DrawableStudent] Null student type");
 
         // Assign the constant parameters
-        RADIUS = radius;
-        HEIGHT = height;
         TYPE = type;
 
         // Create the mesh referring to the Object file
@@ -74,11 +55,11 @@ public class DrawableStudent extends DrawableObject
         material.setDiffuseColor(type.getColor());
         material.setSpecularColor(Color.WHITE);
 
-        // Rotate the student of 180 degrees on the y axis
-        studentMesh.getTransforms().add(new Rotate(180, new Point3D(0, 1, 0)));
-
         // Apply the material
         studentMesh.setMaterial(material);
+
+        // Rotate the student of 180 degrees on the y axis
+        studentMesh.getTransforms().add(new Rotate(180, new Point3D(0, 1, 0)));
     }
 
     @Override
@@ -104,6 +85,9 @@ public class DrawableStudent extends DrawableObject
     @Override
     public void subscribeToPointLight(PointLight light)
     {
+        if(light == null)
+            throw new NullPointerException("[DrawableStudent] Null point light");
+
         // The students should be under the light so i subscribe it
         light.getScope().add(studentMesh);
     }
@@ -115,6 +99,10 @@ public class DrawableStudent extends DrawableObject
     @Override
     public void translate(Point3D point)
     {
+        if(point == null)
+            throw new NullPointerException("[DrawableStudent] Null point");
+
+        // Set all the translation
         studentMesh.translateXProperty().set(point.getX());
         studentMesh.translateYProperty().set(point.getY());
         studentMesh.translateZProperty().set(point.getZ());

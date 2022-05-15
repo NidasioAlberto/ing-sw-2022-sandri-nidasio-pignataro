@@ -137,7 +137,8 @@ public class GameActionHandler
     public void moveStudentFromEntranceToIsland(SchoolColor selectedColor, int selectedIsland)
             throws InvalidModuleException
     {
-        checkIfCharacterCardIsStillPlayable();
+        // If the current card is activated i can apply the action
+        checkIfCharacterCardIsStillApplicable();
 
         // Select the color
         game.getSelectedPlayer().get().selectColor(selectedColor);
@@ -151,11 +152,6 @@ public class GameActionHandler
         game.putStudentToIsland(game.getSelectedPlayer().get().getBoard().removeStudentFromEntrance(
                 game.getSelectedPlayer().get().getSelectedColors().get(0)).get());
 
-        // If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent()
-                && game.getCurrentCharacterCard().get().isActivated())
-            game.getCurrentCharacterCard().get().applyAction();
-
         // Clear the selections
         game.getSelectedPlayer().get().clearSelections();
 
@@ -166,18 +162,14 @@ public class GameActionHandler
     public void moveStudentFromEntranceToDining(SchoolColor selectedColor)
             throws InvalidModuleException
     {
-        checkIfCharacterCardIsStillPlayable();
+        // If the current card is activated i can apply the action
+        checkIfCharacterCardIsStillApplicable();
 
         // Select the color
         game.getSelectedPlayer().get().selectColor(selectedColor);
 
         // Move the student to dining
         game.putStudentToDining(game.pickStudentFromEntrance());
-
-        // If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent()
-                && game.getCurrentCharacterCard().get().isActivated())
-            game.getCurrentCharacterCard().get().applyAction();
 
         // Clear the selections
         game.getSelectedPlayer().get().clearSelections();
@@ -189,7 +181,8 @@ public class GameActionHandler
     public void moveMotherNature(int selectedIsland)
             throws InvalidModuleException, NoSuchElementException, InvalidParameterException
     {
-        checkIfCharacterCardIsStillPlayable();
+        // If the current card is activated i can apply the action
+        checkIfCharacterCardIsStillApplicable();
 
         // Select the island
         game.getSelectedPlayer().get().selectIsland(selectedIsland);
@@ -216,11 +209,6 @@ public class GameActionHandler
         // If all goes correctly i compute the influence
         game.computeInfluence();
 
-        // If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent()
-                && game.getCurrentCharacterCard().get().isActivated())
-            game.getCurrentCharacterCard().get().applyAction();
-
         // Clear the selections
         game.getSelectedPlayer().get().clearSelections();
 
@@ -230,18 +218,20 @@ public class GameActionHandler
 
     public void selectCloudTile(int selectedCloudTile) throws InvalidModuleException
     {
-        checkIfCharacterCardIsStillPlayable();
+        // If the current card is activated i can apply the action
+        checkIfCharacterCardIsStillApplicable();
+
+        // Check if the index of the selectedCloudTile is valid
+        if (selectedCloudTile < 0 || selectedCloudTile >= game.getCloudTiles().size() ||
+            game.getCloudTiles().get(selectedCloudTile).getStudents().size() !=
+            game.getCloudTiles().get(selectedCloudTile).getType().getStudentCapacity())
+            throw new InvalidCloudTileException("[GameActionHandler]");
 
         // Select the cloud tile
         game.getSelectedPlayer().get().selectCloudTile(selectedCloudTile);
 
         // I use the designed method
         game.moveStudentsFromCloudTile();
-
-        // If the current card is activated i can apply the action
-        if (game.getCurrentCharacterCard().isPresent()
-                && game.getCurrentCharacterCard().get().isActivated())
-            game.getCurrentCharacterCard().get().applyAction();
 
         // If all goes correctly i step the FSM
         gamePhase.onValidAction(this);
@@ -303,7 +293,8 @@ public class GameActionHandler
 
     public void endTurn() throws InvalidModuleException
     {
-        checkIfCharacterCardIsStillPlayable();
+        // If the current card is activated i can apply the action
+        checkIfCharacterCardIsStillApplicable();
 
         // Clear the selections and disable any character card
         game.getSelectedPlayer().get().clearSelectionsEndTurn();
@@ -342,15 +333,13 @@ public class GameActionHandler
         return game;
     }
 
-    private void checkIfCharacterCardIsStillPlayable() throws InvalidModuleException
+    private void checkIfCharacterCardIsStillApplicable()
     {
-        // If there is still an active character card which is has not been played the turn can't
-        // end
+        // If there is still an active character card I have to apply its action
         if (game.getCurrentCharacterCard().isPresent()
                 && game.getCurrentCharacterCard().get().isActivated()
-                && !game.getCurrentCharacterCard().get()
+                && game.getCurrentCharacterCard().get()
                         .isValidAction(ExpertGameAction.BASE_ACTION))
-            throw new InvalidModuleException(
-                    "[GameActionHandler] The turn can't end, a character card is still active and not played yet");
+            game.getCurrentCharacterCard().filter(c -> c.isActivated()).get().applyAction();
     }
 }

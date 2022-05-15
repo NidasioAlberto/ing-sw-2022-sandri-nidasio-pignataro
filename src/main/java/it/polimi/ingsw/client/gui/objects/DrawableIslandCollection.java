@@ -132,6 +132,9 @@ public class DrawableIslandCollection extends DrawableObject
     @Override
     public synchronized void translate(Point3D point)
     {
+        if(point == null)
+            throw new NullPointerException("[DrawableIslandCollection] Null point");
+
         // Set the position
         position = point;
 

@@ -214,6 +214,9 @@ public class Controller
         {
             getCurrentPlayer().clearSelections();
             sendError(getCurrentPlayer().getNickname(), "You can't select that island.");
+        } catch (InvalidCloudTileException e)
+        {
+            sendError(getCurrentPlayer().getNickname(), "You can't select that cloud tile.");
         } catch (NotEnoughCoinsException e)
         {
             game.clearCharacterCard();
