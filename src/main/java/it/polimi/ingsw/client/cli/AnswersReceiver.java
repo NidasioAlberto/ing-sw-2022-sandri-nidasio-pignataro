@@ -21,8 +21,7 @@ public class AnswersReceiver implements Runnable
                 System.out.println(inputStream.readObject().toString());
         } catch (IOException e)
         {
-            System.err
-                    .println("[AnswersReceiver] Error while reading an object: " + e.getMessage());
+            System.err.println("[AnswersReceiver] Error while reading an object: " + e.getMessage());
         } catch (ClassNotFoundException e)
         {
             System.out.println("SEVERE ERROR! " + e.getMessage());

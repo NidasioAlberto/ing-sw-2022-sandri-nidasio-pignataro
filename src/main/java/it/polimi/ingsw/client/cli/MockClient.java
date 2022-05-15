@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.protocol.commands.*;
 import it.polimi.ingsw.protocol.messages.*;
 
-public class Client
+public class MockClient
 {
     public static void main(String[] args)
     {
@@ -95,8 +95,7 @@ public class Client
             {
                 System.out.print("Match name: ");
                 String matchId = scanner.nextLine();
-                System.out.print("Game mode [" + GameMode.CLASSIC.toString() + ","
-                        + GameMode.EXPERT.toString() + "]: ");
+                System.out.print("Game mode [" + GameMode.CLASSIC.toString() + "," + GameMode.EXPERT.toString() + "]: ");
                 GameMode gameMode = GameMode.valueOf(scanner.nextLine());
                 System.out.print("Players number [2-3]: ");
                 int playersNumber = Integer.parseInt(scanner.nextLine());
@@ -155,7 +154,8 @@ public class Client
 
         int choice = Integer.parseInt(scanner.nextLine());
 
-        switch (choice) {
+        switch (choice)
+        {
             case 1:
             {
                 System.out.println("Selected card: ");
@@ -173,8 +173,7 @@ public class Client
             {
                 SchoolColor selectedColor = selectSchoolColors(scanner);
                 int selectedIsland = selectIsland(scanner);
-                outputStream.writeObject(
-                        new MoveStudentFromEntranceToIslandMessage(selectedColor, selectedIsland));
+                outputStream.writeObject(new MoveStudentFromEntranceToIslandMessage(selectedColor, selectedIsland));
                 break;
             }
             case 4:
@@ -210,8 +209,7 @@ public class Client
                 int action = Integer.parseInt(scanner.nextLine());
                 int selectedIsland = selectIsland(scanner);
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
-                outputStream.writeObject(new CharacterCardActionMessage(
-                        ExpertGameAction.values()[action], selectedIsland, selectedColors));
+                outputStream.writeObject(new CharacterCardActionMessage(ExpertGameAction.values()[action], selectedIsland, selectedColors));
                 break;
             }
             case 9:
@@ -240,8 +238,7 @@ public class Client
         {
             selectedColors.add(selectSchoolColors(scanner));
             System.out.println("Type 'Y' to select another");
-        } while (scanner.nextLine().equals("Y")
-                && selectedColors.size() < SchoolColor.values().length);
+        } while (scanner.nextLine().equals("Y") && selectedColors.size() < SchoolColor.values().length);
 
         return selectedColors;
     }
@@ -263,6 +260,7 @@ public class Client
 
     /**
      * List of Character Cards' effects.
+     * 
      * @return the printable version of the effects.
      */
     static String characterCardsEffects()
@@ -270,30 +268,27 @@ public class Client
         String rules = "";
 
         rules += "These are the effects of the character cards: \n";
-        rules += "- MONK: Take 1 Student from this card and place it on an island of your choice. " +
-                "Then, draw a new Student from the bag and place it on this card;\n";
-        rules += "- SHAMAN: During this turn, you take control of any number of Professors even if you " +
-                "have the same number of Students as the player who currently controls them;\n";
-        rules += "- HERALD: Choose an Island and resolve the Island as if Mother Nature had ended her movement there." +
-                " Mother Nature will still move and the Island where she ends her movement will also be resolved;\n";
-        rules += "- POSTMAN: You may move Mother Nature up to 2 additional Islands than is indicated " +
-                "by the Assistant card you've played;\n";
-        rules += "- GRANDMA_HERBS: Place a No Entry tile on an Island of your choice. The  first time Mother Nature " +
-                "ends her movement there, put the No Entry Tile back onto this card DO NOT calculate influence on " +
-                "that Island, or place any Towers;\n";
+        rules += "- MONK: Take 1 Student from this card and place it on an island of your choice. "
+                + "Then, draw a new Student from the bag and place it on this card;\n";
+        rules += "- SHAMAN: During this turn, you take control of any number of Professors even if you "
+                + "have the same number of Students as the player who currently controls them;\n";
+        rules += "- HERALD: Choose an Island and resolve the Island as if Mother Nature had ended her movement there."
+                + " Mother Nature will still move and the Island where she ends her movement will also be resolved;\n";
+        rules += "- POSTMAN: You may move Mother Nature up to 2 additional Islands than is indicated " + "by the Assistant card you've played;\n";
+        rules += "- GRANDMA_HERBS: Place a No Entry tile on an Island of your choice. The  first time Mother Nature "
+                + "ends her movement there, put the No Entry Tile back onto this card DO NOT calculate influence on "
+                + "that Island, or place any Towers;\n";
         rules += "- CENTAUR: When resolving a computeInfluence on an Island, Towers do not count towards influence;\n";
-        rules += "- JOKER: You may take up to 3 Students from this card and replace them with the same number " +
-                "of Students from your Entrance;\n";
+        rules += "- JOKER: You may take up to 3 Students from this card and replace them with the same number " + "of Students from your Entrance;\n";
         rules += "- KNIGHT: During the influence calculation this turn, you count as having 2 more influence;\n";
-        rules += "- MUSHROOM_MAN: Choose a color of Student; during the influence calculation this turn, " +
-                "that color adds no influence;\n";
+        rules += "- MUSHROOM_MAN: Choose a color of Student; during the influence calculation this turn, " + "that color adds no influence;\n";
         rules += "- MINSTREL: You may exchange up to 2 Students between your Entrance and your Dining Room;\n";
-        rules += "- PRINCESS: Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student" +
-                " from the Bag and place it on this card;\n";
-        rules += "- THIEF: Choose a type of Student; every player (including yourself) must return 3 Students of that " +
-                "type from their Dining Room to the bag. If any player has fewer than 3 Students of that type," +
-                " return as many Students as they have.\n";
+        rules += "- PRINCESS: Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student"
+                + " from the Bag and place it on this card;\n";
+        rules += "- THIEF: Choose a type of Student; every player (including yourself) must return 3 Students of that "
+                + "type from their Dining Room to the bag. If any player has fewer than 3 Students of that type,"
+                + " return as many Students as they have.\n";
 
-        return  rules;
+        return rules;
     }
 }

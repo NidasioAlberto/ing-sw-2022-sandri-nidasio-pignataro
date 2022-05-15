@@ -36,8 +36,7 @@ public class PlayerConnection implements Runnable
             outputStream = new ObjectOutputStream(playerSocket.getOutputStream());
         } catch (IOException e)
         {
-            System.err.println("[PlayerConnection] Error during initialization of the client: "
-                    + e.getMessage());
+            System.err.println("[PlayerConnection] Error during initialization of the client: " + e.getMessage());
         }
     }
 
@@ -85,8 +84,7 @@ public class PlayerConnection implements Runnable
             playerSocket.close();
         } catch (IOException e)
         {
-            System.err.println(
-                    "[PlayerConnection] An error occurred while closing the player's connection");
+            System.err.println("[PlayerConnection] An error occurred while closing the player's connection");
             System.err.println("[PlayerConnection] " + e.getMessage());
         }
     }
@@ -114,8 +112,7 @@ public class PlayerConnection implements Runnable
 
     public void handlePacket(Object rawPacket)
     {
-        System.out.println(
-                "[PlayerConnection] New packet received: " + rawPacket.getClass().getSimpleName());
+        System.out.println("[PlayerConnection] New packet received: " + rawPacket.getClass().getSimpleName());
 
         try
         {
@@ -148,8 +145,7 @@ public class PlayerConnection implements Runnable
 
     private void sendObject(Object object)
     {
-        System.out.println(
-                "[PlayerConnection] Sending " + object.getClass().getSimpleName() + " to player " + playerName.orElse(""));
+        System.out.println("[PlayerConnection] Sending " + object.getClass().getSimpleName() + " to player " + playerName.orElse(""));
         try
         {
             outputStream.writeObject(object);
