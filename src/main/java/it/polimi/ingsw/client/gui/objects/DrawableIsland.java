@@ -133,6 +133,16 @@ public class DrawableIsland extends DrawableObject
         box.translateZProperty().set(point.getZ());
     }
 
+    @Override
+    public void addRotation(Rotate rotation)
+    {
+        if(rotation == null)
+            throw new NullPointerException("[DrawableIsland] Null rotation");
+
+        // Rotate the box
+        box.getTransforms().add(rotation);
+    }
+
     public synchronized void setX(float x) { box.translateXProperty().set(x); }
 
     public synchronized void setY(float y) { box.translateYProperty().set(y); }

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.objects.*;
+import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.TowerColor;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -116,73 +118,69 @@ public class GameView extends Application
         // Create all the game components
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f);
         islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
-        schoolBoard = new DrawableSchoolBoard(350, 350 / DrawableSchoolBoard.SCALE_FACTOR);
-        DrawableTower tower = new DrawableTower(TowerType.WHITE);
+        schoolBoard = new DrawableSchoolBoard(350);
+        DrawableSchoolBoard s2 = new DrawableSchoolBoard(350);
+        DrawableSchoolBoard s3 = new DrawableSchoolBoard(350);
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
-        schoolBoard.translate(new Point3D(0, 0, 0));
-        tower.translate(new Point3D(0,0, 100));
-
-        // Calibration
-        DrawableStudent red = new DrawableStudent(StudentType.RED);
-        DrawableStudent red2 = new DrawableStudent(StudentType.RED);
-        DrawableStudent green = new DrawableStudent(StudentType.GREEN);
-        DrawableStudent yellow = new DrawableStudent(StudentType.YELLOW);
-        DrawableStudent pink = new DrawableStudent(StudentType.PINK);
-        DrawableStudent blue = new DrawableStudent(StudentType.BLUE);
-        red.translate(new Point3D(-102.5, 0, 25));
-        red2.translate(new Point3D(-52.49, 0, 25)); // Increment of 16.67 per position
-        green.translate(new Point3D(-102.5, 0, 50));
-        yellow.translate(new Point3D(-102.5, 0, 0));
-        pink.translate(new Point3D(-102.5, 0, -25));
-        blue.translate(new Point3D(-102.5, 0, -50));
-
-        DrawableProfessor pgreen = new DrawableProfessor(ProfessorType.GREEN);
-        DrawableProfessor pred = new DrawableProfessor(ProfessorType.RED);
-        DrawableProfessor pyellow = new DrawableProfessor(ProfessorType.YELLOW);
-        DrawableProfessor ppink = new DrawableProfessor(ProfessorType.PINK);
-        DrawableProfessor pblue = new DrawableProfessor(ProfessorType.BLUE);
-        pgreen.translate(new Point3D(80, 0, 50));
-        pred.translate(new Point3D(80, 0, 25));
-        pyellow.translate(new Point3D(80, 0, 0));
-        ppink.translate(new Point3D(80, 0, -25));
-        pblue.translate(new Point3D(80, 0, -50));
-
-        DrawableStudent dining1 = new DrawableStudent(StudentType.RED);
-        DrawableStudent dining2 = new DrawableStudent(StudentType.YELLOW);
-        dining1.translate(new Point3D(-155.5, 0, -50));
-        dining2.translate(new Point3D(-135, 0, -50)); // Increment of 20.5 per position
-
-        DrawableTower tower1 = new DrawableTower(TowerType.WHITE);
-        DrawableTower tower2 = new DrawableTower(TowerType.WHITE);
-        DrawableTower tower3 = new DrawableTower(TowerType.WHITE);
-        tower1.translate(new Point3D(118.5, 0, 37.5));
-        tower2.translate(new Point3D(145.5, 0, 37.5)); // X Increment of 27 per position
-        tower3.translate(new Point3D(118.5, 0, 12.5)); // Y decrement of 15 per position
-
+        schoolBoard.translate(new Point3D(0, 0, -175));
+        s2.translate(new Point3D(-400, 0, 150));
+        s3.translate(new Point3D(400, 0, 150));
+        s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
+        s3.addRotation(new Rotate(-90, new Point3D(0, 1, 0)));
 
         // Add all the created objects to the collection of drawable objects
-        //drawableObjects.add(motherNature);
-        //drawableObjects.add(islandCollection);
+        drawableObjects.add(motherNature);
+        drawableObjects.add(islandCollection);
         drawableObjects.add(schoolBoard);
-        drawableObjects.add(red);
-        drawableObjects.add(red2);
-        drawableObjects.add(green);
-        drawableObjects.add(yellow);
-        drawableObjects.add(pink);
-        drawableObjects.add(blue);
-        drawableObjects.add(pgreen);
-        drawableObjects.add(pred);
-        drawableObjects.add(pyellow);
-        drawableObjects.add(ppink);
-        drawableObjects.add(pblue);
-        drawableObjects.add(dining1);
-        drawableObjects.add(dining2);
-        drawableObjects.add(tower1);
-        drawableObjects.add(tower2);
-        drawableObjects.add(tower3);
-        //drawableObjects.add(tower);
+        drawableObjects.add(s2);
+        drawableObjects.add(s3);
+
+        // Dynamic object add to schoolboard
+        schoolBoard.addProfessor(SchoolColor.GREEN, group, pointLight);
+        schoolBoard.addProfessor(SchoolColor.RED, group, pointLight);
+        schoolBoard.addProfessor(SchoolColor.YELLOW, group, pointLight);
+        schoolBoard.addProfessor(SchoolColor.PINK, group, pointLight);
+        schoolBoard.addProfessor(SchoolColor.BLUE, group, pointLight);
+
+        s2.addProfessor(SchoolColor.GREEN, group, pointLight);
+        s2.addProfessor(SchoolColor.RED, group, pointLight);
+        s2.addProfessor(SchoolColor.YELLOW, group, pointLight);
+        s2.addProfessor(SchoolColor.PINK, group, pointLight);
+        s2.addProfessor(SchoolColor.BLUE, group, pointLight);
+
+        s3.addProfessor(SchoolColor.GREEN, group, pointLight);
+        s3.addProfessor(SchoolColor.RED, group, pointLight);
+        s3.addProfessor(SchoolColor.YELLOW, group, pointLight);
+        s3.addProfessor(SchoolColor.PINK, group, pointLight);
+        s3.addProfessor(SchoolColor.BLUE, group, pointLight);
+        for(int i = 0; i < 8; i++)
+        {
+            schoolBoard.addStudentToDining(SchoolColor.GREEN, group, pointLight);
+            schoolBoard.addStudentToDining(SchoolColor.RED, group, pointLight);
+            schoolBoard.addStudentToDining(SchoolColor.YELLOW, group, pointLight);
+            schoolBoard.addStudentToDining(SchoolColor.PINK, group, pointLight);
+            schoolBoard.addStudentToDining(SchoolColor.BLUE, group, pointLight);
+            schoolBoard.addStudentToEntrance(SchoolColor.RED, group, pointLight);
+            schoolBoard.addTower(TowerColor.WHITE, group, pointLight);
+
+            s2.addStudentToDining(SchoolColor.GREEN, group, pointLight);
+            s2.addStudentToDining(SchoolColor.RED, group, pointLight);
+            s2.addStudentToDining(SchoolColor.YELLOW, group, pointLight);
+            s2.addStudentToDining(SchoolColor.PINK, group, pointLight);
+            s2.addStudentToDining(SchoolColor.BLUE, group, pointLight);
+            s2.addStudentToEntrance(SchoolColor.RED, group, pointLight);
+            s2.addTower(TowerColor.BLACK, group, pointLight);
+
+            s3.addStudentToDining(SchoolColor.GREEN, group, pointLight);
+            s3.addStudentToDining(SchoolColor.RED, group, pointLight);
+            s3.addStudentToDining(SchoolColor.YELLOW, group, pointLight);
+            s3.addStudentToDining(SchoolColor.PINK, group, pointLight);
+            s3.addStudentToDining(SchoolColor.BLUE, group, pointLight);
+            s3.addStudentToEntrance(SchoolColor.RED, group, pointLight);
+            s3.addTower(TowerColor.GREY, group, pointLight);
+        }
 
         // Add the lights to the view
         group.getChildren().add(pointLight);

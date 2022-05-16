@@ -108,8 +108,20 @@ public class DrawableProfessor extends DrawableObject
     }
 
     @Override
+    public void addRotation(Rotate rotation)
+    {
+        if(rotation == null)
+            throw new NullPointerException("[DrawableProfessor] Null rotation");
+
+        // Add the rotation to the object
+        professorMesh.getTransforms().add(rotation);
+    }
+
+    @Override
     public Point3D getPosition()
     {
         return new Point3D(professorMesh.getTranslateX(), professorMesh.getTranslateY(), professorMesh.getTranslateZ());
     }
+
+    public ProfessorType getType() { return TYPE; }
 }

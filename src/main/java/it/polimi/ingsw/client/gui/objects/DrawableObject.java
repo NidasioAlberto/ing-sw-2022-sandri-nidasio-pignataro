@@ -5,6 +5,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.LightBase;
 import javafx.scene.PointLight;
+import javafx.scene.transform.Rotate;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -38,6 +39,12 @@ public abstract class DrawableObject
      * @param point The 3D point where translate the object
      */
     public abstract void translate(Point3D point);
+
+    /**
+     * Adds a rotation transformation to the object
+     * @param rotation The transformation to be added
+     */
+    public abstract void addRotation(Rotate rotation);
 
     /**
      * Method to return the current position of the object

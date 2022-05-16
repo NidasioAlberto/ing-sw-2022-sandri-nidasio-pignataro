@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Rotate;
 
 import javax.swing.text.html.HTMLDocument;
 
@@ -131,6 +132,10 @@ public class DrawableMotherNature extends DrawableObject
         setY(point.getY());
         setZ(point.getZ());
     }
+
+    // This method does nothing, mother nature is a sphere
+    @Override
+    public void addRotation(Rotate rotation) {}
 
     private void setX(double x)
     {

@@ -6,7 +6,7 @@ public enum TowerType
 {
     BLACK(Color.rgb(65, 68, 68)),
     WHITE(Color.WHITE),
-    GRAY(Color.rgb(113, 115, 116));
+    GREY(Color.rgb(113, 115, 116));
 
     /**
      * The tower color

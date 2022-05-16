@@ -109,6 +109,16 @@ public class DrawableStudent extends DrawableObject
     }
 
     @Override
+    public void addRotation(Rotate rotation)
+    {
+        if(rotation == null)
+            throw new NullPointerException("[DrawableStudent]");
+
+        // Add the transformation
+        studentMesh.getTransforms().add(rotation);
+    }
+
+    @Override
     public Point3D getPosition()
     {
         return new Point3D(studentMesh.getTranslateX(), studentMesh.getTranslateY(), studentMesh.getTranslateZ());

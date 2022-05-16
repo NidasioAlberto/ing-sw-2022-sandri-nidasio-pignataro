@@ -10,6 +10,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
+import javafx.scene.transform.Rotate;
 
 public class DrawableTower extends DrawableObject
 {
@@ -104,6 +105,16 @@ public class DrawableTower extends DrawableObject
         towerMesh.translateXProperty().set(point.getX());
         towerMesh.translateYProperty().set(point.getY());
         towerMesh.translateZProperty().set(point.getZ());
+    }
+
+    @Override
+    public void addRotation(Rotate rotation)
+    {
+        if(rotation == null)
+            throw new NullPointerException("[DrawableTower] Null rotation");
+
+        // Add the transformation to the mesh
+        towerMesh.getTransforms().add(rotation);
     }
 
     @Override

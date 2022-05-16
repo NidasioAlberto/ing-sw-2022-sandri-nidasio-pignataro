@@ -6,6 +6,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.LightBase;
 import javafx.scene.PointLight;
+import javafx.scene.transform.Rotate;
 
 import java.util.Random;
 
@@ -148,6 +149,10 @@ public class DrawableIslandCollection extends DrawableObject
             islands[i].translate(new Point3D(coordX + point.getX(), point.getY(), coordZ + point.getZ()));
         }
     }
+
+    // This method does nothing, i don't want the island collection to rotate
+    @Override
+    public void addRotation(Rotate rotation) {}
 
     @Override
     public Point3D getPosition() { return position; }
