@@ -10,11 +10,9 @@ import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 
 /**
- * Character card Grandma Herbs. Effect: Place a No Entry tile on an Island of your choice. The
- * first time Mother Nature ends her movement there, put the No Entry Tile back onto this card DO
- * NOT calculate influence on that Island, or place any Towers. IMPORTANT: THIS CARD IS THE ONLY ONE
- * THAT IS ALWAYS REPLACING A METHOD: computeInfluence, TO MONITOR IF A NO ENTRY TILE MUST RETURN TO
- * THE CARD ITSELF.
+ * Character card Grandma Herbs. Effect: Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her movement there, put
+ * the No Entry Tile back onto this card DO NOT calculate influence on that Island, or place any Towers. IMPORTANT: THIS CARD IS THE ONLY ONE THAT IS
+ * ALWAYS REPLACING A METHOD: computeInfluence, TO MONITOR IF A NO ENTRY TILE MUST RETURN TO THE CARD ITSELF.
  */
 public class GrandmaHerbs extends CharacterCard
 {
@@ -80,9 +78,7 @@ public class GrandmaHerbs extends CharacterCard
             throw new NoMoreNoEntryTilesException("[GrandmaHerbs]");
 
         // Put the no entry tile on the selected island
-        int island = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[GrandmaHerbs]"))
-                .getSelectedIsland()
+        int island = instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[GrandmaHerbs]")).getSelectedIsland()
                 .orElseThrow(() -> new NoSelectedIslandException("[GrandmaHerbs]"));
 
         // Add the noEntryTile to the selected island
@@ -103,8 +99,7 @@ public class GrandmaHerbs extends CharacterCard
     {
         // I have to find this character card index inside the list
         int index = 0;
-        for (index = 0; index < instance.characterCards.size()
-                && this != instance.characterCards.get(index); index++);
+        for (index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
 
         // Before the notification i update also the number of no entry tiles
         int count = 0;
@@ -134,8 +129,8 @@ public class GrandmaHerbs extends CharacterCard
     {
         String rep = super.toString();
 
-        rep += PrintHelper.moveCursorRelative(3, 4) + noEntryTiles + GamePieces.NO_ENTRY_TILE;
-        rep += PrintHelper.moveCursorRelative(-3, -5);
+        rep += PrintHelper.moveCursorRelative(2, -6) + noEntryTiles + GamePieces.NO_ENTRY_TILE;
+        rep += PrintHelper.moveCursorRelative(-2, 4);
 
         return rep;
     }

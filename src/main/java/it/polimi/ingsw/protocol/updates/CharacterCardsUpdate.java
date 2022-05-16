@@ -52,7 +52,15 @@ public class CharacterCardsUpdate extends ModelUpdate
         // Draw a character card
         for (CharacterCard card : cards)
         {
+            // Draw the card
             rep += card.toString();
+
+            // Draw its number
+            rep += PrintHelper.moveCursorRelative(5, -8);
+            rep += cards.indexOf(card);
+            rep += PrintHelper.moveCursorRelative(-5, 7);
+
+            // Move the cursor to the next card
             rep += PrintHelper.moveCursorRelative(6, 1);
         }
 

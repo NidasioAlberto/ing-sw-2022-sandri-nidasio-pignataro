@@ -3,14 +3,13 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 
-import java.awt.dnd.DragGestureEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the cloud tile. During the setup phase, these tiles are positioned with
- * some students on them depending on the actual game players.
+ * This class represents the cloud tile. During the setup phase, these tiles are positioned with some students on them depending on the actual game
+ * players.
  */
 public class CloudTile implements Serializable
 {
@@ -98,6 +97,7 @@ public class CloudTile implements Serializable
 
     /**
      * Draws the student at position index of students if present.
+     * 
      * @param index of the student.
      * @return the student if present or blank.
      */
@@ -106,8 +106,8 @@ public class CloudTile implements Serializable
         if (students.size() > index)
         {
             return PrintHelper.drawColor(students.get(index).getColor(), GamePieces.STUDENT.toString());
-        }
-        else return " ";
+        } else
+            return " ";
     }
 
     /**
@@ -118,10 +118,10 @@ public class CloudTile implements Serializable
     {
         String rep = "";
 
-        rep += "╭––––╮" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "╎" +   drawStudent(0) + "  " + drawStudent(1) + "╎" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "╎" +   drawStudent(2) + "  " + drawStudent(3) + "╎" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "╰––––╯";
+        rep += "╭────╮" + PrintHelper.moveCursorRelative(-1, -6);
+        rep += "│" + drawStudent(0) + "  " + drawStudent(1) + "│" + PrintHelper.moveCursorRelative(-1, -6);
+        rep += "│" + drawStudent(2) + "  " + drawStudent(3) + "│" + PrintHelper.moveCursorRelative(-1, -6);
+        rep += "╰────╯";
 
         return rep;
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GrandmaHerbs;
@@ -83,6 +82,5 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
 
     @Override
     public void handleUpdate(Object handler)
-    {
-    }
+    {}
 }

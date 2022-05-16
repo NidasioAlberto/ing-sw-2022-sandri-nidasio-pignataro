@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
@@ -14,10 +15,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
- * This class defines the abstraction of a Character card. A Character card can be played by a
- * player in every moment of his turn paying a price (this price increases the first time the card
- * is played). The card affects the game flow, the game mechanics or both of them, so it is
- * implemented using a decorator pattern of the Game class.
+ * This class defines the abstraction of a Character card. A Character card can be played by a player in every moment of his turn paying a price (this
+ * price increases the first time the card is played). The card affects the game flow, the game mechanics or both of them, so it is implemented using
+ * a decorator pattern of the Game class.
  */
 public abstract class CharacterCard extends Game implements Serializable
 {
@@ -27,8 +27,7 @@ public abstract class CharacterCard extends Game implements Serializable
     protected int cost;
 
     /**
-     * Boolean that indicates the first use of the card. It is used to distinguish the first usage
-     * from the others.
+     * Boolean that indicates the first use of the card. It is used to distinguish the first usage from the others.
      */
     protected boolean firstUsed;
 
@@ -66,18 +65,17 @@ public abstract class CharacterCard extends Game implements Serializable
     }
 
     /**
-     * Method that vary based on the actual card. It accesses the Game instance to understand using
-     * the current game state if it is proper to play the card.
+     * Method that vary based on the actual card. It accesses the Game instance to understand using the current game state if it is proper to play the
+     * card.
      * 
      * @return boolean that indicates the result
      */
     public abstract boolean isPlayable();
 
     /**
-     * This is a critical method for the entire game. Based on the actual game state it decides
-     * whether the argument action should be allowed or not for the game flow. This method, combined
-     * with the decorator pattern, allows the played card to modify the usual game flow applying the
-     * card effect to the match.
+     * This is a critical method for the entire game. Based on the actual game state it decides whether the argument action should be allowed or not
+     * for the game flow. This method, combined with the decorator pattern, allows the played card to modify the usual game flow applying the card
+     * effect to the match.
      * 
      * @param action game action to be verified
      * @return the decision's result
@@ -85,20 +83,17 @@ public abstract class CharacterCard extends Game implements Serializable
     public abstract boolean isValidAction(ExpertGameAction action);
 
     /**
-     * Method to apply the card action to the Game model. IMPORTANT: This method has to be called
-     * after the corresponding action is thrown. It acts with the ALREADY selected objects in the
-     * player instance. IMPORTANT2: THIS METHOD IS CALLED BY REFERENCING TO THE ARRAY OF CHARACTER
-     * CARDS AND NOT WITH THE GAME INSTANCE. IMPORTANT3: THIS METHOD (WITH THE CARD ACTIVE) SHOULD
-     * BE CALLED AT EVERY CONTROLLER OR GAME STEP, SO THAT THE CARD ITSELF DECIDES WERTHER
-     * DEACTIVATE ITSELF.
+     * Method to apply the card action to the Game model. IMPORTANT: This method has to be called after the corresponding action is thrown. It acts
+     * with the ALREADY selected objects in the player instance. IMPORTANT2: THIS METHOD IS CALLED BY REFERENCING TO THE ARRAY OF CHARACTER CARDS AND
+     * NOT WITH THE GAME INSTANCE. IMPORTANT3: THIS METHOD (WITH THE CARD ACTIVE) SHOULD BE CALLED AT EVERY CONTROLLER OR GAME STEP, SO THAT THE CARD
+     * ITSELF DECIDES WERTHER DEACTIVATE ITSELF.
      */
     public abstract void applyAction() throws NoSuchElementException;
 
     /**
      * Method to activate the card effect. Activated => the methods are not pass through.
      *
-     * @throws NotEnoughCoinsException if the player hasn't got enough coins to activate the
-     *         selected card.
+     * @throws NotEnoughCoinsException if the player hasn't got enough coins to activate the selected card.
      * @throws NoSelectedPlayerException if there isn't a selected player.
      */
     public void activate() throws NotEnoughCoinsException, NoSelectedPlayerException
@@ -138,8 +133,7 @@ public abstract class CharacterCard extends Game implements Serializable
                 characterCardsList.add((CharacterCard) card.clone());
             }
 
-            instance.subscriber.get().onNext(
-                    new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+            instance.subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
         }
     }
 
@@ -352,8 +346,8 @@ public abstract class CharacterCard extends Game implements Serializable
 
     public Island getCurrentIsland() throws NoSuchElementException
     {
-        return islands.get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                "[Game] No mother nature index, is the game initialized?")));
+        return islands
+                .get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException("[Game] No mother nature index, is the game initialized?")));
     }
 
     public Optional<Integer> getMotherNatureIndex()
@@ -371,8 +365,7 @@ public abstract class CharacterCard extends Game implements Serializable
         return instance.getGameMode();
     }
 
-    public static CharacterCard createCharacterCard(CharacterCardType type, Game game)
-            throws NullPointerException
+    public static CharacterCard createCharacterCard(CharacterCardType type, Game game) throws NullPointerException
     {
         // Check if the parameters are not null
         if (type == null)
@@ -427,28 +420,23 @@ public abstract class CharacterCard extends Game implements Serializable
     }
 
     /**
-     * Draws a 6x12 representation of the card.
+     * Draws a 7x12 representation of the card.
      */
     @Override
     public String toString()
     {
-        //// ⮊ ⬢ ⬣ ⬡ ⚭ 💰 ⏣ ⎔ ⚭ ⌬ ◯
-        // String[] coinsSign = new String[]{"\u2780", "\u2777", "\u2778", "\u2779", "\u2780"};
         String rep = "";
 
         rep += paintIfActive(this, getCardType().toString());
+        rep += PrintHelper.moveCursorRelative(-1, -getCardType().toString().length());
 
-        for (int i = 0; i < 14 - getCardType().toString().length(); i++)
-            rep += " ";
-        rep += PrintHelper.moveCursorRelative(-1, -14);
-
-        rep += paintIfActive(this, "┏━━━━━━━━━━┓") + PrintHelper.moveCursorRelative(-1, -12);
-        rep += paintIfActive(this, "┃ \uD83D\uDCB0" + getCost() + "       ┃") + PrintHelper.moveCursorRelative(-1, -12);
-            // rep += "║ " + coinsSign[card.getCost() - 1] + " ║ ";
-        rep += paintIfActive(this, "┃          ┃") + PrintHelper.moveCursorRelative(-1, -12);
-        rep += paintIfActive(this, "┃          ┃") + PrintHelper.moveCursorRelative(-1, -12);
-        rep += paintIfActive(this, "┃          ┃") + PrintHelper.moveCursorRelative(-1, -12);
-        rep += paintIfActive(this, "┗━━━━━━━━━━┛") + PrintHelper.moveCursorRelative(-1, -12);
+        rep += paintIfActive(this, "┏━━━━━━━┓") + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, "┃  " + GamePieces.COINS_MARKER + getCost() + "  ┃") + PrintHelper.moveCursorRelative(-1, -9);
+        // rep += "║ " + coinsSign[card.getCost() - 1] + " ║ ";
+        rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, "┗━━━━━━━┛");
 
         return rep;
     }

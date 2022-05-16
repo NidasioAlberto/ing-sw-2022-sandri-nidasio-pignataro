@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Character card Princess. Effect: Take 1 Student from this card and place it in your Dining Room.
- * Then, draw a new Student from the Bag and place it on this card.
+ * Character card Princess. Effect: Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it
+ * on this card.
  */
 public class Princess extends CharacterCard
 {
@@ -63,24 +63,20 @@ public class Princess extends CharacterCard
     /**
      * Move a student from this card to the current player's dining room.
      *
-     * @throws NoSuchElementException If there isn't a current player or a student,
-     * of the color selected, on the card.
+     * @throws NoSuchElementException If there isn't a current player or a student, of the color selected, on the card.
      */
     @Override
     public void applyAction() throws NoSuchElementException
     {
-        //If the card is not currently activated i do nothing
-        if(!activated)
+        // If the card is not currently activated i do nothing
+        if (!activated)
             return;
 
         // Take a student of the selected color from the card
-        Student student = students.stream().filter(s -> s.getColor() == instance
-                        .getSelectedPlayer().orElseThrow(
-                            () -> new NoSelectedPlayerException("[Princess]")
-                        ).getSelectedColors().stream().findFirst().orElseThrow(
-                            () -> new NoSelectedColorException("[Princess]")
-                        ))
-                        .findFirst().orElseThrow(() -> new NoSuchStudentOnCardException("[Princess]"));
+        Student student = students.stream()
+                .filter(s -> s.getColor() == instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Princess]"))
+                        .getSelectedColors().stream().findFirst().orElseThrow(() -> new NoSelectedColorException("[Princess]")))
+                .findFirst().orElseThrow(() -> new NoSuchStudentOnCardException("[Princess]"));
 
         // Remove the student from the card
         students.remove(student);
@@ -95,8 +91,9 @@ public class Princess extends CharacterCard
         try
         {
             students.add(instance.getStudentFromBag());
+        } catch (Exception e)
+        {
         }
-        catch(Exception e){}
 
         this.deactivate();
 
@@ -109,9 +106,9 @@ public class Princess extends CharacterCard
     {
         // I have to find this character card index inside the list
         int index = 0;
-        for(index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
+        for (index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
 
-        if(instance.subscriber.isPresent())
+        if (instance.subscriber.isPresent())
             instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, new ArrayList<Student>(students)));
     }
 
@@ -128,6 +125,7 @@ public class Princess extends CharacterCard
 
     /**
      * Draws the student at position index of students if present.
+     * 
      * @param index of the student.
      * @return the student if present or blank.
      */
@@ -136,8 +134,8 @@ public class Princess extends CharacterCard
         if (students.size() > index)
         {
             return PrintHelper.drawColor(students.get(index).getColor(), GamePieces.STUDENT.toString());
-        }
-        else return " ";
+        } else
+            return " ";
     }
 
     @Override
@@ -145,11 +143,11 @@ public class Princess extends CharacterCard
     {
         String rep = super.toString();
 
-        rep += PrintHelper.moveCursorRelative(4, 3) + drawStudent(0);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(1);
+        rep += PrintHelper.moveCursorRelative(2, -7) + drawStudent(0);
+        rep += PrintHelper.moveCursorRelative(0, 3) + drawStudent(1);
         rep += PrintHelper.moveCursorRelative(-1, -5) + drawStudent(2);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(3);
-        rep += PrintHelper.moveCursorRelative(-3, -8);
+        rep += PrintHelper.moveCursorRelative(0, 3) + drawStudent(3);
+        rep += PrintHelper.moveCursorRelative(-1, 2);
 
         return rep;
     }

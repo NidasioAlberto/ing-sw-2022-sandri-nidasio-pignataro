@@ -52,8 +52,16 @@ public class CloudTilesUpdate extends ModelUpdate
         // Draw cloud tiles
         for (CloudTile cloudTile : cloudTiles)
         {
+            // Draw the cloud tile
             rep += cloudTile.toString();
-            rep += PrintHelper.moveCursorRelative(4, 1);
+
+            // Draw its number
+            rep += PrintHelper.moveCursorRelative(3, -5);
+            rep += cloudTiles.indexOf(cloudTile);
+            rep += PrintHelper.moveCursorRelative(-3, 4);
+
+            // Move cursor to draw the next cloud tile
+            rep += PrintHelper.moveCursorRelative(3, 1);
         }
 
         return rep;
@@ -61,7 +69,7 @@ public class CloudTilesUpdate extends ModelUpdate
 
     public static void main(String[] args)
     {
-        List <CloudTile> cloudTiles = new ArrayList<>();
+        List<CloudTile> cloudTiles = new ArrayList<>();
 
         CloudTile cloudTile1 = new CloudTile(CloudTileType.TILE_2);
         cloudTile1.addStudent(new Student(SchoolColor.PINK));

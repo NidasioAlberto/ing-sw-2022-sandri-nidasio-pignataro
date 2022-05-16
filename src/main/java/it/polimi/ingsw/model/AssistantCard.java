@@ -95,10 +95,10 @@ public class AssistantCard implements Serializable
     {
         String rep = "";
 
-        rep += "┏━━━━┓" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "┃ " + wizard.toString() + " ┃" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "┃" + turnOrder + (turnOrder < 10 ? " " : "") + " " + steps + "┃" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "┗━━━━┛";
+        rep += "┌" + turnOrder + (turnOrder < 10 ? "─" : "") + "──┐" + PrintHelper.moveCursorRelative(-1, -6);
+        rep += "│ " + wizard.toString() + " │" + PrintHelper.moveCursorRelative(-1, -6);
+        rep += "│ ⮊" + steps + " │" + PrintHelper.moveCursorRelative(-1, -6);
+        rep += "└────┘";
 
         return rep;
     }

@@ -42,14 +42,13 @@ public class MatchesListAnswer extends Answer
     {
         if (numPlayers.isEmpty())
         {
-            return "[MatchesListCommand] There are no matches";
+            return "[MatchesListAnswer] There are no matches";
         } else
         {
-            String str = "[MatchesListCommand] Matches list:\n";
+            String str = "[MatchesListAnswer] Matches list:\n";
 
             for (String key : numPlayers.keySet())
-                str += "\t" + key + ": mode = " + gameModes.get(key) + " - players = "
-                        + numPlayers.get(key) + "/" + maxNumPlayers.get(key) + "\n";
+                str += "\t" + key + ": mode = " + gameModes.get(key) + " - players = " + numPlayers.get(key) + "/" + maxNumPlayers.get(key) + "\n";
 
             return str;
         }

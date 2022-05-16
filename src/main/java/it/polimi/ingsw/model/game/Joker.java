@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Character card Joker. Effect: You may take up to 3 Students from this card and replace them with
- * the same number of Students from your Entrance.
+ * Character card Joker. Effect: You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.
  */
 public class Joker extends CharacterCard
 {
@@ -94,8 +93,7 @@ public class Joker extends CharacterCard
             return;
 
         // Get the current player
-        Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Joker]"));
+        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Joker]"));
 
         // Check that the player has selected two students to swap
         if (currentPlayer.getSelectedColors().size() != 2)
@@ -107,8 +105,7 @@ public class Joker extends CharacterCard
         Student entranceStudent = instance.pickStudentFromEntrance();
 
         // Get the selected student from the card
-        Student cardStudent = students.stream()
-                .filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst()
+        Student cardStudent = students.stream().filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst()
                 .orElseThrow(() -> new NoSuchStudentOnCardException("[Joker]"));
 
         // Remove the cardStudent from the card
@@ -135,9 +132,9 @@ public class Joker extends CharacterCard
     {
         // I have to find this character card index inside the list
         int index = 0;
-        for(index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
+        for (index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
 
-        if(instance.subscriber.isPresent())
+        if (instance.subscriber.isPresent())
             instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, new ArrayList<Student>(students)));
     }
 
@@ -161,6 +158,7 @@ public class Joker extends CharacterCard
 
     /**
      * Draws the student at position index of students if present.
+     * 
      * @param index of the student.
      * @return the student if present or blank.
      */
@@ -169,8 +167,8 @@ public class Joker extends CharacterCard
         if (students.size() > index)
         {
             return PrintHelper.drawColor(students.get(index).getColor(), GamePieces.STUDENT.toString());
-        }
-        else return " ";
+        } else
+            return " ";
     }
 
     @Override
@@ -178,13 +176,13 @@ public class Joker extends CharacterCard
     {
         String rep = super.toString();
 
-        rep += PrintHelper.moveCursorRelative(4, 3) + drawStudent(0);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(1);
-        rep += PrintHelper.moveCursorRelative(-1, -5) + drawStudent(2);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(3);
-        rep += PrintHelper.moveCursorRelative(-1, -5) + drawStudent(4);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(5);
-        rep += PrintHelper.moveCursorRelative(-2, -8);
+        rep += PrintHelper.moveCursorRelative(2, -7) + drawStudent(0);
+        rep += PrintHelper.moveCursorRelative(0, 1) + drawStudent(1);
+        rep += PrintHelper.moveCursorRelative(0, 1) + drawStudent(2);
+        rep += PrintHelper.moveCursorRelative(-1, -5) + drawStudent(3);
+        rep += PrintHelper.moveCursorRelative(0, 1) + drawStudent(4);
+        rep += PrintHelper.moveCursorRelative(0, 1) + drawStudent(5);
+        rep += PrintHelper.moveCursorRelative(-1, 2);
 
         return rep;
     }
