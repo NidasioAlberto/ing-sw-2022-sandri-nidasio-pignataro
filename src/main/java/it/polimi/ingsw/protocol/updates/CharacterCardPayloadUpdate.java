@@ -58,7 +58,7 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     {
         if (index < 0 || index >= Game.CHARACTER_CARDS_NUMBER)
             throw new IndexOutOfBoundsException("[CharacterCardPayloadUpdate] Character card index out of bounds");
-        if (noEntryTiles < 0 || noEntryTiles >= GrandmaHerbs.INITIAL_NO_ENTRY_NUMBER)
+        if (noEntryTiles < 0 || noEntryTiles > GrandmaHerbs.INITIAL_NO_ENTRY_NUMBER)
             throw new IllegalArgumentException("[CharacterCardPayloadUpdate] Number of noEntryTiles out of bounds");
 
         this.index = index;
@@ -115,7 +115,7 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
 
     /**
      * Allow to paint a string.
-     * 
+     *
      * @param color to paint the string.
      * @param content the string to paint.
      * @return the painted string.

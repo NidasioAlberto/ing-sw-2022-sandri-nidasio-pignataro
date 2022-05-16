@@ -183,7 +183,9 @@ public class MushroomMan extends CharacterCard
             if (towersToAdd.size() == 0)
             {
                 // The island has no tower
-                currentIsland.addTower(influencer.getBoard().getTowers().get(0));
+                Tower towerToMove = influencer.getBoard().getTowers().get(0);
+                currentIsland.addTower(towerToMove);
+                influencer.getBoard().removeTower(towerToMove);
             } else
             {
                 towersToAdd.forEach(t -> {
