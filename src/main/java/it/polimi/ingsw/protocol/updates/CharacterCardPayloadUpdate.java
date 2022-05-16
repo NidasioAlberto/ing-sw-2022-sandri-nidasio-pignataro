@@ -87,32 +87,6 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
 
     }
 
-    @Override
-    public String toString()
-    {
-        String rep = "";
-
-        /*
-         * rep += card.getCardType();
-         * 
-         * for (int i = 0; i < 14 - card.getCardType().toString().length(); i++) rep += " "; rep += "\n";
-         * 
-         * rep += CardPiece.TOP_ROW + "  "; rep += "\n";
-         * 
-         * rep += "║ $" + card.getCost() + "       ║  "; rep += "\n";
-         * 
-         * rep += "║  " + drawStudent(students, 0) + "    " + drawStudent(students, 1) + "  ║  "; rep += "\n";
-         * 
-         * if (noEntryTiles != null) { rep += "║  " + noEntryTiles + " no    ║  "; } else rep += "║  " + drawStudent(students, 2) + "    " +
-         * drawStudent(students, 3) + "  ║  "; rep += "\n";
-         * 
-         * rep += "║  " + drawStudent(students, 4) + "    " + drawStudent(students, 5) + "  ║  "; rep += "\n";
-         * 
-         * rep += CardPiece.BOTTOM_ROW + "  "; rep += "\n";
-         */
-        return rep;
-    }
-
     /**
      * Allow to paint a string.
      *
