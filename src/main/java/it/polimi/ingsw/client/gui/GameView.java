@@ -149,6 +149,19 @@ public class GameView extends Application
         ppink.translate(new Point3D(80, 0, -25));
         pblue.translate(new Point3D(80, 0, -50));
 
+        DrawableStudent dining1 = new DrawableStudent(StudentType.RED);
+        DrawableStudent dining2 = new DrawableStudent(StudentType.YELLOW);
+        dining1.translate(new Point3D(-155.5, 0, -50));
+        dining2.translate(new Point3D(-135, 0, -50)); // Increment of 20.5 per position
+
+        DrawableTower tower1 = new DrawableTower(TowerType.WHITE);
+        DrawableTower tower2 = new DrawableTower(TowerType.WHITE);
+        DrawableTower tower3 = new DrawableTower(TowerType.WHITE);
+        tower1.translate(new Point3D(118.5, 0, 37.5));
+        tower2.translate(new Point3D(145.5, 0, 37.5)); // X Increment of 27 per position
+        tower3.translate(new Point3D(118.5, 0, 12.5)); // Y decrement of 15 per position
+
+
         // Add all the created objects to the collection of drawable objects
         //drawableObjects.add(motherNature);
         //drawableObjects.add(islandCollection);
@@ -164,6 +177,11 @@ public class GameView extends Application
         drawableObjects.add(pyellow);
         drawableObjects.add(ppink);
         drawableObjects.add(pblue);
+        drawableObjects.add(dining1);
+        drawableObjects.add(dining2);
+        drawableObjects.add(tower1);
+        drawableObjects.add(tower2);
+        drawableObjects.add(tower3);
         //drawableObjects.add(tower);
 
         // Add the lights to the view

@@ -22,8 +22,13 @@ public class DrawableSchoolBoard extends DrawableObject
      */
     private static final double DINING_X_STEP   = 0.04763;
     private static final double DINING_Y_STEP   = 0.07143;
+    private static final double ENTRANCE_X_STEP = 0.05857;
+    private static final double TOWER_X_STEP    = 0.07714;
+    private static final double TOWER_Y_STEP    = 0.04286;
     private static final double FIRST_DINING    = -0.29286;
-    private static final double X_PROFESSOR     = 0.22857;
+    private static final double FIRST_PROFESSOR = 0.22857;
+    private static final double FIRST_ENTRANCE  = -0.44429;
+    private static final double FIRST_TOWER     = 0.33857;
 
     /**
      * X Dimension constant
