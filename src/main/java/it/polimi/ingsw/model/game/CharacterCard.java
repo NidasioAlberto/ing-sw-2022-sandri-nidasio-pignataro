@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
@@ -35,6 +36,16 @@ public abstract class CharacterCard extends Game implements Serializable
      * The game instance to be wrapped using the decorator pattern
      */
     protected Game instance;
+
+    /**
+     * Color of active card (red)
+     */
+    protected static final String ACTIVE = "\u001B[31m";
+
+    /**
+     * Reset the color
+     */
+    protected static final String DEACTIVE = "\u001B[97m";
 
     protected boolean activated;
 
@@ -398,5 +409,47 @@ public abstract class CharacterCard extends Game implements Serializable
             default:
                 return new Centaur(game);
         }
+    }
+
+    /**
+     * Allow to paint the string if the card is active.
+     *
+     * @param card to check if active.
+     * @param rep the string that could be painted.
+     * @return the final string.
+     */
+    private String paintIfActive(CharacterCard card, String rep)
+    {
+        if (card.isActivated())
+            return ACTIVE + rep + DEACTIVE;
+        else
+            return rep;
+    }
+
+    /**
+     * Draws a 6x12 representation of the card.
+     */
+    @Override
+    public String toString()
+    {
+        //// ⮊ ⬢ ⬣ ⬡ ⚭ 💰 ⏣ ⎔ ⚭ ⌬ ◯
+        // String[] coinsSign = new String[]{"\u2780", "\u2777", "\u2778", "\u2779", "\u2780"};
+        String rep = "";
+
+        rep += paintIfActive(this, getCardType().toString());
+
+        for (int i = 0; i < 14 - getCardType().toString().length(); i++)
+            rep += " ";
+        rep += PrintHelper.moveCursorRelative(-1, -14);
+
+        rep += paintIfActive(this, "┏━━━━━━━━━━┓") + PrintHelper.moveCursorRelative(-1, -12);
+        rep += paintIfActive(this, "┃ \uD83D\uDCB0" + getCost() + "       ┃") + PrintHelper.moveCursorRelative(-1, -12);
+            // rep += "║ " + coinsSign[card.getCost() - 1] + " ║ ";
+        rep += paintIfActive(this, "┃          ┃") + PrintHelper.moveCursorRelative(-1, -12);
+        rep += paintIfActive(this, "┃          ┃") + PrintHelper.moveCursorRelative(-1, -12);
+        rep += paintIfActive(this, "┃          ┃") + PrintHelper.moveCursorRelative(-1, -12);
+        rep += paintIfActive(this, "┗━━━━━━━━━━┛") + PrintHelper.moveCursorRelative(-1, -12);
+
+        return rep;
     }
 }

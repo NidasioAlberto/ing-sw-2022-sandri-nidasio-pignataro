@@ -5,16 +5,29 @@ package it.polimi.ingsw.model.game;
  */
 public enum CharacterCardType
 {
-    MONK,
-    SHAMAN,
-    HERALD,
-    POSTMAN,
-    GRANDMA_HERBS,
-    JOKER,
-    KNIGHT,
-    MUSHROOM_MAN,
-    MINSTREL,
-    PRINCESS,
-    THIEF,
-    CENTAUR;
+    MONK("Monk"),
+    SHAMAN("Shaman"),
+    HERALD("Herald"),
+    POSTMAN("Postman"),
+    GRANDMA_HERBS("GrandmaHerbs"),
+    JOKER("Joker"),
+    KNIGHT("Knight"),
+    MUSHROOM_MAN("MushroomMan"),
+    MINSTREL("Minstrel"),
+    PRINCESS("Princess"),
+    THIEF("Thief"),
+    CENTAUR("Centaur");
+
+    private String name;
+
+    private CharacterCardType(String name)
+    {
+        this.name = name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
+    }
 }

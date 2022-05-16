@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.client.cli.utils.GamePieces;
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
@@ -118,5 +120,33 @@ public class Monk extends CharacterCard
     public List<Student> getStudents()
     {
         return new ArrayList<>(students);
+    }
+
+    /**
+     * Draws the student at position index of students if present.
+     * @param index of the student.
+     * @return the student if present or blank.
+     */
+    private String drawStudent(int index)
+    {
+        if (students.size() > index)
+        {
+            return PrintHelper.drawColor(students.get(index).getColor(), GamePieces.STUDENT.toString());
+        }
+        else return " ";
+    }
+
+    @Override
+    public String toString()
+    {
+        String rep = super.toString();
+
+        rep += PrintHelper.moveCursorRelative(4, 3) + drawStudent(0);
+        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(1);
+        rep += PrintHelper.moveCursorRelative(-1, -5) + drawStudent(2);
+        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(3);
+        rep += PrintHelper.moveCursorRelative(-3, -8);
+
+        return rep;
     }
 }

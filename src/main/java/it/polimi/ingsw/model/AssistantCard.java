@@ -88,7 +88,7 @@ public class AssistantCard implements Serializable
     }
 
     /**
-     * Draw a 4x6 representation of the card.
+     * Draws a 4x6 representation of the card.
      */
     @Override
     public String toString()

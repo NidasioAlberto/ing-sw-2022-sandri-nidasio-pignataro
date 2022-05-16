@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.client.cli.utils.GamePieces;
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.exceptions.NoMoreNoEntryTilesException;
@@ -125,5 +127,16 @@ public class GrandmaHerbs extends CharacterCard
     public int getNoEntryTiles()
     {
         return noEntryTiles;
+    }
+
+    @Override
+    public String toString()
+    {
+        String rep = super.toString();
+
+        rep += PrintHelper.moveCursorRelative(3, 4) + noEntryTiles + GamePieces.NO_ENTRY_TILE;
+        rep += PrintHelper.moveCursorRelative(-3, -5);
+
+        return rep;
     }
 }

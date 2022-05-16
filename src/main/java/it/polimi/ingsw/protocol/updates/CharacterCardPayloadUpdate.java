@@ -84,45 +84,5 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     @Override
     public void handleUpdate(Object handler)
     {
-
-    }
-
-    /**
-     * Allow to paint a string.
-     *
-     * @param color to paint the string.
-     * @param content the string to paint.
-     * @return the painted string.
-     */
-    private String drawColor(SchoolColor color, String content)
-    {
-
-        String rep = "\u001B[";
-
-        switch (color)
-        {
-            case BLUE:
-                rep += "34";
-                break;
-            case GREEN:
-                rep += "32";
-                break;
-            case PINK:
-                rep += "35";
-                break;
-            case RED:
-                rep += "31";
-                break;
-            case YELLOW:
-                rep += "33";
-                break;
-        }
-
-        rep += "m" + content;
-
-        // Reset the color
-        rep += "\u001B[97m";
-
-        return rep;
     }
 }
