@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Character card Monk. Effect: Take 1 Student from this card and place it on an island of your
- * choice. Then, draw a new Student from the bag and place it on this card
+ * Character card Monk. Effect: Take 1 Student from this card and place it on an island of your choice. Then, draw a new Student from the bag and
+ * place it on this card
  */
 public class Monk extends CharacterCard
 {
@@ -39,10 +39,10 @@ public class Monk extends CharacterCard
         // Instance the list
         students = new ArrayList<Student>();
 
-        //Draw 4 students from the bag
-        //TODO think about how the view could be updated and could
-        //access this list to show the players
-        for(int i = 0; i < 4; i++)
+        // Draw 4 students from the bag
+        // TODO think about how the view could be updated and could
+        // access this list to show the players
+        for (int i = 0; i < 4; i++)
         {
             students.add(game.getStudentFromBag());
         }
@@ -51,7 +51,7 @@ public class Monk extends CharacterCard
     @Override
     public boolean isPlayable()
     {
-        //This card can be played everytime
+        // This card can be played everytime
         return true;
     }
 
@@ -66,34 +66,30 @@ public class Monk extends CharacterCard
     public void applyAction() throws NoSuchElementException
     {
         // If the card is not currently activated I do nothing
-        if(!activated)
+        if (!activated)
             return;
 
-        //Take the selected color
-        SchoolColor selectedColor = instance.getSelectedPlayer()
-                .orElseThrow(
-                        () -> new NoSelectedPlayerException("[Monk]")
-                ).getSelectedColors().stream().findFirst().orElseThrow(
-                        () -> new NoSelectedColorException("[Monk]")
-                );
-        //Take the selected student from the card
-        Student selectedStudent = students.stream()
-                .filter(s -> s.getColor() == selectedColor)
-                .findFirst().orElseThrow(() -> new NoSuchStudentOnCardException("[Monk]"));
+        // Take the selected color
+        SchoolColor selectedColor = instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Monk]")).getSelectedColors()
+                .stream().findFirst().orElseThrow(() -> new NoSelectedColorException("[Monk]"));
+        // Take the selected student from the card
+        Student selectedStudent = students.stream().filter(s -> s.getColor() == selectedColor).findFirst()
+                .orElseThrow(() -> new NoSuchStudentOnCardException("[Monk]"));
 
-        //Put the student to the island
+        // Put the student to the island
         instance.putStudentToIsland(selectedStudent);
-        //Remove the previous student from the card
+        // Remove the previous student from the card
         students.remove(selectedStudent);
 
-        //Pick another student from the bag
+        // Pick another student from the bag
         try
         {
             students.add(instance.getStudentFromBag());
+        } catch (Exception e)
+        {
         }
-        catch(Exception e){}
 
-        //Disable the card
+        // Disable the card
         this.deactivate();
 
         // Notify the subscriber
@@ -105,9 +101,9 @@ public class Monk extends CharacterCard
     {
         // I have to find this character card index inside the list
         int index = 0;
-        for(index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
+        for (index = 0; index < instance.characterCards.size() && this != instance.characterCards.get(index); index++);
 
-        if(instance.subscriber.isPresent())
+        if (instance.subscriber.isPresent())
             instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, new ArrayList<Student>(students)));
     }
 
@@ -124,6 +120,7 @@ public class Monk extends CharacterCard
 
     /**
      * Draws the student at position index of students if present.
+     * 
      * @param index of the student.
      * @return the student if present or blank.
      */
@@ -132,8 +129,8 @@ public class Monk extends CharacterCard
         if (students.size() > index)
         {
             return PrintHelper.drawColor(students.get(index).getColor(), GamePieces.STUDENT.toString());
-        }
-        else return " ";
+        } else
+            return " ";
     }
 
     @Override
@@ -141,11 +138,11 @@ public class Monk extends CharacterCard
     {
         String rep = super.toString();
 
-        rep += PrintHelper.moveCursorRelative(4, 3) + drawStudent(0);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(1);
+        rep += PrintHelper.moveCursorRelative(2, -7) + drawStudent(0);
+        rep += PrintHelper.moveCursorRelative(0, 3) + drawStudent(1);
         rep += PrintHelper.moveCursorRelative(-1, -5) + drawStudent(2);
-        rep += PrintHelper.moveCursorRelative(0, 5) + drawStudent(3);
-        rep += PrintHelper.moveCursorRelative(-3, -8);
+        rep += PrintHelper.moveCursorRelative(0, 3) + drawStudent(3);
+        rep += PrintHelper.moveCursorRelative(-1, 2);
 
         return rep;
     }

@@ -72,6 +72,15 @@ public class AssistantCardsUpdate extends ModelUpdate
 
         String rep = "";
 
+        // Clear the lines
+        for (int i = 0; i < 4; i++)
+        {
+            rep += PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_LINE;
+            rep += PrintHelper.moveCursorRelative(-1, 0);
+        }
+        rep += PrintHelper.moveCursorRelative(4, 0);
+
+
         for (AssistantCard card : cards)
         {
             rep += card.toString();

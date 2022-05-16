@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.SchoolColor;
@@ -22,11 +23,15 @@ public class CLI extends Visualizer implements Runnable
 
     private boolean active = false;
 
+    private List<String> players;
+
     public CLI(Client client)
     {
         super(client);
 
         executor = Executors.newCachedThreadPool();
+
+        players = new ArrayList<>();
     }
 
     public void start()
@@ -40,7 +45,7 @@ public class CLI extends Visualizer implements Runnable
             executor.submit(this);
         } catch (IOException e)
         {
-            System.out.println("[Client] Unable to connect to the server");
+            PrintHelper.print("[Client] Unable to connect to the server");
         }
     }
 
@@ -67,16 +72,19 @@ public class CLI extends Visualizer implements Runnable
                 choosePacket(scanner);
             } catch (Exception e)
             {
-                System.out.println("Unable to parse parse the input: " + e.toString());
+                PrintHelper.print("Unable to parse parse the input: " + e.toString());
             }
         }
     }
 
     void choosePacket(Scanner scanner) throws IOException
     {
-        System.out.println("Choose between:");
-        System.out.println("\t1 - Commands");
-        System.out.println("\t2 - Actions");
+        String msg = "";
+        msg += "Choose between:\n";
+        msg += "\t1 - Commands\n";
+        msg += "\t2 - Actions\n";
+        msg += PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN;
+        PrintHelper.printM(26, 2, msg);
 
         int choice = Integer.parseInt(scanner.nextLine());
 
@@ -89,21 +97,23 @@ public class CLI extends Visualizer implements Runnable
                 chooseAction(scanner);
                 break;
             default:
-                System.out.println("You should choose a command between 1 and 2.\n");
+                PrintHelper.printMessage("You should choose a command between 1 and 2.\n");
                 break;
         }
     }
 
     void chooseCommand(Scanner scanner) throws IOException
     {
-        System.out.println("Choose between:");
-        System.out.println("\t1 - Set name");
-        System.out.println("\t2 - Create match");
-        System.out.println("\t3 - Get matches list");
-        System.out.println("\t4 - Join match");
-        System.out.println("\t5 - Quit match");
-        System.out.println("\t6 - Quit game");
-        System.out.println("\t7 - Undo choice");
+        String msg = "";
+        msg += "Choose between:\n";
+        msg += "\t1 - Set name\n";
+        msg += "\t2 - Create match\n";
+        msg += "\t3 - Get matches list\n";
+        msg += "\t4 - Join match\n";
+        msg += "\t5 - Quit match\n";
+        msg += "\t6 - Quit game\n";
+        msg += "\t7 - Undo choice\n";
+        PrintHelper.print(msg);
 
         int choice = Integer.parseInt(scanner.nextLine());
         scanner.reset();
@@ -112,7 +122,7 @@ public class CLI extends Visualizer implements Runnable
         {
             case 1:
             {
-                System.out.println("Player name: ");
+                PrintHelper.print("Player name: ");
                 String playerName = scanner.nextLine();
                 client.sendCommand(new SetNameCommand(playerName));
                 break;
@@ -135,7 +145,7 @@ public class CLI extends Visualizer implements Runnable
             }
             case 4:
             {
-                System.out.println("Match name: ");
+                PrintHelper.print("Match name: ");
                 String matchId = scanner.nextLine();
                 client.sendCommand(new JoinMatchCommand(matchId));
                 break;
@@ -157,7 +167,7 @@ public class CLI extends Visualizer implements Runnable
             }
             default:
             {
-                System.out.println("You should choose a command between 1 and 7.\n");
+                PrintHelper.print("You should choose a command between 1 and 7.\n");
                 chooseCommand(scanner);
                 break;
             }
@@ -166,17 +176,19 @@ public class CLI extends Visualizer implements Runnable
 
     void chooseAction(Scanner scanner) throws IOException
     {
-        System.out.println("Choose between:");
-        System.out.println("\t1 - Play assistant card");
-        System.out.println("\t2 - Move student from entrance to dining");
-        System.out.println("\t3 - Move student from entrance to island");
-        System.out.println("\t4 - Move mother nature");
-        System.out.println("\t5 - Select cloud tile");
-        System.out.println("\t6 - End turn");
-        System.out.println("\t7 - Play character card");
-        System.out.println("\t8 - Character card action");
-        System.out.println("\t9 - Character cards effects");
-        System.out.println("\t10 - Undo choice");
+        String msg = "";
+        msg += "Choose between:\n";
+        msg += "\t1 - Play assistant card\n";
+        msg += "\t2 - Move student from entrance to dining\n";
+        msg += "\t3 - Move student from entrance to island\n";
+        msg += "\t4 - Move mother nature\n";
+        msg += "\t5 - Select cloud tile\n";
+        msg += "\t6 - End turn\n";
+        msg += "\t7 - Play character card\n";
+        msg += "\t8 - Character card action\n";
+        msg += "\t9 - Character cards effects\n";
+        msg += "\t10 - Undo choice\n";
+        PrintHelper.print(msg);
 
         int choice = Integer.parseInt(scanner.nextLine());
 
@@ -184,7 +196,7 @@ public class CLI extends Visualizer implements Runnable
         {
             case 1:
             {
-                System.out.println("Selected card: ");
+                PrintHelper.print("Selected card: ");
                 int selectedCard = Integer.parseInt(scanner.nextLine());
                 client.sendAction(new PlayAssistantCardMessage(selectedCard));
                 break;
@@ -210,7 +222,7 @@ public class CLI extends Visualizer implements Runnable
             }
             case 5:
             {
-                System.out.println("Selected cloud tile: ");
+                PrintHelper.print("Selected cloud tile: ");
                 int selectedCloudTile = Integer.parseInt(scanner.nextLine());
                 client.sendAction(new SelectCloudTileMessage(selectedCloudTile));
                 break;
@@ -222,16 +234,16 @@ public class CLI extends Visualizer implements Runnable
             }
             case 7:
             {
-                System.out.println("Selected character card: ");
+                PrintHelper.print("Selected character card: ");
                 int selectedCharacterCard = Integer.parseInt(scanner.nextLine());
                 client.sendAction(new PlayCharacterCardMessage(selectedCharacterCard));
                 break;
             }
             case 8:
             {
-                System.out.println("Expert game action:");
+                PrintHelper.print("Expert game action:");
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
-                    System.out.println(i + " - " + ExpertGameAction.values()[i]);
+                    PrintHelper.print(i + " - " + ExpertGameAction.values()[i]);
                 int action = Integer.parseInt(scanner.nextLine());
                 int selectedIsland = selectIsland(scanner);
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
@@ -240,7 +252,7 @@ public class CLI extends Visualizer implements Runnable
             }
             case 9:
             {
-                System.out.println(characterCardsEffects());
+                PrintHelper.print(characterCardsEffects());
                 break;
             }
             case 10:
@@ -249,7 +261,7 @@ public class CLI extends Visualizer implements Runnable
             }
             default:
             {
-                System.out.println("You should choose an action between 1 and 10.\n");
+                PrintHelper.print("You should choose an action between 1 and 10.\n");
                 chooseAction(scanner);
                 break;
             }
@@ -263,7 +275,7 @@ public class CLI extends Visualizer implements Runnable
         do
         {
             selectedColors.add(selectSchoolColors(scanner));
-            System.out.println("Type 'Y' to select another");
+            PrintHelper.print("Type 'Y' to select another");
         } while (scanner.nextLine().equals("Y") && selectedColors.size() < SchoolColor.values().length);
 
         return selectedColors;
@@ -271,9 +283,12 @@ public class CLI extends Visualizer implements Runnable
 
     SchoolColor selectSchoolColors(Scanner scanner)
     {
-        System.out.println("Choose a color:");
+        String msg = "";
+        msg += "Choose a color:\n";
         for (int i = 0; i < SchoolColor.values().length; i++)
-            System.out.println(i + " - " + SchoolColor.values()[i]);
+            msg += i + " - " + SchoolColor.values()[i] + "\n";
+        PrintHelper.print(msg);
+
         return SchoolColor.values()[Integer.parseInt(scanner.nextLine())];
     }
 
@@ -322,7 +337,9 @@ public class CLI extends Visualizer implements Runnable
 
     @Override
     public void displayAssistantCards(AssistantCardsUpdate update)
-    {}
+    {
+        PrintHelper.printMR(7, 25, update.toString());
+    }
 
     @Override
     public void displayCharacterCardPayload(CharacterCardPayloadUpdate update)
@@ -330,49 +347,93 @@ public class CLI extends Visualizer implements Runnable
 
     @Override
     public void displayCharacterCards(CharacterCardsUpdate update)
-    {}
+    {
+        PrintHelper.printMR(12, 68, update.toString());
+    }
 
     @Override
     public void displayCloudTiles(CloudTilesUpdate update)
-    {}
+    {
+        PrintHelper.printMR(7, 2, update.toString());
+    }
 
     @Override
     public void displayIslands(IslandsUpdate update)
-    {}
+    {
+        PrintHelper.printMR(1, 2, update.toString());
+    }
 
     @Override
     public void displayPlayedAssistantCard(PlayedAssistantCardUpdate update)
-    {}
+    {
+        int playerIndex;
+        if (players.contains(update.getPlayer()))
+        {
+            playerIndex = players.indexOf(update.getPlayer());
+        } else
+        {
+            playerIndex = players.size();
+            players.add(update.getPlayer());
+        }
+
+        PrintHelper.printMR(19, 2 + 33 * playerIndex, update.toString());
+    }
 
     @Override
     public void displaySchoolboard(SchoolBoardUpdate update)
-    {}
+    {
+        int playerIndex;
+        if (players.contains(update.getPlayer()))
+        {
+            playerIndex = players.indexOf(update.getPlayer());
+        } else
+        {
+            playerIndex = players.size();
+            players.add(update.getPlayer());
+        }
+
+        PrintHelper.printMessage("player index: " + playerIndex);
+
+        PrintHelper.printMR(12, 2 + 33 * playerIndex, update.toString());
+    }
 
     // Answers
 
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
-    {}
+    {
+        PrintHelper.printMessage(answer.toString());
+    }
 
     @Override
     public void displayError(ErrorAnswer answer)
-    {}
+    {
+        PrintHelper.printMessage(answer.toString());
+    }
 
     @Override
     public void displayJoinedMatch(JoinedMatchAnswer answer)
-    {}
+    {
+        PrintHelper.printMessage(answer.toString());
+    }
 
     @Override
     public void displayMatchesList(MatchesListAnswer answer)
-    {}
+    {
+        PrintHelper.printMessage(answer.toString());
+    }
 
     @Override
     public void displaySetName(SetNameAnswer answer)
-    {}
+    {
+        PrintHelper.printMessage(answer.toString());
+    }
 
     @Override
     public void displayStartMatch(StartMatchAnswer answer)
-    {}
+    {
+        PrintHelper.printMessage(answer.toString());
+    }
 
     public static void main(String[] args)
     {

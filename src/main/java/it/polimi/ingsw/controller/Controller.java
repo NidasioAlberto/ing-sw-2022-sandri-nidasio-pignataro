@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class allows creating, starting and ending a game. The controller links the model package
- * with the network one in order to organize the match phases and actions.
+ * This class allows creating, starting and ending a game. The controller links the model package with the network one in order to organize the match
+ * phases and actions.
  */
 public class Controller
 {
@@ -42,8 +42,7 @@ public class Controller
      * @throws NullPointerException If the server or game mode are null.
      * @throws IllegalArgumentException If the players number is invalid.
      */
-    public Controller(Match match, int playersNumber, GameMode mode)
-            throws NullPointerException, IllegalArgumentException
+    public Controller(Match match, int playersNumber, GameMode mode) throws NullPointerException, IllegalArgumentException
     {
         if (match == null)
             throw new NullPointerException("[Controller] The server is null");
@@ -101,26 +100,19 @@ public class Controller
                     : a.getBoard().getTowers().size() - b.getBoard().getTowers().size());
             // The first player in the rank has the most tower or has the same tower as the second,
             // but the first has more professors, so the first wins
-            if (rank.get(0).getBoard().getTowers().size() < rank.get(1).getBoard().getTowers()
-                    .size()
-                    || (rank.get(0).getBoard().getTowers().size() == rank.get(1).getBoard()
-                            .getTowers().size()
-                            && rank.get(0).getBoard().getProfessors().size() > rank.get(1)
-                                    .getBoard().getProfessors().size()))
+            if (rank.get(0).getBoard().getTowers().size() < rank.get(1).getBoard().getTowers().size()
+                    || (rank.get(0).getBoard().getTowers().size() == rank.get(1).getBoard().getTowers().size()
+                            && rank.get(0).getBoard().getProfessors().size() > rank.get(1).getBoard().getProfessors().size()))
             {
                 match.endMatch("The game is ended. The winner is " + rank.get(0).getNickname());
                 return;
             }
             // Case of a three players game and a tie between the first two
-            else if (rank.size() == 3 && (rank.get(0).getBoard().getTowers().size() < rank.get(2)
-                    .getBoard().getTowers().size()
-                    || (rank.get(0).getBoard().getTowers().size() == rank.get(2).getBoard()
-                            .getTowers().size()
-                            && rank.get(0).getBoard().getProfessors().size() > rank.get(2)
-                                    .getBoard().getProfessors().size())))
+            else if (rank.size() == 3 && (rank.get(0).getBoard().getTowers().size() < rank.get(2).getBoard().getTowers().size()
+                    || (rank.get(0).getBoard().getTowers().size() == rank.get(2).getBoard().getTowers().size()
+                            && rank.get(0).getBoard().getProfessors().size() > rank.get(2).getBoard().getProfessors().size())))
             {
-                match.endMatch("The game is ended. It is a tie between " + rank.get(0).getNickname()
-                        + " and " + rank.get(1).getNickname());
+                match.endMatch("The game is ended. It is a tie between " + rank.get(0).getNickname() + " and " + rank.get(1).getNickname());
                 return;
             }
             // Otherwise, it is a tie between all the players
@@ -153,8 +145,7 @@ public class Controller
     }
 
     /**
-     * The method passes the message to the handler. It catches and handles all the possible
-     * exceptions that are thrown if something goes wrong.
+     * The method passes the message to the handler. It catches and handles all the possible exceptions that are thrown if something goes wrong.
      * 
      * @param message It represents the player's action.
      */
@@ -185,31 +176,25 @@ public class Controller
         } catch (NoSelectedIslandException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select an island to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select an island to perform the action.");
         } catch (NoSelectedColorException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select a color to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a color to perform the action.");
         } catch (NoSelectedAssistantCardException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select an assistant card to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select an assistant card to perform the action.");
         } catch (NoSelectedStudentsException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select the students to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select the students to perform the action.");
         } catch (NoSelectedCloudTileException e)
         {
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select a cloud tile to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a cloud tile to perform the action.");
         } catch (NoSelectedCharacterCardException e)
         {
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select a character card to perform the action.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a character card to perform the action.");
         } catch (IslandIndexOutOfBoundsException e)
         {
             getCurrentPlayer().clearSelections();
@@ -220,49 +205,41 @@ public class Controller
         } catch (NotEnoughCoinsException e)
         {
             game.clearCharacterCard();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You don't have enough coins to play this card.");
+            sendError(getCurrentPlayer().getNickname(), "You don't have enough coins to play this card.");
         } catch (NoSuchStudentOnCardException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select a student present on the card.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a student present on the card.");
         } catch (NoSuchStudentInEntranceException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select a student present in your entrance room.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a student present in your entrance room.");
         } catch (NoSuchStudentInDiningException e)
         {
             getCurrentPlayer().clearSelections();
-            sendError(getCurrentPlayer().getNickname(),
-                    "You have to select a student present in your dining room.");
+            sendError(getCurrentPlayer().getNickname(), "You have to select a student present in your dining room.");
         } catch (NoSuchAssistantCardException e)
         {
-            sendError(getCurrentPlayer().getNickname(),
-                    "You don't have the assistant card you selected.");
+            sendError(getCurrentPlayer().getNickname(), "You don't have the assistant card you selected.");
         } catch (InvalidMovementException e)
         {
             getCurrentPlayer().clearSelections();
             sendError(getCurrentPlayer().getNickname(), e.getMessage());
         } catch (InvalidCharacterCardException e)
         {
-            sendError(getCurrentPlayer().getNickname(),
-                    "You can't play two character cards in the same turn.");
-        }catch (InvalidAssistantCardException e)
+            sendError(getCurrentPlayer().getNickname(), "You can't play two character cards in the same turn.");
+        } catch (InvalidAssistantCardException e)
         {
             sendError(getCurrentPlayer().getNickname(),
-                    "You can't play this card, another player has already played it " +
-                            "in this round and you have other cards you can play.");
+                    "You can't play this card, another player has already played it " + "in this round and you have other cards you can play.");
         } catch (NoMoreNoEntryTilesException e)
         {
-            sendError(getCurrentPlayer().getNickname(),
-                    "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
+            sendError(getCurrentPlayer().getNickname(), "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
         } catch (Exception e)
         {
-            match.endMatch(
-                    "Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible, error: "
-                            + e.getMessage());
+            // TODO: Check the end match logic, there may be an error
+            match.endMatch("Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible, error: " + e.getMessage() + " "
+                    + e.getClass().getName());
         }
     }
 
@@ -274,8 +251,7 @@ public class Controller
      * @throws NullPointerException If the player or message are null.
      * @throws IllegalArgumentException If the player doesn't exist.
      */
-    public void sendError(String player, String message)
-            throws NullPointerException, IllegalArgumentException
+    public void sendError(String player, String message) throws NullPointerException, IllegalArgumentException
     {
         if (message == null)
             throw new NullPointerException("[Controller] Message is null");
@@ -294,8 +270,7 @@ public class Controller
             }
         }
 
-        throw new IllegalArgumentException(
-                "[Controller] It doesn't exist a player with such nickname");
+        throw new IllegalArgumentException("[Controller] It doesn't exist a player with such nickname");
     }
 
     /**
@@ -306,8 +281,7 @@ public class Controller
      * @throws IllegalArgumentException If already exists a player with such nickname.
      * @throws TooManyPlayersException If there are too many players.
      */
-    public void addPlayer(String nickname)
-            throws NullPointerException, IllegalArgumentException, TooManyPlayersException
+    public void addPlayer(String nickname) throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
         // The nickname must not be null
         if (nickname == null)
@@ -315,8 +289,7 @@ public class Controller
 
         for (Player player : game.getPlayerTableList())
             if (player.getNickname().equals(nickname))
-                throw new IllegalArgumentException(
-                        "[Controller] Already existing a player with such nickname");
+                throw new IllegalArgumentException("[Controller] Already existing a player with such nickname");
 
         // Add the player to the game with the correct color of the towers
         switch (game.getPlayerTableList().size())
@@ -359,8 +332,7 @@ public class Controller
 
     public Player getCurrentPlayer()
     {
-        return game.getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Controller]"));
+        return game.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Controller]"));
     }
 
     public Game getGame()

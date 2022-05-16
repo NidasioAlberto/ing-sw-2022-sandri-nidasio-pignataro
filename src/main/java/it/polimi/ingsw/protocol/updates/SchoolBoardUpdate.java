@@ -2,8 +2,12 @@ package it.polimi.ingsw.protocol.updates;
 
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
+import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.Tower;
+import it.polimi.ingsw.model.TowerColor;
 
 public class SchoolBoardUpdate extends ModelUpdate
 {
@@ -52,14 +56,14 @@ public class SchoolBoardUpdate extends ModelUpdate
         for (int i = 0; i < 18 - player.length(); i++)
             rep += "═";
 
-        rep += "╤═╦═══╗\n";
+        rep += "╤═╦════╗";
 
         return rep;
     }
 
     private String drawBottomRow()
     {
-        return "╚═══╩═══════════════════╧═╩═══╝";
+        return "╚═══╩═══════════════════╧═╩════╝";
     }
 
     private String drawStudent(int index)
@@ -82,7 +86,11 @@ public class SchoolBoardUpdate extends ModelUpdate
                 rep += " ";
         }
 
-        for (int i = 0; i < 10 - board.getStudentsNumber(color); i++)
+        for (int i = 1; i < 10 - board.getStudentsNumber(color); i++)
+            rep += "  ";
+        if (board.getStudentsNumber(color) == 0)
+            rep += " ";
+        else
             rep += "  ";
 
         return rep;
@@ -112,18 +120,52 @@ public class SchoolBoardUpdate extends ModelUpdate
     {
         String rep = "";
 
-        rep += drawTopRow();
+        rep += drawTopRow() + PrintHelper.moveCursorRelative(-1, -32);
         rep += "║" + drawStudent(0) + " " + drawStudent(1) + "║" + drawDiningRoom(SchoolColor.GREEN) + "│" + drawProfessor(SchoolColor.GREEN) + "║"
-                + drawTower(0) + " " + drawTower(1) + "║\n";
+                + drawTower(0) + "  " + drawTower(1) + "║" + PrintHelper.moveCursorRelative(-1, -32);
         rep += "║" + drawStudent(2) + " " + drawStudent(3) + "║" + drawDiningRoom(SchoolColor.RED) + "│" + drawProfessor(SchoolColor.RED) + "║"
-                + drawTower(2) + " " + drawTower(3) + "║\n";
+                + drawTower(2) + "  " + drawTower(3) + "║" + PrintHelper.moveCursorRelative(-1, -32);
         rep += "║" + drawStudent(4) + " " + drawStudent(5) + "║" + drawDiningRoom(SchoolColor.YELLOW) + "│" + drawProfessor(SchoolColor.YELLOW) + "║"
-                + drawTower(4) + " " + drawTower(5) + "║\n";
+                + drawTower(4) + "  " + drawTower(5) + "║" + PrintHelper.moveCursorRelative(-1, -32);
         rep += "║" + drawStudent(6) + " " + drawStudent(7) + "║" + drawDiningRoom(SchoolColor.PINK) + "│" + drawProfessor(SchoolColor.PINK) + "║"
-                + drawTower(6) + " " + drawTower(7) + "║\n";
-        rep += "║" + drawStudent(8) + "  ║" + drawDiningRoom(SchoolColor.BLUE) + "│" + drawProfessor(SchoolColor.BLUE) + "║   ║\n";
+                + drawTower(6) + "  " + drawTower(7) + "║" + PrintHelper.moveCursorRelative(-1, -32);
+        rep += "║" + drawStudent(8) + "  ║" + drawDiningRoom(SchoolColor.BLUE) + "│" + drawProfessor(SchoolColor.BLUE) + "║    ║"
+                + PrintHelper.moveCursorRelative(-1, -32);
         rep += drawBottomRow();
 
+        // Draw the number of coins if the game is in expert mode
+        if (board.getMode() == GameMode.EXPERT)
+        {
+            rep += PrintHelper.moveCursorRelative(1, -5);
+            rep += GamePieces.COINS_MARKER + "" + board.getCoins();
+            rep += PrintHelper.moveCursorRelative(-1, (board.getCoins() < 10 ? 3 : 2));
+        }
+
         return rep;
+    }
+
+    public static void main(String[] args)
+    {
+        SchoolBoard board = new SchoolBoard(TowerColor.GREY, GameMode.EXPERT);
+
+        board.setPlayersNumber(2);
+
+        board.addStudentToDiningRoom(new Student(SchoolColor.BLUE));
+        board.addStudentToDiningRoom(new Student(SchoolColor.BLUE));
+        board.addStudentToDiningRoom(new Student(SchoolColor.YELLOW));
+        board.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+
+        board.addTower(new Tower(TowerColor.GREY));
+        board.addTower(new Tower(TowerColor.GREY));
+        board.addTower(new Tower(TowerColor.GREY));
+        board.addTower(new Tower(TowerColor.GREY));
+        board.addTower(new Tower(TowerColor.GREY));
+
+        board.addCoins(10);
+
+
+        SchoolBoardUpdate update = new SchoolBoardUpdate(board, "test");
+
+        System.out.print(update.toString());
     }
 }

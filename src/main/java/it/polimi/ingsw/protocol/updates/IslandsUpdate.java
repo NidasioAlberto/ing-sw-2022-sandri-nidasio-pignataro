@@ -66,12 +66,28 @@ public class IslandsUpdate extends ModelUpdate
     @Override
     public String toString()
     {
-        String rep = "  ";
+        String rep = "";
+
+        // Clear the lines
+        for (int i = 0; i < 5; i++)
+        {
+            rep += PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_LINE;
+            rep += PrintHelper.moveCursorRelative(-1, 0);
+        }
+        rep += PrintHelper.moveCursorRelative(5, 0);
 
         // Draw islands
         for (Island island : islands)
         {
+            // Draw the island
             rep += island.toString();
+
+            // Draw its number
+            rep += PrintHelper.moveCursorRelative(0, -7);
+            rep += islands.indexOf(island);
+            rep += PrintHelper.moveCursorRelative(0, 6 - (islands.indexOf(island) > 9 ? 1 : 0));
+
+            // Move the cursor to draw the next island
             rep += PrintHelper.moveCursorRelative(4, 2);
         }
 

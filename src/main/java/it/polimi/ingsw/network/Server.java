@@ -69,13 +69,11 @@ public class Server
         return matches.get(id);
     }
 
-    public void createMatch(String matchId, int playersNumber, GameMode mode)
-            throws IllegalArgumentException
+    public void createMatch(String matchId, int playersNumber, GameMode mode) throws IllegalArgumentException
     {
         // Check if a match with the same id already exists
         if (matches.containsKey(matchId))
-            throw new IllegalArgumentException(
-                    "[Server] A match with id " + matchId + " already exists");
+            throw new IllegalArgumentException("[Server] A match with id " + matchId + " already exists");
 
         // Create the match
         matches.put(matchId, new Match(this, playersNumber, mode));
@@ -89,13 +87,11 @@ public class Server
      * @param mode Game mode for the new match.
      * @param player Player who created the match and needs to be included.
      * @throws NullPointerException If the player is null.
-     * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in
-     *         another match, if there is already a player with such nickname of if there is no
-     *         match with the given id.
+     * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in another match, if there is already a player with
+     *         such nickname of if there is no match with the given id.
      * @throws TooManyPlayersException If there are too many players.
      */
-    public void createMatch(String matchId, int playersNumber, GameMode mode,
-            PlayerConnection player)
+    public void createMatch(String matchId, int playersNumber, GameMode mode, PlayerConnection player)
             throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
         createMatch(matchId, playersNumber, mode);
@@ -127,9 +123,8 @@ public class Server
      * Adds a player to the match identified with the given match id.
      *
      * @throws NullPointerException If the player is null.
-     * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in
-     *         another match, if there is already a player with such nickname of if there is no
-     *         match with the given id.
+     * @throws IllegalArgumentException If the player lacks a nickname, if it is participating in another match, if there is already a player with
+     *         such nickname of if there is no match with the given id.
      * @throws TooManyPlayersException If there are too many players.
      */
     public void addPlayerToMatch(String matchId, PlayerConnection player)
@@ -137,18 +132,15 @@ public class Server
     {
         // Check if the player is in the lobby
         if (!lobby.contains(player))
-            throw new IllegalArgumentException(
-                    "[Server] The player must be in the lobby to be included in a game");
+            throw new IllegalArgumentException("[Server] The player must be in the lobby to be included in a game");
 
         // Check if the player has a name
         if (player.getPlayerName().isEmpty())
-            throw new IllegalArgumentException(
-                    "[Server] The player must have a name to participate in a match");
+            throw new IllegalArgumentException("[Server] The player must have a name to participate in a match");
 
         // Check if the player isn't in another match
         if (playersMapMatch.containsKey(player))
-            throw new IllegalArgumentException(
-                    "[Server] The player is already participating in a match");
+            throw new IllegalArgumentException("[Server] The player is already participating in a match");
 
         // Find the match with the given id
         Match match = matches.get(matchId);
@@ -171,8 +163,7 @@ public class Server
     public void addPlayerToLobby(PlayerConnection player) throws NullPointerException
     {
         if (player == null)
-            throw new NullPointerException(
-                    "[Server] Attempting to add a null PlayerConnection to the lobby");
+            throw new NullPointerException("[Server] Attempting to add a null PlayerConnection to the lobby");
 
         lobby.add(player);
         System.out.println("[Server] Added new player to lobby");
@@ -203,14 +194,12 @@ public class Server
     public void movePlayerToMatch(PlayerConnection player)
     {}
 
-    public void applyAction(ActionMessage action, PlayerConnection player)
-            throws IllegalArgumentException
+    public void applyAction(ActionMessage action, PlayerConnection player) throws IllegalArgumentException
     {
         // Check if the player is part of a match
         if (!playersMapMatch.containsKey(player))
             throw new IllegalArgumentException(
-                    "[Server] The player is not part of a match, can't perform the action "
-                            + action.getBaseGameAction().name());
+                    "[Server] The player is not part of a match, can't perform the action " + action.getBaseGameAction().name());
 
         // Retrieve the match
         Match match = playersMapMatch.get(player);
@@ -224,8 +213,7 @@ public class Server
      */
     public void sendToLobby(Answer answer)
     {
-        System.out.println("[Server] Sending answer " + answer.getClass().getSimpleName()
-                + " to the whole lobby");
+        System.out.println("[Server] Sending answer " + answer.getClass().getSimpleName() + " to the whole lobby");
 
         for (PlayerConnection player : lobby)
             player.sendAnswer(answer);

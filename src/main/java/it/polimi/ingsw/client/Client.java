@@ -97,7 +97,7 @@ public class Client implements Runnable
         {
             while (isActive())
             {
-                Object input = inputStream.readObject().toString();
+                Object input = inputStream.readObject();
 
                 // Updates
                 if (input instanceof AssistantCardsUpdate)
@@ -131,7 +131,7 @@ public class Client implements Runnable
 
                 // Unrecognized
                 else
-                    visualizer.displayError(new ErrorAnswer("[Client] Unable to recognize the received object"));
+                    visualizer.displayError(new ErrorAnswer("[Client] Unable to recognize the received object: " + input.getClass().getName()));
             }
         } catch (IOException e)
         {
