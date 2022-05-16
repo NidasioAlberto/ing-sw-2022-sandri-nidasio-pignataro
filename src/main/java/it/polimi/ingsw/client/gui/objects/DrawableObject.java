@@ -64,6 +64,11 @@ public abstract class DrawableObject
      */
     public abstract void subscribeToAmbientLight(AmbientLight light);
 
+    /**
+     * This method adds a step of animation to the queue
+     * @param point The point to reach
+     * @param speed The speed needed
+     */
     public void addAnimationPosition(Point3D point, double speed)
     {
         if(point == null)

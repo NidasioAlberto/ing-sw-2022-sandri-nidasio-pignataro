@@ -5,6 +5,10 @@ import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
@@ -24,6 +28,13 @@ public class DrawableTower extends DrawableObject
      */
     private TriangleMesh triangleMesh;
     private MeshView towerMesh;
+
+
+    private volatile double offsetPosX;
+    private volatile double offsetPosZ;
+
+    private volatile double posX;
+    private volatile double posZ;
 
     /**
      * Constructor
@@ -60,6 +71,22 @@ public class DrawableTower extends DrawableObject
 
         // Set the material
         towerMesh.setMaterial(material);
+
+
+
+        towerMesh.setOnMouseClicked((MouseEvent event) ->{
+            offsetPosX = event.getX();
+            offsetPosZ = event.getZ();
+            posX = towerMesh.getTranslateX();
+            posZ = towerMesh.getTranslateZ();
+        });
+
+        towerMesh.setOnMouseDragged((MouseEvent event) -> {
+            //System.out.println("provolone");
+            posX = posX + event.getX() - offsetPosX;
+            posZ = posZ + event.getZ() - offsetPosZ;
+            this.addAnimationPosition(new Point3D(posX, 0, posZ), 100);
+        });
     }
     @Override
     public void addToGroup(Group group)
