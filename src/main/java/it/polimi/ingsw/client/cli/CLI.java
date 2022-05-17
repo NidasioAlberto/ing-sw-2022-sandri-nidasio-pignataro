@@ -36,6 +36,9 @@ public class CLI extends Visualizer implements Runnable
 
     public void start()
     {
+        // Clear the screen
+        PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
+
         try
         {
             client.connect();

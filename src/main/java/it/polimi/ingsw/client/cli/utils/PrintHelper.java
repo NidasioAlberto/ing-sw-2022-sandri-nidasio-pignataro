@@ -7,6 +7,8 @@ public class PrintHelper
 {
     static public String ERASE_FROM_CURSOR_TILL_END_OF_SCREEN = "\u001B[0J";
 
+    static public String ERASE_ENTIRE_SCREEN = "\u001B[2J";
+
     static public String ERASE_FROM_CURSOR_TILL_END_OF_LINE = "\u001B[0K";
 
     static public String ERASE_ENTIRE_LINE = "\u001B[2K";
