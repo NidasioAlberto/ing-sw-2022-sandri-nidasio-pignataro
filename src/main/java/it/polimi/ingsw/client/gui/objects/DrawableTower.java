@@ -6,8 +6,6 @@ import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
@@ -78,24 +76,26 @@ public class DrawableTower extends DrawableObject
         // Set in general the object to mouse transparent
         towerMesh.setMouseTransparent(false);
 
+
         towerMesh.setOnDragDetected((MouseEvent event) ->{
             offsetPosX = event.getX();
             offsetPosZ = event.getZ();
             posX = towerMesh.getTranslateX();
             posZ = towerMesh.getTranslateZ();
-            towerMesh.setMouseTransparent(false);
+            towerMesh.setMouseTransparent(true);
+            towerMesh.startFullDrag();
         });
 
         towerMesh.setOnMouseDragged((MouseEvent event) -> {
-            towerMesh.setMouseTransparent(false);
-            posX = posX + event.getX() - offsetPosX;
-            posZ = posZ + event.getZ() - offsetPosZ;
-            System.out.println("" + event.getX() + " " + event.getZ());
+            towerMesh.setMouseTransparent(true);
+            posX = event.getX() - offsetPosX;
+            posZ = event.getZ() - offsetPosZ;
             //this.addAnimationPosition(new Point3D(posX, 0, posZ), 100);
-            this.translate(new Point3D(posX, 0, posZ));
+            this.translate(new Point3D(towerMesh.getTranslateX() + posX, 0, towerMesh.getTranslateZ() + posZ));
         });
 
         towerMesh.setOnMouseDragReleased((MouseEvent event) -> {
+            System.out.println();
             towerMesh.setMouseTransparent(true);
         });
 
@@ -136,6 +136,20 @@ public class DrawableTower extends DrawableObject
     // This method does nothing because the tower is subscribed only to point light
     @Override
     public void subscribeToAmbientLight(AmbientLight light) {}
+
+    @Override
+    public void enableVisibility()
+    {
+        // Enable the visibility of the mesh
+        towerMesh.setMouseTransparent(false);
+    }
+
+    @Override
+    public void disableVisibility()
+    {
+        // Disable the visibility of the mesh
+        towerMesh.setMouseTransparent(true);
+    }
 
     @Override
     public void translate(Point3D point)

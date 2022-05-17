@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.input.DragEvent;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
@@ -77,11 +78,15 @@ public class DrawableIsland extends DrawableObject
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
 
         // Set the node to mouse transparent
-        box.setMouseTransparent(true);
+        box.setMouseTransparent(false);
 
         // At the end if the updater != null i add the box to it
         if(this.updater != null)
             this.updater.subscribeObject(this);
+
+        box.setOnMouseDragOver((event) -> {
+            System.out.println("prova");
+        });
     }
 
     @Override
@@ -119,12 +124,24 @@ public class DrawableIsland extends DrawableObject
     }
 
     @Override
+    public void enableVisibility()
+    {
+
+    }
+
+    @Override
+    public void disableVisibility()
+    {
+
+    }
+
+    @Override
     public void updateAnimation()
     {
         // I update the floating angle and them sum the Y shift with the sin
-        floatingAngle += 5;
+        floatingAngle += 1;
         floatingAngle = floatingAngle % 360;
-        setY((float)box.getTranslateY() + (float) (Math.sin(Math.toRadians(floatingAngle)) / 2));
+        setY((float)box.getTranslateY() + (float) (Math.sin(Math.toRadians(floatingAngle)) / 10));
     }
 
 

@@ -105,6 +105,16 @@ public class DrawableStudent extends DrawableObject
     public void subscribeToAmbientLight(AmbientLight light){}
 
     @Override
+    public void enableVisibility() {
+
+    }
+
+    @Override
+    public void disableVisibility() {
+
+    }
+
+    @Override
     public void translate(Point3D point)
     {
         if(point == null)

@@ -2,32 +2,18 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.objects.*;
 import it.polimi.ingsw.model.SchoolColor;
-import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.TowerColor;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.shape.VertexFormat;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.awt.desktop.SystemSleepEvent;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -120,6 +106,12 @@ public class GameView extends Application
         setupCamera();
 
         // Create all the game components
+        Box groundPlane = new Box(3000, 3000, 0);
+        groundPlane.translateYProperty().set(15f);
+        groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
+        groundPlane.setMaterial(new PhongMaterial(Color.TRANSPARENT));
+        //groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
+        group.getChildren().add(groundPlane);
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
         islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100, updater);
         schoolBoard = new DrawableSchoolBoard(350, updater);

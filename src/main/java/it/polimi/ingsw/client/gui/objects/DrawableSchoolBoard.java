@@ -157,6 +157,18 @@ public class DrawableSchoolBoard extends DrawableObject
         light.getScope().add(box);
     }
 
+    @Override
+    public void enableVisibility()
+    {
+
+    }
+
+    @Override
+    public void disableVisibility()
+    {
+
+    }
+
     /**
      * Adds a student to the dining room
      * @param color The student color to be added

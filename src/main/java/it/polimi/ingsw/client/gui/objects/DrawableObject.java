@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
-import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.transform.Rotate;
 import javafx.util.Pair;
@@ -79,6 +78,22 @@ public abstract class DrawableObject
      * @param light The light that the object has to subscribe to
      */
     public abstract void subscribeToAmbientLight(AmbientLight light);
+
+    /**
+     * Subscribes the object to the visibility handler
+     * NOTE: subscribe only the objects that are user interactive
+     */
+    public void subscribeToMouseVisibilityHandler(){}
+
+    /**
+     * Enables the mouse visibility of the object
+     */
+    public abstract void enableVisibility();
+
+    /**
+     * Disables the mouse visibility of the object
+     */
+    public abstract void disableVisibility();
 
     /**
      * This method adds a step of animation to the queue

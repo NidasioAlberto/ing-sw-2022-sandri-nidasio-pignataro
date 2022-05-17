@@ -126,6 +126,18 @@ public class DrawableIslandCollection extends DrawableObject
             island.subscribeToAmbientLight(light);
     }
 
+    @Override
+    public void enableVisibility()
+    {
+
+    }
+
+    @Override
+    public void disableVisibility()
+    {
+
+    }
+
     /**
      * Position setters, needs to be synchronized to handle the scheduled task
      */
