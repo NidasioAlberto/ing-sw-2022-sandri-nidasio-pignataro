@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -41,8 +42,10 @@ public class DrawableIsland extends DrawableObject
      * @param dimension The square dimensions
      * @param type The texture island type
      */
-    public DrawableIsland(int dimension, IslandType type)
+    public DrawableIsland(int dimension, IslandType type, AnimationHandler updater)
     {
+        super(updater);
+
         if(dimension < 0)
             throw new IllegalArgumentException("[DrawableIsland] Negative island dimensions");
         if(type == null)
@@ -72,6 +75,13 @@ public class DrawableIsland extends DrawableObject
         // Rotate the island by 90 degrees in the x axis and 180 in the y axis
         box.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
+
+        // Set the node to mouse transparent
+        box.setMouseTransparent(true);
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
 
     @Override

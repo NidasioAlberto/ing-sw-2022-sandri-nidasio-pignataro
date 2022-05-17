@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.model.Island;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
@@ -51,8 +52,10 @@ public class DrawableIslandCollection extends DrawableObject
      * @param y_multiply The parameter of radius that is multiplied in the y axis
      * @param radius The base circle diameter
      */
-    public DrawableIslandCollection(int island_dimension, float x_multiply, float y_multiply, float radius)
+    public DrawableIslandCollection(int island_dimension, float x_multiply, float y_multiply, float radius, AnimationHandler updater)
     {
+        super(updater);
+
         if(island_dimension < 0)
             throw new IllegalArgumentException("[DrawableIslandCollection] Negative island dimension");
         if(x_multiply < 0 || y_multiply < 0)
@@ -74,12 +77,16 @@ public class DrawableIslandCollection extends DrawableObject
 
         for(int i = 0; i < islands.length; i++)
         {
-            islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)]);
+            islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)], updater);
             float angle = i * ((float)360.0 / NUMBER_OF_ISLANDS);
             float coordX = (float)Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY;
             float coordY = (float)Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY;
             islands[i].translate(new Point3D(coordX, 0, coordY));
         }
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
 
     @Override
@@ -119,14 +126,6 @@ public class DrawableIslandCollection extends DrawableObject
             island.subscribeToAmbientLight(light);
     }
 
-    @Override
-    public void updateAnimation()
-    {
-        // Updates the animation of all the islands
-        for(DrawableIsland island : islands)
-            island.updateAnimation();
-    }
-
     /**
      * Position setters, needs to be synchronized to handle the scheduled task
      */
@@ -142,7 +141,7 @@ public class DrawableIslandCollection extends DrawableObject
         // For every island i set the position according to the ellipsis and traslate it
         for(int i = 0; i < islands.length; i++)
         {
-            islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)]);
+            islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)], updater);
             float angle = i * ((float)360.0 / NUMBER_OF_ISLANDS);
             float coordX = (float)Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY;
             float coordZ = (float)Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY;

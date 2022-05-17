@@ -63,12 +63,13 @@ public class GameView extends Application
     /**
      * Game objects
      */
+    private AnimationHandler updater;
     private DrawableMotherNature motherNature;
     private DrawableIslandCollection islandCollection;
     private DrawableSchoolBoard schoolBoard;
 
     /**
-     * Collection of all the drawable objects, useful to the Animation Updates
+     * Collection of all the drawable objects, useful for repetitive tasks
      */
     private List<DrawableObject> drawableObjects;
 
@@ -110,17 +111,20 @@ public class GameView extends Application
         // Set the scene background
         scene.setFill(Color.rgb(129, 202, 241));
 
+        // Create the updater to update the objects every period
+        updater = new AnimationHandler(ANIMATION_UPDATE_PERIOD_MILLIS);
+
         // Create a mix with ambient and point light
         setupLights();
         // Set the camera up in perspective mode
         setupCamera();
 
         // Create all the game components
-        motherNature = new DrawableMotherNature(3, 7.5f, 1.5f);
-        islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100);
-        schoolBoard = new DrawableSchoolBoard(350);
-        DrawableSchoolBoard s2 = new DrawableSchoolBoard(350);
-        DrawableSchoolBoard s3 = new DrawableSchoolBoard(350);
+        motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
+        islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100, updater);
+        schoolBoard = new DrawableSchoolBoard(350, updater);
+        DrawableSchoolBoard s2 = new DrawableSchoolBoard(350, updater);
+        DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
@@ -200,7 +204,7 @@ public class GameView extends Application
         motherNature.addAnimationPosition(islandCollection.getPosition(), 2);
 
         // Start the time scheduled animations
-        startAnimationUpdates();
+        updater.start();
     }
 
     /**
@@ -233,27 +237,6 @@ public class GameView extends Application
         pointLight.setRotationAxis(new Point3D(1, 0, 0));
         pointLight.rotateProperty().set(90);
         pointLight.setLinearAttenuation(-0.0003);
-    }
-
-    /**
-     * Method that sets periodically updates about Graphical objects
-     */
-    private void startAnimationUpdates()
-    {
-        // Create the scheduled task
-        Timeline animationUpdates = new Timeline(new KeyFrame(Duration.millis(ANIMATION_UPDATE_PERIOD_MILLIS), new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                // To handle the animations update i call every drawable object
-                for (DrawableObject object : drawableObjects)
-                    object.updateAnimation();
-            }
-        }));
-        // Set the task as infinite and start the task
-        animationUpdates.setCycleCount(Timeline.INDEFINITE);
-        animationUpdates.play();
     }
 
     /**

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -28,8 +29,10 @@ public class DrawableProfessor extends DrawableObject
      * Constructor
      * @param type The type of the professor (Color and therefore it's shape)
      */
-    public DrawableProfessor(ProfessorType type)
+    public DrawableProfessor(ProfessorType type, AnimationHandler updater)
     {
+        super(updater);
+
         if(type == null)
             throw new NullPointerException("[DrawableProfessor] Null professor type");
 
@@ -59,6 +62,13 @@ public class DrawableProfessor extends DrawableObject
 
         // Apply the material
         professorMesh.setMaterial(material);
+
+        // Set the node to mouse transparent
+        professorMesh.setMouseTransparent(true);
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
 
     @Override

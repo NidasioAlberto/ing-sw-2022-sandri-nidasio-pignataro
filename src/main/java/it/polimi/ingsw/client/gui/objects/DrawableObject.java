@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -14,13 +15,28 @@ import java.util.List;
 public abstract class DrawableObject
 {
     /**
+     * Eventual animation updater to be used
+     */
+    protected AnimationHandler updater;
+
+    /**
      * Collection of ending positions to go with the animation process.
      * The pair represents the point where the object should go
      * and the step that should do every cycle
      */
     protected List<Pair<Point3D, Double>> positions;
 
-    protected DrawableObject() { positions = new ArrayList<>(); }
+    /**
+     * Constructor
+     * @param updater The animation updater to which subscribe the object
+     */
+    protected  DrawableObject(AnimationHandler updater)
+    {
+        if(updater != null)
+            this.updater = updater;
+
+        positions = new ArrayList<>();
+    }
 
     /**
      * Method to register the object to a group

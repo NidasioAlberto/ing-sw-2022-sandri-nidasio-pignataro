@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -27,8 +28,10 @@ public class DrawableStudent extends DrawableObject
     /**
      * Constructor
      */
-    public DrawableStudent( StudentType type)
+    public DrawableStudent(StudentType type, AnimationHandler updater)
     {
+        super(updater);
+
         if(type == null)
             throw new NullPointerException("[DrawableStudent] Null student type");
 
@@ -58,6 +61,13 @@ public class DrawableStudent extends DrawableObject
 
         // Rotate the student of 180 degrees on the y axis
         studentMesh.getTransforms().add(new Rotate(180, new Point3D(0, 1, 0)));
+
+        // Set the node to mouse transparent
+        studentMesh.setMouseTransparent(true);
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.TowerColor;
@@ -69,8 +70,10 @@ public class DrawableSchoolBoard extends DrawableObject
      * Constructor
      * @param x_dimension The x dimension of the board
      */
-    public DrawableSchoolBoard(float x_dimension)
+    public DrawableSchoolBoard(float x_dimension, AnimationHandler updater)
     {
+        super(updater);
+
         if(x_dimension < 0)
             throw new IllegalArgumentException("[DrawableSchoolBoard] X dimension less than 0");
 
@@ -111,6 +114,13 @@ public class DrawableSchoolBoard extends DrawableObject
         // Rotate the box correctly
         box.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
+
+        // Set the node to mouse transparent
+        box.setMouseTransparent(true);
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
 
     @Override
@@ -160,7 +170,7 @@ public class DrawableSchoolBoard extends DrawableObject
             return;
 
         // Create the new student of the same color
-        DrawableStudent student = new DrawableStudent(StudentType.valueOf(color.name()));
+        DrawableStudent student = new DrawableStudent(StudentType.valueOf(color.name()), updater);
 
         // The coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_DINING * X_DIMENSION + dining.get(color).size() * DINING_X_STEP * X_DIMENSION, 0,
@@ -205,7 +215,7 @@ public class DrawableSchoolBoard extends DrawableObject
         }
 
         // Create the new professor
-        DrawableProfessor professor = new DrawableProfessor(ProfessorType.valueOf(color.name()));
+        DrawableProfessor professor = new DrawableProfessor(ProfessorType.valueOf(color.name()), updater);
 
         // The coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_PROFESSOR * X_DIMENSION, 0, HEIGHTS.get(color) * X_DIMENSION );
@@ -245,7 +255,7 @@ public class DrawableSchoolBoard extends DrawableObject
             return;
 
         // Create the new student
-        DrawableStudent student = new DrawableStudent(StudentType.valueOf(color.name()));
+        DrawableStudent student = new DrawableStudent(StudentType.valueOf(color.name()), updater);
 
         // The coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_ENTRANCE * X_DIMENSION + ((entrance.size() + 1) % 2) * ENTRANCE_X_STEP * X_DIMENSION, 0,
@@ -286,7 +296,7 @@ public class DrawableSchoolBoard extends DrawableObject
             return;
 
         // Create the new tower
-        DrawableTower tower = new DrawableTower(TowerType.valueOf(color.name()));
+        DrawableTower tower = new DrawableTower(TowerType.valueOf(color.name()), updater);
 
         // The coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_TOWER * X_DIMENSION + (towers.size() % 2) * TOWER_X_STEP * X_DIMENSION, 0,

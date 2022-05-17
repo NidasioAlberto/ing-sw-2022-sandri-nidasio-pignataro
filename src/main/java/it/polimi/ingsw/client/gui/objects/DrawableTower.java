@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.ObjectModelParser;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
@@ -40,8 +41,10 @@ public class DrawableTower extends DrawableObject
      * Constructor
      * @param type The tower color
      */
-    public DrawableTower(TowerType type)
+    public DrawableTower(TowerType type, AnimationHandler updater)
     {
+        super(updater);
+
         if(type == null)
             throw new NullPointerException("[DrawableTower] Null tower type");
 
@@ -72,21 +75,33 @@ public class DrawableTower extends DrawableObject
         // Set the material
         towerMesh.setMaterial(material);
 
+        // Set in general the object to mouse transparent
+        towerMesh.setMouseTransparent(false);
 
-
-        towerMesh.setOnMouseClicked((MouseEvent event) ->{
+        towerMesh.setOnDragDetected((MouseEvent event) ->{
             offsetPosX = event.getX();
             offsetPosZ = event.getZ();
             posX = towerMesh.getTranslateX();
             posZ = towerMesh.getTranslateZ();
+            towerMesh.setMouseTransparent(false);
         });
 
         towerMesh.setOnMouseDragged((MouseEvent event) -> {
-            //System.out.println("provolone");
+            towerMesh.setMouseTransparent(false);
             posX = posX + event.getX() - offsetPosX;
             posZ = posZ + event.getZ() - offsetPosZ;
-            this.addAnimationPosition(new Point3D(posX, 0, posZ), 100);
+            System.out.println("" + event.getX() + " " + event.getZ());
+            //this.addAnimationPosition(new Point3D(posX, 0, posZ), 100);
+            this.translate(new Point3D(posX, 0, posZ));
         });
+
+        towerMesh.setOnMouseDragReleased((MouseEvent event) -> {
+            towerMesh.setMouseTransparent(true);
+        });
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
     @Override
     public void addToGroup(Group group)

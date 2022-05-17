@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -44,8 +45,10 @@ public class DrawableMotherNature extends DrawableObject
     /**
      * Constructor
      */
-    public DrawableMotherNature(int number_of_spheres, float starting_radius, float delta_radius)
+    public DrawableMotherNature(int number_of_spheres, float starting_radius, float delta_radius, AnimationHandler updater)
     {
+        super(updater);
+
         if(number_of_spheres < 0 || starting_radius < 0 || delta_radius < 0)
             throw new IllegalArgumentException("[DrawableMotherNature] Invalid mother nature dimensions");
 
@@ -72,7 +75,13 @@ public class DrawableMotherNature extends DrawableObject
             spheres[i].setRadius(STARTING_RADIUS - i * DELTA_RADIUS);
             spheres[i].setMaterial(material);
             spheres[i].setTranslateY(-(i * STARTING_RADIUS - i * DELTA_RADIUS));
+            // Set the node to mouse transparent
+            spheres[i].setMouseTransparent(true);
         }
+
+        // At the end if the updater != null i add the box to it
+        if(this.updater != null)
+            this.updater.subscribeObject(this);
     }
 
     @Override
