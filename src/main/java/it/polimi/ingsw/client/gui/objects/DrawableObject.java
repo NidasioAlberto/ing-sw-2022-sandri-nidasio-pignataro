@@ -80,12 +80,6 @@ public abstract class DrawableObject
     public abstract void subscribeToAmbientLight(AmbientLight light);
 
     /**
-     * Subscribes the object to the visibility handler
-     * NOTE: subscribe only the objects that are user interactive
-     */
-    public void subscribeToMouseVisibilityHandler(){}
-
-    /**
      * Enables the mouse visibility of the object
      */
     public abstract void enableVisibility();

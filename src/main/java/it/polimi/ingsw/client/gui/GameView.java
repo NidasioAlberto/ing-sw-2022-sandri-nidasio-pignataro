@@ -105,12 +105,14 @@ public class GameView extends Application
         // Set the camera up in perspective mode
         setupCamera();
 
-        // Create all the game components
+        // Create the ground plane so that the mouse ray casting hits something
+        // just below the playground
         Box groundPlane = new Box(3000, 3000, 0);
-        groundPlane.translateYProperty().set(15f);
+        groundPlane.translateYProperty().set(6f);
         groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
         groundPlane.setMaterial(new PhongMaterial(Color.TRANSPARENT));
-        //groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
+
+        // Create all the game components
         group.getChildren().add(groundPlane);
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
         islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100, updater);

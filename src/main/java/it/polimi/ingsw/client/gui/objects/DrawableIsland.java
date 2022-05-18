@@ -18,6 +18,10 @@ import java.util.Random;
 
 public class DrawableIsland extends DrawableObject
 {
+    // Constants
+    public static final float FLOATING_AMPLITUDE = 5;
+    public static final float FLOATING_ANGULAR_VELOCITY = 1.5f;
+
     /**
      * Island square dimensions
      */
@@ -84,8 +88,12 @@ public class DrawableIsland extends DrawableObject
         if(this.updater != null)
             this.updater.subscribeObject(this);
 
-        box.setOnMouseDragOver((event) -> {
-            System.out.println("prova");
+        box.setOnDragOver((event) -> {
+            System.out.println(event.getGestureSource());
+        });
+
+        box.setOnMouseDragReleased((event) -> {
+            System.out.println(event.getEventType());
         });
     }
 
@@ -139,9 +147,9 @@ public class DrawableIsland extends DrawableObject
     public void updateAnimation()
     {
         // I update the floating angle and them sum the Y shift with the sin
-        floatingAngle += 1;
+        floatingAngle += FLOATING_ANGULAR_VELOCITY;
         floatingAngle = floatingAngle % 360;
-        setY((float)box.getTranslateY() + (float) (Math.sin(Math.toRadians(floatingAngle)) / 10));
+        setY((float) (Math.sin(Math.toRadians(floatingAngle)) * FLOATING_AMPLITUDE));
     }
 
 

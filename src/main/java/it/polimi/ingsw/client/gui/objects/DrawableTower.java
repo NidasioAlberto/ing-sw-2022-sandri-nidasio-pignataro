@@ -4,10 +4,10 @@ import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.ObjectModelParser;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
@@ -77,16 +77,18 @@ public class DrawableTower extends DrawableObject
         towerMesh.setMouseTransparent(false);
 
 
-        towerMesh.setOnDragDetected((MouseEvent event) ->{
+        towerMesh.setOnDragDetected((event) ->{
             offsetPosX = event.getX();
             offsetPosZ = event.getZ();
             posX = towerMesh.getTranslateX();
             posZ = towerMesh.getTranslateZ();
             towerMesh.setMouseTransparent(true);
+            towerMesh.setCursor(Cursor.MOVE);
             towerMesh.startFullDrag();
+
         });
 
-        towerMesh.setOnMouseDragged((MouseEvent event) -> {
+        towerMesh.setOnMouseDragged((event) -> {
             towerMesh.setMouseTransparent(true);
             posX = event.getX() - offsetPosX;
             posZ = event.getZ() - offsetPosZ;
@@ -94,9 +96,9 @@ public class DrawableTower extends DrawableObject
             this.translate(new Point3D(towerMesh.getTranslateX() + posX, 0, towerMesh.getTranslateZ() + posZ));
         });
 
-        towerMesh.setOnMouseDragReleased((MouseEvent event) -> {
-            System.out.println();
-            towerMesh.setMouseTransparent(true);
+        towerMesh.setOnMouseReleased((event) -> {
+            towerMesh.setCursor(Cursor.DEFAULT);
+            towerMesh.setMouseTransparent(false);
         });
 
         // At the end if the updater != null i add the box to it
