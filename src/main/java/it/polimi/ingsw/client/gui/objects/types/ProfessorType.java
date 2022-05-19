@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.gui.objects;
+package it.polimi.ingsw.client.gui.objects.types;
 
 import it.polimi.ingsw.client.gui.ObjectModelParser;
 import javafx.scene.paint.Color;

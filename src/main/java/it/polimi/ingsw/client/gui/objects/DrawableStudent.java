@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
+import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -9,8 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
-
-import java.util.Objects;
 
 public class DrawableStudent extends DrawableObject
 {

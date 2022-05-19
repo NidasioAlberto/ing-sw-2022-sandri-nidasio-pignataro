@@ -1,16 +1,14 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
+import it.polimi.ingsw.client.gui.objects.types.IslandType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
-import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
-import javafx.scene.input.DragEvent;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 
 import java.util.Objects;

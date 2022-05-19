@@ -1,20 +1,20 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
-import it.polimi.ingsw.model.SchoolBoard;
+import it.polimi.ingsw.client.gui.objects.types.ProfessorType;
+import it.polimi.ingsw.client.gui.objects.types.StudentType;
+import it.polimi.ingsw.client.gui.objects.types.TowerType;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.TowerColor;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
-import javafx.scene.LightBase;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class DrawableSchoolBoard extends DrawableObject

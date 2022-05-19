@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
+import it.polimi.ingsw.client.gui.objects.types.ProfessorType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;

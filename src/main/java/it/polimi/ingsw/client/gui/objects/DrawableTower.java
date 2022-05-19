@@ -2,12 +2,12 @@ package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.ObjectModelParser;
+import it.polimi.ingsw.client.gui.objects.types.TowerType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
-import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
@@ -49,18 +49,15 @@ public class DrawableTower extends DrawableObject
         // Set the constants
         TYPE = type;
 
-        // Read the object file
-        ObjectModelParser parser = new ObjectModelParser("Models/tower.obj", 1);
-
         // Create the mesh referring to the object file
         triangleMesh = new TriangleMesh();
 
         // Assign all the vertices, faces, textures and normals
         triangleMesh.setVertexFormat(VertexFormat.POINT_NORMAL_TEXCOORD);
-        triangleMesh.getNormals().addAll(parser.getNormals());
-        triangleMesh.getFaces().addAll(parser.getFaces());
-        triangleMesh.getPoints().addAll(parser.getVertices());
-        triangleMesh.getTexCoords().addAll(parser.getTextures());
+        triangleMesh.getNormals().addAll(type.getParser().getNormals());
+        triangleMesh.getFaces().addAll(type.getParser().getFaces());
+        triangleMesh.getPoints().addAll(type.getParser().getVertices());
+        triangleMesh.getTexCoords().addAll(type.getParser().getTextures());
 
         // Now i create the actual node with the mesh
         towerMesh = new MeshView(triangleMesh);
@@ -75,7 +72,6 @@ public class DrawableTower extends DrawableObject
 
         // Set in general the object to mouse transparent
         towerMesh.setMouseTransparent(false);
-
 
         towerMesh.setOnDragDetected((event) ->{
             offsetPosX = event.getX();
