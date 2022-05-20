@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.objects.*;
 import it.polimi.ingsw.client.gui.objects.types.CloudType;
+import it.polimi.ingsw.client.gui.objects.types.DrawableAssistantCollection;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.client.gui.objects.types.WizardType;
 import it.polimi.ingsw.model.SchoolColor;
@@ -123,7 +124,9 @@ public class GameView extends Application
         DrawableSchoolBoard s2 = new DrawableSchoolBoard(350, updater);
         DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
         DrawableCloudTile tile = new DrawableCloudTile(40, CloudType.CLOUD_4, updater);
-        DrawableAssistantCard card = new DrawableAssistantCard(100, 7, WizardType.WIZARD_1, updater);
+        DrawableAssistantCollection collection = new DrawableAssistantCollection(500, WizardType.WIZARD_1, updater);
+        collection.translate(new Point3D(0, -10, -290));
+
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
@@ -145,7 +148,7 @@ public class GameView extends Application
         drawableObjects.add(s2);
         drawableObjects.add(s3);
         drawableObjects.add(tile);
-        drawableObjects.add(card);
+        drawableObjects.add(collection);
 
         // Dynamic object add to schoolboard
         schoolBoard.addProfessor(SchoolColor.GREEN, group, pointLight);

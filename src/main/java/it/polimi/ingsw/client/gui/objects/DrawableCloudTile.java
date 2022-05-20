@@ -88,6 +88,10 @@ public class DrawableCloudTile extends DrawableObject
 
         // Set the tile mouse transparent
         box.setMouseTransparent(true);
+
+        // If not null subscribe to the updater
+        if(updater != null)
+            updater.subscribeObject(this);
     }
 
     /**

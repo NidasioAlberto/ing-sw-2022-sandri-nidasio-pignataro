@@ -40,6 +40,11 @@ public class DrawableAssistantCard extends DrawableObject
     private final Box backBox;
 
     /**
+     * The card position used for animation purposes
+     */
+    private Point3D position;
+
+    /**
      * Constructor
      * @param updater
      */
@@ -58,6 +63,9 @@ public class DrawableAssistantCard extends DrawableObject
         X_DIMENSION = x_dimension;
         Y_DIMENSION = X_DIMENSION * SCALE_FACTOR;
         TYPE        = type;
+
+        // Set the card position
+        position = new Point3D(0, 0, 0);
 
         // Create the boxes
         frontBox = new Box(X_DIMENSION, Y_DIMENSION, 0);
@@ -88,6 +96,24 @@ public class DrawableAssistantCard extends DrawableObject
 
         // The default card is set not flipped
         setFlipped(false);
+
+        // If not null subscribe to the updater
+        if(updater != null)
+            updater.subscribeObject(this);
+
+        // Animation settings
+        frontBox.setOnMouseEntered((event) -> {
+            if(positions.size() == 0)
+            {
+                // Save the current position before translating
+                position = new Point3D(frontBox.getTranslateX(), frontBox.getTranslateY(), frontBox.getTranslateZ());
+                this.addAnimationPosition(new Point3D(position.getX(), position.getY(), position.getZ() + X_DIMENSION * SCALE_FACTOR / 2), 5);
+            }
+        });
+
+        frontBox.setOnMouseExited((event -> {
+            this.addAnimationPosition(new Point3D(position.getX(), position.getY(), position.getZ()), 5);
+        }));
     }
 
     /**
@@ -97,9 +123,9 @@ public class DrawableAssistantCard extends DrawableObject
     public void setFlipped(boolean flipped)
     {
         if(flipped)
-            backBox.setTranslateY(-2);
+            backBox.setLayoutY(-2);
         else
-            backBox.setTranslateY(2);
+            backBox.setLayoutY(2);
     }
 
     @Override
