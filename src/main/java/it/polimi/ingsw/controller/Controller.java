@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class allows creating, starting and ending a game. The controller links the model package with the network one in order to organize the match
- * phases and actions.
+ * This class allows creating, starting and ending a game. The controller links the model package
+ * with the network one in order to organize the match phases and actions.
  */
 public class Controller
 {
@@ -237,6 +237,7 @@ public class Controller
             sendError(getCurrentPlayer().getNickname(), "You can't play GrandmaHerbs now, because the No Entry tiles are finished.");
         } catch (Exception e)
         {
+            actionHandler.setGamePhase(new EndGamePhase());
             // TODO: Check the end match logic, there may be an error
             match.endMatch("Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible, error: " + e.getMessage() + " "
                     + e.getClass().getName());

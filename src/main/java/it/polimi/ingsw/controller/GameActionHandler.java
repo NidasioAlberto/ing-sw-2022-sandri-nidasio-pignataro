@@ -149,8 +149,7 @@ public class GameActionHandler
         game.getSelectedPlayer().get().selectIsland(selectedIsland);
 
         // Move the student to the selected island
-        game.putStudentToIsland(game.getSelectedPlayer().get().getBoard().removeStudentFromEntrance(
-                game.getSelectedPlayer().get().getSelectedColors().get(0)).get());
+        game.putStudentToIsland(game.pickStudentFromEntrance());
 
         // Clear the selections
         game.getSelectedPlayer().get().clearSelections();

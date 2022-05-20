@@ -351,7 +351,7 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayCharacterCards(CharacterCardsUpdate update)
     {
-        PrintHelper.printMR(12, 68, update.toString());
+        PrintHelper.printMR(12, 68 + 34, update.toString());
     }
 
     @Override
