@@ -154,6 +154,17 @@ public class DrawableIslandCollection extends DrawableObject
         {
             islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)], updater);
             float angle = i * ((float)360.0 / NUMBER_OF_ISLANDS);
+
+            // Angle compensation for centering
+            float delta = i == 0 || i == NUMBER_OF_ISLANDS / 2 ? 0 : (float)Math.abs(Math.cos(Math.toRadians(angle))) * 5;
+            if((angle >= 0 && angle <= 90) || (angle >= 180 && angle <= 270))
+                // I need to increase the angle
+                angle += delta;
+            else
+                // I need to decrease the angle
+                angle -= delta;
+
+            // Set the actual coordinates
             float coordX = (float)Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY;
             float coordZ = (float)Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY;
             islands[i].translate(new Point3D(coordX + point.getX(), point.getY(), coordZ + point.getZ()));

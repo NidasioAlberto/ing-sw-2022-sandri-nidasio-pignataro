@@ -119,7 +119,7 @@ public class GameView extends Application
         // Create all the game components
         group.getChildren().add(groundPlane);
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
-        islandCollection = new DrawableIslandCollection(100, 2.5f, 1.5f, 100, updater);
+        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, updater);
         schoolBoard = new DrawableSchoolBoard(350, updater);
         DrawableSchoolBoard s2 = new DrawableSchoolBoard(350, updater);
         DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
@@ -130,7 +130,7 @@ public class GameView extends Application
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
-        schoolBoard.translate(new Point3D(0, 0, -175));
+        schoolBoard.translate(new Point3D(0, 0, -170));
         s2.translate(new Point3D(-400, 0, 150));
         s3.translate(new Point3D(400, 0, 150));
         s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
