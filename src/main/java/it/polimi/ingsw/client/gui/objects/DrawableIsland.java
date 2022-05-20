@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.IslandType;
+import it.polimi.ingsw.client.gui.objects.types.TowerType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -11,6 +12,8 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -26,6 +29,12 @@ public class DrawableIsland extends DrawableObject
     private final int DIMENSION;
 
     /**
+     * Positioning constants
+     */
+    private final double X_TOWER = -0.17;
+    private final double Y_TOWER = 0.25;
+
+    /**
      * Island draw type
      */
     private final IslandType TYPE;
@@ -34,6 +43,12 @@ public class DrawableIsland extends DrawableObject
      * Box containing the island texture
      */
     private Box box;
+
+    /**
+     * Island payloads
+     */
+    private DrawableTower tower;
+    private List<DrawableStudent> students;
 
     /**
      * Animation angle (to which apply the Math.sin and float the island)
@@ -57,6 +72,9 @@ public class DrawableIsland extends DrawableObject
         // Set the island constants
         DIMENSION = dimension;
         TYPE = type;
+
+        // Create the collection of students
+        students = new ArrayList<>();
 
         // Random set the first angle
         floatingAngle = new Random().nextFloat(360);
@@ -93,6 +111,23 @@ public class DrawableIsland extends DrawableObject
         box.setOnMouseDragReleased((event) -> {
             System.out.println(event.getEventType());
         });
+    }
+
+    public void addTower(TowerType type, Group group, PointLight light)
+    {
+        // I add the tower only if there isn't already one
+        if(tower != null)
+            return;
+
+        // Create the drawable tower
+        tower = new DrawableTower(type, updater);
+
+        // Translate the tower
+        tower.translate(new Point3D(X_TOWER * DIMENSION + getPosition().getX(), 0, Y_TOWER * DIMENSION + getPosition().getY()));
+
+        // Add the tower to group and point light
+        tower.addToGroup(group);
+        tower.subscribeToPointLight(light);
     }
 
     @Override
@@ -147,7 +182,7 @@ public class DrawableIsland extends DrawableObject
         // I update the floating angle and them sum the Y shift with the sin
         floatingAngle += FLOATING_ANGULAR_VELOCITY;
         floatingAngle = floatingAngle % 360;
-        setY((float) (Math.sin(Math.toRadians(floatingAngle)) * FLOATING_AMPLITUDE));
+        translate(new Point3D(getPosition().getX(), Math.sin(Math.toRadians(floatingAngle)) * FLOATING_AMPLITUDE, getPosition().getZ()));
     }
 
 
@@ -164,6 +199,10 @@ public class DrawableIsland extends DrawableObject
         box.translateXProperty().set(point.getX());
         box.translateYProperty().set(point.getY());
         box.translateZProperty().set(point.getZ());
+
+        // Update all the components
+        if(tower != null)
+            tower.translate(new Point3D(X_TOWER * DIMENSION + point.getX(), point.getY(), Y_TOWER * DIMENSION + point.getZ()));
     }
 
     @Override
@@ -176,10 +215,10 @@ public class DrawableIsland extends DrawableObject
         box.getTransforms().add(rotation);
     }
 
-    public synchronized void setX(float x) { box.translateXProperty().set(x); }
+    public synchronized void setX(double x) { box.translateXProperty().set(x); }
 
-    public synchronized void setY(float y) { box.translateYProperty().set(y); }
-    public synchronized void setZ(float z) { box.translateZProperty().set(z); }
+    public synchronized void setY(double y) { box.translateYProperty().set(y); }
+    public synchronized void setZ(double z) { box.translateZProperty().set(z); }
     @Override
     public Point3D getPosition() { return new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ()); }
 }

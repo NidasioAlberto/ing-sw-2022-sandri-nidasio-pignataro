@@ -140,4 +140,6 @@ public class DrawableStudent extends DrawableObject
     {
         return new Point3D(studentMesh.getTranslateX(), studentMesh.getTranslateY(), studentMesh.getTranslateZ());
     }
+
+    public StudentType getType() { return TYPE; }
 }

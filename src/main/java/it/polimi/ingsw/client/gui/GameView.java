@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.objects.*;
-import it.polimi.ingsw.client.gui.objects.types.CloudType;
-import it.polimi.ingsw.client.gui.objects.types.DrawableAssistantCollection;
-import it.polimi.ingsw.client.gui.objects.types.StudentType;
-import it.polimi.ingsw.client.gui.objects.types.WizardType;
+import it.polimi.ingsw.client.gui.objects.types.*;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.TowerColor;
 import javafx.application.Application;
@@ -126,7 +123,6 @@ public class GameView extends Application
         DrawableCloudTile tile = new DrawableCloudTile(40, CloudType.CLOUD_4, updater);
         DrawableAssistantCollection collection = new DrawableAssistantCollection(500, WizardType.WIZARD_1, updater);
         collection.translate(new Point3D(0, -10, -290));
-
 
         // Eventually modify the single objects for window design things
         islandCollection.translate(new Point3D(0, 0, 150));
