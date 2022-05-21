@@ -200,7 +200,7 @@ public class GameActionHandler
             game.moveMotherNature(wantedPosition - currentPosition);
         else if (wantedPosition < currentPosition && game.isValidMotherNatureMovement(
                 game.getIslands().size() + wantedPosition - currentPosition))
-            game.moveMotherNature(Game.ISLAND_TILES_NUMBER + wantedPosition - currentPosition);
+            game.moveMotherNature(game.getIslands().size() + wantedPosition - currentPosition);
         else
             throw new InvalidMovementException(
                     "[GameActionHandler] Mother nature cannot move there");

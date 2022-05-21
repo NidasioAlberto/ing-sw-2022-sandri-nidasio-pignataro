@@ -8,6 +8,10 @@ import it.polimi.ingsw.model.exceptions.NoMoreNoEntryTilesException;
 import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
+import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Character card Grandma Herbs. Effect: Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her movement there, put
@@ -110,7 +114,21 @@ public class GrandmaHerbs extends CharacterCard
         noEntryTiles = INITIAL_NO_ENTRY_NUMBER - count;
 
         if (instance.subscriber.isPresent())
+        {
             instance.subscriber.get().onNext(new CharacterCardPayloadUpdate(index, noEntryTiles));
+
+            // I need to send also the CharacterCardsUpdate because CLI
+            // doesn't use the CharacterCardPayloadUpdate
+            List<CharacterCard> characterCardsList = new ArrayList<>();
+
+            for (CharacterCard card : instance.characterCards)
+            {
+                // I clone all the character card to avoid serializing the game instance
+                characterCardsList.add((CharacterCard) card.clone());
+            }
+
+            instance.subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+        }
     }
 
     @Override

@@ -208,11 +208,14 @@ public class MushroomMan extends CharacterCard
                         currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0).getColor())
                 {
                     // Mother must step back if it is placed after the current island or
-                    // if it is in the last island
-                    if (instance.motherNatureIndex.get() > instance.islands.indexOf(currIsland) ||
-                            instance.motherNatureIndex.get() == (instance.islands.size() - 1))
+                    // if it is on the last island or if the current island is the last one
+                    if (motherNatureIndex.get() > islands.indexOf(currIsland) ||
+                            motherNatureIndex.get() == (islands.size() - 1) ||
+                            islands.indexOf(currIsland) == (islands.size() - 1))
                     {
-                        instance.motherNatureIndex = Optional.of(getMotherNatureIndex().get() - 1);
+                        // In case of 0 index, mother nature goes to islands.size - 2 because we will remove an island
+                        motherNatureIndex = getMotherNatureIndex().get() == 0 ?
+                                Optional.of(islands.size() - 2) : Optional.of(getMotherNatureIndex().get() - 1);
                     }
 
                     // Merge the two islands and remove one

@@ -246,7 +246,7 @@ public class CLI extends Visualizer implements Runnable
             {
                 PrintHelper.print("Expert game action:");
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
-                    PrintHelper.print(i + " - " + ExpertGameAction.values()[i]);
+                    PrintHelper.print(i + " - " + ExpertGameAction.values()[i] + "\n");
                 int action = Integer.parseInt(scanner.nextLine());
                 int selectedIsland = selectIsland(scanner);
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
