@@ -143,6 +143,19 @@ public abstract class CharacterCard extends Game implements Serializable
     public void deactivate()
     {
         this.activated = false;
+
+        if (instance.subscriber.isPresent())
+        {
+            List<CharacterCard> characterCardsList = new ArrayList<>();
+
+            for (CharacterCard card : instance.characterCards)
+            {
+                // I clone all the character card to avoid serializing the game instance
+                characterCardsList.add((CharacterCard) card.clone());
+            }
+
+            instance.subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+        }
     }
 
     /**

@@ -99,9 +99,6 @@ public class CLI extends Visualizer implements Runnable
             case 2:
                 chooseAction(scanner);
                 break;
-            default:
-                PrintHelper.printMessage("You should choose a command between 1 and 2.\n");
-                break;
         }
     }
 
@@ -166,12 +163,6 @@ public class CLI extends Visualizer implements Runnable
             }
             case 7:
             {
-                break;
-            }
-            default:
-            {
-                PrintHelper.print("You should choose a command between 1 and 7.\n");
-                chooseCommand(scanner);
                 break;
             }
         }
@@ -244,9 +235,10 @@ public class CLI extends Visualizer implements Runnable
             }
             case 8:
             {
-                PrintHelper.print("Expert game action:");
+                PrintHelper.print("If you don't have to select an island nor colors choose \"Base action\".\n");
+                PrintHelper.print("Expert game action:\n");
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
-                    PrintHelper.print(i + " - " + ExpertGameAction.values()[i] + "\n");
+                    PrintHelper.print("\t" + i + " - " + ExpertGameAction.values()[i] + "\n");
                 int action = Integer.parseInt(scanner.nextLine());
                 int selectedIsland = selectIsland(scanner);
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
@@ -260,12 +252,6 @@ public class CLI extends Visualizer implements Runnable
             }
             case 10:
             {
-                break;
-            }
-            default:
-            {
-                PrintHelper.print("You should choose an action between 1 and 10.\n");
-                chooseAction(scanner);
                 break;
             }
         }

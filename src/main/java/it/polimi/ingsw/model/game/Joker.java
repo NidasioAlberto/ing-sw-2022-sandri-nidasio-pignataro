@@ -65,7 +65,7 @@ public class Joker extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
-        if (action == ExpertGameAction.SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE)
+        if (action == ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD)
         {
             // If it is activated I accept the
             // SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE
