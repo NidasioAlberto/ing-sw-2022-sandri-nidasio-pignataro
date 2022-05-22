@@ -100,34 +100,12 @@ public class Client implements Runnable
                 Object input = inputStream.readObject();
 
                 // Updates
-                if (input instanceof AssistantCardsUpdate)
-                    visualizer.displayAssistantCards((AssistantCardsUpdate) input);
-                else if (input instanceof CharacterCardPayloadUpdate)
-                    visualizer.displayCharacterCardPayload((CharacterCardPayloadUpdate) input);
-                else if (input instanceof CharacterCardsUpdate)
-                    visualizer.displayCharacterCards((CharacterCardsUpdate) input);
-                else if (input instanceof CloudTilesUpdate)
-                    visualizer.displayCloudTiles((CloudTilesUpdate) input);
-                else if (input instanceof IslandsUpdate)
-                    visualizer.displayIslands((IslandsUpdate) input);
-                else if (input instanceof PlayedAssistantCardUpdate)
-                    visualizer.displayPlayedAssistantCard((PlayedAssistantCardUpdate) input);
-                else if (input instanceof SchoolBoardUpdate)
-                    visualizer.displaySchoolboard((SchoolBoardUpdate) input);
+                if (input instanceof ModelUpdate)
+                    ((ModelUpdate) input).handleUpdate(visualizer);
 
                 // Answers
-                else if (input instanceof EndMatchAnswer)
-                    visualizer.displayEndMatch((EndMatchAnswer) input);
-                else if (input instanceof ErrorAnswer)
-                    visualizer.displayError((ErrorAnswer) input);
-                else if (input instanceof JoinedMatchAnswer)
-                    visualizer.displayJoinedMatch((JoinedMatchAnswer) input);
-                else if (input instanceof MatchesListAnswer)
-                    visualizer.displayMatchesList((MatchesListAnswer) input);
-                else if (input instanceof SetNameAnswer)
-                    visualizer.displaySetName((SetNameAnswer) input);
-                else if (input instanceof StartMatchAnswer)
-                    visualizer.displayStartMatch((StartMatchAnswer) input);
+                else if (input instanceof Answer)
+                    ((Answer) input).handleAnswer(visualizer);
 
                 // Unrecognized
                 else

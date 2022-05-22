@@ -1,5 +1,7 @@
 package it.polimi.ingsw.protocol.updates;
 
+import it.polimi.ingsw.client.Visualizer;
+
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -41,11 +43,9 @@ public abstract class ModelUpdate implements Serializable
     /**
      * This method is part of the command pattern.
      * 
-     * TODO: Replace Object with the correct type.
-     * 
      * @param handler The handler class to modify client side
      */
-    public abstract void handleUpdate(Object handler);
+    public abstract void handleUpdate(Visualizer handler);
 
     public Optional<String> getPlayerDestination()
     {

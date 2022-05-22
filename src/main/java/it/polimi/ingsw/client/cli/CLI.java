@@ -12,6 +12,7 @@ import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.game.CharacterCardType;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.*;
 import it.polimi.ingsw.protocol.messages.*;
@@ -113,7 +114,7 @@ public class CLI extends Visualizer implements Runnable
         msg += "\t5 - Quit match\n";
         msg += "\t6 - Quit game\n";
         msg += "\t7 - Undo choice\n";
-        PrintHelper.print(msg);
+        PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + msg);
 
         int choice = Integer.parseInt(scanner.nextLine());
         scanner.reset();
@@ -182,7 +183,7 @@ public class CLI extends Visualizer implements Runnable
         msg += "\t8 - Character card action\n";
         msg += "\t9 - Character cards effects\n";
         msg += "\t10 - Undo choice\n";
-        PrintHelper.print(msg);
+        PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + msg);
 
         int choice = Integer.parseInt(scanner.nextLine());
 
@@ -240,7 +241,11 @@ public class CLI extends Visualizer implements Runnable
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
                     PrintHelper.print("\t" + i + " - " + ExpertGameAction.values()[i] + "\n");
                 int action = Integer.parseInt(scanner.nextLine());
+                if (action < 0  || action >= ExpertGameAction.values().length)
+                    break;
+                PrintHelper.print("If you don't need to select an island just type \"0\"\n");
                 int selectedIsland = selectIsland(scanner);
+                PrintHelper.print("If you don't need to select a color just type \"0\"\n");
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
                 client.sendAction(new CharacterCardActionMessage(ExpertGameAction.values()[action], selectedIsland, selectedColors));
                 break;
@@ -248,6 +253,8 @@ public class CLI extends Visualizer implements Runnable
             case 9:
             {
                 PrintHelper.print(characterCardsEffects());
+                PrintHelper.print("Press enter when you are done\n");
+                scanner.nextLine();
                 break;
             }
             case 10:
@@ -298,24 +305,27 @@ public class CLI extends Visualizer implements Runnable
         String rules = "";
 
         rules += "These are the effects of the character cards: \n";
-        rules += "- MONK: Take 1 Student from this card and place it on an island of your choice. "
+        rules += "- " + CharacterCardType.MONK + ": Take 1 Student from this card and place it on an Island of your choice. "
                 + "Then, draw a new Student from the bag and place it on this card;\n";
-        rules += "- SHAMAN: During this turn, you take control of any number of Professors even if you "
+        rules += "- " + CharacterCardType.SHAMAN + ": During this turn, you take control of any number of Professors even if you "
                 + "have the same number of Students as the player who currently controls them;\n";
-        rules += "- HERALD: Choose an Island and resolve the Island as if Mother Nature had ended her movement there."
+        rules += "- " + CharacterCardType.HERALD + ": Choose an Island and resolve the Island as if Mother Nature had ended her movement there."
                 + " Mother Nature will still move and the Island where she ends her movement will also be resolved;\n";
-        rules += "- POSTMAN: You may move Mother Nature up to 2 additional Islands than is indicated " + "by the Assistant card you've played;\n";
-        rules += "- GRANDMA_HERBS: Place a No Entry tile on an Island of your choice. The  first time Mother Nature "
+        rules += "- " + CharacterCardType.POSTMAN + ": You may move Mother Nature up to 2 additional Islands than is indicated "
+                + "by the Assistant card you've played;\n";
+        rules += "- " + CharacterCardType.GRANDMA_HERBS + ": Place a No Entry tile on an Island of your choice. The  first time Mother Nature "
                 + "ends her movement there, put the No Entry Tile back onto this card DO NOT calculate influence on "
                 + "that Island, or place any Towers;\n";
-        rules += "- CENTAUR: When resolving a computeInfluence on an Island, Towers do not count towards influence;\n";
-        rules += "- JOKER: You may take up to 3 Students from this card and replace them with the same number " + "of Students from your Entrance;\n";
-        rules += "- KNIGHT: During the influence calculation this turn, you count as having 2 more influence;\n";
-        rules += "- MUSHROOM_MAN: Choose a color of Student; during the influence calculation this turn, " + "that color adds no influence;\n";
-        rules += "- MINSTREL: You may exchange up to 2 Students between your Entrance and your Dining Room;\n";
-        rules += "- PRINCESS: Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student"
+        rules += "- " + CharacterCardType.CENTAUR + ": When resolving a conquering on an Island, Towers do not count towards influence;\n";
+        rules += "- " + CharacterCardType.JOKER + ": You may take up to 3 Students from this card and replace them with the same number "
+                + "of Students from your Entrance;\n";
+        rules += "- " + CharacterCardType.KNIGHT + ": During the influence calculation this turn, you count as having 2 more influence;\n";
+        rules += "- " + CharacterCardType.MUSHROOM_MAN + ": Choose a color of Student; during the influence calculation this turn, "
+                + "that color adds no influence;\n";
+        rules += "- " + CharacterCardType.MINSTREL + ": You may exchange up to 2 Students between your Entrance and your Dining Room;\n";
+        rules += "- " + CharacterCardType.PRINCESS + ": Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student"
                 + " from the Bag and place it on this card;\n";
-        rules += "- THIEF: Choose a type of Student; every player (including yourself) must return 3 Students of that "
+        rules += "- " + CharacterCardType.THIEF + ": Choose a type of Student; every player (including yourself) must return 3 Students of that "
                 + "type from their Dining Room to the bag. If any player has fewer than 3 Students of that type,"
                 + " return as many Students as they have.\n";
 
@@ -337,7 +347,7 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayCharacterCards(CharacterCardsUpdate update)
     {
-        PrintHelper.printMR(12, 68 + 34, update.toString());
+        PrintHelper.printMR(12, 2 + 33 * players.size() + 1, update.toString());
     }
 
     @Override

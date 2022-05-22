@@ -1,5 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
+import it.polimi.ingsw.client.Visualizer;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.game.*;
@@ -36,9 +37,9 @@ public class CharacterCardsUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Object handler)
+    public void handleUpdate(Visualizer handler)
     {
-
+        handler.displayCharacterCards(this);
     }
 
     /**

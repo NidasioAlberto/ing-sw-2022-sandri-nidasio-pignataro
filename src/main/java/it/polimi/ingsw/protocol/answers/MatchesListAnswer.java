@@ -2,6 +2,8 @@ package it.polimi.ingsw.protocol.answers;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import it.polimi.ingsw.client.Visualizer;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.network.Match;
 
@@ -52,5 +54,11 @@ public class MatchesListAnswer extends Answer
 
             return str;
         }
+    }
+
+    @Override
+    public void handleAnswer(Visualizer handler)
+    {
+        handler.displayMatchesList(this);
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
+import it.polimi.ingsw.client.Visualizer;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
@@ -36,9 +37,9 @@ public class CloudTilesUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Object handler)
+    public void handleUpdate(Visualizer handler)
     {
-
+        handler.displayCloudTiles(this);
     }
 
     /**

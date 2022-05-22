@@ -1,5 +1,7 @@
 package it.polimi.ingsw.protocol.answers;
 
+import it.polimi.ingsw.client.Visualizer;
+
 public class JoinedMatchAnswer extends Answer
 {
     private String matchId;
@@ -13,5 +15,11 @@ public class JoinedMatchAnswer extends Answer
     public String toString()
     {
         return "[JoinedMatchAnswer] Joined match " + matchId;
+    }
+
+    @Override
+    public void handleAnswer(Visualizer handler)
+    {
+        handler.displayJoinedMatch(this);
     }
 }
