@@ -76,8 +76,8 @@ public class SchoolBoard implements Serializable
         // Assign the mode
         this.mode = mode;
 
-        // Set the initial coins to 0
-        coins = 0;
+        // Set the initial coins
+        coins = mode == GameMode.EXPERT ? 1 : 0;
 
         // Instantiate all the things
         entrance = new ArrayList<Student>();

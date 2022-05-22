@@ -18,7 +18,7 @@ public enum ExpertGameAction
     MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND("Move student from character card to island"),
     SELECT_ISLAND("Select island"),
     MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND("Move no entry tile from character card to island"),
-    SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD("swap student from entrance to character card"),
+    SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD("Swap student from entrance to character card"),
     SELECT_COLOR("Select color"),
     SWAP_STUDENT_FROM_ENTRANCE_TO_DINING("Swap student from entrance to dining"),
     MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING("Move student from character card to dining");

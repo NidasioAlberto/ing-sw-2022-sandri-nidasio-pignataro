@@ -98,6 +98,7 @@ public class MinstrelTest
         player1.getBoard().removeCoins(1);
 
         // If i activate the card with no coins i should get an error
+        game.getSelectedPlayer().get().getBoard().removeCoins(1);
         assertThrows(NotEnoughCoinsException.class, () -> minstrel.activate());
 
         // Add the coins to activate the card

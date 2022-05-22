@@ -238,9 +238,9 @@ public class Controller
         } catch (Exception e)
         {
             actionHandler.setGamePhase(new EndGamePhase());
-            // TODO: Check the end match logic, there may be an error
             match.endMatch("Oh no, we are sorry but an internal error occurred, we will fix it as soon as possible, error: " + e.getMessage() + " "
                     + e.getClass().getName());
+            e.printStackTrace();
         }
     }
 

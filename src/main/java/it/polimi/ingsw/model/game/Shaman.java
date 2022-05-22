@@ -52,6 +52,14 @@ public class Shaman extends CharacterCard
 
         conquerProfessors();
 
+        // I need to send the SchoolBoardUpdate because of the conquerProfessors
+        if (instance.subscriber.isPresent()) {
+            for (Player player : instance.players)
+                instance.subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+
+        }
+
         if(instance.motherNatureMoved)
             this.deactivate();
     }

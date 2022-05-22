@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInDiningException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
+import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
 import java.util.NoSuchElementException;
 
@@ -108,6 +109,15 @@ public class Minstrel extends CharacterCard
 
         // Check if the player gain a professor
         instance.conquerProfessors();
+
+        // I need to send the SchoolBoardUpdate because some students have changed
+        if (instance.subscriber.isPresent())
+        {
+            for (Player player : instance.players)
+                instance.subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+
+        }
 
         exchangeCounter += 1;
 

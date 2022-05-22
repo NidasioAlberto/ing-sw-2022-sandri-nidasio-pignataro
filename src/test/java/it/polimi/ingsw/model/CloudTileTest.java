@@ -172,6 +172,8 @@ public class CloudTileTest
         assertEquals(student2, cloud.getStudents().get(1));
         cloud.removeStudents();
         assertEquals(0, cloud.getStudents().size());
+
+        assertNotEquals(null, cloud.toString());
     }
 
     /**

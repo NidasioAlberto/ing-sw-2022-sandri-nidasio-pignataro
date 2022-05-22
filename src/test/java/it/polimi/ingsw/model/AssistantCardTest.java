@@ -16,6 +16,8 @@ public class AssistantCardTest
         assertAll(() -> assertEquals(Wizard.WIZARD_1, card.getWizard()),
                 () -> assertEquals(10, card.getTurnOrder()),
                 () -> assertEquals(5, card.getSteps()));
+
+        assertNotEquals(null, card.toString());
     }
 
     /**

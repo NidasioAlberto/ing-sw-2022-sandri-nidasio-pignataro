@@ -94,8 +94,9 @@ public class MushroomManTest
         {
         }
 
-        // After activation the player should have 3 coin less
-        assertEquals(7, player1.getBoard().getCoins());
+        // After activation the player should have 3 coin less, but there was already one coin
+        // because of expert mode
+        assertEquals(8, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, mushroomMan.firstUsed);
@@ -114,7 +115,7 @@ public class MushroomManTest
         assertEquals(true, mushroomMan.firstUsed);
         assertEquals(true, mushroomMan.isActivated());
         assertEquals(4, mushroomMan.cost);
-        assertEquals(7, player1.getBoard().getCoins());
+        assertEquals(8, player1.getBoard().getCoins());
 
         // Finally, if I deactivate the card the cost will be 4 coins
         mushroomMan.deactivate();
@@ -129,7 +130,7 @@ public class MushroomManTest
         assertEquals(true, mushroomMan.firstUsed);
         assertEquals(true, mushroomMan.isActivated());
         assertEquals(4, mushroomMan.cost);
-        assertEquals(3, player1.getBoard().getCoins());
+        assertEquals(4, player1.getBoard().getCoins());
     }
 
     @Test

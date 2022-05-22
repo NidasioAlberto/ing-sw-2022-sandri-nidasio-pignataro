@@ -510,14 +510,14 @@ public class SchoolBoardTest
 
         // Expert board
         SchoolBoard expertBoard = new SchoolBoard(TowerColor.BLACK, GameMode.EXPERT);
-        assertEquals(0, expertBoard.getCoins());
-        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
-        assertEquals(0, expertBoard.getCoins());
-        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
-        assertEquals(0, expertBoard.getCoins());
-        // The player adds the 3rd student, so gains a coin
+        assertEquals(1, expertBoard.getCoins());
         expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         assertEquals(1, expertBoard.getCoins());
+        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(1, expertBoard.getCoins());
+        // The player adds the 3rd student, so gains a coin
+        expertBoard.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        assertEquals(2, expertBoard.getCoins());
     }
 
     @Test

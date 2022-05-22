@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
 import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
@@ -99,6 +100,14 @@ public class Thief extends CharacterCard
                             .ifPresent(s -> instance.addStudentToBag(s));
                 });
             });
+        }
+
+        // I need to send the SchoolBoardUpdate because some students have been removed from the dining
+        if (instance.subscriber.isPresent()) {
+            for (Player player : instance.players)
+                instance.subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+
         }
 
         this.deactivate();

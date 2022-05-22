@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
+import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +151,12 @@ public class Joker extends CharacterCard
             }
 
             instance.subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+
+            // I need to send the SchoolBoardUpdate because a student has changed in entrance
+            for (Player player : instance.players)
+                instance.subscriber.get()
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+
         }
     }
 

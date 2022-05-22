@@ -61,6 +61,8 @@ public class MonkTest
 
         // At the beginning the card isn't used
         assertFalse(monk.firstUsed);
+
+        assertNotEquals(null, monk.toString());
     }
 
     @Test
@@ -76,6 +78,7 @@ public class MonkTest
         game.selectPlayer(0);
 
         // If the player doesn't have enough coins an exception is thrown
+        game.getSelectedPlayer().get().getBoard().removeCoins(1);
         assertThrows(NotEnoughCoinsException.class, () -> monk.activate());
 
         try

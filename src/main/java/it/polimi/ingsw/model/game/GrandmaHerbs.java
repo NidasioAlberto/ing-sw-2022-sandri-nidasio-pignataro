@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
+import it.polimi.ingsw.protocol.updates.IslandsUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +129,11 @@ public class GrandmaHerbs extends CharacterCard
             }
 
             instance.subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+
+            // I need to send this because a no entry tile has been added on an island
+            instance.subscriber.get().onNext(new IslandsUpdate
+                    (new ArrayList<Island>(instance.islands), instance.getMotherNatureIndex().get()));
+
         }
     }
 

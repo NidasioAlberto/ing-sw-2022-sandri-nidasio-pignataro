@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PrincessTest
 {
@@ -75,6 +74,8 @@ public class PrincessTest
         //Not already used
         assertEquals(false, princess.firstUsed);
         assertEquals(false, princess.isActivated());
+
+        assertNotEquals(null, princess.toString());
     }
 
     @Test
@@ -100,7 +101,7 @@ public class PrincessTest
         }
 
         // After activation the player should have 2 coin less
-        assertEquals(8, player1.getBoard().getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, princess.firstUsed);
@@ -119,7 +120,7 @@ public class PrincessTest
         assertEquals(true, princess.firstUsed);
         assertEquals(true, princess.isActivated());
         assertEquals(3, princess.cost);
-        assertEquals(8, player1.getBoard().getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 3 coins
         princess.deactivate();
@@ -134,7 +135,7 @@ public class PrincessTest
         assertEquals(true, princess.firstUsed);
         assertEquals(true, princess.isActivated());
         assertEquals(3, princess.cost);
-        assertEquals(5, player1.getBoard().getCoins());
+        assertEquals(6, player1.getBoard().getCoins());
     }
 
     @Test

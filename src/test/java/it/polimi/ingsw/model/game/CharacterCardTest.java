@@ -129,6 +129,8 @@ public class CharacterCardTest
         thief.fillClouds();
         assertEquals(3, thief.getCloudTiles().get(0).getStudents().size());
 
+        assertNotEquals(null, thief.toString());
+
         // The game is in classic mode so there are no character cards
         assertEquals(0, thief.getCharacterCards().size());
         assertDoesNotThrow(() -> thief.clearTurn());

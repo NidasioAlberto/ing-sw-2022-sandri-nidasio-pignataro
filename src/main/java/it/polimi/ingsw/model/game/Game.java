@@ -675,10 +675,6 @@ public class Game implements Publisher<ModelUpdate>
         // If the game is in expert mode, create randomly 3 character cards
         if (gameMode.equals(GameMode.EXPERT))
         {
-            // In expert mode each player receives a coin
-            for (Player player : players)
-                player.getBoard().addCoins(1);
-
             List<CharacterCardType> types =
                     new ArrayList<>(Arrays.asList(CharacterCardType.values()));
 

@@ -86,6 +86,7 @@ public class PostmanTest
         game.selectPlayer(0);
 
         // If the player doesn't have enough coins an exception is thrown
+        game.getSelectedPlayer().get().getBoard().removeCoins(1);
         assertThrows(NotEnoughCoinsException.class, () -> postman.activate());
 
         try
@@ -143,7 +144,7 @@ public class PostmanTest
             game.selectPlayer(0);
             player1.getBoard().addCoins(1);
             postman.activate();
-            assertEquals(0, player1.getBoard().getCoins());
+            assertEquals(1, player1.getBoard().getCoins());
             assertTrue(postman.activated);
         } catch (NotEnoughCoinsException e)
         {

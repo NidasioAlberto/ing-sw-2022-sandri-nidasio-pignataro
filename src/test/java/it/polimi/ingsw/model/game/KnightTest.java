@@ -90,7 +90,7 @@ public class KnightTest
         }
 
         // After activation the player should have 2 coin less
-        assertEquals(8, player1.getBoard().getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // The card should have the activation flag to true and also the first used flag
         assertEquals(true, knight.firstUsed);
@@ -109,7 +109,7 @@ public class KnightTest
         assertEquals(true, knight.firstUsed);
         assertEquals(true, knight.isActivated());
         assertEquals(3, knight.cost);
-        assertEquals(8, player1.getBoard().getCoins());
+        assertEquals(9, player1.getBoard().getCoins());
 
         // Finally if I deactivate the card the cost will be 3 coins
         knight.deactivate();
@@ -124,7 +124,7 @@ public class KnightTest
         assertEquals(true, knight.firstUsed);
         assertEquals(true, knight.isActivated());
         assertEquals(3, knight.cost);
-        assertEquals(5, player1.getBoard().getCoins());
+        assertEquals(6, player1.getBoard().getCoins());
     }
 
 

@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JokerTest
 {
@@ -60,6 +59,8 @@ public class JokerTest
             if (!joker.getStudentBag().contains(student))
                 studentsOnCard.add(student);
         }
+
+        assertNotEquals(null, joker.toString());
     }
 
     @Test
@@ -88,6 +89,7 @@ public class JokerTest
         game.selectPlayer(0);
 
         // If i activate the card with no coins i should get an error
+        game.getSelectedPlayer().get().getBoard().removeCoins(1);
         assertThrows(NotEnoughCoinsException.class, () -> joker.activate());
 
         // Add the coins to activate the card

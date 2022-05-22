@@ -78,7 +78,7 @@ public class HeraldTest
             // Activate the card
             player1.getBoard().addCoins(3);
             herald.activate();
-            assertEquals(0, player1.getBoard().getCoins());
+            assertEquals(1, player1.getBoard().getCoins());
             for (ExpertGameAction action: ExpertGameAction.values())
             {
                 // When Herald is active the only valid action is SELECT_ISLAND
@@ -106,7 +106,7 @@ public class HeraldTest
             // Activate the card
             player1.getBoard().addCoins(4);
             herald.activate();
-            assertEquals(0, player1.getBoard().getCoins());
+            assertEquals(1, player1.getBoard().getCoins());
         }
         catch (NotEnoughCoinsException e)
         {
@@ -137,7 +137,7 @@ public class HeraldTest
             // Activate the card
             player1.getBoard().addCoins(3);
             herald.activate();
-            assertEquals(0, player1.getBoard().getCoins());
+            assertEquals(1, player1.getBoard().getCoins());
         }
         catch (NotEnoughCoinsException e)
         {
