@@ -180,6 +180,14 @@ public class Server
 
             // And add him to the lobby
             lobby.add(player);
+
+            if (match.getPlayers().size() == 0)
+            {
+                removeMatch(match, "The match no longer exists");
+
+                // Update all the players in the lobby with the new list of matches
+                sendToLobby(new MatchesListAnswer(matches));
+            }
         }
     }
 

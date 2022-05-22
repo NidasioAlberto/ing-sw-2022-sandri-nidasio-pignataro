@@ -46,6 +46,7 @@ public class Match implements Subscriber<ModelUpdate>
         } catch (Exception e)
         {
             players.remove(player);
+            server.addPlayerToLobby(player);
             player.sendAnswer(new ErrorAnswer(e.getMessage()));
         }
     }

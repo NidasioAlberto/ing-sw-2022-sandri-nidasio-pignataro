@@ -81,7 +81,7 @@ public class CLI extends Visualizer implements Runnable
         }
     }
 
-    void choosePacket(Scanner scanner) throws IOException
+    public void choosePacket(Scanner scanner) throws IOException
     {
         PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
@@ -102,7 +102,7 @@ public class CLI extends Visualizer implements Runnable
         }
     }
 
-    void chooseCommand(Scanner scanner) throws IOException
+    public void chooseCommand(Scanner scanner) throws IOException
     {
         PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
@@ -158,13 +158,19 @@ public class CLI extends Visualizer implements Runnable
             }
             case 5:
             {
-                client.sendCommand(new QuitMatchCommand());
+                PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
+                if (scanner.nextLine().equals("Y"))
+                    client.sendCommand(new QuitMatchCommand());
                 break;
             }
             case 6:
             {
-                client.sendCommand(new QuitGameCommand());
-                System.exit(0);
+                PrintHelper.print("Are you sure to quit the game? Type 'Y' if you are sure\n");
+                if (scanner.nextLine().equals("Y"))
+                {
+                    client.sendCommand(new QuitGameCommand());
+                    System.exit(0);
+                }
                 break;
             }
             case 7:
@@ -174,7 +180,7 @@ public class CLI extends Visualizer implements Runnable
         }
     }
 
-    void chooseAction(Scanner scanner) throws IOException
+    public void chooseAction(Scanner scanner) throws IOException
     {
         PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
@@ -243,16 +249,16 @@ public class CLI extends Visualizer implements Runnable
             case 8:
             {
                 PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
-                PrintHelper.print("If you don't have to select an island nor colors choose \"Base action\".\n");
+                PrintHelper.print("If you don't have to select an island nor colors choose 'Base action'\n");
                 PrintHelper.print("Expert game action:\n");
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
                     PrintHelper.print("\t" + i + " - " + ExpertGameAction.values()[i] + "\n");
                 int action = Integer.parseInt(scanner.nextLine());
                 if (action < 0  || action >= ExpertGameAction.values().length)
                     break;
-                PrintHelper.print("If you don't need to select an island just type \"0\"\n");
+                PrintHelper.print("If you don't need to select an island just type '0'\n");
                 int selectedIsland = selectIsland(scanner);
-                PrintHelper.print("If you don't need to select a color just type \"0\"\n");
+                PrintHelper.print("If you don't need to select a color just type '0'\n");
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
                 client.sendAction(new CharacterCardActionMessage(ExpertGameAction.values()[action], selectedIsland, selectedColors));
                 break;
@@ -261,7 +267,7 @@ public class CLI extends Visualizer implements Runnable
             {
                 PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print(characterCardsEffects());
-                PrintHelper.print("Press enter when you are done\n");
+                PrintHelper.print("\nPress enter when you are done\n");
                 scanner.nextLine();
                 break;
             }
@@ -272,20 +278,20 @@ public class CLI extends Visualizer implements Runnable
         }
     }
 
-    List<SchoolColor> chooseSchoolColors(Scanner scanner)
+    private List<SchoolColor> chooseSchoolColors(Scanner scanner)
     {
         List<SchoolColor> selectedColors = new ArrayList<>();
 
         do
         {
             selectedColors.add(selectSchoolColors(scanner));
-            PrintHelper.print("Type 'Y' to select another");
+            PrintHelper.print("Type 'Y' to select another\n");
         } while (scanner.nextLine().equals("Y") && selectedColors.size() < SchoolColor.values().length);
 
         return selectedColors;
     }
 
-    SchoolColor selectSchoolColors(Scanner scanner)
+    private SchoolColor selectSchoolColors(Scanner scanner)
     {
         PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
@@ -297,7 +303,7 @@ public class CLI extends Visualizer implements Runnable
         return SchoolColor.values()[Integer.parseInt(scanner.nextLine())];
     }
 
-    int selectIsland(Scanner scanner)
+    private int selectIsland(Scanner scanner)
     {
 
         PrintHelper.print("Selected island: ");
@@ -309,7 +315,7 @@ public class CLI extends Visualizer implements Runnable
      * 
      * @return the printable version of the effects.
      */
-    String characterCardsEffects()
+    private String characterCardsEffects()
     {
         String rules = "";
 
