@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.cli;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import it.polimi.ingsw.client.Client;
@@ -24,7 +22,24 @@ public class CLI extends Visualizer implements Runnable
 
     private boolean active = false;
 
+    private boolean isMatchStarted = false;
+
     private List<String> players;
+
+    /**
+     * Save the state of the match in order to display it everytime I want.
+     */
+    private AssistantCardsUpdate assistantCards;
+
+    private CharacterCardsUpdate characterCards;
+
+    private CloudTilesUpdate cloudTiles;
+
+    private IslandsUpdate islands;
+
+    private Map<Integer, PlayedAssistantCardUpdate> playedAssistantCards = new HashMap<Integer, PlayedAssistantCardUpdate>();
+
+    private Map<Integer, SchoolBoardUpdate> schoolBoards = new HashMap<Integer, SchoolBoardUpdate>();
 
     public CLI(Client client)
     {
@@ -73,7 +88,9 @@ public class CLI extends Visualizer implements Runnable
         {
             try
             {
-                choosePacket(scanner);
+                if (isMatchStarted)
+                    chooseAction(scanner);
+                else choosePacket(scanner);
             } catch (Exception e)
             {
                 PrintHelper.print("Unable to parse parse the input: " + e.toString());
@@ -182,7 +199,11 @@ public class CLI extends Visualizer implements Runnable
 
     public void chooseAction(Scanner scanner) throws IOException
     {
-        PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
+
+        // Every time I print the board
+        displayBoard();
+
         String msg = "";
         msg += "Choose between:\n";
         msg += "\t1 - Play assistant card\n";
@@ -194,9 +215,9 @@ public class CLI extends Visualizer implements Runnable
         msg += "\t7 - Play character card\n";
         msg += "\t8 - Character card action\n";
         msg += "\t9 - Character cards effects\n";
-        msg += "\t10 - Undo choice\n";
-        PrintHelper.print(msg);
-
+        msg += "\t10 - Quit match\n";
+        msg += "\t11 - Undo choice\n";
+        PrintHelper.printM(26, 2 , msg);
         int choice = Integer.parseInt(scanner.nextLine());
 
         switch (choice)
@@ -272,6 +293,16 @@ public class CLI extends Visualizer implements Runnable
                 break;
             }
             case 10:
+            {
+                PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
+                if (scanner.nextLine().equals("Y"))
+                {
+                    isMatchStarted = false;
+                    client.sendCommand(new QuitMatchCommand());
+                }
+                break;
+            }
+            case 11:
             {
                 break;
             }
@@ -352,7 +383,11 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayAssistantCards(AssistantCardsUpdate update)
     {
-        PrintHelper.printMR(7, 25, update.toString());
+        if (update != null)
+        {
+            PrintHelper.printMR(7, 25, update.toString());
+            assistantCards = update;
+        }
     }
 
     @Override
@@ -362,53 +397,89 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayCharacterCards(CharacterCardsUpdate update)
     {
-        PrintHelper.printMR(12, 2 + 33 * players.size() + 1, update.toString());
+        if (update != null)
+        {
+            PrintHelper.printMR(12, 2 + 33 * players.size() + 1, update.toString());
+            characterCards = update;
+        }
     }
 
     @Override
     public void displayCloudTiles(CloudTilesUpdate update)
     {
-        PrintHelper.printMR(7, 2, update.toString());
+        if (update != null)
+        {
+            PrintHelper.printMR(7, 2, update.toString());
+            cloudTiles = update;
+        }
     }
 
     @Override
     public void displayIslands(IslandsUpdate update)
     {
-        PrintHelper.printMR(1, 2, update.toString());
+        if (update != null)
+        {
+            PrintHelper.printMR(1, 2, update.toString());
+            islands = update;
+        }
     }
 
     @Override
     public void displayPlayedAssistantCard(PlayedAssistantCardUpdate update)
     {
-        int playerIndex;
-        if (players.contains(update.getPlayer()))
+        if (update != null)
         {
-            playerIndex = players.indexOf(update.getPlayer());
-        } else
-        {
-            playerIndex = players.size();
-            players.add(update.getPlayer());
-        }
+            int playerIndex;
+            if (players.contains(update.getPlayer()))
+            {
+                playerIndex = players.indexOf(update.getPlayer());
+            } else
+            {
+                playerIndex = players.size();
+                players.add(update.getPlayer());
+            }
 
-        PrintHelper.printMR(19, 2 + 33 * playerIndex, update.toString());
+            PrintHelper.printMR(19, 2 + 33 * playerIndex, update.toString());
+
+            if (playedAssistantCards.keySet().contains(playerIndex))
+            {
+                playedAssistantCards.replace(playerIndex, update);
+            }
+            else
+            {
+                playedAssistantCards.put(playerIndex, update);
+            }
+        }
     }
 
     @Override
     public void displaySchoolboard(SchoolBoardUpdate update)
     {
-        int playerIndex;
-        if (players.contains(update.getPlayer()))
+        if (update != null)
         {
-            playerIndex = players.indexOf(update.getPlayer());
-        } else
-        {
-            playerIndex = players.size();
-            players.add(update.getPlayer());
+            int playerIndex;
+            if (players.contains(update.getPlayer()))
+            {
+                playerIndex = players.indexOf(update.getPlayer());
+            } else
+            {
+                playerIndex = players.size();
+                players.add(update.getPlayer());
+            }
+
+            PrintHelper.printMessage("player index: " + playerIndex);
+
+            PrintHelper.printMR(12, 2 + 33 * playerIndex, update.toString());
+
+            if (schoolBoards.keySet().contains(playerIndex))
+            {
+                schoolBoards.replace(playerIndex, update);
+            }
+            else
+            {
+                schoolBoards.put(playerIndex, update);
+            }
         }
-
-        PrintHelper.printMessage("player index: " + playerIndex);
-
-        PrintHelper.printMR(12, 2 + 33 * playerIndex, update.toString());
     }
 
     // Answers
@@ -416,6 +487,7 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
+        isMatchStarted = false;
         PrintHelper.printMessage(answer.toString());
     }
 
@@ -446,6 +518,7 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayStartMatch(StartMatchAnswer answer)
     {
+        isMatchStarted = true;
         PrintHelper.printMessage(answer.toString());
     }
 
@@ -456,5 +529,45 @@ public class CLI extends Visualizer implements Runnable
         client.setVisualizer(cli);
 
         cli.start();
+    }
+
+    /**
+     * Display the entire board.
+     */
+    private void displayBoard()
+    {
+        String msg = "";
+
+        if (assistantCards != null)
+            msg += PrintHelper.moveCursorAbsolute(7, 25) + assistantCards;
+
+        if (characterCards != null)
+            msg += PrintHelper.moveCursorAbsolute(12, 2 + 33 * players.size() + 1) +  characterCards;
+
+        if (cloudTiles != null)
+            msg += PrintHelper.moveCursorAbsolute(7, 2) + cloudTiles;
+
+        if (islands != null)
+            msg += PrintHelper.moveCursorAbsolute(1, 2) + islands;
+
+        for (Integer playerIndex : playedAssistantCards.keySet())
+        {
+            if (playedAssistantCards.get(playerIndex) != null)
+            {
+                msg += PrintHelper.moveCursorAbsolute(19, 2 + 33 * playerIndex) +
+                        playedAssistantCards.get(playerIndex);
+            }
+        }
+
+        for (Integer playerIndex : schoolBoards.keySet())
+        {
+            if (schoolBoards.get(playerIndex) != null)
+            {
+                msg += PrintHelper.moveCursorAbsolute(12, 2 + 33 * playerIndex) +
+                        schoolBoards.get(playerIndex);
+            }
+        }
+
+        PrintHelper.print(msg);
     }
 }
