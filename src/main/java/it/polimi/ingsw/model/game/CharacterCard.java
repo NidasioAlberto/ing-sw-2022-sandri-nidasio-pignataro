@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ import java.util.Optional;
  */
 public abstract class CharacterCard extends Game implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 2490106078604536485L;
+
     /**
      * Card cost (increased once the card is first used)
      */

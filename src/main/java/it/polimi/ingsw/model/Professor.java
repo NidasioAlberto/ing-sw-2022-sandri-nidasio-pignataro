@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
@@ -10,6 +11,9 @@ import it.polimi.ingsw.client.cli.utils.PrintHelper;
  */
 public class Professor implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 1655900624489466140L;
+
     private SchoolColor color;
 
     /**

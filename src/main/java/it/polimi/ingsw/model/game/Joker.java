@@ -12,6 +12,7 @@ import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,6 +22,9 @@ import java.util.NoSuchElementException;
  */
 public class Joker extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = 2023802294472339058L;
+
     /**
      * To count the number of exchanges, it can't be greater than 3
      */

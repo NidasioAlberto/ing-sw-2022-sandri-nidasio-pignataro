@@ -1,5 +1,6 @@
 package it.polimi.ingsw.protocol.answers;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,9 @@ import it.polimi.ingsw.network.Match;
 
 public class MatchesListAnswer extends Answer
 {
+    @Serial
+    private static final long serialVersionUID = 3123945080375660972L;
+
     Map<String, Integer> maxNumPlayers;
 
     Map<String, Integer> numPlayers;

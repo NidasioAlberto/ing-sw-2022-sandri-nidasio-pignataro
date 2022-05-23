@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GrandmaHerbs;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,9 @@ import java.util.List;
  */
 public class CharacterCardPayloadUpdate extends ModelUpdate
 {
+    @Serial
+    private static final long serialVersionUID = -1169780540465503321L;
+
     /**
      * Index of the updated character card
      */

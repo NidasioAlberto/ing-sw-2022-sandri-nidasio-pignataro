@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentInDiningException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
+import java.io.Serial;
 import java.util.NoSuchElementException;
 
 /**
@@ -17,6 +18,9 @@ import java.util.NoSuchElementException;
  */
 public class Minstrel extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = 4408720973850745657L;
+
     /**
      * To count the number of exchanges, it can't be greater than 2
      */

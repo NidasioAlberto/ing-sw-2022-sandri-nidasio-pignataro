@@ -3,11 +3,16 @@ package it.polimi.ingsw.protocol.commands;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.network.PlayerConnection;
 
+import java.io.Serial;
+
 /**
  * Command used to create and join a match.
  */
 public class CreateMatchCommand extends Command
 {
+    @Serial
+    private static final long serialVersionUID = -3543453577305970257L;
+
     String matchId;
 
     int playersNumber;

@@ -29,7 +29,7 @@ public class Client implements Runnable
 
     public Client()
     {
-        this("194.0.141.151");
+        this("127.0.0.1");
     }
 
     public Client(String ip)

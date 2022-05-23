@@ -336,9 +336,8 @@ public class GameActionHandler
     {
         // If there is still an active character card I have to apply its action
         if (game.getCurrentCharacterCard().isPresent()
-                && game.getCurrentCharacterCard().get().isActivated()
-                && game.getCurrentCharacterCard().get()
-                        .isValidAction(ExpertGameAction.BASE_ACTION))
+                && game.getCurrentCharacterCard().get().isValidAction(ExpertGameAction.BASE_ACTION)
+                &&game.getCurrentCharacterCard().get().isActivated())
             game.getCurrentCharacterCard().filter(c -> c.isActivated()).get().applyAction();
     }
 }

@@ -3,8 +3,13 @@ package it.polimi.ingsw.protocol.commands;
 import it.polimi.ingsw.network.PlayerConnection;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 
+import java.io.Serial;
+
 public class SetNameCommand extends Command
 {
+    @Serial
+    private static final long serialVersionUID = 6186392409377027610L;
+
     String playerName;
 
     public SetNameCommand(String playerName)

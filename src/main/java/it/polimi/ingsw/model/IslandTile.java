@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,9 @@ import it.polimi.ingsw.model.exceptions.NoLegitActionException;
  */
 public class IslandTile implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -6662308214804626348L;
+
     /**
      * List of students positioned on this tile
      */

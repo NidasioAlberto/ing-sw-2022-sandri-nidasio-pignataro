@@ -8,11 +8,16 @@ import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.Tower;
 import it.polimi.ingsw.model.TowerColor;
+
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IslandsUpdate extends ModelUpdate
 {
+    @Serial
+    private static final long serialVersionUID = -1290378826120993267L;
+
     /**
      * The whole island list of objects
      */

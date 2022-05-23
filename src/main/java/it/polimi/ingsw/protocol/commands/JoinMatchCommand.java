@@ -2,8 +2,13 @@ package it.polimi.ingsw.protocol.commands;
 
 import it.polimi.ingsw.network.PlayerConnection;
 
+import java.io.Serial;
+
 public class JoinMatchCommand extends Command
 {
+    @Serial
+    private static final long serialVersionUID = -6556916209678345591L;
+
     String matchId;
 
     public JoinMatchCommand(String matchId)

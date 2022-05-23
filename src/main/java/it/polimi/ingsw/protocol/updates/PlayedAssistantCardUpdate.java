@@ -3,8 +3,13 @@ package it.polimi.ingsw.protocol.updates;
 import it.polimi.ingsw.client.Visualizer;
 import it.polimi.ingsw.model.*;
 
+import java.io.Serial;
+
 public class PlayedAssistantCardUpdate extends ModelUpdate
 {
+    @Serial
+    private static final long serialVersionUID = -4678041619405025552L;
+
     /**
      * The played assistant card
      */

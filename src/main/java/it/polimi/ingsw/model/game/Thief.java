@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
+import java.io.Serial;
 import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
@@ -15,6 +16,9 @@ import java.util.stream.IntStream;
  */
 public class Thief extends CharacterCard
 {
+
+    @Serial
+    private static final long serialVersionUID = 2057268773712564630L;
 
     /**
      * Constructor

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.List;
  */
 public class CloudTile implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 8708745491450029913L;
+
     /**
      * List of student discs on the tile.
      */

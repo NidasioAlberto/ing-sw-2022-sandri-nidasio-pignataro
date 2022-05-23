@@ -3,11 +3,16 @@ package it.polimi.ingsw.protocol.messages;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 
+import java.io.Serial;
+
 /**
  * Message related to the played character card.
  */
 public class PlayCharacterCardMessage extends ActionMessage
 {
+    @Serial
+    private static final long serialVersionUID = 3138939243550746030L;
+
     private int selectedCharacterCard;
 
     public PlayCharacterCardMessage(int selectedCharacterCard)

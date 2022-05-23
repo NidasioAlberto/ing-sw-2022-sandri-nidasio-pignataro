@@ -2,8 +2,13 @@ package it.polimi.ingsw.protocol.answers;
 
 import it.polimi.ingsw.client.Visualizer;
 
+import java.io.Serial;
+
 public class ErrorAnswer extends Answer
 {
+    @Serial
+    private static final long serialVersionUID = -4240143038569233287L;
+
     private String errorMessage;
 
     public ErrorAnswer(String errorMessage)

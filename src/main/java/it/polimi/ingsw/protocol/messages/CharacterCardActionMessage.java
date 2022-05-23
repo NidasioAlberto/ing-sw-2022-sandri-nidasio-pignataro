@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,9 @@ import java.util.Optional;
  */
 public class CharacterCardActionMessage extends ActionMessage
 {
+    @Serial
+    private static final long serialVersionUID = 1267639762193407116L;
+
     private ExpertGameAction action;
     private Integer selectedIsland;
     private List<SchoolColor> selectedColors;

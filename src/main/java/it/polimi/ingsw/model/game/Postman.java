@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.NoSelectedAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
+import java.io.Serial;
 import java.util.NoSuchElementException;
 
 /**
@@ -14,6 +15,9 @@ import java.util.NoSuchElementException;
  */
 public class Postman extends CharacterCard
 {
+
+    @Serial
+    private static final long serialVersionUID = -6741083535931506838L;
 
     /**
      * Constructor

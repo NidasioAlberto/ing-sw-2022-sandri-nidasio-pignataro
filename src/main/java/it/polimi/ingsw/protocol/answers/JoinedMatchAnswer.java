@@ -2,8 +2,13 @@ package it.polimi.ingsw.protocol.answers;
 
 import it.polimi.ingsw.client.Visualizer;
 
+import java.io.Serial;
+
 public class JoinedMatchAnswer extends Answer
 {
+    @Serial
+    private static final long serialVersionUID = -5016036062321547220L;
+
     private String matchId;
 
     public JoinedMatchAnswer(String matchId)

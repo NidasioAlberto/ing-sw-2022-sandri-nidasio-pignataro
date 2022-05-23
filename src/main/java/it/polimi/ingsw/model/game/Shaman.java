@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -14,6 +15,9 @@ import java.util.stream.Collectors;
  */
 public class Shaman extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = 3271607904776512668L;
+
     /**
      * Constructor
      *

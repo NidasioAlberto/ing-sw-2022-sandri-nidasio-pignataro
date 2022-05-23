@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.protocol.updates.IslandsUpdate;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
  */
 public class MushroomMan extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = -4668121392140910282L;
+
     /**
      * The selected color
      */

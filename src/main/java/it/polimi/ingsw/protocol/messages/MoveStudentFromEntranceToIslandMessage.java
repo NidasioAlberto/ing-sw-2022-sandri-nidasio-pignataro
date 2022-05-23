@@ -4,11 +4,16 @@ import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 
+import java.io.Serial;
+
 /**
  * Message related to the movement of a student from entrance to an island.
  */
 public class MoveStudentFromEntranceToIslandMessage extends ActionMessage
 {
+    @Serial
+    private static final long serialVersionUID = 7133746970469817406L;
+
     private SchoolColor selectedColor;
     private int selectedIsland;
 

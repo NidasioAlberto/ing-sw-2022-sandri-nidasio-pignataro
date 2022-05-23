@@ -2,6 +2,7 @@ package it.polimi.ingsw.protocol.updates;
 
 import it.polimi.ingsw.client.Visualizer;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -14,6 +15,9 @@ import java.util.Optional;
  */
 public abstract class ModelUpdate implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 6601821834483061246L;
+
     /**
      * In case we want to define the single player that has to receive the message.
      */

@@ -11,6 +11,7 @@ import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 import it.polimi.ingsw.protocol.updates.IslandsUpdate;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,9 @@ import java.util.List;
  */
 public class GrandmaHerbs extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = -8720585997673901427L;
+
     public static int INITIAL_NO_ENTRY_NUMBER = 4;
 
     /**

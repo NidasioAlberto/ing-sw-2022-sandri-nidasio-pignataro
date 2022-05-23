@@ -5,11 +5,15 @@ import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.game.*;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterCardsUpdate extends ModelUpdate
 {
+    @Serial
+    private static final long serialVersionUID = 6697636575765084582L;
+
     /**
      * List of all the character cards
      */

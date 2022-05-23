@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentInEntranceException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -13,6 +15,9 @@ import java.util.*;
  */
 public class SchoolBoard implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -1601566713757416304L;
+
     public static final int MAX_STUDENTS_PER_ROOM = 10;
 
     /**

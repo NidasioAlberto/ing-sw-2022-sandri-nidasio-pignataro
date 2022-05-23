@@ -1,10 +1,14 @@
 package it.polimi.ingsw.protocol.commands;
 
+import java.io.Serial;
 import java.io.Serializable;
 import it.polimi.ingsw.network.PlayerConnection;
 
 public abstract class Command implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 3628236076897277859L;
+
     /**
      * Checks if the given player connection is valid.
      * 

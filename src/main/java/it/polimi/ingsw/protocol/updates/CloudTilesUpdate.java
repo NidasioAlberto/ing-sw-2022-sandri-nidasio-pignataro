@@ -5,11 +5,15 @@ import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CloudTilesUpdate extends ModelUpdate
 {
+    @Serial
+    private static final long serialVersionUID = -2463490370341477330L;
+
     /**
      * List of all the cloud tiles
      */

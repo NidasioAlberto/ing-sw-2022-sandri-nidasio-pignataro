@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.exceptions.NoSelectedIslandException;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 
+import java.io.Serial;
 import java.util.NoSuchElementException;
 
 /**
@@ -13,6 +14,9 @@ import java.util.NoSuchElementException;
  */
 public class Herald extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = -804589700829197784L;
+
     /**
      * Constructor
      *

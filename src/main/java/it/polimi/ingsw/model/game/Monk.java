@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,6 +20,9 @@ import java.util.NoSuchElementException;
  */
 public class Monk extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = -3647475303673771501L;
+
     /**
      * Payload of this card is students that the player selects
      */

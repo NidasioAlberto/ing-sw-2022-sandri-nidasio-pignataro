@@ -2,6 +2,8 @@ package it.polimi.ingsw.protocol.messages;
 
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,6 +13,9 @@ import java.io.Serializable;
  */
 public abstract class ActionMessage implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 7782867703098380154L;
+
     /**
      * Checks if the given game action handler is valid.
      * 

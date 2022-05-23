@@ -385,8 +385,8 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            PrintHelper.printMR(7, 25, update.toString());
             assistantCards = update;
+            PrintHelper.printMR(7, 25, update.toString());
         }
     }
 
@@ -399,8 +399,8 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            PrintHelper.printMR(12, 2 + 33 * players.size() + 1, update.toString());
             characterCards = update;
+            PrintHelper.printMR(12, 2 + 33 * players.size() + 1, update.toString());
         }
     }
 
@@ -409,8 +409,8 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            PrintHelper.printMR(7, 2, update.toString());
             cloudTiles = update;
+            PrintHelper.printMR(7, 2, update.toString());
         }
     }
 
@@ -419,8 +419,8 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            PrintHelper.printMR(1, 2, update.toString());
             islands = update;
+            PrintHelper.printMR(1, 2, update.toString());
         }
     }
 
@@ -439,8 +439,6 @@ public class CLI extends Visualizer implements Runnable
                 players.add(update.getPlayer());
             }
 
-            PrintHelper.printMR(19, 2 + 33 * playerIndex, update.toString());
-
             if (playedAssistantCards.keySet().contains(playerIndex))
             {
                 playedAssistantCards.replace(playerIndex, update);
@@ -449,6 +447,8 @@ public class CLI extends Visualizer implements Runnable
             {
                 playedAssistantCards.put(playerIndex, update);
             }
+
+            PrintHelper.printMR(19, 2 + 33 * playerIndex, update.toString());
         }
     }
 
@@ -467,10 +467,6 @@ public class CLI extends Visualizer implements Runnable
                 players.add(update.getPlayer());
             }
 
-            PrintHelper.printMessage("player index: " + playerIndex);
-
-            PrintHelper.printMR(12, 2 + 33 * playerIndex, update.toString());
-
             if (schoolBoards.keySet().contains(playerIndex))
             {
                 schoolBoards.replace(playerIndex, update);
@@ -479,6 +475,10 @@ public class CLI extends Visualizer implements Runnable
             {
                 schoolBoards.put(playerIndex, update);
             }
+
+            PrintHelper.printMessage("player index: " + playerIndex);
+
+            PrintHelper.printMR(12, 2 + 33 * playerIndex, update.toString());
         }
     }
 
@@ -487,8 +487,8 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        isMatchStarted = false;
         PrintHelper.printMessage(answer.toString());
+        clear();
     }
 
     @Override
@@ -569,5 +569,21 @@ public class CLI extends Visualizer implements Runnable
         }
 
         PrintHelper.print(msg);
+    }
+
+    /**
+     * Method to call after every endMatchAnswer in order to clear the attributes
+     * of the previous match.
+     */
+    private void clear()
+    {
+        isMatchStarted = false;
+        players.clear();
+        assistantCards = null;
+        characterCards = null;
+        cloudTiles = null;
+        islands = null;
+        playedAssistantCards.clear();
+        schoolBoards.clear();
     }
 }

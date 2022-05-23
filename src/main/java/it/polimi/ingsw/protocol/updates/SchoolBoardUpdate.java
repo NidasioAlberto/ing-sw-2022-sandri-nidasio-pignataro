@@ -10,8 +10,13 @@ import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.Tower;
 import it.polimi.ingsw.model.TowerColor;
 
+import java.io.Serial;
+
 public class SchoolBoardUpdate extends ModelUpdate
 {
+    @Serial
+    private static final long serialVersionUID = -6512400991408278614L;
+
     private SchoolBoard board;
 
     /**

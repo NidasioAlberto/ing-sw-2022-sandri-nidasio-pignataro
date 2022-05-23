@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,9 @@ import it.polimi.ingsw.client.cli.utils.PrintHelper;
  */
 public class Island implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -5547031297637105565L;
+
     /**
      * Collection of tiles
      */

@@ -4,11 +4,15 @@ import it.polimi.ingsw.client.Visualizer;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class AssistantCardsUpdate extends ModelUpdate
 {
+
+    @Serial
+    private static final long serialVersionUID = -4060217661973644912L;
 
     /**
      * List of a single player assistant cards

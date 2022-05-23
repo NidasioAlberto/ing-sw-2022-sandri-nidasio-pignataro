@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentOnCardException;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +21,9 @@ import java.util.NoSuchElementException;
  */
 public class Princess extends CharacterCard
 {
+    @Serial
+    private static final long serialVersionUID = 7476410418734816900L;
+
     /**
      * This card has a list of students as payload
      */

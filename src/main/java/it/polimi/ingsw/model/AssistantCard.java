@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 
@@ -9,6 +10,9 @@ import it.polimi.ingsw.client.cli.utils.PrintHelper;
  */
 public class AssistantCard implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = 3254487044517145211L;
+
     public static final int MAX_TURN_ORDER = 10;
 
     public static final int MAX_STEPS = 5;
