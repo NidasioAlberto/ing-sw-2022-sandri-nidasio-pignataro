@@ -40,10 +40,6 @@ public class Princess extends CharacterCard
 
         // Instance the list
         students = new ArrayList<Student>();
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
     }
 
     @Override
@@ -51,6 +47,35 @@ public class Princess extends CharacterCard
     {
         // This card can be played everytime
         return true;
+    }
+
+    @Override
+    public void init()
+    {
+        // Draw 4 students from the bag
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+    }
+
+    @Override
+    public CharacterCard clone()
+    {
+        // Create a new card
+        Princess cloned = (Princess) createCharacterCard(this.getCardType(), instance);
+
+        // Null the instance
+        cloned.instance = null;
+        // Copy the properties
+        cloned.cost = this.cost;
+        cloned.activated = this.activated;
+        cloned.firstUsed = this.firstUsed;
+
+        // Assign the students
+        cloned.students = new ArrayList<>(students);
+
+        return cloned;
     }
 
     @Override

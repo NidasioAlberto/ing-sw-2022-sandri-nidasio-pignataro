@@ -65,6 +65,25 @@ public class GrandmaHerbs extends CharacterCard
     }
 
     @Override
+    public CharacterCard clone()
+    {
+        // Create a new card
+        GrandmaHerbs cloned = (GrandmaHerbs) createCharacterCard(this.getCardType(), instance);
+
+        // Null the instance
+        cloned.instance = null;
+        // Copy the properties
+        cloned.cost = this.cost;
+        cloned.activated = this.activated;
+        cloned.firstUsed = this.firstUsed;
+
+        // Assign the same number of no entry
+        cloned.noEntryTiles = noEntryTiles;
+
+        return cloned;
+    }
+
+    @Override
     public boolean isValidAction(ExpertGameAction action)
     {
         // If active I accept only MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND
@@ -131,8 +150,7 @@ public class GrandmaHerbs extends CharacterCard
             instance.subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
 
             // I need to send this because a no entry tile has been added on an island
-            instance.subscriber.get().onNext(new IslandsUpdate
-                    (new ArrayList<Island>(instance.islands), instance.getMotherNatureIndex().get()));
+            instance.subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.getMotherNatureIndex().get()));
 
         }
     }

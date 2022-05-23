@@ -39,14 +39,6 @@ public class Monk extends CharacterCard
 
         // Instance the list
         students = new ArrayList<Student>();
-
-        // Draw 4 students from the bag
-        // TODO think about how the view could be updated and could
-        // access this list to show the players
-        for (int i = 0; i < 4; i++)
-        {
-            students.add(game.getStudentFromBag());
-        }
     }
 
     @Override
@@ -54,6 +46,37 @@ public class Monk extends CharacterCard
     {
         // This card can be played everytime
         return true;
+    }
+
+    @Override
+    public void init()
+    {
+        // Draw 4 students from the bag
+        // TODO think about how the view could be updated and could
+        // access this list to show the players
+        for (int i = 0; i < 4; i++)
+        {
+            students.add(instance.getStudentFromBag());
+        }
+    }
+
+    @Override
+    public CharacterCard clone()
+    {
+        // Create a new card
+        Monk cloned = (Monk) createCharacterCard(this.getCardType(), instance);
+
+        // Null the instance
+        cloned.instance = null;
+        // Copy the properties
+        cloned.cost = this.cost;
+        cloned.activated = this.activated;
+        cloned.firstUsed = this.firstUsed;
+
+        // Assign the students
+        cloned.students = new ArrayList<>(students);
+
+        return cloned;
     }
 
     @Override

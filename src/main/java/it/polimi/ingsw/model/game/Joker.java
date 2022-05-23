@@ -46,12 +46,6 @@ public class Joker extends CharacterCard
 
         // Instance the list
         students = new ArrayList<Student>();
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
-        students.add(instance.getStudentFromBag());
 
         exchangeCounter = 0;
     }
@@ -61,6 +55,37 @@ public class Joker extends CharacterCard
     {
         // This card can be played everytime
         return true;
+    }
+
+    @Override
+    public void init()
+    {
+        // Pulls the students from the bag
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+        students.add(instance.getStudentFromBag());
+    }
+
+    @Override
+    public CharacterCard clone()
+    {
+        // Create a new card
+        Joker cloned = (Joker) createCharacterCard(this.getCardType(), instance);
+
+        // Null the instance
+        cloned.instance = null;
+        // Copy the properties
+        cloned.cost = this.cost;
+        cloned.activated = this.activated;
+        cloned.firstUsed = this.firstUsed;
+
+        // Set the students
+        cloned.students = new ArrayList<>(students);
+
+        return cloned;
     }
 
     @Override
@@ -154,8 +179,7 @@ public class Joker extends CharacterCard
 
             // I need to send the SchoolBoardUpdate because a student has changed in entrance
             for (Player player : instance.players)
-                instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
 
         }
     }

@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import it.polimi.ingsw.protocol.updates.AssistantCardsUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 
@@ -130,8 +129,7 @@ public abstract class CharacterCard extends Game implements Serializable
             // I need to send the SchoolBoardUpdate because some coins have been removed
             for (Player player : instance.players)
             {
-                instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
             }
 
             List<CharacterCard> characterCardsList = new ArrayList<>();
@@ -171,6 +169,9 @@ public abstract class CharacterCard extends Game implements Serializable
      * This method is used to make the cards notify the subscriber about their payload
      */
     public void notifySubscriber()
+    {}
+
+    public void init()
     {}
 
     /**
