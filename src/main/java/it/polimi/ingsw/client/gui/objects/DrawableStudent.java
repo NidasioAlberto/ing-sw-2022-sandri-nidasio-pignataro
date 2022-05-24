@@ -104,6 +104,19 @@ public class DrawableStudent extends DrawableObject
     public void subscribeToAmbientLight(AmbientLight light){}
 
     @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableStudent] Null point light");
+
+        // The students should be under the light so i unsubscribe it
+        light.getScope().remove(studentMesh);
+    }
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light) {}
+
+    @Override
     public void enableVisibility() {
 
     }

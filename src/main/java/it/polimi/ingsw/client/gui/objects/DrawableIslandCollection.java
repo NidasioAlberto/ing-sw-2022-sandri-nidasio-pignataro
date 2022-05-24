@@ -126,6 +126,29 @@ public class DrawableIslandCollection extends DrawableObject
             island.subscribeToAmbientLight(light);
     }
 
+    // To remove eventual students from light
+    @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if (light == null)
+            throw new NullPointerException("[DrawableIslandCollection] Null ambient light");
+
+        // Remove the light from all the islands
+        for(DrawableIsland island : islands)
+            island.unsubscribeFromPointLight(light);
+    }
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if (light == null)
+            throw new NullPointerException("[DrawableIslandCollection] Null ambient light");
+
+        // Remove the light from all the islands
+        for(DrawableIsland island : islands)
+            island.unsubscribeFromAmbientLight(light);
+    }
+
     @Override
     public void enableVisibility()
     {

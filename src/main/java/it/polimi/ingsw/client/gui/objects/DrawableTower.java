@@ -136,6 +136,20 @@ public class DrawableTower extends DrawableObject
     public void subscribeToAmbientLight(AmbientLight light) {}
 
     @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableTower] Null point light");
+
+        // Remove the mesh from the point light scope
+        light.getScope().remove(towerMesh);
+    }
+
+    // This method does nothing because the tower is subscribed only to point light
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light) {}
+
+    @Override
     public void enableVisibility()
     {
         // Enable the visibility of the mesh
@@ -176,4 +190,6 @@ public class DrawableTower extends DrawableObject
     {
         return new Point3D(towerMesh.getTranslateX(), towerMesh.getTranslateY(), towerMesh.getTranslateZ());
     }
+
+    public TowerType getType() { return TYPE; }
 }

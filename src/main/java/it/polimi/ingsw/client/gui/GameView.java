@@ -10,7 +10,6 @@ import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -122,6 +121,15 @@ public class GameView extends Application
         DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
         DrawableCloudTile tile = new DrawableCloudTile(40, CloudType.CLOUD_4, updater);
         DrawableAssistantCollection collection = new DrawableAssistantCollection(500, WizardType.WIZARD_1, updater);
+        DrawableIsland testIsland = new DrawableIsland(120, IslandType.ISLAND1, updater);
+        testIsland.addStudent(StudentType.RED, group, pointLight);
+        testIsland.addStudent(StudentType.RED, group, pointLight);
+        testIsland.addStudent(StudentType.YELLOW, group, pointLight);
+        testIsland.addStudent(StudentType.GREEN, group, pointLight);
+        testIsland.addStudent(StudentType.PINK, group, pointLight);
+        testIsland.addStudent(StudentType.BLUE, group, pointLight);
+        testIsland.addTower(TowerType.GREY, group, pointLight);
+        testIsland.removeTower(group, pointLight);
         collection.translate(new Point3D(0, -10, -290));
 
         // Eventually modify the single objects for window design things
@@ -131,6 +139,7 @@ public class GameView extends Application
         s3.translate(new Point3D(400, 0, 150));
         s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
         s3.addRotation(new Rotate(-90, new Point3D(0, 1, 0)));
+        testIsland.translate(new Point3D(0, 0, 200));
         tile.translate(new Point3D(0, 0, 100));
         tile.addStudent(StudentType.YELLOW, group, pointLight);
         tile.addStudent(StudentType.RED, group, pointLight);
@@ -145,6 +154,7 @@ public class GameView extends Application
         drawableObjects.add(s3);
         drawableObjects.add(tile);
         drawableObjects.add(collection);
+        drawableObjects.add(testIsland);
 
         // Dynamic object add to schoolboard
         schoolBoard.addProfessor(SchoolColor.GREEN, group, pointLight);

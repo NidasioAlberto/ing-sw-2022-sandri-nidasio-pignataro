@@ -2,7 +2,9 @@ package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.IslandType;
+import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.client.gui.objects.types.TowerType;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -12,10 +14,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class DrawableIsland extends DrawableObject
 {
@@ -33,7 +32,14 @@ public class DrawableIsland extends DrawableObject
      */
     private final double X_TOWER = -0.17;
     private final double Y_TOWER = 0.25;
-
+    private final Point2D studentPositions[] =
+    {
+            new Point2D(0, 0.120),
+            new Point2D(0.125, 0.030),
+            new Point2D(0.0875, -0.130),
+            new Point2D(-0.0875, -0.130),
+            new Point2D(-0.125, 0.030)
+    };
     /**
      * Island draw type
      */
@@ -48,7 +54,10 @@ public class DrawableIsland extends DrawableObject
      * Island payloads
      */
     private DrawableTower tower;
-    private List<DrawableStudent> students;
+    //List of all the drawn students
+    private List<DrawableStudent> drawnStudents;
+    //List of all the student types inside the island, for counting purposes
+    private List<StudentType> students;
 
     /**
      * Animation angle (to which apply the Math.sin and float the island)
@@ -74,6 +83,7 @@ public class DrawableIsland extends DrawableObject
         TYPE = type;
 
         // Create the collection of students
+        drawnStudents = new ArrayList<>();
         students = new ArrayList<>();
 
         // Random set the first angle
@@ -113,6 +123,12 @@ public class DrawableIsland extends DrawableObject
         });
     }
 
+    /**
+     * Metho to add a tower to the floating island
+     * @param type The type of tower
+     * @param group The vision group where to add the tower
+     * @param light The point light to which subscribe the new tower
+     */
     public void addTower(TowerType type, Group group, PointLight light)
     {
         // I add the tower only if there isn't already one
@@ -128,6 +144,61 @@ public class DrawableIsland extends DrawableObject
         // Add the tower to group and point light
         tower.addToGroup(group);
         tower.subscribeToPointLight(light);
+    }
+
+    /**
+     * Removes the only tower
+     */
+    public void removeTower(Group group, PointLight light)
+    {
+        // If there is no tower i remove nothing
+        if (tower == null)
+            return;
+
+        // Remove the tower from group
+        tower.removeFromGroup(group);
+
+        // Remove the tower from the light
+        tower.unsubscribeFromPointLight(light);
+
+        // Remove the object itself
+        tower = null;
+    }
+
+    /**
+     * Method to add a student to the island
+     * @param type The type of student to be added
+     * @param group The group to which add the student
+     * @param light The point light to which subscribe the student
+     */
+    public void addStudent(StudentType type, Group group, PointLight light)
+    {
+        // I add the student only if it is not null
+        if(type == null)
+            throw new NullPointerException("[DrawableIsland] Null student type");
+
+        // I add graphically the student only if it is not already present
+        if(!students.contains(type))
+        {
+            // Create and add the student
+            DrawableStudent student = new DrawableStudent(type, updater);
+
+            // Translate the student where it should be
+            student.translate(new Point3D(
+                    studentPositions[drawnStudents.size()].getX() * DIMENSION + getPosition().getX(),
+                    0, studentPositions[drawnStudents.size()].getY() * DIMENSION + getPosition().getZ()));
+
+            // Add the student to the group and light
+            student.addToGroup(group);
+            student.subscribeToPointLight(light);
+
+            // Add the student to the list
+            drawnStudents.add(student);
+        }
+
+        // At the end i add anyway the student to the list
+        // for counting purposes
+        students.add(type);
     }
 
     @Override
@@ -162,6 +233,31 @@ public class DrawableIsland extends DrawableObject
 
         // Subscribe the island to the light
         light.getScope().add(box);
+    }
+
+    // This method unsubscribes the components from the point light
+    @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableIsland] Null point light");
+
+        // Unsubscribe all the components
+        if(tower != null)
+            tower.unsubscribeFromPointLight(light);
+
+        for(DrawableStudent student : drawnStudents)
+            student.unsubscribeFromPointLight(light);
+    }
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableIsland] Null ambient light");
+
+        // Subscribe the island to the light
+        light.getScope().remove(box);
     }
 
     @Override
@@ -203,6 +299,13 @@ public class DrawableIsland extends DrawableObject
         // Update all the components
         if(tower != null)
             tower.translate(new Point3D(X_TOWER * DIMENSION + point.getX(), point.getY(), Y_TOWER * DIMENSION + point.getZ()));
+
+        // Update the students
+        for(int i = 0; i < drawnStudents.size(); i++)
+        {
+            drawnStudents.get(i).translate(new Point3D(studentPositions[i].getX() * DIMENSION + point.getX(),
+                    point.getY(), studentPositions[i].getY() * DIMENSION + point.getZ()));
+        }
     }
 
     @Override
@@ -214,6 +317,9 @@ public class DrawableIsland extends DrawableObject
         // Rotate the box
         box.getTransforms().add(rotation);
     }
+
+    public Optional<TowerType> getTowerType()
+    { return tower == null ? Optional.empty() : Optional.of(tower.getType()); }
 
     public synchronized void setX(double x) { box.translateXProperty().set(x); }
 

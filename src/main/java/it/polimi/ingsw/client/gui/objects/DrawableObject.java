@@ -80,6 +80,18 @@ public abstract class DrawableObject
     public abstract void subscribeToAmbientLight(AmbientLight light);
 
     /**
+     * Method to unsubscribe from a point light if necessary
+     * @param light The light that the object has to subscribe to
+     */
+    public abstract void unsubscribeFromPointLight(PointLight light);
+
+    /**
+     * Method to unsubscribe from an ambient light if necessary
+     * @param light The light that the object has to subscribe to
+     */
+    public abstract void unsubscribeFromAmbientLight(AmbientLight light);
+
+    /**
      * Enables the mouse visibility of the object
      */
     public abstract void enableVisibility();

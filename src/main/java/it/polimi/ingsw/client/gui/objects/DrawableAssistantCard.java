@@ -165,6 +165,20 @@ public class DrawableAssistantCard extends DrawableObject
         light.getScope().add(backBox);
     }
 
+    // This method does nothing, i want only to subscribe to ambient light
+    @Override
+    public void unsubscribeFromPointLight(PointLight light) {}
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableAssistantCard] Null light");
+
+        light.getScope().remove(frontBox);
+        light.getScope().remove(backBox);
+    }
+
     @Override
     public void enableVisibility() {
 

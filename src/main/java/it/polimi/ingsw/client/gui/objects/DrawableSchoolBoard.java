@@ -157,6 +157,35 @@ public class DrawableSchoolBoard extends DrawableObject
         light.getScope().add(box);
     }
 
+    // Unsubscribe all the payloads
+    @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null point light");
+
+        // Unsubscribe all the components
+        for(DrawableStudent student : entrance)
+            student.unsubscribeFromPointLight(light);
+
+        for(SchoolColor color : dining.keySet())
+            for(DrawableStudent student : dining.get(color))
+                student.unsubscribeFromPointLight(light);
+
+        for(DrawableTower tower : towers)
+            tower.unsubscribeFromPointLight(light);
+    }
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null ambient light");
+
+        // Remove the box from the light
+        light.getScope().remove(box);
+    }
+
     @Override
     public void enableVisibility()
     {

@@ -160,6 +160,26 @@ public class DrawableCloudTile extends DrawableObject
         light.getScope().add(box);
     }
 
+    // Unsubscribe all the potential students
+    @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableCloudTile] Null point light");
+
+        for(DrawableStudent student : students)
+            student.unsubscribeFromPointLight(light);
+    }
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableCloudTile] Null light");
+
+        light.getScope().remove(box);
+    }
+
     @Override
     public void enableVisibility() {
 

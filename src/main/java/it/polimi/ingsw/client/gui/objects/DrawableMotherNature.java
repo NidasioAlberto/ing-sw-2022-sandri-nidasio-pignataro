@@ -129,6 +129,28 @@ public class DrawableMotherNature extends DrawableObject
     }
 
     @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableMotherNature] Null point light");
+
+        // Add the light for all spheres
+        for(Sphere sphere : spheres)
+            light.getScope().remove(sphere);
+    }
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableMotherNature] Null ambient light");
+
+        // Add the light for all spheres
+        for(Sphere sphere : spheres)
+            light.getScope().remove(sphere);
+    }
+
+    @Override
     public void enableVisibility()
     {
 

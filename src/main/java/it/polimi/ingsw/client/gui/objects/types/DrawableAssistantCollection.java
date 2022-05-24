@@ -113,6 +113,21 @@ public class DrawableAssistantCollection extends DrawableObject
             card.subscribeToAmbientLight(light);
     }
 
+    // This method does nothing, i want only ambient light
+    @Override
+    public void unsubscribeFromPointLight(PointLight light) {}
+
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableAssistantCollection] Null ambient light");
+
+        // If the light is not null i subscribe every card
+        for(DrawableAssistantCard card : assistantCards)
+            card.unsubscribeFromAmbientLight(light);
+    }
+
     @Override
     public void enableVisibility() {
 

@@ -107,6 +107,20 @@ public class DrawableProfessor extends DrawableObject
     public void subscribeToAmbientLight(AmbientLight light) {}
 
     @Override
+    public void unsubscribeFromPointLight(PointLight light)
+    {
+        if(light == null)
+            throw new NullPointerException("[DrawableProfessor] Null point light");
+
+        // unsubscribe from the point light
+        light.getScope().remove(professorMesh);
+    }
+
+    // This method does nothing because the professor needs to be subscribed only to point lights
+    @Override
+    public void unsubscribeFromAmbientLight(AmbientLight light) {}
+
+    @Override
     public void enableVisibility()
     {
 
