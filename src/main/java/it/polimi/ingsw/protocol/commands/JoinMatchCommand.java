@@ -23,5 +23,6 @@ public class JoinMatchCommand extends Command
         // Check if the player has a name
         if (connection.getPlayerName().isPresent())
             connection.getServer().addPlayerToMatch(matchId, connection);
+        else throw new IllegalArgumentException("A match can't be created until the username has been configured");
     }
 }

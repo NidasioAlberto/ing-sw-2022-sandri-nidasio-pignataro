@@ -41,6 +41,8 @@ public class CLI extends Visualizer implements Runnable
 
     private Map<Integer, SchoolBoardUpdate> schoolBoards = new HashMap<Integer, SchoolBoardUpdate>();
 
+    private MatchesListAnswer matchesList;
+
     public CLI(Client client)
     {
         super(client);
@@ -164,10 +166,12 @@ public class CLI extends Visualizer implements Runnable
             case 3:
             {
                 client.sendCommand(new GetMatchesListCommand());
+                displayMatchesList(scanner);
                 break;
             }
             case 4:
             {
+                PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 PrintHelper.print("Match name: ");
                 String matchId = scanner.nextLine();
                 client.sendCommand(new JoinMatchCommand(matchId));
@@ -487,39 +491,104 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
-        clear();
+        if (answer != null)
+        {
+            PrintHelper.printMessage(answer.toString());
+            clear();
+        }
     }
 
     @Override
     public void displayError(ErrorAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
+        if (answer != null)
+        {
+            PrintHelper.printMessage(answer.toString());
+        }
     }
 
     @Override
     public void displayJoinedMatch(JoinedMatchAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
+        if (answer != null)
+        {
+            PrintHelper.printMessage(answer.toString());
+        }
     }
 
     @Override
     public void displayMatchesList(MatchesListAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
+        if (answer != null)
+        {
+            matchesList = answer;
+            PrintHelper.printMessage(" There could be new available matches, " +
+                    "to see them choose -> Command -> Get matches list");
+        }
+    }
+
+    /**
+     * Display all the matches not started yet. It is called when a player chooses 'Get matches list' in 'Command'.
+     */
+    public void displayMatchesList(Scanner scanner)
+    {
+        String msg = "[MatchesListAnswer] Matches list:\n" +
+                "";
+        int counter = 0;
+
+        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        if (matchesList.getNumPlayers().size() < 20)
+        {
+            PrintHelper.printMR(1, 2, matchesList.toString());
+        }
+        else
+        {
+            for (String key : matchesList.getNumPlayers().keySet())
+            {
+                if (counter % 20 != 19)
+                {
+                    msg += matchesList.singleMatchToString(key);
+                    counter ++;
+                }
+                else
+                {
+                    msg += matchesList.singleMatchToString(key);
+                    counter ++;
+                    if (counter != matchesList.getNumPlayers().size())
+                    {
+                        msg += "To see other matches type 'Y'\n";
+                        PrintHelper.printMR(1, 2, msg);
+                        if (scanner.nextLine().equals("Y"))
+                        {
+                            msg = "";
+                            PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+                        }
+                        else break;
+                    }
+                }
+            }
+        }
+        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printMR(1, 2, msg);
     }
 
     @Override
     public void displaySetName(SetNameAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
+        if (answer != null)
+        {
+            PrintHelper.printMessage(answer.toString());
+        }
     }
 
     @Override
     public void displayStartMatch(StartMatchAnswer answer)
     {
-        isMatchStarted = true;
-        PrintHelper.printMessage(answer.toString());
+        if (answer != null)
+        {
+            isMatchStarted = true;
+            PrintHelper.printMessage(answer.toString());
+        }
     }
 
     public static void main(String[] args)
