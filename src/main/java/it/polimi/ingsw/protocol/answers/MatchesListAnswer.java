@@ -60,6 +60,20 @@ public class MatchesListAnswer extends Answer
         }
     }
 
+    /**
+     * toString() of a single match.
+     * @param key name of the match.
+     * @return the match's string.
+     */
+    public String singleMatchToString(String key)
+    {
+        String str = "";
+
+        if (gameModes.containsKey(key))
+            str += "\t" + key + ": mode = " + gameModes.get(key) + " - players = " + numPlayers.get(key) + "/" + maxNumPlayers.get(key) + "\n";
+
+        return str;
+    }
     @Override
     public void handleAnswer(Visualizer handler)
     {
