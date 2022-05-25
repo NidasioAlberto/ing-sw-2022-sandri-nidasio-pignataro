@@ -60,7 +60,7 @@ public class Shaman extends CharacterCard
         if (instance.subscriber.isPresent()) {
             for (Player player : instance.players)
                 instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
         }
 
@@ -173,7 +173,7 @@ public class Shaman extends CharacterCard
         {
             for (Player player : instance.players)
                 instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
         }
     }
 

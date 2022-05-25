@@ -110,6 +110,11 @@ public class Game implements Publisher<ModelUpdate>
         }
 
         currentPlayerIndex = Optional.of(index);
+
+        if (subscriber.isPresent())
+        {
+            subscriber.get().onNext(new CurrentPlayerUpdate(index));
+        }
     }
 
     /**
@@ -159,7 +164,7 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
-     * Compute the clockwise distance of the given player from the player that plays the first assistant card in this turn.
+     * Compute the clockwise distance of the given player from the player that played the first assistant card the turn before.
      * 
      * @param player whose distance you want to calculate.
      * @return the distance.
@@ -221,7 +226,7 @@ public class Game implements Publisher<ModelUpdate>
         if (subscriber.isPresent())
         {
             for (Player player : players)
-                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
         }
     }
 
@@ -250,7 +255,7 @@ public class Game implements Publisher<ModelUpdate>
         // notification
         // of the schoolboard where it was before.
         if (subscriber.isPresent())
-            subscriber.get().onNext(new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname()));
+            subscriber.get().onNext(new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname(), players.indexOf(selectedPlayer)));
 
         return result;
     }
@@ -463,7 +468,7 @@ public class Game implements Publisher<ModelUpdate>
                 // I do that for all the players and not just the 2 because it is much simpler
                 // and in the bast case we send 2 boards instead of 4
                 for (Player player : players)
-                    subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                    subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(),  players.indexOf(player)));
 
                 subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             }
@@ -532,7 +537,7 @@ public class Game implements Publisher<ModelUpdate>
         // At the end i notify the observer
         if (subscriber.isPresent())
         {
-            subscriber.get().onNext(new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname()));
+            subscriber.get().onNext(new SchoolBoardUpdate(selectedPlayer.getBoard(), selectedPlayer.getNickname(), players.indexOf(selectedPlayer)));
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
         }
     }
@@ -615,7 +620,7 @@ public class Game implements Publisher<ModelUpdate>
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
             for (Player player : players)
             {
-                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(),  players.indexOf(player)));
                 subscriber.get().onNext(new AssistantCardsUpdate(player.getNickname(), new ArrayList<AssistantCard>(player.getCards())));
             }
         }

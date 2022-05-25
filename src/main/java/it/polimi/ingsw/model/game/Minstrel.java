@@ -119,7 +119,7 @@ public class Minstrel extends CharacterCard
         {
             for (Player player : instance.players)
                 instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
         }
 

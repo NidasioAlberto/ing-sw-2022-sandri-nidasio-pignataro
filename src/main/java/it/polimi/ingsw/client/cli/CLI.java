@@ -24,7 +24,7 @@ public class CLI extends Visualizer implements Runnable
 
     private boolean isMatchStarted = false;
 
-    private List<String> players;
+    private Map<String, Integer> players;
 
     /**
      * Save the state of the match in order to display it everytime I want.
@@ -43,13 +43,29 @@ public class CLI extends Visualizer implements Runnable
 
     private MatchesListAnswer matchesList;
 
+    /**
+     * Used to color the SchoolBoard of the current player.
+     */
+    private int currentPlayerIndex;
+
+    /**
+     * It is the index of the player who played the assistant with lowest turnOrder the previous turn.
+     * In the first round it is the first player because plays first.
+     */
+    private int bestPreviousPlayerIndex = 0;
+
+    /**
+     * Used to track how many CurrentPlayerUpdate the client has received.
+     */
+    private int currentPlayerUpdatesCounter;
+
     public CLI(Client client)
     {
         super(client);
 
         executor = Executors.newCachedThreadPool();
 
-        players = new ArrayList<>();
+        players = new HashMap<>();
     }
 
     public void start()
@@ -171,9 +187,9 @@ public class CLI extends Visualizer implements Runnable
             }
             case 4:
             {
-                PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 PrintHelper.print("Match name: ");
                 String matchId = scanner.nextLine();
+                PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 client.sendCommand(new JoinMatchCommand(matchId));
                 break;
             }
@@ -433,26 +449,17 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            int playerIndex;
-            if (players.contains(update.getPlayer()))
-            {
-                playerIndex = players.indexOf(update.getPlayer());
-            } else
-            {
-                playerIndex = players.size();
-                players.add(update.getPlayer());
-            }
 
-            if (playedAssistantCards.keySet().contains(playerIndex))
+            if (playedAssistantCards.keySet().contains(players.get(update.getPlayer())))
             {
-                playedAssistantCards.replace(playerIndex, update);
+                playedAssistantCards.replace(players.get(update.getPlayer()), update);
             }
             else
             {
-                playedAssistantCards.put(playerIndex, update);
+                playedAssistantCards.put(players.get(update.getPlayer()), update);
             }
 
-            PrintHelper.printMR(19, 2 + 33 * playerIndex, update.toString());
+            PrintHelper.printMR(19, 2 + 33 * players.get(update.getPlayer()), update.toString());
         }
     }
 
@@ -461,29 +468,99 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            int playerIndex;
-            if (players.contains(update.getPlayer()))
+            if (!players.keySet().contains(update.getPlayer()))
             {
-                playerIndex = players.indexOf(update.getPlayer());
-            } else
-            {
-                playerIndex = players.size();
-                players.add(update.getPlayer());
+                players.put(update.getPlayer(), update.getPlayerIndex());
             }
 
-            if (schoolBoards.keySet().contains(playerIndex))
+            if (schoolBoards.keySet().contains(update.getPlayerIndex()))
             {
-                schoolBoards.replace(playerIndex, update);
+                schoolBoards.replace(update.getPlayerIndex(), update);
             }
             else
             {
-                schoolBoards.put(playerIndex, update);
+                schoolBoards.put(update.getPlayerIndex(), update);
             }
 
-            PrintHelper.printMessage("player index: " + playerIndex);
+            PrintHelper.printMessage("player index: " + update.getPlayerIndex());
 
-            PrintHelper.printMR(12, 2 + 33 * playerIndex, update.toString());
+            String msg = "";
+            for (Integer playerIndex : schoolBoards.keySet())
+            {
+                if (schoolBoards.get(playerIndex) != null)
+                {
+                    msg += PrintHelper.moveCursorAbsolute(12, 2 + 33 * playerIndex) +
+                            (playerIndex == currentPlayerIndex ?
+                                    schoolBoards.get(playerIndex).toStringActive()
+                                    : schoolBoards.get(playerIndex).toString());
+                }
+            }
+
+            PrintHelper.printMR(0, 0, msg);
         }
+    }
+
+    /**
+     * At each round in the plan phase the client receives a number of CurrentPlayerUpdate as the number of player
+     * because every player has to play an AssistantCard and after it the currentPlayer changes: in this phase
+     * the playerIndex is referred to the table order so the method just chooses the player with that index.
+     * After each player turn the client receives a CurrentPlayerUpdate, so also in this case the number of updates will
+     * be the same as the number of players, but in this case the playerIndex is referred to the sorted order of players
+     * based on the AssistantCards they have played, so it is necessary to calculate the corresponding player to the
+     * index received.
+     * @param update contains the current player.
+     */
+    @Override
+    public void setCurrentPlayer(CurrentPlayerUpdate update)
+    {
+        if (update != null)
+        {
+            // List of playerIndex to sort based on the assistant card played
+            List <Integer> sortedList = new ArrayList<>();
+
+            // Still in plan phase so just need to set the player index according to table order
+            if (currentPlayerUpdatesCounter < players.size()) {
+                currentPlayerIndex = update.getCurrentPlayerIndex();
+            }
+            // Not in plan phase so need to set the player index according to the played assistant cards
+            else if (currentPlayerUpdatesCounter < 2 * players.size())
+            {
+                // Add all the playerIndex to the list to sort
+                for (String player : players.keySet())
+                    sortedList.add(players.get(player));
+
+                // Sort the list based on the played assistant card
+                sortedList.sort((a, b) -> playedAssistantCards.get(a).getCard().getTurnOrder() == playedAssistantCards.get(b).getCard().getTurnOrder()
+                        ? computeDistance(a) - computeDistance(b)
+                        : playedAssistantCards.get(a).getCard().getTurnOrder() - playedAssistantCards.get(b).getCard().getTurnOrder());
+
+                // Assign the currentPlayerIndex based on the sortedList
+                currentPlayerIndex = sortedList.get(update.getCurrentPlayerIndex());
+            }
+
+            // Need to reset the counter and save the bestPreviousPlayer index when the round
+            // is finished, so when I have received 2 * number of players updates
+            if (currentPlayerUpdatesCounter + 1 == 2 * players.size())
+            {
+                currentPlayerUpdatesCounter = 0;
+                bestPreviousPlayerIndex = sortedList.get(0);
+            }
+            else currentPlayerUpdatesCounter++;
+
+            // I need to call it because the current player could have changed
+            displayBoard();
+        }
+    }
+
+    /**
+     * Compute the clockwise distance of the given player from the player that played the first assistant card the turn before.
+     *
+     * @param currentPlayerIndex whose distance you want to calculate.
+     * @return the distance.
+     */
+    private int computeDistance(Integer currentPlayerIndex)
+    {
+        return currentPlayerIndex - bestPreviousPlayerIndex >= 0 ? currentPlayerIndex - bestPreviousPlayerIndex : players.size() - bestPreviousPlayerIndex + currentPlayerIndex;
     }
 
     // Answers
@@ -532,44 +609,37 @@ public class CLI extends Visualizer implements Runnable
      */
     public void displayMatchesList(Scanner scanner)
     {
-        String msg = "[MatchesListAnswer] Matches list:\n" +
-                "";
+        String msg = "[MatchesListAnswer] Matches list:\n";
         int counter = 0;
 
+        // Clear all the terminal above the area where error are displayed
         PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
-        if (matchesList.getNumPlayers().size() < 20)
+
+        // Create the string with all the matches
+        for (String key : matchesList.getNumPlayers().keySet())
         {
-            PrintHelper.printMR(1, 2, matchesList.toString());
-        }
-        else
-        {
-            for (String key : matchesList.getNumPlayers().keySet())
+            msg += matchesList.singleMatchToString(key);
+            counter ++;
+
+            // Every 20 matches I display them and ask the player if wants to see more (if there are)
+            // 20 matches in order to not relocate other elements in the terminal
+            if (counter % 20 == 19 && counter != matchesList.getNumPlayers().size())
             {
-                if (counter % 20 != 19)
+                msg += "To see other matches type 'Y'\n";
+                PrintHelper.printMR(1, 2, msg);
+                if (scanner.nextLine().equals("Y"))
                 {
-                    msg += matchesList.singleMatchToString(key);
-                    counter ++;
+                    msg = "";
+                    PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 }
-                else
-                {
-                    msg += matchesList.singleMatchToString(key);
-                    counter ++;
-                    if (counter != matchesList.getNumPlayers().size())
-                    {
-                        msg += "To see other matches type 'Y'\n";
-                        PrintHelper.printMR(1, 2, msg);
-                        if (scanner.nextLine().equals("Y"))
-                        {
-                            msg = "";
-                            PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
-                        }
-                        else break;
-                    }
-                }
+                else break;
             }
         }
+
+        // At the end I print again the list of matches, it is necessary when there are less than 20 matches
         PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
         PrintHelper.printMR(1, 2, msg);
+        PrintHelper.printMR(21, 1, PrintHelper.ERASE_ENTIRE_LINE);
     }
 
     @Override
@@ -633,11 +703,13 @@ public class CLI extends Visualizer implements Runnable
             if (schoolBoards.get(playerIndex) != null)
             {
                 msg += PrintHelper.moveCursorAbsolute(12, 2 + 33 * playerIndex) +
-                        schoolBoards.get(playerIndex);
+                        (playerIndex == currentPlayerIndex ?
+                                schoolBoards.get(playerIndex).toStringActive()
+                                : schoolBoards.get(playerIndex).toString());
             }
         }
 
-        PrintHelper.print(msg);
+        PrintHelper.printMR(0,0,msg);
     }
 
     /**
@@ -654,5 +726,9 @@ public class CLI extends Visualizer implements Runnable
         islands = null;
         playedAssistantCards.clear();
         schoolBoards.clear();
+        matchesList = null;
+        currentPlayerIndex = 0;
+        bestPreviousPlayerIndex = 0;
+        currentPlayerUpdatesCounter = 0;
     }
 }

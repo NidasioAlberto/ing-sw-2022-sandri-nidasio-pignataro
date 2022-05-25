@@ -218,7 +218,7 @@ public class Knight extends CharacterCard
                 // and in the bast case we send 2 boards instead of 4
                 for (Player player : instance.players)
                     instance.subscriber.get()
-                            .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                            .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
                 instance.subscriber.get().onNext(
                         new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));

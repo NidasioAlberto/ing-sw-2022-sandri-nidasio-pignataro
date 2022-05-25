@@ -133,7 +133,7 @@ public abstract class CharacterCard extends Game implements Serializable
             // I need to send the SchoolBoardUpdate because some coins have been removed
             for (Player player : instance.players)
             {
-                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
             }
 
             List<CharacterCard> characterCardsList = new ArrayList<>();

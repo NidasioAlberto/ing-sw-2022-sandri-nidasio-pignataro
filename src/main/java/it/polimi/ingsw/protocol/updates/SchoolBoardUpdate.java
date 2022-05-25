@@ -24,7 +24,22 @@ public class SchoolBoardUpdate extends ModelUpdate
      */
     private String player;
 
-    public SchoolBoardUpdate(SchoolBoard board, String player)
+    /**
+     * The index of the player in the table order.
+     */
+    private int playerIndex;
+
+    /**
+     * Color of active schoolBoard (red)
+     */
+    protected static final String ACTIVE = "\u001B[31m";
+
+    /**
+     * Reset the color
+     */
+    protected static final String DEACTIVE = "\u001B[97m";
+
+    public SchoolBoardUpdate(SchoolBoard board, String player, int playerIndex)
     {
         if (board == null)
             throw new NullPointerException("[SchoolBoardUpdate] Null board");
@@ -33,6 +48,7 @@ public class SchoolBoardUpdate extends ModelUpdate
 
         this.board = board;
         this.player = player;
+        this.playerIndex = playerIndex;
     }
 
     public SchoolBoard getBoard()
@@ -43,6 +59,11 @@ public class SchoolBoardUpdate extends ModelUpdate
     public String getPlayer()
     {
         return player;
+    }
+
+    public int getPlayerIndex()
+    {
+        return playerIndex;
     }
 
     @Override
@@ -150,6 +171,37 @@ public class SchoolBoardUpdate extends ModelUpdate
         return rep;
     }
 
+    /**
+     * Draws a 7x31 painted representation of the school board.
+     */
+    public String toStringActive()
+    {
+        String rep = "";
+
+        rep += ACTIVE + drawTopRow() + PrintHelper.moveCursorRelative(-1, -32) + DEACTIVE;
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(0) + " " + drawStudent(1) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.GREEN) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.GREEN) + ACTIVE + "║" + DEACTIVE
+                + drawTower(0) + "  " + drawTower(1) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(2) + " " + drawStudent(3) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.RED) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.RED) + ACTIVE + "║" + DEACTIVE
+                + drawTower(2) + "  " + drawTower(3) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
+        rep += ACTIVE + "║"  + DEACTIVE+ drawStudent(4) + " " + drawStudent(5) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.YELLOW) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.YELLOW) + ACTIVE + "║" + DEACTIVE
+                + drawTower(4) + "  " + drawTower(5) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(6) + " " + drawStudent(7) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.PINK) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.PINK) + ACTIVE + "║" + DEACTIVE
+                + drawTower(6) + "  " + drawTower(7) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(8) + ACTIVE + "  ║" + DEACTIVE + drawDiningRoom(SchoolColor.BLUE) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.BLUE) + ACTIVE + "║    ║" + DEACTIVE
+                + PrintHelper.moveCursorRelative(-1, -32);
+        rep += ACTIVE + drawBottomRow() + DEACTIVE;
+
+        // Draw the number of coins if the game is in expert mode
+        if (board.getMode() == GameMode.EXPERT)
+        {
+            rep += PrintHelper.moveCursorRelative(1, -5);
+            rep += GamePieces.COINS_MARKER + "" + board.getCoins();
+            rep += PrintHelper.moveCursorRelative(-1, (board.getCoins() < 10 ? 3 : 2));
+        }
+
+        return rep;
+    }
+
     public static void main(String[] args)
     {
         SchoolBoard board = new SchoolBoard(TowerColor.GREY, GameMode.EXPERT);
@@ -170,7 +222,7 @@ public class SchoolBoardUpdate extends ModelUpdate
         board.addCoins(10);
 
 
-        SchoolBoardUpdate update = new SchoolBoardUpdate(board, "test");
+        SchoolBoardUpdate update = new SchoolBoardUpdate(board, "test", 1);
 
         System.out.print(update.toString());
     }

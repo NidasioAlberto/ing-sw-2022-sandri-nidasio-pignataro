@@ -183,7 +183,7 @@ public class Joker extends CharacterCard
 
             // I need to send the SchoolBoardUpdate because a student has changed in entrance
             for (Player player : instance.players)
-                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname()));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
         }
     }

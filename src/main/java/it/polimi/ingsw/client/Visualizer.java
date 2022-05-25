@@ -33,6 +33,8 @@ public abstract class Visualizer
 
     public abstract void displaySchoolboard(SchoolBoardUpdate update);
 
+    public abstract void setCurrentPlayer(CurrentPlayerUpdate update);
+
     // Answers
 
     public abstract void displayEndMatch(EndMatchAnswer answer);
