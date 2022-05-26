@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
@@ -23,6 +24,15 @@ public class DrawableStudent extends DrawableObject
      */
     private final TriangleMesh triangleMesh;
     private final MeshView studentMesh;
+
+    /**
+     * Drag and drop movement variables
+     */
+    private volatile double offsetPosX;
+    private volatile double offsetPosZ;
+
+    private volatile double posX;
+    private volatile double posZ;
 
     /**
      * Constructor
@@ -59,10 +69,34 @@ public class DrawableStudent extends DrawableObject
         studentMesh.setMaterial(material);
 
         // Rotate the student of 180 degrees on the y axis
-        studentMesh.getTransforms().add(new Rotate(180, new Point3D(0, 1, 0)));
+        Rotate rotation = new Rotate(180, new Point3D(0, 1, 0));
+        studentMesh.getTransforms().add(rotation);
 
         // Set the node to mouse transparent
-        studentMesh.setMouseTransparent(true);
+        studentMesh.setMouseTransparent(false);
+
+        // Set the drag and drop features
+        studentMesh.setOnDragDetected((event) ->{
+            offsetPosX = event.getX();
+            offsetPosZ = event.getZ();
+            posX = studentMesh.getTranslateX();
+            posZ = studentMesh.getTranslateZ();
+            studentMesh.setMouseTransparent(true);
+            studentMesh.setCursor(Cursor.MOVE);
+            studentMesh.startFullDrag();
+        });
+
+        studentMesh.setOnMouseDragged((event) -> {
+            studentMesh.setMouseTransparent(true);
+            posX = rotation.transform(new Point3D(event.getX(), 0, 0)).getX() - offsetPosX;
+            posZ = rotation.transform(new Point3D(0, 0, event.getZ())).getZ() - offsetPosZ;
+            this.translate(new Point3D(studentMesh.getTranslateX() + posX, 0, studentMesh.getTranslateZ() + posZ));
+        });
+
+        studentMesh.setOnMouseReleased((event) -> {
+            studentMesh.setCursor(Cursor.DEFAULT);
+            studentMesh.setMouseTransparent(false);
+        });
 
         // At the end if the updater != null i add the box to it
         if(this.updater != null)
@@ -117,14 +151,10 @@ public class DrawableStudent extends DrawableObject
     public void unsubscribeFromAmbientLight(AmbientLight light) {}
 
     @Override
-    public void enableVisibility() {
-
-    }
+    public void enableVisibility() { studentMesh.setMouseTransparent(false); }
 
     @Override
-    public void disableVisibility() {
-
-    }
+    public void disableVisibility() { studentMesh.setMouseTransparent(true); }
 
     @Override
     public void translate(Point3D point)

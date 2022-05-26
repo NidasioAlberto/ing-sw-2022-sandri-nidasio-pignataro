@@ -189,7 +189,7 @@ public class DrawableMotherNature extends DrawableObject
     private void setY(double y)
     {
         for(int i = 0; i < spheres.length; i++)
-            spheres[i].setTranslateY(y - (i * STARTING_RADIUS - i * DELTA_RADIUS));
+            spheres[i].setTranslateY(y - (i * STARTING_RADIUS - i * DELTA_RADIUS) - STARTING_RADIUS / 2);
     }
 
     private void setZ(double z)

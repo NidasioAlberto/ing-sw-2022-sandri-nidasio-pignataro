@@ -118,6 +118,9 @@ public class DrawableCloudTile extends DrawableObject
         // Translate the student
         student.translate(coordinates.add(new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ())));
 
+        // Make the student invisible to mouse (We don't want drag and drop)
+        student.disableVisibility();
+
         // Add the student to the model
         students.add(student);
 

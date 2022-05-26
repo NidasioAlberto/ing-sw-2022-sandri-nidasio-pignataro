@@ -28,7 +28,9 @@ public class DrawableTower extends DrawableObject
     private TriangleMesh triangleMesh;
     private MeshView towerMesh;
 
-
+    /**
+     * Drag and drop movement variables
+     */
     private volatile double offsetPosX;
     private volatile double offsetPosZ;
 

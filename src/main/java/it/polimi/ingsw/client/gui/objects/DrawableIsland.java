@@ -10,17 +10,22 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
 import java.util.*;
+import java.util.List;
 
 public class DrawableIsland extends DrawableObject
 {
     // Constants
     public static final float FLOATING_AMPLITUDE = 5;
     public static final float FLOATING_ANGULAR_VELOCITY = 1.5f;
+
+    // This defines how much an eventual island payload should stay off the island itself
+    public static final float HEIGHT_SPAN = 1.0f;
 
     /**
      * Island square dimensions
@@ -40,6 +45,9 @@ public class DrawableIsland extends DrawableObject
             new Point2D(-0.0875, -0.130),
             new Point2D(-0.125, 0.030)
     };
+    private final double X_MOTHER = 0.17;
+    private final double Y_MOTHER = 0.25;
+
     /**
      * Island draw type
      */
@@ -58,6 +66,8 @@ public class DrawableIsland extends DrawableObject
     private List<DrawableStudent> drawnStudents;
     //List of all the student types inside the island, for counting purposes
     private List<StudentType> students;
+    //Eventual mother nature on the island
+    private DrawableMotherNature motherNature;
 
     /**
      * Animation angle (to which apply the Math.sin and float the island)
@@ -114,12 +124,18 @@ public class DrawableIsland extends DrawableObject
         if(this.updater != null)
             this.updater.subscribeObject(this);
 
-        box.setOnDragOver((event) -> {
-            System.out.println(event.getGestureSource());
+        // Set a little light when the mouse drags over
+        box.setOnMouseDragEntered((event) -> {
+            material.setDiffuseColor(Color.color(1, 1, 1, 0.9));
+        });
+
+        box.setOnMouseDragExited((event) -> {
+            material.setDiffuseColor(Color.color(1, 1, 1, 1));
         });
 
         box.setOnMouseDragReleased((event) -> {
             System.out.println(event.getEventType());
+            material.setDiffuseColor(Color.color(1, 1, 1, 1));
         });
     }
 
@@ -139,7 +155,10 @@ public class DrawableIsland extends DrawableObject
         tower = new DrawableTower(type, updater);
 
         // Translate the tower
-        tower.translate(new Point3D(X_TOWER * DIMENSION + getPosition().getX(), 0, Y_TOWER * DIMENSION + getPosition().getY()));
+        tower.translate(new Point3D(X_TOWER * DIMENSION + getPosition().getX(), -HEIGHT_SPAN, Y_TOWER * DIMENSION + getPosition().getY()));
+
+        // Make the tower invisible to mouse (we don't want drag and drop)
+        tower.disableVisibility();
 
         // Add the tower to group and point light
         tower.addToGroup(group);
@@ -186,7 +205,10 @@ public class DrawableIsland extends DrawableObject
             // Translate the student where it should be
             student.translate(new Point3D(
                     studentPositions[drawnStudents.size()].getX() * DIMENSION + getPosition().getX(),
-                    0, studentPositions[drawnStudents.size()].getY() * DIMENSION + getPosition().getZ()));
+                    -HEIGHT_SPAN, studentPositions[drawnStudents.size()].getY() * DIMENSION + getPosition().getZ()));
+
+            // Set the student invisible to the mouse (we don't want drag and drop on islands)
+            student.disableVisibility();
 
             // Add the student to the group and light
             student.addToGroup(group);
@@ -200,6 +222,29 @@ public class DrawableIsland extends DrawableObject
         // for counting purposes
         students.add(type);
     }
+
+    /**
+     * Method to add mother nature to this island so that the floating
+     * action happens at the same time
+     */
+    public void addMotherNature(DrawableMotherNature motherNature)
+    {
+        if(motherNature == null)
+            throw new NullPointerException("[DrawableIsland] Null mother nature");
+
+        // Assign mother nature if not already present
+        if(this.motherNature == null)
+            this.motherNature = motherNature;
+
+        // Translate mother nature
+        motherNature.translate(new Point3D(X_MOTHER * DIMENSION + getPosition().getX(),
+                getPosition().getY() - HEIGHT_SPAN, Y_MOTHER * DIMENSION + getPosition().getZ()));
+    }
+
+    /**
+     * Method to remove mother nature
+     */
+    public void removeMotherNature() { this.motherNature = null; }
 
     @Override
     public void addToGroup(Group group)
@@ -298,14 +343,19 @@ public class DrawableIsland extends DrawableObject
 
         // Update all the components
         if(tower != null)
-            tower.translate(new Point3D(X_TOWER * DIMENSION + point.getX(), point.getY(), Y_TOWER * DIMENSION + point.getZ()));
+            tower.translate(new Point3D(X_TOWER * DIMENSION + point.getX(), point.getY() - HEIGHT_SPAN, Y_TOWER * DIMENSION + point.getZ()));
 
         // Update the students
         for(int i = 0; i < drawnStudents.size(); i++)
         {
             drawnStudents.get(i).translate(new Point3D(studentPositions[i].getX() * DIMENSION + point.getX(),
-                    point.getY(), studentPositions[i].getY() * DIMENSION + point.getZ()));
+                    point.getY() - HEIGHT_SPAN, studentPositions[i].getY() * DIMENSION + point.getZ()));
         }
+
+        // Update eventual mother nature
+        if(motherNature != null)
+            motherNature.translate(new Point3D(X_MOTHER * DIMENSION + getPosition().getX(),
+                    getPosition().getY() - HEIGHT_SPAN, Y_MOTHER * DIMENSION + getPosition().getZ()));
     }
 
     @Override
