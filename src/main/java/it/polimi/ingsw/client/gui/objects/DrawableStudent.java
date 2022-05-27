@@ -76,6 +76,14 @@ public class DrawableStudent extends DrawableObject
         studentMesh.setMouseTransparent(false);
 
         // Set the drag and drop features
+        studentMesh.setOnMouseDragEntered((event)->{
+            material.setDiffuseColor(type.getColor().interpolate(new Color(1, 1,1, 0.9), 0.5));
+        });
+
+        studentMesh.setOnMouseDragExited((event) -> {
+            material.setDiffuseColor(type.getColor());
+        });
+
         studentMesh.setOnDragDetected((event) ->{
             offsetPosX = event.getX();
             offsetPosZ = event.getZ();

@@ -11,6 +11,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -116,7 +117,7 @@ public class DrawableSchoolBoard extends DrawableObject
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
 
         // Set the node to mouse transparent
-        box.setMouseTransparent(true);
+        box.setMouseTransparent(false);
 
         // At the end if the updater != null i add the box to it
         if(this.updater != null)
