@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
+import javax.swing.plaf.synth.SynthStyle;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
@@ -18,12 +19,16 @@ public class Match implements Subscriber<ModelUpdate>
 
     private List<PlayerConnection> players;
 
+    // Disconnected players
+    private List<String> missingPlayers;
+
     private Controller gameController;
 
     Match(Server server, int playersNumber, GameMode mode)
     {
         this.server = server;
         players = new ArrayList<>();
+        missingPlayers = new ArrayList<>();
         gameController = new Controller(this, playersNumber, mode);
         gameController.getGame().subscribe(this);
     }
@@ -40,19 +45,41 @@ public class Match implements Subscriber<ModelUpdate>
         try
         {
             players.add(player);
-            gameController.addPlayer(player.getPlayerName().get());
-            gameController.getGame().getPlayerTableList().stream().filter((p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst()
-                    .ifPresent((p) -> p.subscribe(this));
+
+            System.out.print("[Match] Current players list: ");
+            for (PlayerConnection p : players)
+                System.out.print(p.getPlayerName().get() + " ");
+            System.out.println();
+
+            if (!missingPlayers.contains(player.getPlayerName().get()))
+            {
+                gameController.addPlayer(player.getPlayerName().get());
+                gameController.getGame().getPlayerTableList().stream().filter((p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst()
+                        .ifPresent((p) -> p.subscribe(this));
+
+                System.out.println("[Match] New player added to the match");
+            } else
+            {
+                missingPlayers.remove(player.getPlayerName().get());
+
+                // Send the current status of the game to the player
+                gameController.getGame().notifyPlayers();
+
+                System.out.println("[Match] Previously disconnected player added to the match");
+            }
+
         } catch (Exception e)
         {
             players.remove(player);
             server.addPlayerToLobby(player);
+            System.out.print(e.toString());
             player.sendAnswer(new ErrorAnswer(e.getMessage()));
         }
     }
 
     public void removePlayer(PlayerConnection player)
     {
+        missingPlayers.add(player.getPlayerName().get());
         players.remove(player);
     }
 
@@ -64,6 +91,11 @@ public class Match implements Subscriber<ModelUpdate>
 
     public void sendError(String playerName, String message)
     {
+        System.out.print("[Match] Sending error, players: ");
+        for (PlayerConnection p : players)
+            System.out.print(p.getPlayerName().get() + " ");
+        System.out.println();
+
         // Find the player with the given name
         players.forEach((player) -> {
             if (player.getPlayerName().isPresent())
@@ -84,7 +116,7 @@ public class Match implements Subscriber<ModelUpdate>
 
     public int getPlayersNumber()
     {
-        return players.size();
+        return players.size() + missingPlayers.size();
     }
 
     public Controller getController()
@@ -95,6 +127,11 @@ public class Match implements Subscriber<ModelUpdate>
     public List<PlayerConnection> getPlayers()
     {
         return players;
+    }
+
+    public List<String> getMissingPlayers()
+    {
+        return missingPlayers;
     }
 
     /**

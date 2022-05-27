@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.Executors;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.Command;
+import it.polimi.ingsw.protocol.commands.PingCommand;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.updates.*;
 
@@ -92,6 +94,19 @@ public class Client implements Runnable
     public void run()
     {
         active = true;
+
+        // Start a ping thread
+        Executors.newCachedThreadPool().submit(() -> {
+            while (true)
+                try
+                {
+                    outputStream.writeObject(new PingCommand());
+                    Thread.sleep(1000);
+                } catch (Exception e)
+                {
+                    break;
+                }
+        });
 
         try
         {

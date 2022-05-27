@@ -27,7 +27,7 @@ public class CLI extends Visualizer implements Runnable
     private Map<String, Integer> players;
 
     /**
-     * Save the state of the match in order to display it everytime I want.
+     * Save the state of the match in order to display it every time I want.
      */
     private AssistantCardsUpdate assistantCards;
 
@@ -113,7 +113,7 @@ public class CLI extends Visualizer implements Runnable
                     choosePacket(scanner);
             } catch (Exception e)
             {
-                PrintHelper.print("Unable to parse parse the input: " + e.toString());
+                PrintHelper.printMessage("Unable to parse parse the input: " + e.toString());
             }
         }
     }
@@ -485,32 +485,17 @@ public class CLI extends Visualizer implements Runnable
         if (update != null)
         {
             if (!players.keySet().contains(update.getPlayer()))
-            {
                 players.put(update.getPlayer(), update.getPlayerIndex());
-            }
 
             if (schoolBoards.keySet().contains(update.getPlayerIndex()))
-            {
                 schoolBoards.replace(update.getPlayerIndex(), update);
-            } else
-            {
+            else
                 schoolBoards.put(update.getPlayerIndex(), update);
-            }
 
-            PrintHelper.printMessage("player index: " + update.getPlayerIndex());
-
-            String msg = "";
             for (Integer playerIndex : schoolBoards.keySet())
-            {
                 if (schoolBoards.get(playerIndex) != null)
-                {
-                    msg += PrintHelper.moveCursorAbsolute(12, 2 + 33 * playerIndex)
-                            + (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
-                                    : schoolBoards.get(playerIndex).toString());
-                }
-            }
-
-            PrintHelper.printMR(0, 0, msg);
+                    PrintHelper.printMR(12, 2 + 33 * playerIndex, (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
+                            : schoolBoards.get(playerIndex).toString()));
         }
     }
 
@@ -603,7 +588,7 @@ public class CLI extends Visualizer implements Runnable
     public void displayMatchesList(MatchesListAnswer answer)
     {
         // Clear the screen
-        PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
+        PrintHelper.printMR(22, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
         printTitle(2, 2);
 
         matchesList = answer;
@@ -705,13 +690,11 @@ public class CLI extends Visualizer implements Runnable
             PrintHelper.printMR(1, 2, islands.toString());
 
         for (Integer playerIndex : playedAssistantCards.keySet())
-            if (playedAssistantCards.get(playerIndex) != null)
+            if (playerIndex != null && playedAssistantCards.get(playerIndex) != null)
                 PrintHelper.printMR(19, 2 + 33 * playerIndex, playedAssistantCards.get(playerIndex).toString());
 
-
-
         for (Integer playerIndex : schoolBoards.keySet())
-            if (schoolBoards.get(playerIndex) != null)
+            if (playerIndex != null && schoolBoards.get(playerIndex) != null)
                 PrintHelper.printMR(12, 2 + 33 * playerIndex, (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
                         : schoolBoards.get(playerIndex).toString()));
     }

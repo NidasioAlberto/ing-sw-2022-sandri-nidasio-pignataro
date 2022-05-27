@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class allows creating, starting and ending a game. The controller links the model package
- * with the network one in order to organize the match phases and actions.
+ * This class allows creating, starting and ending a game. The controller links the model package with the network one in order to organize the match
+ * phases and actions.
  */
 public class Controller
 {

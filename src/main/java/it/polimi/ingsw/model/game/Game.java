@@ -468,7 +468,7 @@ public class Game implements Publisher<ModelUpdate>
                 // I do that for all the players and not just the 2 because it is much simpler
                 // and in the bast case we send 2 boards instead of 4
                 for (Player player : players)
-                    subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(),  players.indexOf(player)));
+                    subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
 
                 subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             }
@@ -620,7 +620,7 @@ public class Game implements Publisher<ModelUpdate>
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
             for (Player player : players)
             {
-                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(),  players.indexOf(player)));
+                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
                 subscriber.get().onNext(new AssistantCardsUpdate(player.getNickname(), new ArrayList<AssistantCard>(player.getCards())));
             }
         }
@@ -632,9 +632,7 @@ public class Game implements Publisher<ModelUpdate>
 
             // Choose 3 random cards
             for (int j = 0; j < CHARACTER_CARDS_NUMBER; j++)
-            {
                 characterCards.add(CharacterCard.createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
-            }
 
             // Init all the random cards
             for (CharacterCard card : characterCards)
@@ -646,10 +644,8 @@ public class Game implements Publisher<ModelUpdate>
                 List<CharacterCard> characterCardsList = new ArrayList<>();
 
                 for (CharacterCard card : characterCards)
-                {
                     // I clone all the character card to avoid serializing the game instance
                     characterCardsList.add((CharacterCard) card.clone());
-                }
 
                 subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
                 // Notify eventually about the payload situation
@@ -822,6 +818,32 @@ public class Game implements Publisher<ModelUpdate>
     public int getPlayersNumber()
     {
         return playersNumber;
+    }
+
+    public void notifyPlayers()
+    {
+        for (Player player : players)
+        {
+            player.notifySubscriber();
+            subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
+        }
+
+        subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndex.get()));
+        subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands),
+                motherNatureIndex.orElseThrow(() -> new NoSuchElementException("[Game] No mother nature index, is the game setup?"))));
+        subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
+
+        if (gameMode == GameMode.EXPERT)
+        {
+            List<CharacterCard> characterCardsList = new ArrayList<>();
+
+            for (CharacterCard card : characterCards)
+                // I clone all the character card to avoid serializing the game instance
+                characterCardsList.add((CharacterCard) card.clone());
+
+            subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+        }
+
     }
 
     @Override

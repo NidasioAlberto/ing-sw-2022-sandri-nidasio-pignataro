@@ -64,6 +64,8 @@ public class Player implements Publisher<ModelUpdate>
 
     protected Optional<Subscriber<? super ModelUpdate>> subscriber;
 
+    private int lastAssistantCardUsed = 0;
+
     public Player(String nickname, TowerColor color, GameMode mode)
     {
         this(nickname, new SchoolBoard(color, mode));
@@ -104,20 +106,25 @@ public class Player implements Publisher<ModelUpdate>
 
                 // Toggle the selected card to be used
                 cards.get(i).toggleUsed();
+                lastAssistantCardUsed = i;
 
                 // I notify the subscriber because I have used a card
-                if (subscriber.isPresent())
-                {
-                    subscriber.get().onNext(new AssistantCardsUpdate(nickname,
-                            new ArrayList<AssistantCard>(cards)));
-                    subscriber.get().onNext(new PlayedAssistantCardUpdate(
-                            new AssistantCard(cards.get(i).getWizard(), cards.get(i).getTurnOrder(),
-                                    cards.get(i).getSteps()), nickname));
-                }
+                notifySubscriber();
                 return;
             }
         }
+
         throw new NoSuchAssistantCardException("[Player]");
+    }
+
+    public void notifySubscriber()
+    {
+        if (subscriber.isPresent())
+        {
+            subscriber.get().onNext(new AssistantCardsUpdate(nickname, new ArrayList<AssistantCard>(cards)));
+            subscriber.get().onNext(new PlayedAssistantCardUpdate(new AssistantCard(cards.get(lastAssistantCardUsed).getWizard(),
+                    cards.get(lastAssistantCardUsed).getTurnOrder(), cards.get(lastAssistantCardUsed).getSteps()), nickname));
+        }
     }
 
     /**

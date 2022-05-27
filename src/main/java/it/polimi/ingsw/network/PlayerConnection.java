@@ -1,10 +1,16 @@
 package it.polimi.ingsw.network;
 
 import java.net.Socket;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.Answer;
+import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
+import it.polimi.ingsw.protocol.commands.PingCommand;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
 import java.io.IOException;
@@ -24,6 +30,8 @@ public class PlayerConnection implements Runnable
     private Optional<String> playerName = Optional.empty();
 
     private boolean active = true;
+
+    private Future<?> watchdogTask = null;
 
     PlayerConnection(Server server, Socket playerSocket) throws IOException
     {
@@ -68,6 +76,40 @@ public class PlayerConnection implements Runnable
     public void setPlayerName(String playerName)
     {
         this.playerName = Optional.of(playerName);
+
+        System.out.println("[PlayerConnection] Checking if the player was in a game");
+        for (Map.Entry<String, Match> match : server.getAllMatches().entrySet())
+        {
+            if (match.getValue().getMissingPlayers().contains(playerName))
+            {
+                try
+                {
+                    server.addPlayerToMatch(match.getKey(), this);
+                    break;
+                } catch (TooManyPlayersException e)
+                {
+                }
+            }
+
+        }
+    }
+
+    public void restartWatchdog()
+    {
+        if (watchdogTask != null)
+            watchdogTask.cancel(true);
+
+        watchdogTask = Executors.newCachedThreadPool().submit(() -> {
+            try
+            {
+                Thread.sleep(1500);
+                System.out.println("Player connection timed out!");
+                sendAnswer(new EndMatchAnswer("Connection timed out"));
+                close();
+            } catch (InterruptedException e)
+            {
+            }
+        });
     }
 
     public boolean isInAMatch()
@@ -95,6 +137,9 @@ public class PlayerConnection implements Runnable
         // Register the player into the server
         server.addPlayerToLobby(this);
 
+        // Start the first watchdog
+        restartWatchdog();
+
         try
         {
             while (isActive())
@@ -112,7 +157,8 @@ public class PlayerConnection implements Runnable
 
     public void handlePacket(Object rawPacket)
     {
-        System.out.println("[PlayerConnection] New packet received: " + rawPacket.getClass().getSimpleName());
+        if (!(rawPacket instanceof PingCommand))
+            System.out.println("[PlayerConnection] New packet received: " + rawPacket.getClass().getSimpleName());
 
         try
         {
