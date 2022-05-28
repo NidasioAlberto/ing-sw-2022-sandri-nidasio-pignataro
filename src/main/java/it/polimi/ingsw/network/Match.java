@@ -8,6 +8,10 @@ import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import javax.swing.plaf.synth.SynthStyle;
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.GameActionHandler;
+import it.polimi.ingsw.controller.fsm.Phase;
+import it.polimi.ingsw.controller.fsm.PlanPhase;
+import it.polimi.ingsw.controller.fsm.SuspendedPhase;
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
@@ -71,6 +75,13 @@ public class Match implements Subscriber<ModelUpdate>
             {
                 missingPlayers.remove(player.getPlayerName().get());
 
+                // Interrupt the timeout
+                Phase currentPhase = gameController.getGameHandler().getGamePhase();
+                if (currentPhase instanceof SuspendedPhase)
+                    ((SuspendedPhase) currentPhase).getTimeout().cancel(true);
+
+                sendAllAnswer(new ErrorAnswer("The match resumes"));
+
                 player.sendAnswer(new JoinedMatchAnswer(matchId));
 
                 Map<String, Integer> players = new HashMap<>();
@@ -99,6 +110,15 @@ public class Match implements Subscriber<ModelUpdate>
     {
         missingPlayers.add(player.getPlayerName().get());
         players.remove(player);
+
+        // If remains only one active player the GameActionHandler moves to SuspendedPhase
+        if (players.size() == 1)
+        {
+            GameActionHandler handler = gameController.getGameHandler();
+            players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
+                    "if no other player reconnects before 1 minute you will win"));
+            handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
+        }
     }
 
     public void sendAllAnswer(Answer answer)

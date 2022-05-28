@@ -122,6 +122,11 @@ public class Controller
                 return;
             }
         }
+
+
+        //TODO controllare se ce un solo player attivo, allora vince lui
+        match.endMatch("You won");
+        return;
     }
 
     /**
