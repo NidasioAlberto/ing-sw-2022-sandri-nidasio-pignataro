@@ -1,17 +1,22 @@
 package it.polimi.ingsw.network;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import javax.swing.plaf.synth.SynthStyle;
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.GameMode;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import it.polimi.ingsw.protocol.answers.Answer;
-import it.polimi.ingsw.protocol.answers.ErrorAnswer;
+import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
+import it.polimi.ingsw.protocol.updates.PlayedAssistantCardUpdate;
 
 public class Match implements Subscriber<ModelUpdate>
 {
@@ -24,9 +29,12 @@ public class Match implements Subscriber<ModelUpdate>
 
     private Controller gameController;
 
-    Match(Server server, int playersNumber, GameMode mode)
+    private String matchId;
+
+    Match(Server server, String matchId, int playersNumber, GameMode mode)
     {
         this.server = server;
+        this.matchId = matchId;
         players = new ArrayList<>();
         missingPlayers = new ArrayList<>();
         gameController = new Controller(this, playersNumber, mode);
@@ -62,9 +70,17 @@ public class Match implements Subscriber<ModelUpdate>
             {
                 missingPlayers.remove(player.getPlayerName().get());
 
-                // Send the current status of the game to the player
-                gameController.getGame().notifyPlayers();
+                player.sendAnswer(new JoinedMatchAnswer(matchId));
 
+                Map<String, Integer> players = new HashMap<>();
+                for (Player gamePlayer : gameController.getGame().getPlayerTableList())
+                    players.put(gamePlayer.getNickname(), gameController.getGame().getPlayerTableList().indexOf(gamePlayer));
+
+                // Notify the match's players
+                player.sendAnswer(new StartMatchAnswer(players));
+
+               // Send the current status of the game to the player
+                gameController.getGame().notifyPlayers();
                 System.out.println("[Match] Previously disconnected player added to the match");
             }
 

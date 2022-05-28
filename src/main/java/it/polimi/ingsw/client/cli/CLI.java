@@ -413,6 +413,8 @@ public class CLI extends Visualizer implements Runnable
                 "▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░▌      ▐░░▌     ▐░▌          ▐░▌     ▐░░░░░░░░░░░▌");
         PrintHelper.printMR(row + 10, column,
                 " ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀        ▀▀       ▀            ▀       ▀▀▀▀▀▀▀▀▀▀▀ ");
+        PrintHelper.printMR(row + 11, column, "Authors: Alberto Nidasio, Matteo Pignataro, Alberto Sandri");
+        PrintHelper.printMR(row + 12, column, "Original site with rules: https://craniointernational.com/products/eriantys/");
     }
 
     // Updates
@@ -618,7 +620,7 @@ public class CLI extends Visualizer implements Runnable
         int counter = 0;
 
         // Clear all the terminal above the area where error are displayed
-        PrintHelper.printMR(1, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
 
         // Create the string with all the matches
         for (String key : matchesList.getNumPlayers().keySet())
@@ -656,8 +658,14 @@ public class CLI extends Visualizer implements Runnable
     @Override
     public void displayStartMatch(StartMatchAnswer answer)
     {
-        isMatchStarted = true;
-        PrintHelper.printMessage(answer.toString());
+        if (!isMatchStarted)
+        {
+            isMatchStarted = true;
+            PrintHelper.printMessage(answer.toString());
+
+            if (answer.getPlayers().size() != 0)
+                players = answer.getPlayers();
+        }
     }
 
     public static void main(String[] args)

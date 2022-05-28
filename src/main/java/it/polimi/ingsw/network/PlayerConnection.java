@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.Answer;
 import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
+import it.polimi.ingsw.protocol.answers.SetNameAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
 import it.polimi.ingsw.protocol.commands.PingCommand;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
@@ -76,6 +77,7 @@ public class PlayerConnection implements Runnable
     public void setPlayerName(String playerName)
     {
         this.playerName = Optional.of(playerName);
+        sendAnswer(new SetNameAnswer(playerName));
 
         System.out.println("[PlayerConnection] Checking if the player was in a game");
         for (Map.Entry<String, Match> match : server.getAllMatches().entrySet())

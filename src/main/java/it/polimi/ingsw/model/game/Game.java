@@ -822,28 +822,31 @@ public class Game implements Publisher<ModelUpdate>
 
     public void notifyPlayers()
     {
-        for (Player player : players)
+        if (subscriber.isPresent())
         {
-            player.notifySubscriber();
-            subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
+            for (Player player : players)
+            {
+                player.notifySubscriber();
+                subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
+            }
+
+            subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndex.get()));
+            subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands),
+                    motherNatureIndex.orElseThrow(() -> new NoSuchElementException("[Game] No mother nature index, is the game setup?"))));
+            subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
+
+            if (gameMode == GameMode.EXPERT)
+            {
+                List<CharacterCard> characterCardsList = new ArrayList<>();
+
+                for (CharacterCard card : characterCards)
+                    // I clone all the character card to avoid serializing the game instance
+                    characterCardsList.add((CharacterCard) card.clone());
+
+                subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
+                //TODO forse va mandata anche la CharacterCardPayloadUpdate
+            }
         }
-
-        subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndex.get()));
-        subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands),
-                motherNatureIndex.orElseThrow(() -> new NoSuchElementException("[Game] No mother nature index, is the game setup?"))));
-        subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));
-
-        if (gameMode == GameMode.EXPERT)
-        {
-            List<CharacterCard> characterCardsList = new ArrayList<>();
-
-            for (CharacterCard card : characterCards)
-                // I clone all the character card to avoid serializing the game instance
-                characterCardsList.add((CharacterCard) card.clone());
-
-            subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
-        }
-
     }
 
     @Override

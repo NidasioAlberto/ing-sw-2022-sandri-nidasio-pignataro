@@ -122,8 +122,11 @@ public class Player implements Publisher<ModelUpdate>
         if (subscriber.isPresent())
         {
             subscriber.get().onNext(new AssistantCardsUpdate(nickname, new ArrayList<AssistantCard>(cards)));
-            subscriber.get().onNext(new PlayedAssistantCardUpdate(new AssistantCard(cards.get(lastAssistantCardUsed).getWizard(),
-                    cards.get(lastAssistantCardUsed).getTurnOrder(), cards.get(lastAssistantCardUsed).getSteps()), nickname));
+            if (lastAssistantCardUsed != 0)
+            {
+                subscriber.get().onNext(new PlayedAssistantCardUpdate(new AssistantCard(cards.get(lastAssistantCardUsed).getWizard(),
+                        cards.get(lastAssistantCardUsed).getTurnOrder(), cards.get(lastAssistantCardUsed).getSteps()), nickname));
+            }
         }
     }
 

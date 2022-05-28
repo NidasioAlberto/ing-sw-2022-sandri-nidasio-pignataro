@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import java.util.concurrent.Executors;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.Command;
@@ -65,13 +67,30 @@ public class Client implements Runnable
 
     public void sendCommand(Command command) throws IOException
     {
-        outputStream.writeObject(command);
+        try
+        {
+            outputStream.writeObject(command);
+            outputStream.flush();
+            outputStream.reset();
+        } catch (IOException e)
+        {
+            PrintHelper.printMessage("Error while writing: " + e.getMessage());
+            stop();
+        }
     }
 
     public void sendAction(ActionMessage action) throws IOException
     {
-        outputStream.writeObject(action);
-
+        try
+        {
+            outputStream.writeObject(action);
+            outputStream.flush();
+            outputStream.reset();
+        } catch (IOException e)
+        {
+            PrintHelper.printMessage("Error while writing: " + e.getMessage());
+            stop();
+        }
     }
 
     public String getPlayerName()
