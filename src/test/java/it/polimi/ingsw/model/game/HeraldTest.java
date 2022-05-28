@@ -37,6 +37,7 @@ public class HeraldTest
         }
         game.setupGame();
         herald = CharacterCard.createCharacterCard(CharacterCardType.HERALD, game);
+        herald.init();
     }
 
     @Test

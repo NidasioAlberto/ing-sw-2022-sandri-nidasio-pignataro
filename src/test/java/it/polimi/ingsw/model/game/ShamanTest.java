@@ -37,6 +37,7 @@ public class ShamanTest
         }
         game.setupGame();
         shaman = CharacterCard.createCharacterCard(CharacterCardType.SHAMAN, game);
+        shaman.init();
     }
 
     @Test

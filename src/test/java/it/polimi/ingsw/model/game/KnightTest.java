@@ -45,6 +45,7 @@ public class KnightTest
 
         // Now i can instantiate the character card
         knight = CharacterCard.createCharacterCard(CharacterCardType.KNIGHT, game);
+        knight.init();
     }
 
     @Test

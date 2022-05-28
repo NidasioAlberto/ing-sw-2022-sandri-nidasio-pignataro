@@ -45,6 +45,7 @@ public class MinstrelTest
 
         // Now i can instantiate the character card
         minstrel = CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, game);
+        minstrel.init();
 
         // Add to the dining room 3 green students
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));

@@ -49,6 +49,7 @@ public class PrincessTest
 
         // Now i can instantiate the character card
         princess = CharacterCard.createCharacterCard(CharacterCardType.PRINCESS, game);
+        princess.init();
 
         // I add the student to the students on card list if it is not present anymore
         for (Student student : originalBagStudents)

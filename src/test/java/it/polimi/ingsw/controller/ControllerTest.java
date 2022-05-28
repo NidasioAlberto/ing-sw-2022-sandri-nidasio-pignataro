@@ -279,6 +279,8 @@ public class ControllerTest
         }
         GameActionHandler handler = controller.getGameHandler();
         Game game = handler.getGame();
+        for (Player player : game.getPlayerTableList())
+            player.setActive(true);
 
         // player1 selects an assistant card
         assertDoesNotThrow(

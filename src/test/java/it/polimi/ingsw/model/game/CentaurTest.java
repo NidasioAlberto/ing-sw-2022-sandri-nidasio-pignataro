@@ -35,6 +35,7 @@ public class CentaurTest
         }
         game.setupGame();
         centaur = CharacterCard.createCharacterCard(CharacterCardType.CENTAUR, game);
+        centaur.init();
     }
 
     @Test

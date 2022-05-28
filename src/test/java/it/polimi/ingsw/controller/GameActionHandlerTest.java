@@ -47,6 +47,8 @@ public class GameActionHandlerTest
                 }
                 handler = controller.getGameHandler();
                 game = handler.getGame();
+                for (Player player : game.getPlayerTableList())
+                        player.setActive(true);
         }
 
         @Test

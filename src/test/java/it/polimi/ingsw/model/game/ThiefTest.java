@@ -42,6 +42,7 @@ public class ThiefTest
 
         // Now i can instantiate the character card
         thief = CharacterCard.createCharacterCard(CharacterCardType.THIEF, game);
+        thief.init();
     }
 
     @Test

@@ -113,10 +113,11 @@ public class Server
 
         // Move all the players to the lobby
         for (PlayerConnection player : match.getPlayers())
-            movePlayerToMatch(player);
+            addPlayerToLobby(player);
 
         // Delete the match
         matches.entrySet().removeIf(entry -> entry.getValue() == match);
+        playersMapMatch.entrySet().removeIf(entry -> entry.getValue() == match);
     }
 
     /**

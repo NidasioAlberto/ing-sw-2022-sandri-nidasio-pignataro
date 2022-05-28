@@ -36,6 +36,7 @@ public class GrandmaHerbsTest
         }
         game.setupGame();
         grandmaHerbs = CharacterCard.createCharacterCard(CharacterCardType.GRANDMA_HERBS, game);
+        grandmaHerbs.init();
     }
 
     @Test

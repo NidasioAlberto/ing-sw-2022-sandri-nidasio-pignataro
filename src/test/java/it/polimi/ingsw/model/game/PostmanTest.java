@@ -40,6 +40,7 @@ public class PostmanTest
         }
         game.setupGame();
         postman = CharacterCard.createCharacterCard(CharacterCardType.POSTMAN, game);
+        postman.init();
     }
 
     @Test

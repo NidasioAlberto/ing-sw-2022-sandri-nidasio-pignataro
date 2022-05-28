@@ -45,6 +45,7 @@ public class MushroomManTest
 
         // Now i can instantiate the character card
         mushroomMan = CharacterCard.createCharacterCard(CharacterCardType.MUSHROOM_MAN, game);
+        mushroomMan.init();
     }
 
     @Test

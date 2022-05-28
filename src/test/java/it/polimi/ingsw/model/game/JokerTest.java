@@ -52,6 +52,7 @@ public class JokerTest
 
         // Now i can instanciate the character card
         joker = CharacterCard.createCharacterCard(CharacterCardType.JOKER, game);
+        joker.init();
 
         // I add the student to the students on card list if it is not present anymore
         for (Student student : originalBagStudents)

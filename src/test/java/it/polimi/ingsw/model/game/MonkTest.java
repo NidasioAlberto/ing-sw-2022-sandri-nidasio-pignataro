@@ -39,6 +39,7 @@ public class MonkTest
         game.setupGame();
         studentsBag = game.getStudentBag();
         monk = CharacterCard.createCharacterCard(CharacterCardType.MONK, game);
+        monk.init();
     }
 
     @Test
