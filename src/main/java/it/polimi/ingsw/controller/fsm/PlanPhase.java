@@ -26,21 +26,37 @@ public class PlanPhase implements Phase
         int playerIndex = handler.getGame().getSelectedPlayerIndex()
                 .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
 
-        // If we are not dealing with the last one i switch player and maintain the current state
-        if (count < handler.getGame().getPlayersNumber() - 1)
+        // If we are not dealing with the last active one i switch player and maintain the current state
+        if (count < handler.getGame().getPlayerTableList().stream().filter(player -> player.isActive()).count() - 1)
         {
-            // In case of a non 0 starting index, i have to use the module
-            handler.getGame()
-                    .selectPlayer((playerIndex + 1) % handler.getGame().getPlayersNumber());
-            handler.getGame().setCurrentPlayerIndexByTable((playerIndex + 1) % handler.getGame().getPlayersNumber());
-            count++;
+            // I search the next active player
+            for (int i = 0; i < handler.getGame().getPlayersNumber(); i++)
+            {
+                if (handler.getGame().getPlayerTableList().
+                        get((playerIndex + i + 1) % handler.getGame().getPlayersNumber()).isActive())
+                {
+                    // In case of a non 0 starting index, i have to use the module
+                    handler.getGame()
+                            .selectPlayer((playerIndex + i + 1) % handler.getGame().getPlayersNumber());
+                    handler.getGame().setCurrentPlayerIndexByTable((playerIndex + i + 1) % handler.getGame().getPlayersNumber());
+                    count++;
+                    break;
+                }
+            }
         } else
         {
-            // If not i select the first player (now about the sorted list)
-            handler.getGame().selectPlayer(0);
-            handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().
-                    indexOf(handler.getGame().getSelectedPlayer().get()));
-            handler.setGamePhase(new MoveStudentPhase());
+            // If not i select the first player (now about the sorted list) who is active
+            for (int i = 0; i < handler.getGame().getPlayersNumber(); i++)
+            {
+                if (handler.getGame().getSortedPlayerList().get(i).isActive())
+                {
+                    handler.getGame().selectPlayer(i);
+                    handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().
+                            indexOf(handler.getGame().getSelectedPlayer().get()));
+                    handler.setGamePhase(new MoveStudentPhase());
+                    break;
+                }
+            }
         }
     }
 

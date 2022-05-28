@@ -386,6 +386,7 @@ public class CLI extends Visualizer implements Runnable
         rules += "- " + CharacterCardType.THIEF + ": Choose a type of Student; every player (including yourself) must return 3 Students of that "
                 + "type from their Dining Room to the bag. If any player has fewer than 3 Students of that type,"
                 + " return as many Students as they have.\n";
+        rules += "Original site with rules: https://craniointernational.com/products/eriantys/";
 
         return rules;
     }

@@ -62,6 +62,11 @@ public class Player implements Publisher<ModelUpdate>
      */
     private Optional<Integer> selectedCharacterCard;
 
+    /**
+     * It is true if this player is currently connected to the game.
+     */
+    private boolean active;
+
     protected Optional<Subscriber<? super ModelUpdate>> subscriber;
 
     private int lastAssistantCardUsed = 0;
@@ -88,6 +93,7 @@ public class Player implements Publisher<ModelUpdate>
         selectedCloudTile = Optional.empty();
         selectedCharacterCard = Optional.empty();
         subscriber = Optional.empty();
+        active = false;
     }
 
     /**
@@ -122,7 +128,8 @@ public class Player implements Publisher<ModelUpdate>
         if (subscriber.isPresent())
         {
             subscriber.get().onNext(new AssistantCardsUpdate(nickname, new ArrayList<AssistantCard>(cards)));
-            if (lastAssistantCardUsed != 0)
+            // If the player has played at least one card, I send the last assistant card played
+            if (cards.stream().filter(assistantCard -> assistantCard.isUsed()).count() != 0)
             {
                 subscriber.get().onNext(new PlayedAssistantCardUpdate(new AssistantCard(cards.get(lastAssistantCardUsed).getWizard(),
                         cards.get(lastAssistantCardUsed).getTurnOrder(), cards.get(lastAssistantCardUsed).getSteps()), nickname));
@@ -306,5 +313,15 @@ public class Player implements Publisher<ModelUpdate>
         // I subscribe the observer to the observable only if doesn't already exist one
         if (this.subscriber.isEmpty())
             this.subscriber = Optional.of(subscriber);
+    }
+
+    public boolean isActive()
+    {
+        return active;
+    }
+
+    public void setActive(boolean active)
+    {
+        this.active = active;
     }
 }

@@ -34,16 +34,26 @@ public class EndTurnPhase implements Phase
     {
         // If the action is valid i have to switch current player
         // and set the current state to moveStudentPhase unless the
-        // current player is the last one. In that case i have to
+        // current player is the last active one. In that case i have to
         // switch to PlanPhase
         int playerIndex = handler.getGame().getSelectedPlayerIndex().get();
 
-        if(playerIndex < handler.getGame().getPlayerTableList().size() - 1)
+        if(playerIndex < handler.getGame().getPlayerTableList().size() - 1 &&
+                handler.getGame().getSortedPlayerList().subList(playerIndex + 1, handler.getGame().getPlayersNumber()).
+                stream().filter(player -> player.isActive()).count() > 0)
         {
-            handler.getGame().selectPlayer(playerIndex + 1);
-            handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().
-                    indexOf(handler.getGame().getSelectedPlayer().get()));
-            handler.setGamePhase(new MoveStudentPhase());
+            // I search the next active player in the sorted list
+            for (int i = playerIndex + 1; i < handler.getGame().getPlayersNumber(); i++)
+            {
+                if (handler.getGame().getSortedPlayerList().get(i).isActive())
+                {
+                    handler.getGame().selectPlayer(i);
+                    handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().
+                            indexOf(handler.getGame().getSelectedPlayer().get()));
+                    handler.setGamePhase(new MoveStudentPhase());
+                    break;
+                }
+            }
         }
         else
         {
@@ -54,8 +64,16 @@ public class EndTurnPhase implements Phase
                 throw new EndGameException("[EndTurnPhase]");
             }
 
-            // Extract the first player that played the first move
+            // Extract the first active player that played the first move
             Player bestPlayer = handler.getGame().getSortedPlayerList().get(0);
+            for (int i = 0; i < handler.getGame().getPlayersNumber(); i++)
+            {
+                if (handler.getGame().getSortedPlayerList().get(i).isActive())
+                {
+                    bestPlayer = handler.getGame().getSortedPlayerList().get(i);
+                    break;
+                }
+            }
 
             // I need to find the index of that best player in table order list
             int index;

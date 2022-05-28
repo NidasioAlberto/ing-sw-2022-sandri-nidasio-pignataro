@@ -708,15 +708,14 @@ public class Game implements Publisher<ModelUpdate>
 
         for (CloudTile cloud : cloudTiles)
         {
-            if (cloud.getStudents().size() != 0)
-                throw new IllegalStateException("[Game] You can't fill non empty clouds");
-            for (int i = 0; i < studentsToPut; i++)
-                try
-                {
-                    cloud.addStudent(getStudentFromBag());
-                } catch (EndGameException e)
-                {
-                }
+            if (cloud.getStudents().size() == 0)
+                for (int i = 0; i < studentsToPut; i++)
+                    try
+                    {
+                        cloud.addStudent(getStudentFromBag());
+                    } catch (EndGameException e)
+                    {
+                    }
         }
 
         // At the end i notify the observer
@@ -746,7 +745,14 @@ public class Game implements Publisher<ModelUpdate>
     {
         clearCharacterCard();
         this.motherNatureMoved = false;
-        bestPreviousPlayerIndex = getPlayerTableList().indexOf(getSortedPlayerList().get(0));
+        for (int i = 0; i < playersNumber; i++)
+        {
+            if (getSortedPlayerList().get(i).isActive())
+            {
+                bestPreviousPlayerIndex = getPlayerTableList().indexOf(getSortedPlayerList().get(i));
+                break;
+            }
+        }
     }
 
     /**

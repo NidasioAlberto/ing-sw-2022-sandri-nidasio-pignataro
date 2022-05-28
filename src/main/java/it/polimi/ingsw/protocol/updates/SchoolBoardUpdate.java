@@ -3,12 +3,7 @@ package it.polimi.ingsw.protocol.updates;
 import it.polimi.ingsw.client.Visualizer;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
-import it.polimi.ingsw.model.GameMode;
-import it.polimi.ingsw.model.SchoolBoard;
-import it.polimi.ingsw.model.SchoolColor;
-import it.polimi.ingsw.model.Student;
-import it.polimi.ingsw.model.Tower;
-import it.polimi.ingsw.model.TowerColor;
+import it.polimi.ingsw.model.*;
 
 import java.io.Serial;
 
@@ -208,10 +203,14 @@ public class SchoolBoardUpdate extends ModelUpdate
 
         board.setPlayersNumber(2);
 
+        board.addStudentToEntrance(new Student(SchoolColor.BLUE));
+        board.addStudentToEntrance(new Student(SchoolColor.BLUE));
         board.addStudentToDiningRoom(new Student(SchoolColor.BLUE));
         board.addStudentToDiningRoom(new Student(SchoolColor.BLUE));
         board.addStudentToDiningRoom(new Student(SchoolColor.YELLOW));
         board.addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        board.addProfessor(new Professor(SchoolColor.BLUE));
+        board.addProfessor(new Professor(SchoolColor.GREEN));
 
         board.addTower(new Tower(TowerColor.GREY));
         board.addTower(new Tower(TowerColor.GREY));
@@ -224,6 +223,12 @@ public class SchoolBoardUpdate extends ModelUpdate
 
         SchoolBoardUpdate update = new SchoolBoardUpdate(board, "test", 1);
 
-        System.out.print(update.toString());
+        String msg = "" + PrintHelper.ERASE_ENTIRE_SCREEN;
+        for (int i = 0; i < 3; i++)
+        {
+            msg += PrintHelper.moveCursorAbsolute(12, 2 + 33 * i) + update;
+        }
+
+        PrintHelper.printM(0,0,msg);
     }
 }

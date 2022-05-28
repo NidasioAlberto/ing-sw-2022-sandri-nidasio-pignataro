@@ -289,8 +289,10 @@ public class GameActionHandler
         // If all goes correctly i step the FSM
         gamePhase.onValidAction(this);
 
-        // If all the players have done their turn, I fill up the clouds
-        if (previousIndex == game.getPlayerTableList().size() - 1)
+        // If all active players have done their turn, I fill up the clouds
+        if (previousIndex == game.getPlayerTableList().size() - 1 ||
+                game.getSortedPlayerList().subList(previousIndex + 1, game.getPlayersNumber()).
+                stream().filter(player -> player.isActive()).count() == 0)
         {
             try
             {

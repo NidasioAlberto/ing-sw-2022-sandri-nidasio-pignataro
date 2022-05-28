@@ -458,7 +458,7 @@ public abstract class CharacterCard extends Game implements Serializable
         rep += PrintHelper.moveCursorRelative(-1, -getCardType().toString().length());
 
         rep += paintIfActive(this, "┏━━━━━━━┓") + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, "┃  " + GamePieces.COINS_MARKER + getCost() + "  ┃") + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, "┃  " + GamePieces.COINS_MARKER + getCost() + "   ┃") + PrintHelper.moveCursorRelative(-1, -9);
         // rep += "║ " + coinsSign[card.getCost() - 1] + " ║ ";
         rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
         rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);

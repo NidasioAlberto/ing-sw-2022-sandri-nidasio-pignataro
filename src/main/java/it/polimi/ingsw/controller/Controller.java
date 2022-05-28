@@ -123,9 +123,11 @@ public class Controller
             }
         }
 
+        // If there is only one active player, that's the winner
+        List<Player> activePlayers = game.getPlayerTableList().stream().filter(player -> player.isActive()).toList();
+        if (activePlayers.size() == 1)
+            match.endMatch("The game is ended. The winner is " + activePlayers.get(0).getNickname());
 
-        //TODO controllare se ce un solo player attivo, allora vince lui
-        match.endMatch("You won");
         return;
     }
 
@@ -344,5 +346,20 @@ public class Controller
     public Game getGame()
     {
         return game;
+    }
+
+    /**
+     * Allow dis/activate a player.
+     *
+     * @param playerName of the player.
+     * @param active true if the player is active, else false.
+     */
+    public void setPlayerActive(String playerName, boolean active)
+    {
+        for (Player player : game.getPlayerTableList())
+        {
+            if (player.getNickname().equals(playerName))
+                player.setActive(active);
+        }
     }
 }
