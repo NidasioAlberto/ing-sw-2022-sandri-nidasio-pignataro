@@ -76,7 +76,7 @@ public class Server
             throw new IllegalArgumentException("[Server] A match with id " + matchId + " already exists");
 
         // Create the match
-        matches.put(matchId, new Match(this, playersNumber, mode));
+        matches.put(matchId, new Match(this, matchId, playersNumber, mode));
     }
 
     /**
