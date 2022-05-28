@@ -47,8 +47,9 @@ public class Match implements Subscriber<ModelUpdate>
      * @throws NullPointerException If the nickname is null.
      * @throws IllegalArgumentException If already exists a player with such nickname.
      * @throws TooManyPlayersException If there are too many players.
+     * @return true if the player is added, else false.
      */
-    public void addPlayer(PlayerConnection player) throws NullPointerException, IllegalArgumentException, TooManyPlayersException
+    public boolean addPlayer(PlayerConnection player) throws NullPointerException, IllegalArgumentException, TooManyPlayersException
     {
         try
         {
@@ -83,13 +84,14 @@ public class Match implements Subscriber<ModelUpdate>
                 gameController.getGame().notifyPlayers();
                 System.out.println("[Match] Previously disconnected player added to the match");
             }
+            return true;
 
         } catch (Exception e)
         {
             players.remove(player);
-            server.addPlayerToLobby(player);
             System.out.print(e.toString());
             player.sendAnswer(new ErrorAnswer(e.getMessage()));
+            return false;
         }
     }
 

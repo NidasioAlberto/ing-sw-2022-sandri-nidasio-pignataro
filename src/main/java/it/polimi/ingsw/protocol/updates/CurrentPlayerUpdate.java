@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Visualizer;
 
 import java.io.Serial;
 
+/**
+ * Update that contains the index of the current player always based on table order.
+ */
 public class CurrentPlayerUpdate extends ModelUpdate
 {
     @Serial

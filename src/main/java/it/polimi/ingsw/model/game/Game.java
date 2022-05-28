@@ -44,6 +44,8 @@ public class Game implements Publisher<ModelUpdate>
 
     protected Optional<Integer> currentPlayerIndex;
 
+    protected int currentPlayerIndexByTable;
+
     protected Optional<Integer> motherNatureIndex;
 
     protected Optional<Integer> currentCharacterCardIndex;
@@ -110,10 +112,21 @@ public class Game implements Publisher<ModelUpdate>
         }
 
         currentPlayerIndex = Optional.of(index);
+    }
+
+    /**
+     * Set the index of the current player in the table order. An update with this
+     * index is sent to the players.
+     *
+     * @param currentPlayerIndexByTable The index of the current player in the table order.
+     */
+    public void setCurrentPlayerIndexByTable(int currentPlayerIndexByTable)
+    {
+        this.currentPlayerIndexByTable = currentPlayerIndexByTable;
 
         if (subscriber.isPresent())
         {
-            subscriber.get().onNext(new CurrentPlayerUpdate(index));
+            subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndexByTable));
         }
     }
 
@@ -830,7 +843,7 @@ public class Game implements Publisher<ModelUpdate>
                 subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
             }
 
-            subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndex.get()));
+            subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndexByTable));
             subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands),
                     motherNatureIndex.orElseThrow(() -> new NoSuchElementException("[Game] No mother nature index, is the game setup?"))));
             subscriber.get().onNext(new CloudTilesUpdate(new ArrayList<CloudTile>(cloudTiles)));

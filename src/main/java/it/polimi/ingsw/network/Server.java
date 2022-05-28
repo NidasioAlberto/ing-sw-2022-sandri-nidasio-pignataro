@@ -150,14 +150,16 @@ public class Server
             throw new IllegalArgumentException("[Server] There is no match with id " + matchId);
 
         // Add the player to the match
-        match.addPlayer(player);
-        playersMapMatch.put(player, match);
+        if (match.addPlayer(player))
+        {
+            playersMapMatch.put(player, match);
 
-        // Remove the player from the lobby
-        lobby.remove(player);
+            // Remove the player from the lobby
+            lobby.remove(player);
 
-        // Notify the player
-        player.sendAnswer(new JoinedMatchAnswer(matchId));
+            // Notify the player
+            player.sendAnswer(new JoinedMatchAnswer(matchId));
+        }
     }
 
     public void addPlayerToLobby(PlayerConnection player) throws NullPointerException

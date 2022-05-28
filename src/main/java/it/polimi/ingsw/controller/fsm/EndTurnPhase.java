@@ -41,6 +41,8 @@ public class EndTurnPhase implements Phase
         if(playerIndex < handler.getGame().getPlayerTableList().size() - 1)
         {
             handler.getGame().selectPlayer(playerIndex + 1);
+            handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().
+                    indexOf(handler.getGame().getSelectedPlayer().get()));
             handler.setGamePhase(new MoveStudentPhase());
         }
         else
@@ -63,6 +65,7 @@ public class EndTurnPhase implements Phase
             // Now that the turn is over i want the plan phase to go with table order
             // but starting with the first player that played this round
             handler.getGame().selectPlayer(index);
+            handler.getGame().setCurrentPlayerIndexByTable(index);
             handler.setGamePhase(new PlanPhase());
         }
     }

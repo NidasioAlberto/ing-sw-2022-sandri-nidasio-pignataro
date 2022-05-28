@@ -32,11 +32,14 @@ public class PlanPhase implements Phase
             // In case of a non 0 starting index, i have to use the module
             handler.getGame()
                     .selectPlayer((playerIndex + 1) % handler.getGame().getPlayersNumber());
+            handler.getGame().setCurrentPlayerIndexByTable((playerIndex + 1) % handler.getGame().getPlayersNumber());
             count++;
         } else
         {
             // If not i select the first player (now about the sorted list)
             handler.getGame().selectPlayer(0);
+            handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().
+                    indexOf(handler.getGame().getSelectedPlayer().get()));
             handler.setGamePhase(new MoveStudentPhase());
         }
     }

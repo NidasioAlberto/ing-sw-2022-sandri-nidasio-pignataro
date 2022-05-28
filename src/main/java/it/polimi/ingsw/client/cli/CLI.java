@@ -502,12 +502,8 @@ public class CLI extends Visualizer implements Runnable
     }
 
     /**
-     * At each round in the plan phase the client receives a number of CurrentPlayerUpdate as the number of player because every player has to play an
-     * AssistantCard and after it the currentPlayer changes: in this phase the playerIndex is referred to the table order so the method just chooses
-     * the player with that index. After each player turn the client receives a CurrentPlayerUpdate, so also in this case the number of updates will
-     * be the same as the number of players, but in this case the playerIndex is referred to the sorted order of players based on the AssistantCards
-     * they have played, so it is necessary to calculate the corresponding player to the index received.
-     * 
+     * Set the current player in the table order.
+     *
      * @param update contains the current player.
      */
     @Override
@@ -515,54 +511,10 @@ public class CLI extends Visualizer implements Runnable
     {
         if (update != null)
         {
-            // List of playerIndex to sort based on the assistant card played
-            List<Integer> sortedList = new ArrayList<>();
-
-            // Still in plan phase so just need to set the player index according to table order
-            if (currentPlayerUpdatesCounter < players.size())
-            {
-                currentPlayerIndex = update.getCurrentPlayerIndex();
-            }
-            // Not in plan phase so need to set the player index according to the played assistant cards
-            else if (currentPlayerUpdatesCounter < 2 * players.size())
-            {
-                // Add all the playerIndex to the list to sort
-                for (String player : players.keySet())
-                    sortedList.add(players.get(player));
-
-                // Sort the list based on the played assistant card
-                sortedList.sort((a, b) -> playedAssistantCards.get(a).getCard().getTurnOrder() == playedAssistantCards.get(b).getCard().getTurnOrder()
-                        ? computeDistance(a) - computeDistance(b)
-                        : playedAssistantCards.get(a).getCard().getTurnOrder() - playedAssistantCards.get(b).getCard().getTurnOrder());
-
-                // Assign the currentPlayerIndex based on the sortedList
-                currentPlayerIndex = sortedList.get(update.getCurrentPlayerIndex());
-            }
-
-            // Need to reset the counter and save the bestPreviousPlayer index when the round
-            // is finished, so when I have received 2 * number of players updates
-            if (currentPlayerUpdatesCounter + 1 == 2 * players.size())
-            {
-                currentPlayerUpdatesCounter = 0;
-                bestPreviousPlayerIndex = sortedList.get(0);
-            } else
-                currentPlayerUpdatesCounter++;
-
+            currentPlayerIndex = update.getCurrentPlayerIndex();
             // I need to call it because the current player could have changed
             displayBoard();
         }
-    }
-
-    /**
-     * Compute the clockwise distance of the given player from the player that played the first assistant card the turn before.
-     *
-     * @param currentPlayerIndex whose distance you want to calculate.
-     * @return the distance.
-     */
-    private int computeDistance(Integer currentPlayerIndex)
-    {
-        return currentPlayerIndex - bestPreviousPlayerIndex >= 0 ? currentPlayerIndex - bestPreviousPlayerIndex
-                : players.size() - bestPreviousPlayerIndex + currentPlayerIndex;
     }
 
     // Answers
