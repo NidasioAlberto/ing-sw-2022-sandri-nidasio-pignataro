@@ -3,6 +3,8 @@ package it.polimi.ingsw.controller.fsm;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.model.BaseGameAction;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
+import it.polimi.ingsw.model.exceptions.WrongPlayerException;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -50,6 +52,16 @@ public class SuspendedPhase implements Phase
     public boolean isLegitAction(GameActionHandler handler, String playerName,
                                  BaseGameAction baseAction)
     {
+        // I check if it is the allowed player from the initial passed list
+        int playerIndex = handler.getGame().getSelectedPlayerIndex()
+                .orElseThrow(() -> new NoSelectedPlayerException("[PlanPhase]"));
+
+        // If the player is not the selected one I throw an exception
+        if (!handler.getGame().getPlayerTableList().get(playerIndex).getNickname()
+                .equals(playerName))
+            throw new WrongPlayerException();
+
+        // There aren't legit actions in this phase
         return false;
     }
 

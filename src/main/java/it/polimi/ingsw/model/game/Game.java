@@ -131,19 +131,10 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
-     * Returns the currently selected player, if any.
+     * Returns the currently selected player, if any. The player could be disconnected.
      */
     public Optional<Player> getSelectedPlayer()
     {
-        // Check if all the players selected a card
-        // TODO CHECK THAT THIS MODIFY DIDN'T AFFECT OTHER CODE
-        for (Player player : players)
-        {
-            if (player.getSelectedCard().isEmpty())
-            {
-                return currentPlayerIndex.map(index -> players.get(index));
-            }
-        }
         return currentPlayerIndex.map(index -> getSortedPlayerList().get(index));
     }
 
@@ -159,6 +150,8 @@ public class Game implements Publisher<ModelUpdate>
     /**
      * Return the players list sorted by their turn order based on the played assistant cards. In case of same turnOrder plays first the player that
      * has played that card first.
+     * The size of the returned list is always the players number, but maybe some players are no more
+     * connected or have never played a card, so you may have to check these things.
      */
     public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
@@ -166,9 +159,12 @@ public class Game implements Publisher<ModelUpdate>
 
         try
         {
-            sortedList.sort((a, b) -> a.getSelectedCard().orElseThrow().getTurnOrder() == b.getSelectedCard().orElseThrow().getTurnOrder()
-                    ? computeDistance(a) - computeDistance(b)
-                    : a.getSelectedCard().orElseThrow().getTurnOrder() - b.getSelectedCard().orElseThrow().getTurnOrder());
+            // If a player hasn't selected a card, its turnOrder will be 10, in order to be last
+            sortedList.sort((a, b) -> a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
+                    getTurnOrder() == b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
+                    getTurnOrder() ? computeDistance(a) - computeDistance(b)
+                    : a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder()
+                    - b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder());
         } catch (NoSuchElementException e)
         {
             throw new NoSelectedAssistantCardException("[Game]");
@@ -745,14 +741,7 @@ public class Game implements Publisher<ModelUpdate>
     {
         clearCharacterCard();
         this.motherNatureMoved = false;
-        for (int i = 0; i < playersNumber; i++)
-        {
-            if (getSortedPlayerList().get(i).isActive())
-            {
-                bestPreviousPlayerIndex = getPlayerTableList().indexOf(getSortedPlayerList().get(i));
-                break;
-            }
-        }
+        bestPreviousPlayerIndex = getPlayerTableList().indexOf(getSortedPlayerList().get(0));
     }
 
     /**

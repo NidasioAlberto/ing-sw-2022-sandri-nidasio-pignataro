@@ -69,7 +69,15 @@ public class Player implements Publisher<ModelUpdate>
 
     protected Optional<Subscriber<? super ModelUpdate>> subscriber;
 
-    private int lastAssistantCardUsed = 0;
+    /**
+     * Save the turn order of the last assistant card played.
+     */
+    private int lastAssistantCardUsed;
+
+    /**
+     * It is true if the player has played a card during the plan phase this round.
+     */
+    private boolean hasPlayedCard;
 
     public Player(String nickname, TowerColor color, GameMode mode)
     {
@@ -94,6 +102,7 @@ public class Player implements Publisher<ModelUpdate>
         selectedCharacterCard = Optional.empty();
         subscriber = Optional.empty();
         active = false;
+        hasPlayedCard = false;
     }
 
     /**
@@ -112,6 +121,7 @@ public class Player implements Publisher<ModelUpdate>
 
                 // Toggle the selected card to be used
                 cards.get(i).toggleUsed();
+                hasPlayedCard = true;
                 lastAssistantCardUsed = i;
 
                 // I notify the subscriber because I have used a card
@@ -129,7 +139,7 @@ public class Player implements Publisher<ModelUpdate>
         {
             subscriber.get().onNext(new AssistantCardsUpdate(nickname, new ArrayList<AssistantCard>(cards)));
             // If the player has played at least one card, I send the last assistant card played
-            if (cards.stream().filter(assistantCard -> assistantCard.isUsed()).count() != 0)
+            if (cards.stream().anyMatch(AssistantCard::isUsed))
             {
                 subscriber.get().onNext(new PlayedAssistantCardUpdate(new AssistantCard(cards.get(lastAssistantCardUsed).getWizard(),
                         cards.get(lastAssistantCardUsed).getTurnOrder(), cards.get(lastAssistantCardUsed).getSteps()), nickname));
@@ -259,6 +269,15 @@ public class Player implements Publisher<ModelUpdate>
         selectedCharacterCard = Optional.empty();
     }
 
+    /**
+     * Method to call at the end of the round to clear the fact that
+     * the player may have played a card.
+     */
+    public void clearSelectionEndRound()
+    {
+        hasPlayedCard = false;
+    }
+
     public String getNickname()
     {
         return nickname;
@@ -323,5 +342,10 @@ public class Player implements Publisher<ModelUpdate>
     public void setActive(boolean active)
     {
         this.active = active;
+    }
+
+    public boolean hasPlayedCard()
+    {
+        return hasPlayedCard;
     }
 }

@@ -40,7 +40,7 @@ public class EndTurnPhase implements Phase
 
         if(playerIndex < handler.getGame().getPlayerTableList().size() - 1 &&
                 handler.getGame().getSortedPlayerList().subList(playerIndex + 1, handler.getGame().getPlayersNumber()).
-                stream().filter(player -> player.isActive()).count() > 0)
+                        stream().anyMatch(player -> player.isActive() && player.hasPlayedCard()))
         {
             // I search the next active player in the sorted list
             for (int i = playerIndex + 1; i < handler.getGame().getPlayersNumber(); i++)
@@ -65,6 +65,7 @@ public class EndTurnPhase implements Phase
             }
 
             // Extract the first active player that played the first move
+            // Initialize the best player
             Player bestPlayer = handler.getGame().getSortedPlayerList().get(0);
             for (int i = 0; i < handler.getGame().getPlayersNumber(); i++)
             {
@@ -76,9 +77,7 @@ public class EndTurnPhase implements Phase
             }
 
             // I need to find the index of that best player in table order list
-            int index;
-            for(index = 0; index < handler.getGame().getPlayerTableList().size() &&
-                    !handler.getGame().getPlayerTableList().get(index).equals(bestPlayer); index++);
+            int index = handler.getGame().getPlayerTableList().indexOf(bestPlayer);
 
             // Now that the turn is over i want the plan phase to go with table order
             // but starting with the first player that played this round

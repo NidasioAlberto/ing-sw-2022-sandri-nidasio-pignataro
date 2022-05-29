@@ -99,22 +99,20 @@ public class GameActionHandler
         boolean sameCard = false;
 
         // For each player that has already played a card during this round
-        for (int i = 0; i < ((PlanPhase) gamePhase).getCount(); i++)
+        for (Player player : game.getPlayerTableList())
         {
-            // Get a previous player
-            Player previousPlayer = game.getPlayerTableList()
-                    .get(game.getSelectedPlayerIndex().get() - i - 1 < 0 ? game.getPlayersNumber() + game.getSelectedPlayerIndex().get() - i - 1
-                            : game.getSelectedPlayerIndex().get() - i - 1);
+            if (player != currentPlayer && player.hasPlayedCard())
+            {
+                // Remove from usableCards the card with the same turnOrder as the one
+                // played by the previous player
+                usableCards =
+                        usableCards.stream().filter((card) -> card.getTurnOrder() != player.getSelectedCard().get().getTurnOrder()).toList();
 
-            // Remove from usableCards the card with the same turnOrder as the one
-            // played by the previous player
-            usableCards =
-                    usableCards.stream().filter((card) -> card.getTurnOrder() != previousPlayer.getSelectedCard().get().getTurnOrder()).toList();
-
-            // Check if the current player has played a card with the same turnOrder
-            // as the card played by the previous player
-            if (selectedCard == previousPlayer.getSelectedCard().get().getTurnOrder())
-                sameCard = true;
+                // Check if the current player has played a card with the same turnOrder
+                // as the card played by the previous player
+                if (selectedCard == player.getSelectedCard().get().getTurnOrder())
+                    sameCard = true;
+            }
         }
 
         // If the current player has played a card already played in this turn and
@@ -292,11 +290,13 @@ public class GameActionHandler
         // If all active players have done their turn, I fill up the clouds
         if (previousIndex == game.getPlayerTableList().size() - 1 ||
                 game.getSortedPlayerList().subList(previousIndex + 1, game.getPlayersNumber()).
-                stream().filter(player -> player.isActive()).count() == 0)
+                stream().filter(Player::isActive).count() == 0)
         {
             try
             {
                 game.fillClouds();
+                for (Player player : game.getPlayerTableList())
+                    player.clearSelectionEndRound();
             } catch (Exception e)
             {
             }

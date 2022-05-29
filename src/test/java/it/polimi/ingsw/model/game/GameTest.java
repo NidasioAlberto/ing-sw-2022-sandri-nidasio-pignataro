@@ -108,8 +108,8 @@ public class GameTest
         // Select a card only for one player
         player1.selectCard(10);
 
-        // This should fail
-        assertThrows(NoSuchElementException.class, () -> game.getSortedPlayerList());
+        // This should not fail, even if all the players haven't played a card yet
+        assertDoesNotThrow(() -> game.getSortedPlayerList());
 
         // Select a card for other players
         player2.selectCard(1);
@@ -631,7 +631,7 @@ public class GameTest
 
         // Clear selection
         assertFalse(game.currentCharacterCardIndex.isEmpty());
-        assertThrows(NoSelectedAssistantCardException.class, () -> game.clearTurn());
+        game.clearTurn();
         assertTrue(game.currentCharacterCardIndex.isEmpty());
 
         // Select an out of bound card

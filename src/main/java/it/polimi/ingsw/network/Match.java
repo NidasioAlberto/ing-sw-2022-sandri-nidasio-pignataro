@@ -81,7 +81,7 @@ public class Match implements Subscriber<ModelUpdate>
                 if (currentPhase instanceof SuspendedPhase)
                     ((SuspendedPhase) currentPhase).getTimeout().cancel(true);
 
-                sendAllAnswer(new ErrorAnswer("The match resumes"));
+                sendAllAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just reconnected"));
 
                 player.sendAnswer(new JoinedMatchAnswer(matchId));
 
@@ -124,8 +124,17 @@ public class Match implements Subscriber<ModelUpdate>
             activePlayer.sendAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just disconnected"));
 
         Phase currentPhase = gameController.getGameHandler().getGamePhase();
+
+        // If remains only one active player the GameActionHandler moves to SuspendedPhase
+        if (players.size() == 1)
+        {
+            GameActionHandler handler = gameController.getGameHandler();
+            players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
+                    "if no other player reconnects before 1 minute you will win"));
+            handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
+        }
         // If the disconnected player was the current player, its turn ends
-        if (currentPhase instanceof PlanPhase)
+        else if (currentPhase instanceof PlanPhase)
         {
             // Check if the player disconnected was the current one, we are in PlanPhase so the order
             // is based on table order
@@ -145,18 +154,9 @@ public class Match implements Subscriber<ModelUpdate>
             {
                 // If the game isn't in plan phase, the player's turn ends
                 gameController.getGameHandler().setGamePhase(new EndTurnPhase());
+                gameController.getGameHandler().getGamePhase().onValidAction(gameController.getGameHandler());
             }
         }
-
-        // If remains only one active player the GameActionHandler moves to SuspendedPhase
-        if (players.size() == 1)
-        {
-            GameActionHandler handler = gameController.getGameHandler();
-            players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
-                    "if no other player reconnects before 1 minute you will win"));
-            handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
-        }
-
     }
 
     public void sendAllAnswer(Answer answer)
@@ -173,11 +173,9 @@ public class Match implements Subscriber<ModelUpdate>
         System.out.println();
 
         // Find the player with the given name
-        players.forEach((player) -> {
-            if (player.getPlayerName().isPresent())
-                if (player.getPlayerName().get() == playerName)
+        for (PlayerConnection player : players)
+            if (player.getPlayerName().isPresent() && player.getPlayerName().get().equals(playerName))
                     player.sendAnswer(new ErrorAnswer(message));
-        });
     }
 
     public void endMatch(String message)
