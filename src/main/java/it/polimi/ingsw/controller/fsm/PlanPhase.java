@@ -62,12 +62,11 @@ public class PlanPhase implements Phase
             handler.getGame().selectPlayer(handler.getGame().getPlayerTableList().indexOf(playersToPlay.get(0)));
             handler.getGame().setCurrentPlayerIndexByTable(handler.getGame().getPlayerTableList().indexOf(playersToPlay.get(0)));
             count++;
-
         }
         else
         {
             // If not i select the first player (now about the sorted list) who is active
-            for (int j = 0; i < handler.getGame().getPlayersNumber(); j++)
+            for (int j = 0; j < handler.getGame().getPlayersNumber(); j++)
             {
                 if (handler.getGame().getSortedPlayerList().get(j).isActive())
                 {

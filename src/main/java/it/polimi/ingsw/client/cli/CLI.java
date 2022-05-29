@@ -44,20 +44,13 @@ public class CLI extends Visualizer implements Runnable
     private MatchesListAnswer matchesList;
 
     /**
+     * Name of the player.
+     */
+    private String name;
+    /**
      * Used to color the SchoolBoard of the current player.
      */
     private int currentPlayerIndex;
-
-    /**
-     * It is the index of the player who played the assistant with lowest turnOrder the previous turn. In the first round it is the first player
-     * because plays first.
-     */
-    private int bestPreviousPlayerIndex = 0;
-
-    /**
-     * Used to track how many CurrentPlayerUpdate the client has received.
-     */
-    private int currentPlayerUpdatesCounter;
 
     public CLI(Client client)
     {
@@ -513,6 +506,16 @@ public class CLI extends Visualizer implements Runnable
         if (update != null)
         {
             currentPlayerIndex = update.getCurrentPlayerIndex();
+
+            for (String currentName : players.keySet())
+                if (players.get(currentName) == currentPlayerIndex)
+                {
+                    if (name.equals(currentName))
+                        PrintHelper.printMessage("It's your turn");
+                    else PrintHelper.printMessage("It's " + currentName + "'s turn");
+                    break;
+                }
+
             // I need to call it because the current player could have changed
             displayBoard();
         }
@@ -606,6 +609,7 @@ public class CLI extends Visualizer implements Runnable
     public void displaySetName(SetNameAnswer answer)
     {
         PrintHelper.printMessage(answer.toString());
+        this.name = answer.getName();
     }
 
     @Override
@@ -675,7 +679,5 @@ public class CLI extends Visualizer implements Runnable
         schoolBoards.clear();
         matchesList = null;
         currentPlayerIndex = 0;
-        bestPreviousPlayerIndex = 0;
-        currentPlayerUpdatesCounter = 0;
     }
 }

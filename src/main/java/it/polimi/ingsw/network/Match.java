@@ -20,6 +20,7 @@ import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
+import it.polimi.ingsw.protocol.messages.EndTurnMessage;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
 import it.polimi.ingsw.protocol.updates.PlayedAssistantCardUpdate;
 
@@ -68,6 +69,7 @@ public class Match implements Subscriber<ModelUpdate>
             if (!missingPlayers.contains(player.getPlayerName().get()))
             {
                 gameController.addPlayer(player.getPlayerName().get());
+                gameController.setPlayerActive(player.getPlayerName().get(), true);
                 gameController.getGame().getPlayerTableList().stream().filter((p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst()
                         .ifPresent((p) -> p.subscribe(this));
 
@@ -75,6 +77,7 @@ public class Match implements Subscriber<ModelUpdate>
             } else
             {
                 missingPlayers.remove(player.getPlayerName().get());
+                gameController.setPlayerActive(player.getPlayerName().get(), true);
 
                 // Interrupt the timeout
                 Phase currentPhase = gameController.getGameHandler().getGamePhase();
@@ -97,7 +100,6 @@ public class Match implements Subscriber<ModelUpdate>
                 System.out.println("[Match] Previously disconnected player added to the match");
             }
 
-            gameController.setPlayerActive(player.getPlayerName().get(), true);
             return true;
 
         } catch (Exception e)
@@ -154,7 +156,7 @@ public class Match implements Subscriber<ModelUpdate>
             {
                 // If the game isn't in plan phase, the player's turn ends
                 gameController.getGameHandler().setGamePhase(new EndTurnPhase());
-                gameController.getGameHandler().getGamePhase().onValidAction(gameController.getGameHandler());
+                gameController.performAction(new EndTurnMessage(), player.getPlayerName().get());
             }
         }
     }

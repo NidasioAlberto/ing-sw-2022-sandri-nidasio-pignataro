@@ -26,4 +26,9 @@ public class SetNameAnswer extends Answer
     {
         return "[SetNameAnswer] Your nickname is " + name;
     }
+
+    public String getName()
+    {
+        return name;
+    }
 }

@@ -45,7 +45,26 @@ public class SuspendedPhase implements Phase
     @Override
     public void onValidAction(GameActionHandler handler)
     {
-       handler.setGamePhase(previousPhase);
+        // Restore the previous phase
+        handler.setGamePhase(previousPhase);
+
+        if (previousPhase instanceof PlanPhase)
+        {
+            // In plan phase the order is in table order, check that the current player is active
+            if (!handler.getGame().getPlayerTableList().get(handler.getGame().getSelectedPlayerIndex().get()).isActive())
+                // The player is no more active so the game moves on
+                handler.getGamePhase().onValidAction(handler);
+        }
+        else
+        {
+            // Not in plan phase so the order is in sorted order, check that the current player is active
+            if (!handler.getGame().getSortedPlayerList().get(handler.getGame().getSelectedPlayerIndex().get()).isActive())
+            {
+                // The player isn't active so its turn ends
+                handler.setGamePhase(new EndTurnPhase());
+                handler.endTurn();
+            }
+        }
     }
 
     @Override
