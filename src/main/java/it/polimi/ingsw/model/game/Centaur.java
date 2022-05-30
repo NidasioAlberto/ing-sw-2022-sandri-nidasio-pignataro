@@ -180,13 +180,13 @@ public class Centaur extends CharacterCard
                 {
                     // Mother must step back if it is placed after the current island or
                     // if it is on the last island or if the current island is the last one
-                    if (motherNatureIndex.get() > islands.indexOf(currIsland) ||
-                            motherNatureIndex.get() == (islands.size() - 1) ||
-                            islands.indexOf(currIsland) == (islands.size() - 1))
+                    if (instance.motherNatureIndex.get() > instance.islands.indexOf(currIsland) ||
+                            instance.motherNatureIndex.get() == (instance.islands.size() - 1) ||
+                            instance.islands.indexOf(currIsland) == (instance.islands.size() - 1))
                     {
                         // In case of 0 index, mother nature goes to islands.size - 2 because we will remove an island
-                        motherNatureIndex = getMotherNatureIndex().get() == 0 ?
-                                Optional.of(islands.size() - 2) : Optional.of(getMotherNatureIndex().get() - 1);
+                        instance.motherNatureIndex = instance.getMotherNatureIndex().get() == 0 ?
+                                Optional.of(instance.islands.size() - 2) : Optional.of(instance.getMotherNatureIndex().get() - 1);
                     }
 
                     // Merge the two islands and remove one
@@ -208,7 +208,7 @@ public class Centaur extends CharacterCard
                             .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
                 instance.subscriber.get().onNext(
-                        new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+                        new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.motherNatureIndex.get()));
             }
 
             // If there are only 3 islands so the game ends

@@ -546,7 +546,7 @@ public class CLI extends Visualizer implements Runnable
     public void displayMatchesList(MatchesListAnswer answer)
     {
         // Clear the screen
-        PrintHelper.printMR(22, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
         printTitle(2, 2);
 
         matchesList = answer;

@@ -77,7 +77,7 @@ public class MushroomMan extends CharacterCard
             Player selectedPlayer = instance.getSelectedPlayer()
                     .orElseThrow(() -> new NoSelectedPlayerException("[MushroomMan]"));
             if (selectedPlayer.getSelectedColors().size() != 1)
-                throw new NoSelectedStudentsException("[MushroomMan]");
+                throw new NoSelectedColorException("[MushroomMan]");
 
             color = selectedPlayer.getSelectedColors().get(0);
         }
@@ -100,18 +100,19 @@ public class MushroomMan extends CharacterCard
         if (player == null)
             throw new NullPointerException("[MushroomMan] player null");
 
-        if (color == null)
-            throw new NoSelectedColorException("[MushroomMan]");
-
         Island currentIsland = instance.islands.get(island);
 
         // Compute the influence of this player from students
         int influence = player.getBoard().getProfessors().stream().map((p) -> {
             // Effect of the card: the selected color adds no influence
-            if (p.getColor() != color)
-                return currentIsland.getStudentsByColor(p.getColor());
-            else
-                return 0;
+            if (color != null)
+            {
+                if (p.getColor() != color)
+                    return currentIsland.getStudentsByColor(p.getColor());
+                else
+                    return 0;
+            }
+            else return currentIsland.getStudentsByColor(p.getColor());
         }).reduce(0, Integer::sum);
 
         // Add the influence from the towers
@@ -213,13 +214,13 @@ public class MushroomMan extends CharacterCard
                 {
                     // Mother must step back if it is placed after the current island or
                     // if it is on the last island or if the current island is the last one
-                    if (motherNatureIndex.get() > islands.indexOf(currIsland) ||
-                            motherNatureIndex.get() == (islands.size() - 1) ||
-                            islands.indexOf(currIsland) == (islands.size() - 1))
+                    if (instance.motherNatureIndex.get() > instance.islands.indexOf(currIsland) ||
+                            instance.motherNatureIndex.get() == (instance.islands.size() - 1) ||
+                            instance.islands.indexOf(currIsland) == (instance.islands.size() - 1))
                     {
                         // In case of 0 index, mother nature goes to islands.size - 2 because we will remove an island
-                        motherNatureIndex = getMotherNatureIndex().get() == 0 ?
-                                Optional.of(islands.size() - 2) : Optional.of(getMotherNatureIndex().get() - 1);
+                        instance.motherNatureIndex = instance.getMotherNatureIndex().get() == 0 ?
+                                Optional.of(instance.islands.size() - 2) : Optional.of(instance.getMotherNatureIndex().get() - 1);
                     }
 
                     // Merge the two islands and remove one
@@ -241,7 +242,7 @@ public class MushroomMan extends CharacterCard
                             .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
                 instance.subscriber.get().onNext(
-                        new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
+                        new IslandsUpdate(new ArrayList<Island>(instance.islands), motherNatureIndex.get()));
             }
 
             // If there are only 3 islands so the game ends

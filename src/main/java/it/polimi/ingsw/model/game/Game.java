@@ -848,11 +848,18 @@ public class Game implements Publisher<ModelUpdate>
                 List<CharacterCard> characterCardsList = new ArrayList<>();
 
                 for (CharacterCard card : characterCards)
+                {
                     // I clone all the character card to avoid serializing the game instance
                     characterCardsList.add((CharacterCard) card.clone());
+                }
 
                 subscriber.get().onNext(new CharacterCardsUpdate(new ArrayList<CharacterCard>(characterCardsList)));
-                //TODO forse va mandata anche la CharacterCardPayloadUpdate
+
+                for (CharacterCard card : characterCards)
+                {
+                    // I update also all the character cards payload
+                    card.notifySubscriber();
+                }
             }
         }
     }

@@ -104,7 +104,7 @@ public class PlayerConnection implements Runnable
         watchdogTask = Executors.newCachedThreadPool().submit(() -> {
             try
             {
-                Thread.sleep(1500);
+                Thread.sleep(3000);
                 System.out.println("Player connection timed out!");
                 sendAnswer(new EndMatchAnswer("Connection timed out"));
                 close();

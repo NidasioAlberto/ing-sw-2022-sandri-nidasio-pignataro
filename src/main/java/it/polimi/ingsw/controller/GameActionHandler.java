@@ -229,15 +229,19 @@ public class GameActionHandler
         if (game.getCurrentCharacterCard().isPresent())
             throw new InvalidCharacterCardException("[GameActionHandler] A character card was already played");
 
+        if (selectedCharacterCard < 0 || selectedCharacterCard >= game.getCharacterCards().size())
+            throw new InvalidCharacterCardException("[GameActionHandler] There isn't a card with such index");
+
         // Select the card
         game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
 
         // I select the character card if the card is playable and no card has already been played
-        if (game.getCharacterCards().get(selectedCharacterCard).isPlayable() && game.getCurrentCharacterCard().isEmpty())
+        if (game.getCharacterCards().get(selectedCharacterCard).isPlayable())
         {
             game.setCurrentCharacterCard(selectedCharacterCard);
             game.getCharacterCards().get(selectedCharacterCard).activate();
         }
+        else throw new InvalidCharacterCardException("[GameActionHandler] This card is not playable right now");
         // IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD'S PLAY
     }
 
