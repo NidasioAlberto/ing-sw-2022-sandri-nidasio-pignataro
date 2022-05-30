@@ -234,7 +234,7 @@ public class Controller
             sendError(getCurrentPlayer().getNickname(), e.getMessage());
         } catch (InvalidCharacterCardException e)
         {
-            sendError(getCurrentPlayer().getNickname(), "You can't play two character cards in the same turn.");
+            sendError(getCurrentPlayer().getNickname(), e.getMessage());
         } catch (InvalidAssistantCardException e)
         {
             sendError(getCurrentPlayer().getNickname(),

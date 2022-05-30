@@ -191,9 +191,9 @@ public class MinstrelTest
         // I need to activate the card another time
         minstrel.activated = true;
 
-        // When i ask for a normal action, the card should deactivate
-        assertEquals(true, minstrel.isValidAction(ExpertGameAction.BASE_ACTION));
-        assertEquals(false, minstrel.isActivated());
+        // When i ask for a normal action, the action is not valid
+        assertEquals(false, minstrel.isValidAction(ExpertGameAction.BASE_ACTION));
+        assertEquals(true, minstrel.isActivated());
     }
 
     @Test

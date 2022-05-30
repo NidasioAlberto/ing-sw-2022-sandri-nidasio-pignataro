@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.answers;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 
 import java.io.Serial;
 
@@ -28,7 +28,7 @@ public class ErrorAnswer extends Answer
     }
 
     @Override
-    public void handleAnswer(Visualizer handler)
+    public void handleAnswer(Visualizable handler)
     {
         handler.displayError(this);
     }

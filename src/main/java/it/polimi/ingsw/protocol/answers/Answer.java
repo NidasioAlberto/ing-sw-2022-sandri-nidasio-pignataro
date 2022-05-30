@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.answers;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,5 +15,5 @@ public abstract class Answer implements Serializable
      *
      * @param handler The handler class to modify client side
      */
-    public abstract void handleAnswer(Visualizer handler);
+    public abstract void handleAnswer(Visualizable handler);
 }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GrandmaHerbs;
@@ -86,7 +86,7 @@ public class CharacterCardPayloadUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Visualizer handler)
+    public void handleUpdate(Visualizable handler)
     {
         handler.displayCharacterCardPayload(this);
     }

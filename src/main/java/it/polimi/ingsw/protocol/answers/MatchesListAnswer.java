@@ -4,7 +4,7 @@ import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.network.Match;
 
@@ -75,7 +75,7 @@ public class MatchesListAnswer extends Answer
         return str;
     }
     @Override
-    public void handleAnswer(Visualizer handler)
+    public void handleAnswer(Visualizable handler)
     {
         handler.displayMatchesList(this);
     }

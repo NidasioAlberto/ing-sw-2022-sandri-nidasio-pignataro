@@ -27,7 +27,7 @@ public class Client implements Runnable
 
     private ObjectInputStream inputStream;
 
-    private Visualizer visualizer;
+    private Visualizable visualizer;
 
     private boolean active = false;
 
@@ -47,7 +47,7 @@ public class Client implements Runnable
         this.port = port;
     }
 
-    public void setVisualizer(Visualizer visualizer)
+    public void setVisualizer(Visualizable visualizer)
     {
         this.visualizer = visualizer;
     }

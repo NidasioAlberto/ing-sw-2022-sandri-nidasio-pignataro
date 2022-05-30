@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.GameMode;
@@ -16,7 +16,7 @@ import it.polimi.ingsw.protocol.commands.*;
 import it.polimi.ingsw.protocol.messages.*;
 import it.polimi.ingsw.protocol.updates.*;
 
-public class CLI extends Visualizer implements Runnable
+public class CLI implements Visualizable, Runnable
 {
     ExecutorService executor;
 
@@ -43,6 +43,8 @@ public class CLI extends Visualizer implements Runnable
 
     private MatchesListAnswer matchesList;
 
+    private Client client;
+
     /**
      * Name of the player.
      */
@@ -54,7 +56,7 @@ public class CLI extends Visualizer implements Runnable
 
     public CLI(Client client)
     {
-        super(client);
+        this.client = client;
 
         executor = Executors.newCachedThreadPool();
 
@@ -170,6 +172,7 @@ public class CLI extends Visualizer implements Runnable
                 GameMode gameMode = GameMode.valueOf(scanner.nextLine());
                 PrintHelper.print("Players number [2-3]: ");
                 int playersNumber = Integer.parseInt(scanner.nextLine());
+                PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 client.sendCommand(new CreateMatchCommand(matchId, playersNumber, gameMode));
                 break;
             }
@@ -233,7 +236,9 @@ public class CLI extends Visualizer implements Runnable
         {
             case 1:
             {
-                PrintHelper.print("Selected card: ");
+                PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.moveCursorRelative(0, 1);
+                PrintHelper.print("Selected card:\n");
                 int selectedCard = Integer.parseInt(scanner.nextLine());
                 client.sendAction(new PlayAssistantCardMessage(selectedCard));
                 break;
@@ -259,7 +264,9 @@ public class CLI extends Visualizer implements Runnable
             }
             case 5:
             {
-                PrintHelper.print("Selected cloud tile: ");
+                PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.moveCursorRelative(0, 1);
+                PrintHelper.print("Select cloud tile:\n");
                 int selectedCloudTile = Integer.parseInt(scanner.nextLine());
                 client.sendAction(new SelectCloudTileMessage(selectedCloudTile));
                 break;
@@ -271,7 +278,9 @@ public class CLI extends Visualizer implements Runnable
             }
             case 7:
             {
-                PrintHelper.print("Selected character card: ");
+                PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.moveCursorRelative(0, 1);
+                PrintHelper.print("Selected character card:\n");
                 int selectedCharacterCard = Integer.parseInt(scanner.nextLine());
                 client.sendAction(new PlayCharacterCardMessage(selectedCharacterCard));
                 break;
@@ -280,15 +289,17 @@ public class CLI extends Visualizer implements Runnable
             {
                 PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print("If you don't have to select an island nor colors choose 'Base action'\n");
-                PrintHelper.print("Expert game action:\n");
+                PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Expert game action:\n");
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
                     PrintHelper.print("\t" + i + " - " + ExpertGameAction.values()[i] + "\n");
                 int action = Integer.parseInt(scanner.nextLine());
                 if (action < 0 || action >= ExpertGameAction.values().length)
                     break;
-                PrintHelper.print("If you don't need to select an island just type '0'\n");
+                PrintHelper.printMR(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printMR(26, 2, "If you don't need to select an island just type '0'\n");
                 int selectedIsland = selectIsland(scanner);
-                PrintHelper.print("If you don't need to select a color just type '0'\n");
+                PrintHelper.printMR(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printMR(26, 2, "If you don't need to select a color just type '0'\n");
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
                 client.sendAction(new CharacterCardActionMessage(ExpertGameAction.values()[action], selectedIsland, selectedColors));
                 break;
@@ -329,8 +340,8 @@ public class CLI extends Visualizer implements Runnable
 
     private SchoolColor selectSchoolColors(Scanner scanner)
     {
-        PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
-        String msg = "";
+        PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        String msg = PrintHelper.moveCursorRelative(0, 1);
         msg += "Choose a color:\n";
         for (int i = 0; i < SchoolColor.values().length; i++)
             msg += "\t" + i + " - " + SchoolColor.values()[i] + "\n";
@@ -341,8 +352,10 @@ public class CLI extends Visualizer implements Runnable
 
     private int selectIsland(Scanner scanner)
     {
-
-        PrintHelper.print("Selected island: ");
+        PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        String msg = PrintHelper.moveCursorRelative(0, 1);
+        msg += "Select island:\n";
+        PrintHelper.print(msg);
         return Integer.parseInt(scanner.nextLine());
     }
 

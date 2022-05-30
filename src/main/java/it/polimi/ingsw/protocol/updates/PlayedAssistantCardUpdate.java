@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.model.*;
 
 import java.io.Serial;
@@ -48,7 +48,7 @@ public class PlayedAssistantCardUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Visualizer handler)
+    public void handleUpdate(Visualizable handler)
     {
         handler.displayPlayedAssistantCard(this);
     }

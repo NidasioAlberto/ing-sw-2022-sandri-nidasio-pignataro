@@ -52,6 +52,7 @@ public class Minstrel extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
+        // I accept only up to 2 SWAP_STUDENT_FROM_ENTRANCE_TO_DINING
         if (action == ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_DINING)
         {
             if (exchangeCounter < 2)
@@ -60,11 +61,7 @@ public class Minstrel extends CharacterCard
             }
         }
 
-        // If he wants to do something different i can deactivate the card
-        this.deactivate();
-
-        // And accept if the action is a base action
-        return action == ExpertGameAction.BASE_ACTION;
+        return false;
     }
 
     /**

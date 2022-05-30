@@ -228,7 +228,7 @@ public class Island implements Serializable
     }
 
     /**
-     * Draws a 5x10 representation of the island.
+     * Draws a 4x10 representation of the island.
      */
     @Override
     public String toString()

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.Island;
@@ -59,7 +59,7 @@ public class IslandsUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Visualizer handler)
+    public void handleUpdate(Visualizable handler)
     {
         handler.displayIslands(this);
     }
@@ -98,8 +98,8 @@ public class IslandsUpdate extends ModelUpdate
         }
 
         // Draw mother nature
-        rep += PrintHelper.moveCursorRelative(-3, -4 - islands.size() * 11);
-        rep += PrintHelper.moveCursorRelative(0, motherNatureIndex * 12);
+        rep += PrintHelper.moveToBeginningOfLine(-3);
+        rep += PrintHelper.moveCursorRelative(0, 9 + motherNatureIndex * 12);
         rep += GamePieces.MOTHER_NATURE.toString();
         rep += PrintHelper.moveToBeginningOfLine(-2);
 
