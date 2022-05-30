@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.IslandType;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
@@ -15,6 +16,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.List;
 
@@ -134,8 +136,14 @@ public class DrawableIsland extends DrawableObject
         });
 
         box.setOnMouseDragReleased((event) -> {
-            System.out.println(event.getEventType());
+            //System.out.println(event.getEventType());
             material.setDiffuseColor(Color.color(1, 1, 1, 1));
+
+            // Set the dropped on item
+            ActionTranslator.getInstance().setDroppedOnItem("Island");
+
+            // Send the message
+            ActionTranslator.getInstance().execute();
         });
     }
 

@@ -1,12 +1,12 @@
 package it.polimi.ingsw.client.gui;
 
+import it.polimi.ingsw.client.gui.objects.types.StudentType;
+import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.messages.PlayAssistantCardMessage;
 
 import java.sql.PseudoColumnUsage;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -20,64 +20,237 @@ import java.util.function.Predicate;
  */
 public class ActionTranslator
 {
-    private final Map<String, Consumer<String>> lookupMap;
+    // Singleton instance
+    private static ActionTranslator instance;
+
+    /**
+     * Map of all the possible actions mapped with their corresponding functions
+     */
+    private final Map<String, Map<String, Runnable>> lookupMap;
+
+    /**
+     * The two actors that determine the behaviour
+     */
+    private String draggedItem;
+    private String droppedOnItem;
+
+    /**
+     * All the possible registered data
+     */
+    private List<SchoolColor> selectedColors;
+    private int selectedIsland;
+    private int selectedCard;
+    private int selectedCloudTile;
 
     /**
      * Private constructor for singleton purposes
      */
     private ActionTranslator()
     {
+        // Create and initialize all the selected stuff
+        selectedColors = new ArrayList<>();
+        selectedIsland = -1;
+        selectedCard = -1;
+        selectedCloudTile = -1;
+
+        draggedItem = "";
+        droppedOnItem = "";
+
         // Create and initialize the map with all the possible actions
         lookupMap = new HashMap<>();
 
-        lookupMap.put("AssistantCard", (secondObject) -> playAssistantCard(secondObject));
-        lookupMap.put("Student", (secondObject) -> moveStudent(secondObject));
-        lookupMap.put("Island", (secondObject) -> selectIsland(secondObject));
-        lookupMap.put("NoEntry", (secondObject) -> moveNoEntry(secondObject));
-        lookupMap.put("MotherNature", (secondObject) -> moveMotherNature(secondObject));
-        lookupMap.put("CloutTile", (secondObject) -> selectCloudTile(secondObject));
-        lookupMap.put("CharacterCard", (secondObject) -> playCharacterCard(secondObject));
+        // Create all the situations
+        lookupMap.put("Student", new HashMap<>());
+        lookupMap.get("Student").put("Island", () -> moveStudentToIsland());
+        lookupMap.get("Student").put("Dining", () -> moveStudentToDining());
+        lookupMap.get("Student").put("Student", () -> swapStudentFromEntranceToDining());
+        lookupMap.get("Student").put("", () -> selectColor());
 
+        lookupMap.put("CharacterStudent", new HashMap<>());
+        lookupMap.get("CharacterStudent").put("Island", () -> moveStudentFromCharacterCardToIsland());
+        lookupMap.get("CharacterStudent").put("Entrance", () -> swapStudentFromCharacterCardToEntrance());
+        lookupMap.get("CharacterStudent").put("Dining", () -> moveStudentFromCharacterCardToDining());
+
+        lookupMap.put("AssistantCard", new HashMap<>());
+        lookupMap.get("AssistantCard").put("", () -> playAssistantCard());
+        
+        lookupMap.put("MotherNature", new HashMap<>());
+        lookupMap.get("MotherNature").put("Island", () -> moveMotherNature());
+
+        lookupMap.put("CloudTile", new HashMap<>());
+        lookupMap.get("CloudTile").put("", () -> selectCloudTile());
+
+        lookupMap.put("CharacterCard", new HashMap<>());
+        lookupMap.get("CharacterCard").put("", () -> playCharacterCard());
+        
+        lookupMap.put("NoEntryTile", new HashMap<>());
+        lookupMap.get("NoEntryTile").put("Island", () -> moveNoEntryFromCharacterCardToIsland());
+
+        lookupMap.put("Island", new HashMap<>());
+        lookupMap.get("Island").put("", () -> selectIsland());
     }
 
-    private void playAssistantCard(String secondObject)
+    public void setDraggedItem(String draggedItem)
     {
-
+        if(draggedItem == null)
+            throw new NullPointerException("[ActionTranslator] Null dragged item");
+        this.draggedItem = draggedItem;
     }
 
-    private void moveStudent(String secondObject)
+    public void setDroppedOnItem(String droppedOnItem)
     {
-
+        if(droppedOnItem == null)
+            throw new NullPointerException("[ActionTranslator] Null dropped on item");
+        this.droppedOnItem = droppedOnItem;
     }
 
-    public void selectIsland(String secondObject)
-
+    /**
+     * Method to act the corresponding function
+     */
+    public void execute()
     {
+        // Check the strings
+        if(draggedItem != null && droppedOnItem != null)
+            Objects.requireNonNull(lookupMap.get(draggedItem).get(droppedOnItem)).run();
 
+        // At the end i clear all the selections
+        clear();
     }
 
-    private void moveNoEntry(String secondObject)
+    /**
+     * Method to clear all the selections
+     */
+    public void clear()
     {
+        // Clear all the selections
+        selectedColors.clear();
+        selectedCloudTile = -1;
+        selectedCard = -1;
+        selectedIsland = -1;
 
+        // Clear also the selection strings
+        draggedItem = "";
+        droppedOnItem = "";
     }
 
-    private void moveMotherNature(String secondObject)
+    /**
+     * PARAMETER SET METHODS
+     */
+    public void selectColor(SchoolColor color)
     {
+        if(color == null)
+            throw new NullPointerException("[ActionTranslator] Null school color");
 
+        selectedColors.add(color);
     }
 
-    private void selectCloudTile(String secondObject)
+    public void selectIsland(int island)
     {
+        if(island < 0)
+            throw new IllegalArgumentException("[ActionTranslator] Illegal island selection");
 
+        selectedIsland = island;
     }
 
-    private void playCharacterCard(String secondObject)
+    public void selectCard(int card)
     {
+        if(card < 0)
+            throw new IllegalArgumentException("[ActionTranslator] Illegal card selection");
 
+        selectedCard = card;
     }
 
+    public void selectCloudTile(int cloud)
+    {
+        if(cloud < 0)
+            throw new IllegalArgumentException("[ActionTranslator] Illegal cloud tile selection");
+
+        selectedCloudTile = cloud;
+    }
+
+    /**
+     * ACTION METHODS
+     */
+    private void moveStudentToIsland()
+    {
+        System.out.println("Move student to island");
+    }
+
+    private void moveStudentToDining()
+    {
+        System.out.println("Move student to dining");
+    }
+
+    private void swapStudentFromEntranceToDining()
+    {
+        System.out.println("Swap student from entrance to dining");
+    }
+
+    private void selectColor()
+    {
+        System.out.println("Select color");
+    }
+
+    private void moveStudentFromCharacterCardToIsland()
+    {
+        System.out.println("Move student from character card to island");
+    }
+
+    private void swapStudentFromCharacterCardToEntrance()
+    {
+        System.out.println("Swap student from character card to entrance");
+    }
+
+    private void moveStudentFromCharacterCardToDining()
+    {
+        System.out.println("Move student from character card to dining");
+    }
+
+    private void playAssistantCard()
+    {
+        System.out.println("Play assistant card");
+    }
+
+    private void moveMotherNature()
+    {
+        System.out.println("MOve mother nature");
+    }
+
+    private void selectCloudTile()
+    {
+        System.out.println("Select cloud tile");
+    }
+
+    private void playCharacterCard()
+    {
+        System.out.println("Play character card");
+    }
+
+    private void moveNoEntryFromCharacterCardToIsland()
+    {
+        System.out.println("Move no entry tile from character card to island");
+    }
+
+    private void selectIsland()
+    {
+        System.out.println("Select island");
+    }
+
+    /**
+     * The only public function. It is called by the end Turn button
+     */
     public void endTurn()
     {
 
+    }
+
+    /**
+     * Static method to get the singleton instance
+     */
+    public static ActionTranslator getInstance()
+    {
+        if(instance == null)
+            instance = new ActionTranslator();
+        return instance;
     }
 }

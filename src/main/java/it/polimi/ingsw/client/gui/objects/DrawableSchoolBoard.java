@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.ProfessorType;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
@@ -116,8 +117,22 @@ public class DrawableSchoolBoard extends DrawableObject
         box.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
 
-        // Set the node to mouse transparent
+        // Set the node to mouse visible
         box.setMouseTransparent(false);
+
+        // Set the mouse drag released checking if the area is dining or entrance
+        box.setOnMouseMoved((event) -> {
+            if(event.getX() >= box.getTranslateX() - X_DIMENSION / 2 &&
+            event.getX() <= box.getTranslateX() - X_DIMENSION * 4 / 10 &&
+            event.getY() >= box.getTranslateZ() - Y_DIMENSION / 2 &&
+            event.getX() <= box.getTranslateZ() + Y_DIMENSION / 2)
+                System.out.println("Entrance");
+            else
+                System.out.println("Fuori");
+
+            // Send the message
+            // ActionTranslator.getInstance().execute();
+        });
 
         // At the end if the updater != null i add the box to it
         if(this.updater != null)

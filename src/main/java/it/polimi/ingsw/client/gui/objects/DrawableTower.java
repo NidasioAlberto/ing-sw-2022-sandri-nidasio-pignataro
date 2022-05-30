@@ -75,30 +75,6 @@ public class DrawableTower extends DrawableObject
         // Set in general the object to mouse transparent
         towerMesh.setMouseTransparent(false);
 
-        towerMesh.setOnDragDetected((event) ->{
-            offsetPosX = event.getX();
-            offsetPosZ = event.getZ();
-            posX = towerMesh.getTranslateX();
-            posZ = towerMesh.getTranslateZ();
-            towerMesh.setMouseTransparent(true);
-            towerMesh.setCursor(Cursor.MOVE);
-            towerMesh.startFullDrag();
-
-        });
-
-        towerMesh.setOnMouseDragged((event) -> {
-            towerMesh.setMouseTransparent(true);
-            posX = event.getX() - offsetPosX;
-            posZ = event.getZ() - offsetPosZ;
-            //this.addAnimationPosition(new Point3D(posX, 0, posZ), 100);
-            this.translate(new Point3D(towerMesh.getTranslateX() + posX, 0, towerMesh.getTranslateZ() + posZ));
-        });
-
-        towerMesh.setOnMouseReleased((event) -> {
-            towerMesh.setCursor(Cursor.DEFAULT);
-            towerMesh.setMouseTransparent(false);
-        });
-
         // At the end if the updater != null i add the box to it
         if(this.updater != null)
             this.updater.subscribeObject(this);

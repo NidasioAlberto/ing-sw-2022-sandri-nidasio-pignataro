@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import javafx.geometry.Point3D;
@@ -92,6 +93,9 @@ public class DrawableStudent extends DrawableObject
             studentMesh.setMouseTransparent(true);
             studentMesh.setCursor(Cursor.MOVE);
             studentMesh.startFullDrag();
+
+            // Set the dragged element on the action translator
+            ActionTranslator.getInstance().setDraggedItem("Student");
         });
 
         studentMesh.setOnMouseDragged((event) -> {
