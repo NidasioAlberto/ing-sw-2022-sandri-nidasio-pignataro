@@ -132,7 +132,7 @@ public class Match implements Subscriber<ModelUpdate>
         {
             GameActionHandler handler = gameController.getGameHandler();
             players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
-                    "if no other player reconnects before 1 minute you will win"));
+                    " if no other player reconnects before 1 minute you will win"));
             handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
         }
         // If the disconnected player was the current player, its turn ends

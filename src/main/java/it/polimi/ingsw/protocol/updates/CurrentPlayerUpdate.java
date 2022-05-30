@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 
 import java.io.Serial;
 
@@ -20,7 +20,7 @@ public class CurrentPlayerUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Visualizer handler)
+    public void handleUpdate(Visualizable handler)
     {
         handler.setCurrentPlayer(this);
     }

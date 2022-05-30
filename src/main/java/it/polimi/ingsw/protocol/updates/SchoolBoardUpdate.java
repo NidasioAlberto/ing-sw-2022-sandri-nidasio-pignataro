@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.cli.utils.GamePieces;
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
 import it.polimi.ingsw.model.*;
@@ -62,7 +62,7 @@ public class SchoolBoardUpdate extends ModelUpdate
     }
 
     @Override
-    public void handleUpdate(Visualizer handler)
+    public void handleUpdate(Visualizable handler)
     {
         handler.displaySchoolboard(this);
     }

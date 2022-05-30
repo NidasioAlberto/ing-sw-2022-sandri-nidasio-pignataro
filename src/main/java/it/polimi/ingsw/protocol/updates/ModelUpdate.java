@@ -1,6 +1,6 @@
 package it.polimi.ingsw.protocol.updates;
 
-import it.polimi.ingsw.client.Visualizer;
+import it.polimi.ingsw.client.Visualizable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -47,7 +47,7 @@ public abstract class ModelUpdate implements Serializable
      * 
      * @param handler The handler class to modify client side
      */
-    public abstract void handleUpdate(Visualizer handler);
+    public abstract void handleUpdate(Visualizable handler);
 
     public Optional<String> getPlayerDestination()
     {

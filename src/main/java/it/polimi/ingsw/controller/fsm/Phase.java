@@ -23,6 +23,6 @@ public interface Phase
      * This method decides based on the actual state if the arrived action should be executed or
      * not.
      */
-    public boolean isLegitAction(GameActionHandler handler, String playerName,
+     boolean isLegitAction(GameActionHandler handler, String playerName,
             BaseGameAction baseAction);
 }
