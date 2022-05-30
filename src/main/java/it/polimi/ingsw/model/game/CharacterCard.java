@@ -382,6 +382,11 @@ public abstract class CharacterCard extends Game implements Serializable
         return instance.getMotherNatureIndex();
     }
 
+    public void setCurrentPlayerIndexByTable(int currentPlayerIndexByTable)
+    {
+        instance.setCurrentPlayerIndexByTable(currentPlayerIndexByTable);
+    }
+
     public int getPlayersNumber()
     {
         return instance.getPlayersNumber();
@@ -390,6 +395,11 @@ public abstract class CharacterCard extends Game implements Serializable
     public GameMode getGameMode()
     {
         return instance.getGameMode();
+    }
+
+    public void notifyPlayers()
+    {
+        instance.notifyPlayers();
     }
 
     public static CharacterCard createCharacterCard(CharacterCardType type, Game game) throws NullPointerException

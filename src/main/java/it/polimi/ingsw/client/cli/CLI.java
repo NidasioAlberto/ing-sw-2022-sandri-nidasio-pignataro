@@ -288,7 +288,8 @@ public class CLI extends Visualizer implements Runnable
                     break;
                 PrintHelper.print("If you don't need to select an island just type '0'\n");
                 int selectedIsland = selectIsland(scanner);
-                PrintHelper.print("If you don't need to select a color just type '0'\n");
+                PrintHelper.printMR(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printMR(26, 2, "If you don't need to select a color just type '0'\n");
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
                 client.sendAction(new CharacterCardActionMessage(ExpertGameAction.values()[action], selectedIsland, selectedColors));
                 break;
@@ -329,7 +330,7 @@ public class CLI extends Visualizer implements Runnable
 
     private SchoolColor selectSchoolColors(Scanner scanner)
     {
-        PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        PrintHelper.printM(27, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
         msg += "Choose a color:\n";
         for (int i = 0; i < SchoolColor.values().length; i++)

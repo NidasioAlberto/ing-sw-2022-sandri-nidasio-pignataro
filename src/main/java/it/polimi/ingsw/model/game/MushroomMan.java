@@ -58,9 +58,9 @@ public class MushroomMan extends CharacterCard
          * accept the color selection and, once it is selected, you have to accept only base
          * commands
          */
-        // If it is activated I accept only the SELECT_COLOR action once and after only base actions
+        // If it is activated I accept only the SELECT_COLOR action once and only base actions
         return (action == ExpertGameAction.SELECT_COLOR && color == null)
-                || (action == ExpertGameAction.BASE_ACTION && color != null);
+                || (action == ExpertGameAction.BASE_ACTION);
     }
 
     @Override
@@ -242,7 +242,7 @@ public class MushroomMan extends CharacterCard
                             .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
                 instance.subscriber.get().onNext(
-                        new IslandsUpdate(new ArrayList<Island>(instance.islands), motherNatureIndex.get()));
+                        new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.motherNatureIndex.get()));
             }
 
             // If there are only 3 islands so the game ends

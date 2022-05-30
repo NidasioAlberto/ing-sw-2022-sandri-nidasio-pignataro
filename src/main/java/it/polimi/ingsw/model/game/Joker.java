@@ -16,6 +16,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Character card Joker. Effect: You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.
@@ -95,21 +96,16 @@ public class Joker extends CharacterCard
     @Override
     public boolean isValidAction(ExpertGameAction action)
     {
+        // I accept only up to 3 SWAP_STUDENT_FROM_CARD_TO_ENTRANCE
         if (action == ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD)
         {
-            // If it is activated I accept the
-            // SWAP_STUDENT_FROM_CHARACTER_CARD_TO_ENTRANCE
             if (exchangeCounter < 3)
             {
                 return true;
             }
         }
 
-        // If he wants to do something different i can deactivate the card
-        this.deactivate();
-
-        // And accept if the action is a base action
-        return action == ExpertGameAction.BASE_ACTION;
+        return false;
     }
 
     /**
@@ -136,14 +132,25 @@ public class Joker extends CharacterCard
         Student entranceStudent = instance.pickStudentFromEntrance();
 
         // Get the selected student from the card
-        Student cardStudent = students.stream().filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst()
-                .orElseThrow(() -> new NoSuchStudentOnCardException("[Joker]"));
+        Optional<Student> cardStudent = students.stream().filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst();
+
+        // If the selected student is not present on the card an exception is thrown and the student is replaced in the entrance
+        if (cardStudent.isEmpty())
+        {
+            currentPlayer.getBoard().addStudentToEntrance(entranceStudent);
+            if (instance.subscriber.isPresent())
+            {
+                instance.subscriber.get()
+                            .onNext(new SchoolBoardUpdate(currentPlayer.getBoard(), currentPlayer.getNickname(), instance.players.indexOf(currentPlayer)));
+            }
+            throw new NoSuchStudentOnCardException("[Joker]");
+        }
 
         // Remove the cardStudent from the card
-        students.remove(cardStudent);
+        students.remove(cardStudent.get());
 
         // Add the cardStudent to the entrance
-        currentPlayer.getBoard().addStudentToEntrance(cardStudent);
+        currentPlayer.getBoard().addStudentToEntrance(cardStudent.get());
 
         // Add the entranceStudent to the card
         students.add(entranceStudent);

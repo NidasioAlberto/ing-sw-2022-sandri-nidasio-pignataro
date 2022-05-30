@@ -227,21 +227,19 @@ public class GameActionHandler
             throw new NoLegitActionException();
 
         if (game.getCurrentCharacterCard().isPresent())
-            throw new InvalidCharacterCardException("[GameActionHandler] A character card was already played");
+            throw new InvalidCharacterCardException("A character card was already played");
 
         if (selectedCharacterCard < 0 || selectedCharacterCard >= game.getCharacterCards().size())
-            throw new InvalidCharacterCardException("[GameActionHandler] There isn't a card with such index");
+            throw new InvalidCharacterCardException("There isn't a card with such index");
 
-        // Select the card
-        game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
-
-        // I select the character card if the card is playable and no card has already been played
+        // Select the card if playable
         if (game.getCharacterCards().get(selectedCharacterCard).isPlayable())
         {
+            game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
             game.setCurrentCharacterCard(selectedCharacterCard);
             game.getCharacterCards().get(selectedCharacterCard).activate();
         }
-        else throw new InvalidCharacterCardException("[GameActionHandler] This card is not playable right now");
+        else throw new InvalidCharacterCardException("This card is not playable right now");
         // IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD'S PLAY
     }
 
@@ -267,8 +265,7 @@ public class GameActionHandler
         // If the action is valid i execute the action
         if (currentCard.isValidAction(action))
             currentCard.applyAction();
-        else
-            throw new NoLegitActionException();
+        else throw new NoLegitActionException();
 
         // Clear the selections
         game.getSelectedPlayer().get().clearSelections();
@@ -278,6 +275,13 @@ public class GameActionHandler
     {
         // If the current card is activated i can apply the action
         checkIfCharacterCardIsStillApplicable();
+
+        if (game.getGameMode() == GameMode.EXPERT)
+        {
+            // If a card is active I take the real instance
+            if (game.getCurrentCharacterCard().isPresent() && game.getCurrentCharacterCard().get().isActivated())
+                game = game.getCurrentCharacterCard().get().getInstance();
+        }
 
         // Clear the selections and disable any character card
         game.getSelectedPlayer().get().clearSelectionsEndTurn();

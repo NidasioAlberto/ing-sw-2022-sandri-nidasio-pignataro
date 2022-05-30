@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSelectedColorException;
 import it.polimi.ingsw.model.exceptions.NoSelectedStudentsException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
@@ -149,10 +150,10 @@ public class MushroomManTest
     @Test
     public void isValidActionTest()
     {
-        // I need to verify that only the color selection action is valid with no selected color
+        // I need to verify that only the color selection action and the base action are valid with no selected color
         for (ExpertGameAction action : ExpertGameAction.values())
         {
-            if (action == ExpertGameAction.SELECT_COLOR)
+            if (action == ExpertGameAction.SELECT_COLOR || action == ExpertGameAction.BASE_ACTION)
                 assertEquals(true, mushroomMan.isValidAction(action));
             else
                 assertEquals(false, mushroomMan.isValidAction(action));
@@ -186,7 +187,7 @@ public class MushroomManTest
         mushroomMan.activated = true;
 
         // I expect to receive a NoSelectedStudentsException because of no selected student color
-        assertThrows(NoSelectedStudentsException.class, () -> mushroomMan.applyAction());
+        assertThrows(NoSelectedColorException.class, () -> mushroomMan.applyAction());
 
         // So i select the color and apply the action
         player1.selectColor(SchoolColor.RED);
@@ -214,8 +215,6 @@ public class MushroomManTest
         assertThrows(IndexOutOfBoundsException.class,
                 () -> mushroomMan.computePlayerInfluence(player1, 20));
         assertThrows(NullPointerException.class, () -> mushroomMan.computePlayerInfluence(null, 0));
-        assertThrows(NoSuchElementException.class,
-                () -> mushroomMan.computePlayerInfluence(player1, 0));
         mushroomMan.activated = false;
 
         // I setup the bench

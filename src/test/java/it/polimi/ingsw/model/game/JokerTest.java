@@ -181,9 +181,9 @@ public class JokerTest
         // I need to activate the card another time
         joker.activated = true;
 
-        // When i ask for a normal action, the card should deactivate
-        assertEquals(true, joker.isValidAction(ExpertGameAction.BASE_ACTION));
-        assertEquals(false, joker.isActivated());
+        // When i ask for a normal action, the action is not valid
+        assertEquals(false, joker.isValidAction(ExpertGameAction.BASE_ACTION));
+        assertEquals(true, joker.isActivated());
     }
 
     @Test
