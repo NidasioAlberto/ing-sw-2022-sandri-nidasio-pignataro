@@ -99,6 +99,23 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
+     * Remove a player from the game if not started yet.
+     *
+     * @param playerName of the player to remove.
+     */
+    public void removePlayer(String playerName)
+    {
+        // Check the game hasn't started yet and there is at least one player
+        if (players.size() < playersNumber && players.size() > 0)
+        {
+            // Find the player to remove and remove it or throw an exception
+            Player playerToRemove = players.stream().filter(player -> player.getNickname().equals(playerName)).
+                    findFirst().orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
+            players.remove(playerToRemove);
+        }
+    }
+
+    /**
      * Changes the selected player. If the index is invalid, an exception is thrown.
      */
     public void selectPlayer(Integer index) throws IndexOutOfBoundsException

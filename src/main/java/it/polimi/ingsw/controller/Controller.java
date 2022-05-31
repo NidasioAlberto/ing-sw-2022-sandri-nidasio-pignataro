@@ -362,4 +362,14 @@ public class Controller
                 player.setActive(active);
         }
     }
+
+    /**
+     * Remove the given player from the game, if not started yet.
+     *
+     * @param playerName of the player to remove.
+     */
+    public void removePlayer(String playerName)
+    {
+        game.removePlayer(playerName);
+    }
 }

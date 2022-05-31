@@ -17,6 +17,7 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Wizard;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
@@ -73,6 +74,8 @@ public class Match implements Subscriber<ModelUpdate>
                 gameController.getGame().getPlayerTableList().stream().filter((p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst()
                         .ifPresent((p) -> p.subscribe(this));
 
+                sendAllAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just joined"));
+
                 System.out.println("[Match] New player added to the match");
             } else
             {
@@ -119,44 +122,63 @@ public class Match implements Subscriber<ModelUpdate>
      */
     public void removePlayer(PlayerConnection player)
     {
-        missingPlayers.add(player.getPlayerName().get());
-        players.remove(player);
-        gameController.setPlayerActive(player.getPlayerName().get(), false);
-        for (PlayerConnection activePlayer : players)
-            activePlayer.sendAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just disconnected"));
-
-        Phase currentPhase = gameController.getGameHandler().getGamePhase();
-
-        // If remains only one active player the GameActionHandler moves to SuspendedPhase
-        if (players.size() == 1)
+        // Check if the game is started
+        if (getPlayersNumber() == gameController.getPlayersNumber())
         {
-            GameActionHandler handler = gameController.getGameHandler();
-            players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
-                    " if no other player reconnects before 1 minute you will win"));
-            handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
-        }
-        // If the disconnected player was the current player, its turn ends
-        else if (currentPhase instanceof PlanPhase)
-        {
-            // Check if the player disconnected was the current one, we are in PlanPhase so the order
-            // is based on table order
-            if (gameController.getGame().getPlayerTableList().get(gameController.getGame().getSelectedPlayerIndex().
-                    get()).getNickname().equals(player.getPlayerName().get()))
+            missingPlayers.add(player.getPlayerName().get());
+            players.remove(player);
+            gameController.setPlayerActive(player.getPlayerName().get(), false);
+            for (PlayerConnection activePlayer : players)
+                activePlayer.sendAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just disconnected"));
+
+            Phase currentPhase = gameController.getGameHandler().getGamePhase();
+
+            // If remains only one active player the GameActionHandler moves to SuspendedPhase
+            if (players.size() == 1)
             {
-                // The game is in plan phase so it moves on
-                currentPhase.onValidAction(gameController.getGameHandler());
+                GameActionHandler handler = gameController.getGameHandler();
+                players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
+                        " if no other player reconnects before 1 minute you will win"));
+                handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
+            }
+            // If the disconnected player was the current player, its turn ends
+            else if (currentPhase instanceof PlanPhase)
+            {
+                // Check if the player disconnected was the current one, we are in PlanPhase so the order
+                // is based on table order
+                if (gameController.getGame().getPlayerTableList().get(gameController.getGame().getSelectedPlayerIndex().
+                        get()).getNickname().equals(player.getPlayerName().get()))
+                {
+                    // The game is in plan phase so it moves on
+                    currentPhase.onValidAction(gameController.getGameHandler());
+                }
+            }
+            else
+            {
+                // Check if the player disconnected was the current one, we are not in PlanPhase so the order
+                // is based on sorted order
+                if (gameController.getGame().getSortedPlayerList().get(gameController.getGame().getSelectedPlayerIndex().
+                        get()).getNickname().equals(player.getPlayerName().get()))
+                {
+                    // If the game isn't in plan phase, the player's turn ends
+                    gameController.getGameHandler().setGamePhase(new EndTurnPhase());
+                    gameController.performAction(new EndTurnMessage(), player.getPlayerName().get());
+                }
             }
         }
+        // The game has not started yet
         else
         {
-            // Check if the player disconnected was the current one, we are not in PlanPhase so the order
-            // is based on sorted order
-            if (gameController.getGame().getSortedPlayerList().get(gameController.getGame().getSelectedPlayerIndex().
-                    get()).getNickname().equals(player.getPlayerName().get()))
+            try
             {
-                // If the game isn't in plan phase, the player's turn ends
-                gameController.getGameHandler().setGamePhase(new EndTurnPhase());
-                gameController.performAction(new EndTurnMessage(), player.getPlayerName().get());
+                players.remove(player);
+                gameController.removePlayer(player.getPlayerName().get());
+                for (PlayerConnection activePlayer : players)
+                    activePlayer.sendAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just disconnected"));
+            }
+            catch (NoSelectedPlayerException e)
+            {
+                System.out.println("[Match] The player to remove wasn't in a match.");
             }
         }
     }
