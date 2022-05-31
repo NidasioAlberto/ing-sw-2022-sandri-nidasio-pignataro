@@ -108,7 +108,7 @@ public class CLI implements Visualizable, Runnable
                     choosePacket(scanner);
             } catch (Exception e)
             {
-                PrintHelper.printMessage("Unable to parse parse the input: " + e.toString());
+                PrintHelper.printMessage("Unable to parse parse the input");
             }
         }
     }
@@ -121,7 +121,12 @@ public class CLI implements Visualizable, Runnable
         msg += "\t1 - Commands\n";
         msg += "\t2 - Actions\n";
         PrintHelper.print(msg);
-        int choice = Integer.parseInt(scanner.nextLine());
+
+        // I need this when the match ends
+        String strChoice = scanner.nextLine();
+        if (strChoice.equals(""))
+            return;
+        int choice = Integer.parseInt(strChoice);
 
         switch (choice)
         {
@@ -147,8 +152,11 @@ public class CLI implements Visualizable, Runnable
         msg += "\t6 - Quit game\n";
         PrintHelper.print(msg);
 
-        int choice = Integer.parseInt(scanner.nextLine());
-        scanner.reset();
+        // I need this when the match ends
+        String strChoice = scanner.nextLine();
+        if (strChoice.equals(""))
+            return;
+        int choice = Integer.parseInt(strChoice);
 
         switch (choice)
         {
@@ -230,7 +238,12 @@ public class CLI implements Visualizable, Runnable
         msg += "\t9 - Character cards effects\n";
         msg += "\t10 - Quit match\n";
         PrintHelper.printM(26, 2, msg);
-        int choice = Integer.parseInt(scanner.nextLine());
+
+        // I need this when the match ends
+        String strChoice = scanner.nextLine();
+        if (strChoice.equals(""))
+            return;
+        int choice = Integer.parseInt(strChoice);
 
         switch (choice)
         {
@@ -539,8 +552,10 @@ public class CLI implements Visualizable, Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
+        PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
+        PrintHelper.printMessage(answer.toString() + PrintHelper.moveCursorAbsolute(25, 2)+ "Press enter to start a new game");
         clear();
+        printTitle(2, 2);
     }
 
     @Override
