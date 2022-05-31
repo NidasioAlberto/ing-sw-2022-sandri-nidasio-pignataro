@@ -53,10 +53,10 @@ public class PrintHelper
         switch (color)
         {
             case BLACK:
-                rep += "236";
+                rep += "235";
                 break;
             case GREY:
-                rep += "246";
+                rep += "248";
                 break;
             case WHITE:
                 rep += "255";

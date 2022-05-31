@@ -105,7 +105,7 @@ public class CLI implements Visualizable, Runnable
                 if (isMatchStarted)
                     chooseAction(scanner);
                 else
-                    choosePacket(scanner);
+                    chooseCommand(scanner);
             } catch (Exception e)
             {
                 PrintHelper.printMessage("Unable to parse parse the input");
@@ -553,7 +553,7 @@ public class CLI implements Visualizable, Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString() + PrintHelper.moveCursorAbsolute(25, 2)+ "Press enter to start a new game");
+        PrintHelper.printMessage(answer.toString());
         displayBoard();
         clear();
     }
@@ -646,7 +646,7 @@ public class CLI implements Visualizable, Runnable
         if (!isMatchStarted)
         {
             isMatchStarted = true;
-            PrintHelper.printMessage(answer.toString());
+            PrintHelper.printMessage(answer.toString()  +  PrintHelper.moveCursorAbsolute(23,2) + "Press enter to play an action");
 
             if (answer.getPlayers().size() != 0)
                 players = answer.getPlayers();
