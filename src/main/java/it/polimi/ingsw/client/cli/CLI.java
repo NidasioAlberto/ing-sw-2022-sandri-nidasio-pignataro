@@ -327,6 +327,7 @@ public class CLI implements Visualizable, Runnable
             }
             case 10:
             {
+                PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
                 if (scanner.nextLine().equals("Y"))
                 {
@@ -552,10 +553,9 @@ public class CLI implements Visualizable, Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
         PrintHelper.printMessage(answer.toString() + PrintHelper.moveCursorAbsolute(25, 2)+ "Press enter to start a new game");
+        displayBoard();
         clear();
-        printTitle(2, 2);
     }
 
     @Override

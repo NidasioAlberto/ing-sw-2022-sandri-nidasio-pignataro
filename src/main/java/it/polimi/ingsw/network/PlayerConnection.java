@@ -202,6 +202,7 @@ public class PlayerConnection implements Runnable
         } catch (IOException e)
         {
             System.err.println("[PlayerConnection] Error while writing: " + e.getMessage());
+            e.printStackTrace();
             close();
         }
     }

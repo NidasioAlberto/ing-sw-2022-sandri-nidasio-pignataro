@@ -132,6 +132,9 @@ public class MushroomMan extends CharacterCard
     @Override
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
+        // Flag to check if a player has finished he towers
+        boolean towerFinished = false;
+
         if (island < 0 || island >= instance.islands.size())
             throw new IslandIndexOutOfBoundsException("[MushroomMan]");
 
@@ -187,19 +190,36 @@ public class MushroomMan extends CharacterCard
 
             if (towersToAdd.size() == 0)
             {
-                // The island has no tower
-                Tower towerToMove = influencer.getBoard().getTowers().get(0);
-                currentIsland.addTower(towerToMove);
-                influencer.getBoard().removeTower(towerToMove);
+                try
+                {
+                    // The island has no tower
+                    Tower towerToMove = influencer.getBoard().getTowers().get(0);
+                    currentIsland.addTower(towerToMove);
+                    influencer.getBoard().removeTower(towerToMove);
+                }
+                catch (EndGameException e)
+                {
+                    // The exception is thrown if a player finishes the towers
+                    towerFinished = true;
+                }
+
             } else
             {
-                towersToAdd.forEach(t -> {
-                    // Remove the tower from the player's board
-                    influencer.getBoard().removeTower(t);
+                try
+                {
+                    towersToAdd.forEach(t -> {
+                        // Remove the tower from the player's board
+                        influencer.getBoard().removeTower(t);
 
-                    // Add the tower to the island
-                    currentIsland.addTower(t);
-                });
+                        // Add the tower to the island
+                        currentIsland.addTower(t);
+                    });
+                }
+                catch (EndGameException e)
+                {
+                    // The exception is thrown if a player finishes the towers
+                    towerFinished = true;
+                }
             }
 
             // Check if there are islands that can be merged
@@ -245,9 +265,9 @@ public class MushroomMan extends CharacterCard
                         new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.motherNatureIndex.get()));
             }
 
-            // If there are only 3 islands so the game ends
-            if (instance.islands.size() <= 3)
-                throw new EndGameException("[MushroomMan]");
+            // If there are only 3 islands or a player has finished the towers the game ends
+            if (islands.size() <= 3 || towerFinished)
+                throw new EndGameException("[Game]");
         }
     }
 

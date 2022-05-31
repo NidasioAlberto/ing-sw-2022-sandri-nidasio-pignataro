@@ -392,6 +392,9 @@ public class Game implements Publisher<ModelUpdate>
      */
     public void computeInfluence(int island) throws IndexOutOfBoundsException
     {
+        // Flag to check if a player has finished he towers
+        boolean towerFinished = false;
+
         if (island < 0 || island >= islands.size())
             throw new IslandIndexOutOfBoundsException("[Game]");
 
@@ -444,19 +447,36 @@ public class Game implements Publisher<ModelUpdate>
 
             if (towersToAdd.size() == 0)
             {
-                // The island has no tower
-                Tower towerToMove = influencer.getBoard().getTowers().get(0);
-                currentIsland.addTower(towerToMove);
-                influencer.getBoard().removeTower(towerToMove);
+                try
+                {
+                    // The island has no tower
+                    Tower towerToMove = influencer.getBoard().getTowers().get(0);
+                    currentIsland.addTower(towerToMove);
+                    influencer.getBoard().removeTower(towerToMove);
+                }
+                catch (EndGameException e)
+                {
+                    // The exception is thrown if a player finishes the towers
+                    towerFinished = true;
+                }
+
             } else
             {
-                towersToAdd.forEach(t -> {
-                    // Remove the tower from the player's board
-                    influencer.getBoard().removeTower(t);
+                try
+                {
+                    towersToAdd.forEach(t -> {
+                        // Remove the tower from the player's board
+                        influencer.getBoard().removeTower(t);
 
-                    // Add the tower to the island
-                    currentIsland.addTower(t);
-                });
+                        // Add the tower to the island
+                        currentIsland.addTower(t);
+                    });
+                }
+                catch (EndGameException e)
+                {
+                    // The exception is thrown if a player finishes the towers
+                    towerFinished = true;
+                }
             }
 
             // Check if there are islands that can be merged
@@ -499,8 +519,8 @@ public class Game implements Publisher<ModelUpdate>
                 subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(islands), motherNatureIndex.get()));
             }
 
-            // If there are only 3 islands so the game ends
-            if (islands.size() <= 3)
+            // If there are only 3 islands or a player has finished the towers the game ends
+            if (islands.size() <= 3 || towerFinished)
                 throw new EndGameException("[Game]");
         }
     }
@@ -625,7 +645,6 @@ public class Game implements Publisher<ModelUpdate>
         });
 
         // 9. Each player gets a deck of cards
-        // TODO: The wizard are assigned automatically! Is it correct?
         players.forEach(p -> {
             IntStream.range(0, ASSISTANT_CARDS_DECK_SIZE).forEach(i -> {
                 p.addCard(new AssistantCard(Wizard.values()[players.indexOf(p)], i + 1, i / 2 + 1));

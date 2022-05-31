@@ -311,6 +311,9 @@ public class Controller
             case 2:
                 game.addPlayer(new Player(nickname, TowerColor.GREY, getGameMode()));
                 break;
+            default:
+                game.addPlayer(new Player(nickname, TowerColor.BLACK, getGameMode()));
+                break;
         }
 
         // If all the players are in the game, setup it
