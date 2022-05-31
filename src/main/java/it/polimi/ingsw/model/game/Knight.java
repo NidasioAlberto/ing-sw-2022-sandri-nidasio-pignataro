@@ -245,7 +245,7 @@ public class Knight extends CharacterCard
             }
 
             // If there are only 3 islands or a player has finished the towers the game ends
-            if (islands.size() <= 3 || towerFinished)
+            if (instance.islands.size() <= 3 || towerFinished)
                 throw new EndGameException("[Game]");
         }
     }
