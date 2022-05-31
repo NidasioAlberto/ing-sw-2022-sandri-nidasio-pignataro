@@ -362,8 +362,8 @@ public class DrawableIsland extends DrawableObject
 
         // Update eventual mother nature
         if(motherNature != null)
-            motherNature.translate(new Point3D(X_MOTHER * DIMENSION + getPosition().getX(),
-                    getPosition().getY() - HEIGHT_SPAN, Y_MOTHER * DIMENSION + getPosition().getZ()));
+            motherNature.addAnimationPosition(new Point3D(motherNature.getPosition().getX(),
+                    getPosition().getY() - HEIGHT_SPAN, motherNature.getPosition().getZ()), 10000);
     }
 
     @Override

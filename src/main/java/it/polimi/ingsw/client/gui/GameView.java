@@ -129,7 +129,6 @@ public class GameView extends Application
         testIsland.addStudent(StudentType.PINK, group, pointLight);
         testIsland.addStudent(StudentType.BLUE, group, pointLight);
         testIsland.addTower(TowerType.GREY, group, pointLight);
-        testIsland.addMotherNature(motherNature);
         collection.translate(new Point3D(0, -10, -290));
 
         // Eventually modify the single objects for window design things
@@ -140,6 +139,7 @@ public class GameView extends Application
         s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
         s3.addRotation(new Rotate(-90, new Point3D(0, 1, 0)));
         testIsland.translate(new Point3D(0, 0, 200));
+        testIsland.addMotherNature(motherNature);
         tile.translate(new Point3D(0, 0, 100));
         tile.addStudent(StudentType.YELLOW, group, pointLight);
         tile.addStudent(StudentType.RED, group, pointLight);

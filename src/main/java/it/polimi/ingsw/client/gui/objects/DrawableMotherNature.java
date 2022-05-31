@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import javafx.geometry.Point3D;
-import javafx.scene.AmbientLight;
-import javafx.scene.Group;
-import javafx.scene.LightBase;
-import javafx.scene.PointLight;
+import javafx.scene.*;
 import javafx.scene.effect.Light;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -43,6 +41,17 @@ public class DrawableMotherNature extends DrawableObject
     private Sphere spheres[];
 
     /**
+     * Drag and drop movement variables
+     */
+    private volatile double offsetPosX;
+    private volatile double offsetPosZ;
+
+    private volatile double posX;
+    private volatile double posZ;
+
+    private boolean dragging;
+
+    /**
      * Constructor
      */
     public DrawableMotherNature(int number_of_spheres, float starting_radius, float delta_radius, AnimationHandler updater)
@@ -75,9 +84,46 @@ public class DrawableMotherNature extends DrawableObject
             spheres[i].setRadius(STARTING_RADIUS - i * DELTA_RADIUS);
             spheres[i].setMaterial(material);
             spheres[i].setTranslateY(-(i * STARTING_RADIUS - i * DELTA_RADIUS));
-            // Set the node to mouse transparent
-            spheres[i].setMouseTransparent(true);
         }
+
+        // Dragging is false at the beginning
+        dragging = false;
+
+        // Set the drag and drop features
+        spheres[0].setOnDragDetected((event) -> {
+            offsetPosX = event.getX();
+            offsetPosZ = event.getZ();
+            posX = getPosition().getX();
+            posZ = getPosition().getZ();
+            for(Sphere sphere1 : spheres)
+                sphere1.setMouseTransparent(true);
+            spheres[0].setCursor(Cursor.MOVE);
+            spheres[0].startFullDrag();
+
+            // Set the dragging to true so that the islands
+            // cannot set mother nature position while dragging
+            dragging = true;
+
+            // Set the dragging element in action translator
+            ActionTranslator.getInstance().setDraggedItem("MotherNature");
+        });
+        spheres[0].setOnMouseReleased((event) -> {
+            for(Sphere sphere1 : spheres)
+                sphere1.setMouseTransparent(false);
+
+            // Set also the cursor back to normal
+            spheres[0].setCursor(Cursor.DEFAULT);
+
+            // Set the dragging back to false
+            dragging = false;
+        });
+
+        // I set the drag relative to spheres[0] (The base one)
+        spheres[0].setOnMouseDragged((event) -> {
+            posX = event.getX() - offsetPosX;
+            posZ = event.getZ() - offsetPosZ;
+            this.translate(new Point3D(getPosition().getX() + posX, 0, getPosition().getZ() + posZ));
+        });
 
         // At the end if the updater != null i add the box to it
         if(this.updater != null)
@@ -160,6 +206,58 @@ public class DrawableMotherNature extends DrawableObject
     public void disableVisibility()
     {
 
+    }
+
+    /**
+     * Need to override this method to allow the user to drag and drop mother nature
+     * when an island is registering movements on her.
+     */
+    @Override
+    public void updateAnimation()
+    {
+        // Check if there actually is some position to reach
+        if(positions.isEmpty())
+            return;
+
+        // When dragging i skip all the positions
+        if(dragging)
+        {
+            positions.clear();
+            return;
+        }
+
+        // Calculate the distance between the actual position of the object
+        // and the point to reach. If it is less than the step i just go there
+        if(getPosition().distance(positions.get(0).getKey()) < positions.get(0).getValue())
+        {
+            // Translate there
+            translate(positions.get(0).getKey());
+            // Delete the position and return
+            positions.remove(0);
+            return;
+        }
+
+        // If i'm still far, i move in that direction
+        Point3D flag = positions.get(0).getKey();
+        Point3D current = getPosition();
+        double D = positions.get(0).getValue();
+        double t = D / current.distance(flag); // This is the multiplication factor
+
+        // Calculate one of the new positions on the calculated rect
+        Point3D newPosition = new Point3D(current.getX() - flag.getX(), current.getY() - flag.getY(), current.getZ() - flag.getZ());
+        newPosition = newPosition.multiply(t).add(current);
+
+        // I need to understand the direction (if -t or t due to second grade equation)
+        if(newPosition.distance(flag) < current.distance(flag))
+        {
+            translate(newPosition);
+            return;
+        }
+
+        // If it is not the correct one i choose the other one
+        newPosition = new Point3D(current.getX() - flag.getX(), current.getY() - flag.getY(), current.getZ() - flag.getZ());
+        newPosition = newPosition.multiply(-t).add(current);
+        translate(newPosition);
     }
 
     /**

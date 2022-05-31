@@ -17,6 +17,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
+import javax.swing.*;
 import java.util.*;
 
 public class DrawableSchoolBoard extends DrawableObject
@@ -121,17 +122,14 @@ public class DrawableSchoolBoard extends DrawableObject
         box.setMouseTransparent(false);
 
         // Set the mouse drag released checking if the area is dining or entrance
-        box.setOnMouseMoved((event) -> {
-            if(event.getX() >= box.getTranslateX() - X_DIMENSION / 2 &&
-            event.getX() <= box.getTranslateX() - X_DIMENSION * 4 / 10 &&
-            event.getY() >= box.getTranslateZ() - Y_DIMENSION / 2 &&
-            event.getX() <= box.getTranslateZ() + Y_DIMENSION / 2)
-                System.out.println("Entrance");
+        box.setOnMouseDragReleased((event) -> {
+            if(event.getX() >= box.getTranslateX() + X_DIMENSION * 3.5 / 10)
+                ActionTranslator.getInstance().setDroppedOnItem("Entrance");
             else
-                System.out.println("Fuori");
+                ActionTranslator.getInstance().setDroppedOnItem("Dining");
 
             // Send the message
-            // ActionTranslator.getInstance().execute();
+            ActionTranslator.getInstance().execute();
         });
 
         // At the end if the updater != null i add the box to it
@@ -246,6 +244,9 @@ public class DrawableSchoolBoard extends DrawableObject
         student.translate(new Point3D(coordinates.getX() + box.getTranslateX(),
                 coordinates.getY() + box.getTranslateY(),
                 coordinates.getZ() + box.getTranslateZ()));
+
+        // Set the student to not draggable
+        student.setDraggable(false);
 
         // Add the student to the model
         dining.get(color).add(student);

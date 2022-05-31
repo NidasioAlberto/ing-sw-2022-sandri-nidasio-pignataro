@@ -13,6 +13,8 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 
+import javax.swing.*;
+
 public class DrawableStudent extends DrawableObject
 {
     /**
@@ -34,6 +36,13 @@ public class DrawableStudent extends DrawableObject
 
     private volatile double posX;
     private volatile double posZ;
+
+    /**
+     * Boolean that represents if the student is drag and droppable.
+     * DIFFERENT from mouse transparent because it can be addressed for
+     * a drop.
+     */
+    private boolean draggable;
 
     /**
      * Constructor
@@ -75,6 +84,7 @@ public class DrawableStudent extends DrawableObject
 
         // Set the node to mouse transparent
         studentMesh.setMouseTransparent(false);
+        draggable = true;
 
         // Set the drag and drop features
         studentMesh.setOnMouseDragEntered((event)->{
@@ -86,28 +96,44 @@ public class DrawableStudent extends DrawableObject
         });
 
         studentMesh.setOnDragDetected((event) ->{
-            offsetPosX = event.getX();
-            offsetPosZ = event.getZ();
-            posX = studentMesh.getTranslateX();
-            posZ = studentMesh.getTranslateZ();
-            studentMesh.setMouseTransparent(true);
-            studentMesh.setCursor(Cursor.MOVE);
-            studentMesh.startFullDrag();
+            if(draggable)
+            {
+                offsetPosX = event.getX();
+                offsetPosZ = event.getZ();
+                posX = studentMesh.getTranslateX();
+                posZ = studentMesh.getTranslateZ();
+                studentMesh.setMouseTransparent(true);
+                studentMesh.setCursor(Cursor.MOVE);
+                studentMesh.startFullDrag();
 
-            // Set the dragged element on the action translator
-            ActionTranslator.getInstance().setDraggedItem("Student");
+                // Set the dragged element on the action translator
+                ActionTranslator.getInstance().setDraggedItem("Student");
+            }
         });
 
         studentMesh.setOnMouseDragged((event) -> {
-            studentMesh.setMouseTransparent(true);
-            posX = rotation.transform(new Point3D(event.getX(), 0, 0)).getX() - offsetPosX;
-            posZ = rotation.transform(new Point3D(0, 0, event.getZ())).getZ() - offsetPosZ;
-            this.translate(new Point3D(studentMesh.getTranslateX() + posX, 0, studentMesh.getTranslateZ() + posZ));
+            if(draggable)
+            {
+                posX = rotation.transform(new Point3D(event.getX(), 0, 0)).getX() - offsetPosX;
+                posZ = rotation.transform(new Point3D(0, 0, event.getZ())).getZ() - offsetPosZ;
+                this.translate(new Point3D(studentMesh.getTranslateX() + posX, 0, studentMesh.getTranslateZ() + posZ));
+            }
         });
 
         studentMesh.setOnMouseReleased((event) -> {
             studentMesh.setCursor(Cursor.DEFAULT);
             studentMesh.setMouseTransparent(false);
+        });
+
+        studentMesh.setOnMouseDragReleased((event) -> {
+            // Set the original color
+            material.setDiffuseColor(type.getColor());
+
+            // Set the dragged on element
+            ActionTranslator.getInstance().setDroppedOnItem("Student");
+
+            // Act the action translator
+            ActionTranslator.getInstance().execute();
         });
 
         // At the end if the updater != null i add the box to it
@@ -146,9 +172,9 @@ public class DrawableStudent extends DrawableObject
     }
 
     // This method does nothing because i don't want light from everywhere
+
     @Override
     public void subscribeToAmbientLight(AmbientLight light){}
-
     @Override
     public void unsubscribeFromPointLight(PointLight light)
     {
@@ -167,6 +193,11 @@ public class DrawableStudent extends DrawableObject
 
     @Override
     public void disableVisibility() { studentMesh.setMouseTransparent(true); }
+
+    /**
+     * Sets the draggable property of the student
+     */
+    public void setDraggable(boolean drag) { this.draggable = drag; }
 
     @Override
     public void translate(Point3D point)

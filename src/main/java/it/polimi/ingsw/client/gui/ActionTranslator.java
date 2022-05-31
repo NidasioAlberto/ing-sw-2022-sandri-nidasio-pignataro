@@ -68,7 +68,7 @@ public class ActionTranslator
 
         lookupMap.put("CharacterStudent", new HashMap<>());
         lookupMap.get("CharacterStudent").put("Island", () -> moveStudentFromCharacterCardToIsland());
-        lookupMap.get("CharacterStudent").put("Entrance", () -> swapStudentFromCharacterCardToEntrance());
+        lookupMap.get("CharacterStudent").put("Student", () -> swapStudentFromCharacterCardToEntrance());
         lookupMap.get("CharacterStudent").put("Dining", () -> moveStudentFromCharacterCardToDining());
 
         lookupMap.put("AssistantCard", new HashMap<>());
@@ -213,7 +213,7 @@ public class ActionTranslator
 
     private void moveMotherNature()
     {
-        System.out.println("MOve mother nature");
+        System.out.println("Move mother nature");
     }
 
     private void selectCloudTile()
