@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.WizardType;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
+import org.json.XML;
 
 import java.util.Objects;
 
@@ -17,6 +19,9 @@ public class DrawableAssistantCard extends DrawableObject
 {
     // Scale factor between X and Y dimensions
     public static final double SCALE_FACTOR = 1.468;
+
+    // Factor of spacing related to the card
+    public static final double SPACING_FACTOR = 0.05;
 
     /**
      * X Dimension constant
@@ -32,6 +37,11 @@ public class DrawableAssistantCard extends DrawableObject
      * The wizard type
      */
     private final WizardType TYPE;
+
+    /**
+     * Turn order
+     */
+    private final int turnOrder;
 
     /**
      * The two boxes (for front and back)
@@ -63,6 +73,7 @@ public class DrawableAssistantCard extends DrawableObject
         X_DIMENSION = x_dimension;
         Y_DIMENSION = X_DIMENSION * SCALE_FACTOR;
         TYPE        = type;
+        turnOrder = number;
 
         // Set the card position
         position = new Point3D(0, 0, 0);
@@ -221,4 +232,6 @@ public class DrawableAssistantCard extends DrawableObject
     {
         return new Point3D(frontBox.getTranslateX(), frontBox.getTranslateY(), frontBox.getTranslateZ());
     }
+
+    public int getTurnOrder() { return turnOrder; }
 }

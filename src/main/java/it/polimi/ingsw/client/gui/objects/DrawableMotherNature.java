@@ -209,58 +209,6 @@ public class DrawableMotherNature extends DrawableObject
     }
 
     /**
-     * Need to override this method to allow the user to drag and drop mother nature
-     * when an island is registering movements on her.
-     */
-    @Override
-    public void updateAnimation()
-    {
-        // Check if there actually is some position to reach
-        if(positions.isEmpty())
-            return;
-
-        // When dragging i skip all the positions
-        if(dragging)
-        {
-            positions.clear();
-            return;
-        }
-
-        // Calculate the distance between the actual position of the object
-        // and the point to reach. If it is less than the step i just go there
-        if(getPosition().distance(positions.get(0).getKey()) < positions.get(0).getValue())
-        {
-            // Translate there
-            translate(positions.get(0).getKey());
-            // Delete the position and return
-            positions.remove(0);
-            return;
-        }
-
-        // If i'm still far, i move in that direction
-        Point3D flag = positions.get(0).getKey();
-        Point3D current = getPosition();
-        double D = positions.get(0).getValue();
-        double t = D / current.distance(flag); // This is the multiplication factor
-
-        // Calculate one of the new positions on the calculated rect
-        Point3D newPosition = new Point3D(current.getX() - flag.getX(), current.getY() - flag.getY(), current.getZ() - flag.getZ());
-        newPosition = newPosition.multiply(t).add(current);
-
-        // I need to understand the direction (if -t or t due to second grade equation)
-        if(newPosition.distance(flag) < current.distance(flag))
-        {
-            translate(newPosition);
-            return;
-        }
-
-        // If it is not the correct one i choose the other one
-        newPosition = new Point3D(current.getX() - flag.getX(), current.getY() - flag.getY(), current.getZ() - flag.getZ());
-        newPosition = newPosition.multiply(-t).add(current);
-        translate(newPosition);
-    }
-
-    /**
      * Position setters
      */
     @Override
@@ -298,4 +246,5 @@ public class DrawableMotherNature extends DrawableObject
 
     @Override
     public Point3D getPosition() { return new Point3D(spheres[0].getTranslateX(), spheres[0].getTranslateY(), spheres[0].getTranslateZ()); }
+    public boolean isDragging() { return dragging; }
 }

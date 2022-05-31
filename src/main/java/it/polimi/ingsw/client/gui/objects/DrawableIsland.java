@@ -334,7 +334,6 @@ public class DrawableIsland extends DrawableObject
         translate(new Point3D(getPosition().getX(), Math.sin(Math.toRadians(floatingAngle)) * FLOATING_AMPLITUDE, getPosition().getZ()));
     }
 
-
     /**
      * Position setters. Needs to be synchronized for animations handling
      */
@@ -361,9 +360,9 @@ public class DrawableIsland extends DrawableObject
         }
 
         // Update eventual mother nature
-        if(motherNature != null)
-            motherNature.addAnimationPosition(new Point3D(motherNature.getPosition().getX(),
-                    getPosition().getY() - HEIGHT_SPAN, motherNature.getPosition().getZ()), 10000);
+        if(motherNature != null && !motherNature.isDragging())
+            motherNature.translate(new Point3D(X_MOTHER * DIMENSION + getPosition().getX(),
+                    getPosition().getY() - HEIGHT_SPAN, Y_MOTHER * DIMENSION + getPosition().getZ()));
     }
 
     @Override
@@ -379,10 +378,6 @@ public class DrawableIsland extends DrawableObject
     public Optional<TowerType> getTowerType()
     { return tower == null ? Optional.empty() : Optional.of(tower.getType()); }
 
-    public synchronized void setX(double x) { box.translateXProperty().set(x); }
-
-    public synchronized void setY(double y) { box.translateYProperty().set(y); }
-    public synchronized void setZ(double z) { box.translateZProperty().set(z); }
     @Override
     public Point3D getPosition() { return new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ()); }
 }

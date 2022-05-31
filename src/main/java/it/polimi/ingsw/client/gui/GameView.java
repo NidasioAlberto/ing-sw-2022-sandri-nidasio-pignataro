@@ -1,9 +1,13 @@
 package it.polimi.ingsw.client.gui;
 
+import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
 import it.polimi.ingsw.client.gui.objects.types.*;
-import it.polimi.ingsw.model.SchoolColor;
-import it.polimi.ingsw.model.TowerColor;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.protocol.answers.*;
+import it.polimi.ingsw.protocol.commands.CreateMatchCommand;
+import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
@@ -15,11 +19,12 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * This class represents the game window and draws all the needed stuff that the server updates and requests
  */
-public class GameView extends Application
+public class GameView extends Application implements Visualizable
 {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
@@ -50,14 +55,24 @@ public class GameView extends Application
      * Game objects
      */
     private AnimationHandler updater;
-    private DrawableMotherNature motherNature;
     private DrawableIslandCollection islandCollection;
+    private DrawableAssistantCollection assistatCollection;
     private DrawableSchoolBoard schoolBoard;
 
     /**
      * Collection of all the drawable objects, useful for repetitive tasks
      */
     private List<DrawableObject> drawableObjects;
+
+    /**
+     * Client which calls the visualizable methods
+     */
+    private Client client;
+
+    /**
+     * The player name of this machine
+     */
+    private final String playerName;
 
     /**
      * Constructor
@@ -73,6 +88,7 @@ public class GameView extends Application
             throw new NullPointerException("[GameView] Null view mode");
 
         this.viewMode = mode;
+        playerName = "pippo";
     }
 
     /**
@@ -105,13 +121,7 @@ public class GameView extends Application
         // Set the camera up in perspective mode
         setupCamera();
 
-        // Create the ground plane so that the mouse ray casting hits something
-        // just below the playground
-        Box groundPlane = new Box(3000, 3000, 0);
-        groundPlane.translateYProperty().set(6f);
-        groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
-        groundPlane.setMaterial(new PhongMaterial(Color.TRANSPARENT));
-
+        /* Old stuff
         // Create all the game components
         group.getChildren().add(groundPlane);
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
@@ -144,77 +154,46 @@ public class GameView extends Application
         tile.addStudent(StudentType.YELLOW, group, pointLight);
         tile.addStudent(StudentType.RED, group, pointLight);
         tile.addStudent(StudentType.BLUE, group, pointLight);
-        tile.addStudent(StudentType.GREEN, group, pointLight);
+        tile.addStudent(StudentType.GREEN, group, pointLight);*/
 
-        // Add all the created objects to the collection of drawable objects
-        drawableObjects.add(motherNature);
-        drawableObjects.add(islandCollection);
-        drawableObjects.add(schoolBoard);
-        drawableObjects.add(s2);
-        drawableObjects.add(s3);
-        drawableObjects.add(tile);
-        drawableObjects.add(collection);
-        drawableObjects.add(testIsland);
 
-        // Dynamic object add to schoolboard
-        schoolBoard.addProfessor(SchoolColor.GREEN, group, pointLight);
-        schoolBoard.addProfessor(SchoolColor.RED, group, pointLight);
-        schoolBoard.addProfessor(SchoolColor.YELLOW, group, pointLight);
-        schoolBoard.addProfessor(SchoolColor.PINK, group, pointLight);
-        schoolBoard.addProfessor(SchoolColor.BLUE, group, pointLight);
+        // Create the ground plane so that the mouse ray casting hits something
+        // just below the playground
+        Box groundPlane = new Box(3000, 3000, 0);
+        groundPlane.translateYProperty().set(6f);
+        groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
+        groundPlane.setMaterial(new PhongMaterial(Color.TRANSPARENT));
+        group.getChildren().add(groundPlane);
 
-        s2.addProfessor(SchoolColor.GREEN, group, pointLight);
-        s2.addProfessor(SchoolColor.RED, group, pointLight);
-        s2.addProfessor(SchoolColor.YELLOW, group, pointLight);
-        s2.addProfessor(SchoolColor.PINK, group, pointLight);
-        s2.addProfessor(SchoolColor.BLUE, group, pointLight);
-
-        s3.addProfessor(SchoolColor.GREEN, group, pointLight);
-        s3.addProfessor(SchoolColor.RED, group, pointLight);
-        s3.addProfessor(SchoolColor.YELLOW, group, pointLight);
-        s3.addProfessor(SchoolColor.PINK, group, pointLight);
-        s3.addProfessor(SchoolColor.BLUE, group, pointLight);
-        for(int i = 0; i < 8; i++)
-        {
-            schoolBoard.addStudentToDining(SchoolColor.GREEN, group, pointLight);
-            schoolBoard.addStudentToDining(SchoolColor.RED, group, pointLight);
-            schoolBoard.addStudentToDining(SchoolColor.YELLOW, group, pointLight);
-            schoolBoard.addStudentToDining(SchoolColor.PINK, group, pointLight);
-            schoolBoard.addStudentToDining(SchoolColor.BLUE, group, pointLight);
-            schoolBoard.addStudentToEntrance(SchoolColor.RED, group, pointLight);
-            schoolBoard.addTower(TowerColor.WHITE, group, pointLight);
-
-            s2.addStudentToDining(SchoolColor.GREEN, group, pointLight);
-            s2.addStudentToDining(SchoolColor.RED, group, pointLight);
-            s2.addStudentToDining(SchoolColor.YELLOW, group, pointLight);
-            s2.addStudentToDining(SchoolColor.PINK, group, pointLight);
-            s2.addStudentToDining(SchoolColor.BLUE, group, pointLight);
-            s2.addStudentToEntrance(SchoolColor.RED, group, pointLight);
-            s2.addTower(TowerColor.BLACK, group, pointLight);
-
-            s3.addStudentToDining(SchoolColor.GREEN, group, pointLight);
-            s3.addStudentToDining(SchoolColor.RED, group, pointLight);
-            s3.addStudentToDining(SchoolColor.YELLOW, group, pointLight);
-            s3.addStudentToDining(SchoolColor.PINK, group, pointLight);
-            s3.addStudentToDining(SchoolColor.BLUE, group, pointLight);
-            s3.addStudentToEntrance(SchoolColor.RED, group, pointLight);
-            s3.addTower(TowerColor.GREY, group, pointLight);
-        }
-
-        // Add the lights to the view
-        group.getChildren().add(pointLight);
-        group.getChildren().add(ambientLight);
-
-        // Add all the game components to the group and subscribe them to the point light
-        for (DrawableObject object : drawableObjects)
-        {
-            object.addToGroup(group);
-            object.subscribeToPointLight(pointLight);
-            object.subscribeToAmbientLight(ambientLight);
-        }
+        // Set the game objects and collections
+        assistatCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
+        assistatCollection.translate(new Point3D(0, -10, -290));
 
         // Start the time scheduled animations
         updater.start();
+
+        // Setup the client
+        client = new Client();
+        client.setVisualizer(this);
+        try
+        {
+            client.connect();
+            new Thread(() -> client.run()).start();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Connection error");
+        }
+        client.setPlayerName(playerName);
+
+        try
+        {
+            client.sendCommand(new CreateMatchCommand("m", 2, GameMode.CLASSIC));
+        }
+        catch(Exception e)
+        {
+            System.out.println("Impossible to create a match");
+        }
     }
 
     /**
@@ -308,6 +287,90 @@ public class GameView extends Application
         // Set the scene
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Visualizable methods
+     */
+    @Override
+    public void displayAssistantCards(AssistantCardsUpdate update) { assistatCollection.displayUpdate(update); }
+
+    @Override
+    public void displayCharacterCardPayload(CharacterCardPayloadUpdate update)
+    {
+
+    }
+
+    @Override
+    public void displayCharacterCards(CharacterCardsUpdate update)
+    {
+
+    }
+
+    @Override
+    public void displayCloudTiles(CloudTilesUpdate update)
+    {
+
+    }
+
+    @Override
+    public void displayIslands(IslandsUpdate update)
+    {
+
+    }
+
+    @Override
+    public void displayPlayedAssistantCard(PlayedAssistantCardUpdate update)
+    {
+
+    }
+
+    @Override
+    public void displaySchoolboard(SchoolBoardUpdate update)
+    {
+
+    }
+
+    @Override
+    public void setCurrentPlayer(CurrentPlayerUpdate update)
+    {
+
+    }
+
+    @Override
+    public void displayEndMatch(EndMatchAnswer answer)
+    {
+
+    }
+
+    @Override
+    public void displayError(ErrorAnswer answer)
+    {
+
+    }
+
+    @Override
+    public void displayJoinedMatch(JoinedMatchAnswer answer)
+    {
+
+    }
+
+    @Override
+    public void displayMatchesList(MatchesListAnswer answer)
+    {
+
+    }
+
+    @Override
+    public void displaySetName(SetNameAnswer answer)
+    {
+
+    }
+
+    @Override
+    public void displayStartMatch(StartMatchAnswer answer)
+    {
+
     }
 
     /**

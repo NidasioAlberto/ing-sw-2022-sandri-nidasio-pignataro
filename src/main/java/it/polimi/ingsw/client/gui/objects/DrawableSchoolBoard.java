@@ -70,19 +70,27 @@ public class DrawableSchoolBoard extends DrawableObject
     private List<Rotate> rotations;
 
     /**
+     * SchoolBoard player name
+     */
+    private String playerName;
+
+    /**
      * Constructor
      * @param x_dimension The x dimension of the board
      */
-    public DrawableSchoolBoard(float x_dimension, AnimationHandler updater)
+    public DrawableSchoolBoard(float x_dimension, String playerName, AnimationHandler updater)
     {
         super(updater);
 
         if(x_dimension < 0)
             throw new IllegalArgumentException("[DrawableSchoolBoard] X dimension less than 0");
+        if(playerName == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null player name");
 
         // Assign the parameters
         X_DIMENSION = x_dimension;
         Y_DIMENSION = x_dimension / SCALE_FACTOR;
+        this.playerName = playerName;
 
         // Initialize all the reference model
         entrance = new ArrayList<>();
