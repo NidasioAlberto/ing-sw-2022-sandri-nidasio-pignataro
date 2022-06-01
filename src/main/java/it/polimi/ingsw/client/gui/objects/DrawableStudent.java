@@ -13,8 +13,6 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 
-import javax.swing.*;
-
 public class DrawableStudent extends DrawableObject
 {
     /**
@@ -38,9 +36,7 @@ public class DrawableStudent extends DrawableObject
     private volatile double posZ;
 
     /**
-     * Boolean that represents if the student is drag and droppable.
-     * DIFFERENT from mouse transparent because it can be addressed for
-     * a drop.
+     * Boolean that represents if the student is drag and droppable. DIFFERENT from mouse transparent because it can be addressed for a drop.
      */
     private boolean draggable;
 
@@ -51,7 +47,7 @@ public class DrawableStudent extends DrawableObject
     {
         super(updater);
 
-        if(type == null)
+        if (type == null)
             throw new NullPointerException("[DrawableStudent] Null student type");
 
         // Assign the constant parameters
@@ -87,16 +83,16 @@ public class DrawableStudent extends DrawableObject
         draggable = true;
 
         // Set the drag and drop features
-        studentMesh.setOnMouseDragEntered((event)->{
-            material.setDiffuseColor(type.getColor().interpolate(new Color(1, 1,1, 0.9), 0.5));
+        studentMesh.setOnMouseDragEntered((event) -> {
+            material.setDiffuseColor(type.getColor().interpolate(new Color(1, 1, 1, 0.9), 0.5));
         });
 
         studentMesh.setOnMouseDragExited((event) -> {
             material.setDiffuseColor(type.getColor());
         });
 
-        studentMesh.setOnDragDetected((event) ->{
-            if(draggable)
+        studentMesh.setOnDragDetected((event) -> {
+            if (draggable)
             {
                 offsetPosX = event.getX();
                 offsetPosZ = event.getZ();
@@ -112,7 +108,7 @@ public class DrawableStudent extends DrawableObject
         });
 
         studentMesh.setOnMouseDragged((event) -> {
-            if(draggable)
+            if (draggable)
             {
                 posX = rotation.transform(new Point3D(event.getX(), 0, 0)).getX() - offsetPosX;
                 posZ = rotation.transform(new Point3D(0, 0, event.getZ())).getZ() - offsetPosZ;
@@ -137,14 +133,14 @@ public class DrawableStudent extends DrawableObject
         });
 
         // At the end if the updater != null i add the box to it
-        if(this.updater != null)
+        if (this.updater != null)
             this.updater.subscribeObject(this);
     }
 
     @Override
     public void addToGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableStudent] Null group");
 
         // Add the cylinder to the group
@@ -154,7 +150,7 @@ public class DrawableStudent extends DrawableObject
     @Override
     public void removeFromGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableStudent] Null group");
 
         // Remove the cylinder from the group
@@ -164,7 +160,7 @@ public class DrawableStudent extends DrawableObject
     @Override
     public void subscribeToPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableStudent] Null point light");
 
         // The students should be under the light so i subscribe it
@@ -174,11 +170,13 @@ public class DrawableStudent extends DrawableObject
     // This method does nothing because i don't want light from everywhere
 
     @Override
-    public void subscribeToAmbientLight(AmbientLight light){}
+    public void subscribeToAmbientLight(AmbientLight light)
+    {}
+
     @Override
     public void unsubscribeFromPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableStudent] Null point light");
 
         // The students should be under the light so i unsubscribe it
@@ -186,23 +184,33 @@ public class DrawableStudent extends DrawableObject
     }
 
     @Override
-    public void unsubscribeFromAmbientLight(AmbientLight light) {}
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {}
 
     @Override
-    public void enableVisibility() { studentMesh.setMouseTransparent(false); }
+    public void enableVisibility()
+    {
+        studentMesh.setMouseTransparent(false);
+    }
 
     @Override
-    public void disableVisibility() { studentMesh.setMouseTransparent(true); }
+    public void disableVisibility()
+    {
+        studentMesh.setMouseTransparent(true);
+    }
 
     /**
      * Sets the draggable property of the student
      */
-    public void setDraggable(boolean drag) { this.draggable = drag; }
+    public void setDraggable(boolean drag)
+    {
+        this.draggable = drag;
+    }
 
     @Override
     public void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableStudent] Null point");
 
         // Set all the translation
@@ -214,7 +222,7 @@ public class DrawableStudent extends DrawableObject
     @Override
     public void addRotation(Rotate rotation)
     {
-        if(rotation == null)
+        if (rotation == null)
             throw new NullPointerException("[DrawableStudent]");
 
         // Add the transformation
@@ -227,5 +235,8 @@ public class DrawableStudent extends DrawableObject
         return new Point3D(studentMesh.getTranslateX(), studentMesh.getTranslateY(), studentMesh.getTranslateZ());
     }
 
-    public StudentType getType() { return TYPE; }
+    public StudentType getType()
+    {
+        return TYPE;
+    }
 }

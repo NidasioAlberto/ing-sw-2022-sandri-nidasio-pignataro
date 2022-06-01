@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.gui.objects;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.CloudType;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
-import it.polimi.ingsw.model.Student;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
@@ -47,20 +46,21 @@ public class DrawableCloudTile extends DrawableObject
 
     /**
      * Constructor
+     * 
      * @param updater The animation updater object
      */
     public DrawableCloudTile(double dimension, CloudType type, AnimationHandler updater)
     {
         super(updater);
 
-        if(dimension <= 0)
+        if (dimension <= 0)
             throw new IllegalArgumentException("[DrawableCloudTile] Invalid box dimension");
-        if(type == null)
+        if (type == null)
             throw new NullPointerException("[DrawableCloudTile] Null cloud type");
 
         // Assign all the constants
-        DIMENSION   = dimension;
-        TYPE        = type;
+        DIMENSION = dimension;
+        TYPE = type;
 
         // Create the rotations collection
         rotations = new ArrayList<>();
@@ -75,9 +75,8 @@ public class DrawableCloudTile extends DrawableObject
         PhongMaterial material = new PhongMaterial();
 
         // Open the correct file
-        material.setDiffuseMap(new Image(
-                Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        type.getFilename()))));
+        material.setDiffuseMap(
+                new Image(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(type.getFilename()))));
 
         // Set the material with the texture
         box.setMaterial(material);
@@ -90,18 +89,19 @@ public class DrawableCloudTile extends DrawableObject
         box.setMouseTransparent(true);
 
         // If not null subscribe to the updater
-        if(updater != null)
+        if (updater != null)
             updater.subscribeObject(this);
     }
 
     /**
      * Method to add a student to the cloud tile
+     * 
      * @param type The type of student to be added
      */
     public void addStudent(StudentType type, Group group, PointLight light)
     {
         // If there is no space left i don't put the student
-        if(students.size() >= TYPE.getPositionsNumber())
+        if (students.size() >= TYPE.getPositionsNumber())
             return;
 
         // Create the new student
@@ -112,7 +112,7 @@ public class DrawableCloudTile extends DrawableObject
         Point3D coordinates = new Point3D(position.getX() * DIMENSION, -1, position.getY() * DIMENSION);
 
         // For all the rotations apply them
-        for(Rotate rotation : rotations)
+        for (Rotate rotation : rotations)
             coordinates = rotation.transform(coordinates);
 
         // Translate the student
@@ -129,10 +129,27 @@ public class DrawableCloudTile extends DrawableObject
         student.subscribeToPointLight(light);
     }
 
+    /**
+     * Method to clear the cloud tile
+     * 
+     * @param group The group to which unsubscribe all the students
+     * @param light The light to which unsubscribe all the students
+     */
+    public void clear(Group group, PointLight light)
+    {
+        for (DrawableStudent student : students)
+        {
+            student.unsubscribeFromPointLight(light);
+            student.removeFromGroup(group);
+        }
+        // At the end i clear the drawable list
+        students.clear();
+    }
+
     @Override
     public void addToGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableCloudTile] Null group");
 
         // If all is correct i subscribe to the group
@@ -142,7 +159,7 @@ public class DrawableCloudTile extends DrawableObject
     @Override
     public void removeFromGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableCloudTile] Null group");
 
         // If all is correct i unsubscribe from the group
@@ -151,12 +168,13 @@ public class DrawableCloudTile extends DrawableObject
 
     // This method does nothing, i want to subscribe to the ambient light
     @Override
-    public void subscribeToPointLight(PointLight light) {}
+    public void subscribeToPointLight(PointLight light)
+    {}
 
     @Override
     public void subscribeToAmbientLight(AmbientLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableCloudTile] Null ambient light");
 
         // If all is correct i subscribe the box to the light
@@ -167,48 +185,61 @@ public class DrawableCloudTile extends DrawableObject
     @Override
     public void unsubscribeFromPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableCloudTile] Null point light");
 
-        for(DrawableStudent student : students)
+        for (DrawableStudent student : students)
             student.unsubscribeFromPointLight(light);
     }
 
     @Override
     public void unsubscribeFromAmbientLight(AmbientLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableCloudTile] Null light");
 
         light.getScope().remove(box);
     }
 
     @Override
-    public void enableVisibility() {
+    public void enableVisibility()
+    {
 
     }
 
     @Override
-    public void disableVisibility() {
+    public void disableVisibility()
+    {
 
     }
 
     @Override
     public void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableCloudTile] Null 3D point");
 
         // If all is correct i translate the box
         box.translateXProperty().set(point.getX());
         box.translateYProperty().set(point.getY());
         box.translateZProperty().set(point.getZ());
+
+        // Translate all the students
+        for (int i = 0; i < students.size(); i++)
+        {
+            // Calculate the translation position
+            Point2D position = TYPE.getPositionAt(i);
+            Point3D coordinates = new Point3D(position.getX() * DIMENSION, -1, position.getY() * DIMENSION);
+
+            // Actually translate the student
+            students.get(i).translate(coordinates.add(point));
+        }
     }
 
     @Override
     public void addRotation(Rotate rotation)
     {
-        if(rotation == null)
+        if (rotation == null)
             throw new NullPointerException("[DrawableCloudTile] Null rotation");
 
         // If all is correct i add the rotation to the box

@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
-import it.polimi.ingsw.client.gui.ObjectModelParser;
 import it.polimi.ingsw.client.gui.objects.types.TowerType;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
@@ -29,23 +27,15 @@ public class DrawableTower extends DrawableObject
     private MeshView towerMesh;
 
     /**
-     * Drag and drop movement variables
-     */
-    private volatile double offsetPosX;
-    private volatile double offsetPosZ;
-
-    private volatile double posX;
-    private volatile double posZ;
-
-    /**
      * Constructor
+     * 
      * @param type The tower color
      */
     public DrawableTower(TowerType type, AnimationHandler updater)
     {
         super(updater);
 
-        if(type == null)
+        if (type == null)
             throw new NullPointerException("[DrawableTower] Null tower type");
 
         // Set the constants
@@ -76,13 +66,14 @@ public class DrawableTower extends DrawableObject
         towerMesh.setMouseTransparent(false);
 
         // At the end if the updater != null i add the box to it
-        if(this.updater != null)
+        if (this.updater != null)
             this.updater.subscribeObject(this);
     }
+
     @Override
     public void addToGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableTower] Null group");
 
         // Add the mesh to the group
@@ -92,7 +83,7 @@ public class DrawableTower extends DrawableObject
     @Override
     public void removeFromGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableTower] Null group");
 
         // remove the mesh from the group
@@ -102,7 +93,7 @@ public class DrawableTower extends DrawableObject
     @Override
     public void subscribeToPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableTower] Null point light");
 
         // Add the mesh to the point light scope
@@ -111,12 +102,13 @@ public class DrawableTower extends DrawableObject
 
     // This method does nothing because the tower is subscribed only to point light
     @Override
-    public void subscribeToAmbientLight(AmbientLight light) {}
+    public void subscribeToAmbientLight(AmbientLight light)
+    {}
 
     @Override
     public void unsubscribeFromPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableTower] Null point light");
 
         // Remove the mesh from the point light scope
@@ -125,7 +117,8 @@ public class DrawableTower extends DrawableObject
 
     // This method does nothing because the tower is subscribed only to point light
     @Override
-    public void unsubscribeFromAmbientLight(AmbientLight light) {}
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {}
 
     @Override
     public void enableVisibility()
@@ -144,7 +137,7 @@ public class DrawableTower extends DrawableObject
     @Override
     public void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableTower] Null point");
 
         // Translate the mesh
@@ -156,7 +149,7 @@ public class DrawableTower extends DrawableObject
     @Override
     public void addRotation(Rotate rotation)
     {
-        if(rotation == null)
+        if (rotation == null)
             throw new NullPointerException("[DrawableTower] Null rotation");
 
         // Add the transformation to the mesh
@@ -169,5 +162,8 @@ public class DrawableTower extends DrawableObject
         return new Point3D(towerMesh.getTranslateX(), towerMesh.getTranslateY(), towerMesh.getTranslateZ());
     }
 
-    public TowerType getType() { return TYPE; }
+    public TowerType getType()
+    {
+        return TYPE;
+    }
 }

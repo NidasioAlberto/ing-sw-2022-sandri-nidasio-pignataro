@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents a collection of drawable objects called
- * every CONSTANT time in milliseconds to update the animation
- * status.
+ * This class represents a collection of drawable objects called every CONSTANT time in milliseconds to update the animation status.
  */
 public class AnimationHandler
 {
@@ -34,12 +32,12 @@ public class AnimationHandler
 
     /**
      * Constructor
-     * @param period Time in millis that the object waits before updating
-     * the next animations
+     * 
+     * @param period Time in millis that the object waits before updating the next animations
      */
     public AnimationHandler(int period)
     {
-        if(period <= 0)
+        if (period <= 0)
             throw new IllegalArgumentException("[AnimationHandler] Invalid period");
 
         // Assign the constant
@@ -49,8 +47,7 @@ public class AnimationHandler
         objects = new ArrayList<>();
 
         // Create the updater object
-        updater = new Timeline(new KeyFrame(Duration.millis(PERIOD),
-                new EventHandler<ActionEvent>()
+        updater = new Timeline(new KeyFrame(Duration.millis(PERIOD), new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(ActionEvent event)
@@ -70,9 +67,9 @@ public class AnimationHandler
      */
     public void subscribeObject(DrawableObject object)
     {
-        if(object == null)
+        if (object == null)
             throw new NullPointerException("[AnimationHandler] Null object");
-        if(objects.contains(object))
+        if (objects.contains(object))
             throw new IllegalArgumentException("[AnimationHandler] Already contained object");
 
         // If all goes correctly i add the object
@@ -84,7 +81,7 @@ public class AnimationHandler
      */
     public void unsubscribeObject(DrawableObject object)
     {
-        if(object == null)
+        if (object == null)
             throw new NullPointerException("[AnimationHandler] Null object");
 
         // IF all goes correctly i remove the object
@@ -94,6 +91,13 @@ public class AnimationHandler
     /**
      * Starts and stops the updater
      */
-    public void start() { updater.play(); }
-    public void stop() { updater.stop(); }
+    public void start()
+    {
+        updater.play();
+    }
+
+    public void stop()
+    {
+        updater.stop();
+    }
 }

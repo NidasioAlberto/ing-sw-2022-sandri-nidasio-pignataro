@@ -1,22 +1,12 @@
 package it.polimi.ingsw.client.gui;
 
-import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.model.SchoolColor;
-import it.polimi.ingsw.protocol.messages.ActionMessage;
-import it.polimi.ingsw.protocol.messages.PlayAssistantCardMessage;
-
-import java.sql.PseudoColumnUsage;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
- * This singleton class is basically a map of lambdas that the graphical game objects
- * use to translate the drag and drop movement into a network action.
- * Basically when an object is being dragged, it sets up a string inside
- * this object and, when an object has been dragged on, it calls a function passing
- * as parameter the eventual string of the second object
+ * This singleton class is basically a map of lambdas that the graphical game objects use to translate the drag and drop movement into a network
+ * action. Basically when an object is being dragged, it sets up a string inside this object and, when an object has been dragged on, it calls a
+ * function passing as parameter the eventual string of the second object
  */
 public class ActionTranslator
 {
@@ -73,7 +63,7 @@ public class ActionTranslator
 
         lookupMap.put("AssistantCard", new HashMap<>());
         lookupMap.get("AssistantCard").put("", () -> playAssistantCard());
-        
+
         lookupMap.put("MotherNature", new HashMap<>());
         lookupMap.get("MotherNature").put("Island", () -> moveMotherNature());
 
@@ -82,7 +72,7 @@ public class ActionTranslator
 
         lookupMap.put("CharacterCard", new HashMap<>());
         lookupMap.get("CharacterCard").put("", () -> playCharacterCard());
-        
+
         lookupMap.put("NoEntryTile", new HashMap<>());
         lookupMap.get("NoEntryTile").put("Island", () -> moveNoEntryFromCharacterCardToIsland());
 
@@ -92,14 +82,14 @@ public class ActionTranslator
 
     public void setDraggedItem(String draggedItem)
     {
-        if(draggedItem == null)
+        if (draggedItem == null)
             throw new NullPointerException("[ActionTranslator] Null dragged item");
         this.draggedItem = draggedItem;
     }
 
     public void setDroppedOnItem(String droppedOnItem)
     {
-        if(droppedOnItem == null)
+        if (droppedOnItem == null)
             throw new NullPointerException("[ActionTranslator] Null dropped on item");
         this.droppedOnItem = droppedOnItem;
     }
@@ -110,7 +100,7 @@ public class ActionTranslator
     public void execute()
     {
         // Check the strings
-        if(draggedItem != null && droppedOnItem != null)
+        if (draggedItem != null && droppedOnItem != null)
             Objects.requireNonNull(lookupMap.get(draggedItem).get(droppedOnItem)).run();
 
         // At the end i clear all the selections
@@ -138,7 +128,7 @@ public class ActionTranslator
      */
     public void selectColor(SchoolColor color)
     {
-        if(color == null)
+        if (color == null)
             throw new NullPointerException("[ActionTranslator] Null school color");
 
         selectedColors.add(color);
@@ -146,7 +136,7 @@ public class ActionTranslator
 
     public void selectIsland(int island)
     {
-        if(island < 0)
+        if (island < 0)
             throw new IllegalArgumentException("[ActionTranslator] Illegal island selection");
 
         selectedIsland = island;
@@ -154,7 +144,7 @@ public class ActionTranslator
 
     public void selectCard(int card)
     {
-        if(card < 0)
+        if (card < 0)
             throw new IllegalArgumentException("[ActionTranslator] Illegal card selection");
 
         selectedCard = card;
@@ -162,7 +152,7 @@ public class ActionTranslator
 
     public void selectCloudTile(int cloud)
     {
-        if(cloud < 0)
+        if (cloud < 0)
             throw new IllegalArgumentException("[ActionTranslator] Illegal cloud tile selection");
 
         selectedCloudTile = cloud;
@@ -249,7 +239,7 @@ public class ActionTranslator
      */
     public static ActionTranslator getInstance()
     {
-        if(instance == null)
+        if (instance == null)
             instance = new ActionTranslator();
         return instance;
     }

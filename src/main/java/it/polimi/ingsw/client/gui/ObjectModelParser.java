@@ -1,15 +1,12 @@
 package it.polimi.ingsw.client.gui;
 
-import java.io.File;
 import java.io.InputStream;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * This class is an immutable object that represents a model 3d object.
- * It parses all the vertices and all the faces of a 3D model.
+ * This class is an immutable object that represents a model 3d object. It parses all the vertices and all the faces of a 3D model.
  */
 public class ObjectModelParser
 {
@@ -45,14 +42,15 @@ public class ObjectModelParser
 
     /**
      * Constructor
+     * 
      * @param filename The file to parse
      * @param multiplication_factor How much scale the model
      */
     public ObjectModelParser(String filename, float multiplication_factor)
     {
-        if(filename == null)
+        if (filename == null)
             throw new NullPointerException("[ObjectModelParser] Null filename");
-        if(multiplication_factor <= 0)
+        if (multiplication_factor <= 0)
             throw new IllegalArgumentException("[ObjectModelParser] Zero or less multiplication factor");
 
         // I assign the filename and parse it to vertices and faces
@@ -60,10 +58,10 @@ public class ObjectModelParser
         MULTIPLICATION_FACTOR = multiplication_factor;
 
         // Create the arrays
-        vertices    = new ArrayList<>();
-        faces       = new ArrayList<>();
-        normals     = new ArrayList<>();
-        texture     = new ArrayList<>();
+        vertices = new ArrayList<>();
+        faces = new ArrayList<>();
+        normals = new ArrayList<>();
+        texture = new ArrayList<>();
 
         // Parse the file
         parse();
@@ -71,6 +69,7 @@ public class ObjectModelParser
 
     /**
      * Constructor
+     * 
      * @param filename The file to parse
      */
     public ObjectModelParser(String filename)
@@ -87,58 +86,55 @@ public class ObjectModelParser
         InputStream fileStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
 
         // Check if the file actually exists
-        if(fileStream == null)
+        if (fileStream == null)
             throw new RuntimeException("[ObjectModelParser] No such file");
 
         // If the file exists i declare the scanner and parse the file
         Scanner scanner = new Scanner(fileStream);
 
         // I proceed until we reach the end of file
-        while(scanner.hasNext())
+        while (scanner.hasNext())
         {
             // Take the current line
             String temp = scanner.nextLine();
             String splitString[] = temp.split(" ");
 
             // There could be black lines
-            if(temp.equals(""))
+            if (temp.equals(""))
                 continue;
 
             // It could be different things depending on the first two letters
-            if(splitString[0].equals("v"))
+            if (splitString[0].equals("v"))
             {
                 // It is a vertex
                 vertices.add(Float.parseFloat(splitString[1]) * MULTIPLICATION_FACTOR);
                 vertices.add(Float.parseFloat(splitString[2]) * MULTIPLICATION_FACTOR);
                 vertices.add(Float.parseFloat(splitString[3]) * MULTIPLICATION_FACTOR);
-            }
-            else if(splitString[0].equals("vn"))
+            } else if (splitString[0].equals("vn"))
             {
                 // It is a normal
                 normals.add(Float.parseFloat(splitString[1]));
                 normals.add(Float.parseFloat(splitString[2]));
                 normals.add(Float.parseFloat(splitString[3]));
-            }
-            else if(splitString[0].equals("vt"))
+            } else if (splitString[0].equals("vt"))
             {
                 // It is a texture
                 texture.add(Float.parseFloat(splitString[1]));
                 texture.add(Float.parseFloat(splitString[2]));
-            }
-            else if(splitString[0].equals("f"))
+            } else if (splitString[0].equals("f"))
             {
                 // It is a face. I have to parse normals and textures
                 String[] tempSplit = splitString[1].split("/");
                 faces.add(Integer.parseInt(tempSplit[0]) - 1);
 
                 // If present i add the normal
-                if(tempSplit.length >= 3 && !tempSplit[2].equals(""))
+                if (tempSplit.length >= 3 && !tempSplit[2].equals(""))
                     faces.add(Integer.parseInt(tempSplit[2]) - 1);
                 else
                     faces.add(0);
 
                 // If present i add the texture
-                if(tempSplit.length >= 2 && !tempSplit[1].equals(""))
+                if (tempSplit.length >= 2 && !tempSplit[1].equals(""))
                     faces.add(Integer.parseInt(tempSplit[1]) - 1);
                 else
                     faces.add(0);
@@ -147,13 +143,13 @@ public class ObjectModelParser
                 faces.add(Integer.parseInt(tempSplit[0]) - 1);
 
                 // If present i add the normal
-                if(tempSplit.length >= 3 && !tempSplit[2].equals(""))
+                if (tempSplit.length >= 3 && !tempSplit[2].equals(""))
                     faces.add(Integer.parseInt(tempSplit[2]) - 1);
                 else
                     faces.add(0);
 
                 // If present i add the texture
-                if(tempSplit.length >= 2 && !tempSplit[1].equals(""))
+                if (tempSplit.length >= 2 && !tempSplit[1].equals(""))
                     faces.add(Integer.parseInt(tempSplit[1]) - 1);
                 else
                     faces.add(0);
@@ -162,13 +158,13 @@ public class ObjectModelParser
                 faces.add(Integer.parseInt(tempSplit[0]) - 1);
 
                 // If present i add the normal
-                if(tempSplit.length >= 3 && !tempSplit[2].equals(""))
+                if (tempSplit.length >= 3 && !tempSplit[2].equals(""))
                     faces.add(Integer.parseInt(tempSplit[2]) - 1);
                 else
                     faces.add(0);
 
                 // If present i add the texture
-                if(tempSplit.length >= 2 && !tempSplit[1].equals(""))
+                if (tempSplit.length >= 2 && !tempSplit[1].equals(""))
                     faces.add(Integer.parseInt(tempSplit[1]) - 1);
                 else
                     faces.add(0);
@@ -181,6 +177,7 @@ public class ObjectModelParser
 
     /**
      * Get the parsed vertices
+     * 
      * @return An array of vertices
      */
     public float[] getVertices()
@@ -189,7 +186,7 @@ public class ObjectModelParser
         float[] result = new float[vertices.size()];
 
         // Copy the array
-        for(int i = 0; i < vertices.size(); i++)
+        for (int i = 0; i < vertices.size(); i++)
             result[i] = vertices.get(i);
 
         // Return the result
@@ -198,6 +195,7 @@ public class ObjectModelParser
 
     /**
      * Get the parsed faces
+     * 
      * @return An array of faces
      */
     public int[] getFaces()
@@ -206,7 +204,7 @@ public class ObjectModelParser
         int[] result = new int[faces.size()];
 
         // Copy the array
-        for(int i = 0; i < faces.size(); i++)
+        for (int i = 0; i < faces.size(); i++)
             result[i] = faces.get(i);
 
         // return the result
@@ -215,6 +213,7 @@ public class ObjectModelParser
 
     /**
      * Get parsed normals
+     * 
      * @return An array of normals
      */
     public float[] getNormals()
@@ -223,7 +222,7 @@ public class ObjectModelParser
         float[] result = new float[normals.size()];
 
         // Copy the array
-        for(int i = 0; i < normals.size(); i++)
+        for (int i = 0; i < normals.size(); i++)
             result[i] = normals.get(i);
 
         // Return the result
@@ -232,6 +231,7 @@ public class ObjectModelParser
 
     /**
      * Get parsed textures
+     * 
      * @return An array of textures points
      */
     public float[] getTextures()
@@ -240,11 +240,12 @@ public class ObjectModelParser
         float[] result = new float[texture.size()];
 
         // If there are no texture coordinates i return a standard one
-        if(result.length == 0)
-            return new float[] {0, 0, 1, 0, 0, 1, 1, 1};
+        if (result.length == 0)
+            return new float[]
+            {0, 0, 1, 0, 0, 1, 1, 1};
 
         // Copy the array
-        for(int i = 0; i < texture.size(); i++)
+        for (int i = 0; i < texture.size(); i++)
             result[i] = texture.get(i);
 
         // Return the result

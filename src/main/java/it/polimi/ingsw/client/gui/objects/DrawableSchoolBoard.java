@@ -12,12 +12,10 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 
-import javax.swing.*;
 import java.util.*;
 
 public class DrawableSchoolBoard extends DrawableObject
@@ -28,17 +26,17 @@ public class DrawableSchoolBoard extends DrawableObject
     /**
      * Positioning constants
      */
-    private static final double DINING_X_STEP   = 0.04763;
-    private static final double DINING_Y_STEP   = 0.07143;
+    private static final double DINING_X_STEP = 0.04763;
+    private static final double DINING_Y_STEP = 0.07143;
     private static final double ENTRANCE_X_STEP = 0.05857;
-    private static final double TOWER_X_STEP    = 0.07714;
-    private static final double TOWER_Y_STEP    = 0.07143;
-    private static final double FIRST_X_DINING    = -0.29286;
+    private static final double TOWER_X_STEP = 0.07714;
+    private static final double TOWER_Y_STEP = 0.07143;
+    private static final double FIRST_X_DINING = -0.29286;
     private static final double FIRST_X_PROFESSOR = 0.22857;
-    private static final double FIRST_X_ENTRANCE  = -0.44429;
-    private static final double FIRST_Y_ENTRANCE  = 0.14286;
-    private static final double FIRST_X_TOWER     = 0.33857;
-    private static final double FIRST_Y_TOWER     = 0.10714;
+    private static final double FIRST_X_ENTRANCE = -0.44429;
+    private static final double FIRST_Y_ENTRANCE = 0.14286;
+    private static final double FIRST_X_TOWER = 0.33857;
+    private static final double FIRST_Y_TOWER = 0.10714;
     private static final Map<SchoolColor, Double> HEIGHTS = new HashMap<>();
 
     /**
@@ -76,15 +74,16 @@ public class DrawableSchoolBoard extends DrawableObject
 
     /**
      * Constructor
+     * 
      * @param x_dimension The x dimension of the board
      */
     public DrawableSchoolBoard(float x_dimension, String playerName, AnimationHandler updater)
     {
         super(updater);
 
-        if(x_dimension < 0)
+        if (x_dimension < 0)
             throw new IllegalArgumentException("[DrawableSchoolBoard] X dimension less than 0");
-        if(playerName == null)
+        if (playerName == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null player name");
 
         // Assign the parameters
@@ -98,7 +97,7 @@ public class DrawableSchoolBoard extends DrawableObject
         towers = new ArrayList<>();
         dining = new HashMap<>();
 
-        for(SchoolColor color : SchoolColor.values())
+        for (SchoolColor color : SchoolColor.values())
             dining.put(color, new ArrayList<>());
 
         // Create the rotation collection
@@ -116,8 +115,8 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Create the correct texture
         PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(new Image(Objects.requireNonNull(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream("schoolboard.png"))));
+        material.setDiffuseMap(
+                new Image(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("schoolboard.png"))));
 
         // Assign the texture
         box.setMaterial(material);
@@ -131,7 +130,7 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Set the mouse drag released checking if the area is dining or entrance
         box.setOnMouseDragReleased((event) -> {
-            if(event.getX() >= box.getTranslateX() + X_DIMENSION * 3.5 / 10)
+            if (event.getX() >= box.getTranslateX() + X_DIMENSION * 3.5 / 10)
                 ActionTranslator.getInstance().setDroppedOnItem("Entrance");
             else
                 ActionTranslator.getInstance().setDroppedOnItem("Dining");
@@ -141,14 +140,14 @@ public class DrawableSchoolBoard extends DrawableObject
         });
 
         // At the end if the updater != null i add the box to it
-        if(this.updater != null)
+        if (this.updater != null)
             this.updater.subscribeObject(this);
     }
 
     @Override
     public void addToGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null group");
 
         // Add the box to the group
@@ -158,7 +157,7 @@ public class DrawableSchoolBoard extends DrawableObject
     @Override
     public void removeFromGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null group");
 
         // Remove the box from the group
@@ -167,12 +166,13 @@ public class DrawableSchoolBoard extends DrawableObject
 
     // This method does nothing because i don't want reflections
     @Override
-    public void subscribeToPointLight(PointLight light) {}
+    public void subscribeToPointLight(PointLight light)
+    {}
 
     @Override
     public void subscribeToAmbientLight(AmbientLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null ambient light");
 
         // Add the box to the light
@@ -183,25 +183,25 @@ public class DrawableSchoolBoard extends DrawableObject
     @Override
     public void unsubscribeFromPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null point light");
 
         // Unsubscribe all the components
-        for(DrawableStudent student : entrance)
+        for (DrawableStudent student : entrance)
             student.unsubscribeFromPointLight(light);
 
-        for(SchoolColor color : dining.keySet())
-            for(DrawableStudent student : dining.get(color))
+        for (SchoolColor color : dining.keySet())
+            for (DrawableStudent student : dining.get(color))
                 student.unsubscribeFromPointLight(light);
 
-        for(DrawableTower tower : towers)
+        for (DrawableTower tower : towers)
             tower.unsubscribeFromPointLight(light);
     }
 
     @Override
     public void unsubscribeFromAmbientLight(AmbientLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null ambient light");
 
         // Remove the box from the light
@@ -222,6 +222,7 @@ public class DrawableSchoolBoard extends DrawableObject
 
     /**
      * Adds a student to the dining room
+     * 
      * @param color The student color to be added
      * @param group The group to which add the student
      * @param light The point light to which subscribe the new student
@@ -229,7 +230,7 @@ public class DrawableSchoolBoard extends DrawableObject
     public void addStudentToDining(SchoolColor color, Group group, PointLight light)
     {
         // Check that the student can be there
-        if(dining.get(color).size() >= 10)
+        if (dining.get(color).size() >= 10)
             return;
 
         // Create the new student of the same color
@@ -240,17 +241,17 @@ public class DrawableSchoolBoard extends DrawableObject
                 HEIGHTS.get(color) * X_DIMENSION);
 
         // For all the present rotations i rotate the student
-        for(Rotate rotation : rotations)
+        for (Rotate rotation : rotations)
         {
             coordinates = rotation.transform(coordinates);
 
             // Rotate also the component with a little correction in axis
-            student.addRotation(new Rotate(rotation.getAngle(), new Point3D(-rotation.getAxis().getX(), rotation.getAxis().getY(), -rotation.getAxis().getZ())));
+            student.addRotation(
+                    new Rotate(rotation.getAngle(), new Point3D(-rotation.getAxis().getX(), rotation.getAxis().getY(), -rotation.getAxis().getZ())));
         }
 
         // Translate the student in the correct position
-        student.translate(new Point3D(coordinates.getX() + box.getTranslateX(),
-                coordinates.getY() + box.getTranslateY(),
+        student.translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
                 coordinates.getZ() + box.getTranslateZ()));
 
         // Set the student to not draggable
@@ -266,6 +267,7 @@ public class DrawableSchoolBoard extends DrawableObject
 
     /**
      * Adds a professor to the schoolboard
+     * 
      * @param color The professor color
      * @param group The group to which add the professor
      * @param light The point light to which add the professor
@@ -273,10 +275,10 @@ public class DrawableSchoolBoard extends DrawableObject
     public void addProfessor(SchoolColor color, Group group, PointLight light)
     {
         // Check if that professor is already inside the schoolboard
-        for(DrawableProfessor professor : professors)
+        for (DrawableProfessor professor : professors)
         {
             // If there is a copy i don't add the professor
-            if(professor.getType().name().equals(color.name()))
+            if (professor.getType().name().equals(color.name()))
                 return;
         }
 
@@ -284,20 +286,20 @@ public class DrawableSchoolBoard extends DrawableObject
         DrawableProfessor professor = new DrawableProfessor(ProfessorType.valueOf(color.name()), updater);
 
         // The coordinates without rotations
-        Point3D coordinates = new Point3D(FIRST_X_PROFESSOR * X_DIMENSION, 0, HEIGHTS.get(color) * X_DIMENSION );
+        Point3D coordinates = new Point3D(FIRST_X_PROFESSOR * X_DIMENSION, 0, HEIGHTS.get(color) * X_DIMENSION);
 
         // For all the present rotations i rotate the professor
-        for(Rotate rotation : rotations)
+        for (Rotate rotation : rotations)
         {
             coordinates = rotation.transform(coordinates);
 
             // Rotate also the component with a little correction
-            professor.addRotation(new Rotate(rotation.getAngle(), new Point3D(rotation.getAxis().getZ(), rotation.getAxis().getY(), -rotation.getAxis().getX())));
+            professor.addRotation(
+                    new Rotate(rotation.getAngle(), new Point3D(rotation.getAxis().getZ(), rotation.getAxis().getY(), -rotation.getAxis().getX())));
         }
 
         // Translate the professor where it should be
-        professor.translate(new Point3D(coordinates.getX() + box.getTranslateX(),
-                coordinates.getY() + box.getTranslateY(),
+        professor.translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
                 coordinates.getZ() + box.getTranslateZ()));
 
         // Add the professor to the model
@@ -310,6 +312,7 @@ public class DrawableSchoolBoard extends DrawableObject
 
     /**
      * Adds a student to the entrance
+     * 
      * @param color The student color
      * @param group The group to which add the student
      * @param light The point light to which add the student
@@ -317,7 +320,7 @@ public class DrawableSchoolBoard extends DrawableObject
     public void addStudentToEntrance(SchoolColor color, Group group, PointLight light)
     {
         // Check if it is actually possible
-        if(entrance.size() >= 9)
+        if (entrance.size() >= 9)
             return;
 
         // Create the new student
@@ -325,20 +328,20 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // The coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_ENTRANCE * X_DIMENSION + ((entrance.size() + 1) % 2) * ENTRANCE_X_STEP * X_DIMENSION, 0,
-                FIRST_Y_ENTRANCE * X_DIMENSION - (int)((entrance.size() + 1) / 2) * DINING_Y_STEP * X_DIMENSION);
+                FIRST_Y_ENTRANCE * X_DIMENSION - (int) ((entrance.size() + 1) / 2) * DINING_Y_STEP * X_DIMENSION);
 
         // For all the present rotations i rotate the student
-        for(Rotate rotation : rotations)
+        for (Rotate rotation : rotations)
         {
             coordinates = rotation.transform(coordinates);
 
             // Rotate also the component with a little correction in axis
-            student.addRotation(new Rotate(rotation.getAngle(), new Point3D(-rotation.getAxis().getX(), rotation.getAxis().getY(), -rotation.getAxis().getZ())));
+            student.addRotation(
+                    new Rotate(rotation.getAngle(), new Point3D(-rotation.getAxis().getX(), rotation.getAxis().getY(), -rotation.getAxis().getZ())));
         }
 
         // Translate the student to the correct position
-        student.translate(new Point3D(coordinates.getX() + box.getTranslateX(),
-                coordinates.getY() + box.getTranslateY(),
+        student.translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
                 coordinates.getZ() + box.getTranslateZ()));
 
         // Add the student to the model
@@ -351,6 +354,7 @@ public class DrawableSchoolBoard extends DrawableObject
 
     /**
      * Adds the tower to the schoolboard
+     * 
      * @param color The color of the tower
      * @param group The group to which add the tower
      * @param light The point light to which add the tower
@@ -358,7 +362,7 @@ public class DrawableSchoolBoard extends DrawableObject
     public void addTower(TowerColor color, Group group, PointLight light)
     {
         // Verify that it could actually be done
-        if(towers.size() >= 8)
+        if (towers.size() >= 8)
             return;
 
         // Create the new tower
@@ -366,10 +370,10 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // The coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_TOWER * X_DIMENSION + (towers.size() % 2) * TOWER_X_STEP * X_DIMENSION, 0,
-                FIRST_Y_TOWER * X_DIMENSION - (int)(towers.size() / 2) * TOWER_Y_STEP * X_DIMENSION);
+                FIRST_Y_TOWER * X_DIMENSION - (int) (towers.size() / 2) * TOWER_Y_STEP * X_DIMENSION);
 
         // For all the present rotations i rotate the tower
-        for(Rotate rotation : rotations)
+        for (Rotate rotation : rotations)
         {
             coordinates = rotation.transform(coordinates);
 
@@ -378,8 +382,7 @@ public class DrawableSchoolBoard extends DrawableObject
         }
 
         // Translate the tower to the correct position
-        tower.translate(new Point3D(coordinates.getX() + box.getTranslateX(),
-                coordinates.getY() + box.getTranslateY(),
+        tower.translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
                 coordinates.getZ() + box.getTranslateZ()));
 
         // Add the tower to the model
@@ -396,7 +399,7 @@ public class DrawableSchoolBoard extends DrawableObject
     @Override
     public synchronized void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null point");
 
         // Set the box position
@@ -412,16 +415,25 @@ public class DrawableSchoolBoard extends DrawableObject
         // so that students, towers and professors added after are affected
         // TODO consider an update for the present objects
 
-        if(rotation == null)
+        if (rotation == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null rotation");
 
         // Add the transformation to the box (little axis swap because of box as plane)
-        box.getTransforms().add(new Rotate(-rotation.getAngle(), new Point3D(rotation.getAxis().getX(), rotation.getAxis().getZ(), rotation.getAxis().getY())));
+        box.getTransforms()
+                .add(new Rotate(-rotation.getAngle(), new Point3D(rotation.getAxis().getX(), rotation.getAxis().getZ(), rotation.getAxis().getY())));
 
         // Also i add the rotation to the list
         rotations.add(rotation);
     }
 
     @Override
-    public Point3D getPosition() { return new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ()); }
+    public Point3D getPosition()
+    {
+        return new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ());
+    }
+
+    public String getPlayerName()
+    {
+        return playerName;
+    }
 }

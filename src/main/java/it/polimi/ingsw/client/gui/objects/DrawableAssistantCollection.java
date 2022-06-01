@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
-import it.polimi.ingsw.client.gui.objects.DrawableAssistantCard;
-import it.polimi.ingsw.client.gui.objects.DrawableObject;
 import it.polimi.ingsw.client.gui.objects.types.WizardType;
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.protocol.updates.AssistantCardsUpdate;
@@ -10,7 +8,6 @@ import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
-import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +20,13 @@ public class DrawableAssistantCollection extends DrawableCollection
     private final double DIMENSION;
 
     /**
-     * Collection position (mean)
-     */
-    private Point3D position;
-
-    /**
      * Collection of assistant cards
      */
     private List<DrawableAssistantCard> assistantCards;
 
     /**
      * Constructor
+     * 
      * @param updater The animation handler that updates every card
      * @param dimension The x_dimension of all the cards
      */
@@ -41,7 +34,7 @@ public class DrawableAssistantCollection extends DrawableCollection
     {
         super(pointLight, ambientLight, group, updater);
 
-        if(dimension <= 0)
+        if (dimension <= 0)
             throw new IllegalArgumentException("[DrawableAssistantCollection] X dimension less or equal to 0");
 
         // Assign the constants
@@ -59,7 +52,7 @@ public class DrawableAssistantCollection extends DrawableCollection
      */
     private void updatePosition()
     {
-        for(int i = 0; i < assistantCards.size(); i++)
+        for (int i = 0; i < assistantCards.size(); i++)
             assistantCards.get(i).translate(new Point3D(position.getX() - DIMENSION * assistantCards.size() / 2.0 + DIMENSION * i + DIMENSION / 2,
                     position.getY(), position.getZ()));
     }
@@ -70,17 +63,16 @@ public class DrawableAssistantCollection extends DrawableCollection
     public void displayUpdate(AssistantCardsUpdate update)
     {
         // Case when we have to create the cards
-        if(assistantCards.size() == 0)
+        if (assistantCards.size() == 0)
         {
             // Create the assistant cards instances
-            for(AssistantCard card : update.getCards())
+            for (AssistantCard card : update.getCards())
             {
-                assistantCards.add(new DrawableAssistantCard(DIMENSION, card.getTurnOrder(),
-                        WizardType.valueOf(card.getWizard().name()), updater));
+                assistantCards.add(new DrawableAssistantCard(DIMENSION, card.getTurnOrder(), WizardType.valueOf(card.getWizard().name()), updater));
             }
 
             // Subscribe all the cards to the light
-            for(DrawableAssistantCard card : assistantCards)
+            for (DrawableAssistantCard card : assistantCards)
             {
                 card.subscribeToAmbientLight(ambientLight);
                 card.subscribeToPointLight(pointLight);
@@ -88,17 +80,16 @@ public class DrawableAssistantCollection extends DrawableCollection
 
             // Add all the cards to the group
             this.addToGroup();
-        }
-        else
+        } else
         {
             // The number is not changed so i don't update
-            if(assistantCards.size() == update.getCards().size())
+            if (assistantCards.size() == update.getCards().size())
                 return;
 
             // Number changed, i delete the missing one
-            for(int i = 0; i < update.getCards().size(); i++)
+            for (int i = 0; i < update.getCards().size(); i++)
             {
-                if(assistantCards.get(i).getTurnOrder() != update.getCards().get(i).getTurnOrder())
+                if (assistantCards.get(i).getTurnOrder() != update.getCards().get(i).getTurnOrder())
                 {
                     // Remove the card
                     assistantCards.get(i).removeFromGroup(group);
@@ -108,7 +99,7 @@ public class DrawableAssistantCollection extends DrawableCollection
                 }
             }
             // Left cards are deleted
-            for(int i = update.getCards().size(); i < assistantCards.size(); i++)
+            for (int i = update.getCards().size(); i < assistantCards.size(); i++)
             {
                 // Remove the left ones
                 assistantCards.get(i).removeFromGroup(group);
@@ -126,7 +117,7 @@ public class DrawableAssistantCollection extends DrawableCollection
     public void addToGroup()
     {
         // I subscribe every card
-        for(DrawableAssistantCard card : assistantCards)
+        for (DrawableAssistantCard card : assistantCards)
             card.addToGroup(group);
     }
 
@@ -134,14 +125,14 @@ public class DrawableAssistantCollection extends DrawableCollection
     public void removeFromGroup()
     {
         // I un subscribe every card
-        for(DrawableAssistantCard card : assistantCards)
+        for (DrawableAssistantCard card : assistantCards)
             card.removeFromGroup(group);
     }
 
     @Override
     public void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableAssistantCollection] Null point");
 
         // Update the current position

@@ -3,10 +3,10 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
-import it.polimi.ingsw.client.gui.objects.types.*;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.CreateMatchCommand;
+import it.polimi.ingsw.protocol.commands.SetNameCommand;
 import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
@@ -19,7 +19,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * This class represents the game window and draws all the needed stuff that the server updates and requests
@@ -30,6 +29,7 @@ public class GameView extends Application implements Visualizable
     public static final int HEIGHT = 720;
 
     public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 20;
+    public static final int UPDATES_HANDLER_PERIOD_MILLIS = 100;
     /**
      * This is the camera view, it can be moved around (switch from 3D to 2D)
      */
@@ -55,8 +55,10 @@ public class GameView extends Application implements Visualizable
      * Game objects
      */
     private AnimationHandler updater;
+    private UpdatesHandler updatesHandler;
     private DrawableIslandCollection islandCollection;
-    private DrawableAssistantCollection assistatCollection;
+    private DrawableAssistantCollection assistantCollection;
+    private DrawableCloudTileCollection cloudTileCollection;
     private DrawableSchoolBoard schoolBoard;
 
     /**
@@ -116,46 +118,49 @@ public class GameView extends Application implements Visualizable
         // Create the updater to update the objects every period
         updater = new AnimationHandler(ANIMATION_UPDATE_PERIOD_MILLIS);
 
+        // Create the updates handler
+        updatesHandler = new UpdatesHandler(UPDATES_HANDLER_PERIOD_MILLIS);
+
         // Create a mix with ambient and point light
         setupLights();
+        group.getChildren().add(ambientLight);
+        group.getChildren().add(pointLight);
         // Set the camera up in perspective mode
         setupCamera();
 
-        /* Old stuff
+        // Old stuff
         // Create all the game components
-        group.getChildren().add(groundPlane);
-        motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
-        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, updater);
-        schoolBoard = new DrawableSchoolBoard(350, updater);
-        DrawableSchoolBoard s2 = new DrawableSchoolBoard(350, updater);
-        DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
-        DrawableCloudTile tile = new DrawableCloudTile(40, CloudType.CLOUD_4, updater);
-        DrawableAssistantCollection collection = new DrawableAssistantCollection(500, WizardType.WIZARD_1, updater);
-        DrawableIsland testIsland = new DrawableIsland(120, IslandType.ISLAND3, updater);
-        testIsland.addStudent(StudentType.RED, group, pointLight);
-        testIsland.addStudent(StudentType.RED, group, pointLight);
-        testIsland.addStudent(StudentType.YELLOW, group, pointLight);
-        testIsland.addStudent(StudentType.GREEN, group, pointLight);
-        testIsland.addStudent(StudentType.PINK, group, pointLight);
-        testIsland.addStudent(StudentType.BLUE, group, pointLight);
-        testIsland.addTower(TowerType.GREY, group, pointLight);
-        collection.translate(new Point3D(0, -10, -290));
+        // group.getChildren().add(groundPlane);
+        // motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
+        // islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, updater);
+        // schoolBoard = new DrawableSchoolBoard(350, updater);
+        // DrawableSchoolBoard s2 = new DrawableSchoolBoard(350, updater);
+        // DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
+        // DrawableCloudTile tile = new DrawableCloudTile(40, CloudType.CLOUD_4, updater);
+        // DrawableAssistantCollection collection = new DrawableAssistantCollection(500, WizardType.WIZARD_1, updater);
+        // DrawableIsland testIsland = new DrawableIsland(120, IslandType.ISLAND3, updater);
+        // testIsland.addStudent(StudentType.RED, group, pointLight);
+        // testIsland.addStudent(StudentType.RED, group, pointLight);
+        // testIsland.addStudent(StudentType.YELLOW, group, pointLight);
+        // testIsland.addStudent(StudentType.GREEN, group, pointLight);
+        // testIsland.addStudent(StudentType.PINK, group, pointLight);
+        // testIsland.addStudent(StudentType.BLUE, group, pointLight);
+        // testIsland.addTower(TowerType.GREY, group, pointLight);
+        // collection.translate(new Point3D(0, -10, -290));
 
-        // Eventually modify the single objects for window design things
-        islandCollection.translate(new Point3D(0, 0, 150));
-        schoolBoard.translate(new Point3D(0, 0, -170));
-        s2.translate(new Point3D(-400, 0, 150));
-        s3.translate(new Point3D(400, 0, 150));
-        s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
-        s3.addRotation(new Rotate(-90, new Point3D(0, 1, 0)));
-        testIsland.translate(new Point3D(0, 0, 200));
-        testIsland.addMotherNature(motherNature);
-        tile.translate(new Point3D(0, 0, 100));
-        tile.addStudent(StudentType.YELLOW, group, pointLight);
-        tile.addStudent(StudentType.RED, group, pointLight);
-        tile.addStudent(StudentType.BLUE, group, pointLight);
-        tile.addStudent(StudentType.GREEN, group, pointLight);*/
-
+        // // Eventually modify the single objects for window design things islandCollection.translate(new Point3D(0, 0, 150));
+        // schoolBoard.translate(new Point3D(0, 0, -170));
+        // s2.translate(new Point3D(-400, 0, 150));
+        // s3.translate(new Point3D(400, 0, 150));
+        // s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
+        // s3.addRotation(new Rotate(-90, new Point3D(0, 1, 0)));
+        // testIsland.translate(new Point3D(0, 0, 200));
+        // testIsland.addMotherNature(motherNature);
+        // tile.translate(new Point3D(0, 0, 100));
+        // tile.addStudent(StudentType.YELLOW, group, pointLight);
+        // tile.addStudent(StudentType.RED, group, pointLight);
+        // tile.addStudent(StudentType.BLUE, group, pointLight);
+        // tile.addStudent(StudentType.GREEN, group, pointLight);
 
         // Create the ground plane so that the mouse ray casting hits something
         // just below the playground
@@ -166,11 +171,17 @@ public class GameView extends Application implements Visualizable
         group.getChildren().add(groundPlane);
 
         // Set the game objects and collections
-        assistatCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
-        assistatCollection.translate(new Point3D(0, -10, -290));
+        assistantCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
+        cloudTileCollection = new DrawableCloudTileCollection(40, pointLight, ambientLight, group, updater);
+        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
 
+        assistantCollection.translate(new Point3D(0, -10, -290));
+        islandCollection.translate(new Point3D(0, 0, 150));
         // Start the time scheduled animations
         updater.start();
+
+        // Start the updates handler
+        updatesHandler.start();
 
         // Setup the client
         client = new Client();
@@ -179,20 +190,12 @@ public class GameView extends Application implements Visualizable
         {
             client.connect();
             new Thread(() -> client.run()).start();
-        }
-        catch(Exception e)
+            Thread.sleep(1000);
+            client.sendCommand(new SetNameCommand(playerName));
+            client.sendCommand(new CreateMatchCommand("m", 2, GameMode.CLASSIC));
+        } catch (Exception e)
         {
             System.out.println("Connection error");
-        }
-        client.setPlayerName(playerName);
-
-        try
-        {
-            client.sendCommand(new CreateMatchCommand("m", 2, GameMode.CLASSIC));
-        }
-        catch(Exception e)
-        {
-            System.out.println("Impossible to create a match");
         }
     }
 
@@ -293,7 +296,11 @@ public class GameView extends Application implements Visualizable
      * Visualizable methods
      */
     @Override
-    public void displayAssistantCards(AssistantCardsUpdate update) { assistatCollection.displayUpdate(update); }
+    public void displayAssistantCards(AssistantCardsUpdate update)
+    {
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> assistantCollection.displayUpdate(update));
+    }
 
     @Override
     public void displayCharacterCardPayload(CharacterCardPayloadUpdate update)
@@ -310,13 +317,15 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayCloudTiles(CloudTilesUpdate update)
     {
-
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> cloudTileCollection.displayUpdate(update));
     }
 
     @Override
     public void displayIslands(IslandsUpdate update)
     {
-
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> islandCollection.displayUpdate(update));
     }
 
     @Override

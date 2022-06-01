@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.WizardType;
-import javafx.geometry.Dimension2D;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -11,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
-import org.json.XML;
 
 import java.util.Objects;
 
@@ -56,23 +54,24 @@ public class DrawableAssistantCard extends DrawableObject
 
     /**
      * Constructor
+     * 
      * @param updater
      */
     public DrawableAssistantCard(double x_dimension, int number, WizardType type, AnimationHandler updater)
     {
         super(updater);
 
-        if(x_dimension <= 0)
+        if (x_dimension <= 0)
             throw new IllegalArgumentException("[DrawableAssistantCard] Zero or less X dimension");
-        if(number <= 0 || number > 10)
+        if (number <= 0 || number > 10)
             throw new IllegalArgumentException("[DrawableAssistantCard] Invalid card number");
-        if(type == null)
+        if (type == null)
             throw new NullPointerException("[DrawableAssistantCard] Null wizard type");
 
         // Set the constants
         X_DIMENSION = x_dimension;
         Y_DIMENSION = X_DIMENSION * SCALE_FACTOR;
-        TYPE        = type;
+        TYPE = type;
         turnOrder = number;
 
         // Set the card position
@@ -86,13 +85,11 @@ public class DrawableAssistantCard extends DrawableObject
         PhongMaterial frontMaterial = new PhongMaterial();
         PhongMaterial backMaterial = new PhongMaterial();
 
-        frontMaterial.setDiffuseMap(new Image(Objects.requireNonNull(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        "assistant" + number + ".png"))));
+        frontMaterial.setDiffuseMap(
+                new Image(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("assistant" + number + ".png"))));
 
-        backMaterial.setDiffuseMap(new Image(Objects.requireNonNull(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        TYPE.getFilename()))));
+        backMaterial.setDiffuseMap(
+                new Image(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(TYPE.getFilename()))));
 
         // Set the materials
         frontBox.setMaterial(frontMaterial);
@@ -109,12 +106,12 @@ public class DrawableAssistantCard extends DrawableObject
         setFlipped(false);
 
         // If not null subscribe to the updater
-        if(updater != null)
+        if (updater != null)
             updater.subscribeObject(this);
 
         // Animation settings
         frontBox.setOnMouseEntered((event) -> {
-            if(positions.size() == 0)
+            if (positions.size() == 0)
             {
                 // Save the current position before translating
                 position = new Point3D(frontBox.getTranslateX(), frontBox.getTranslateY(), frontBox.getTranslateZ());
@@ -129,11 +126,12 @@ public class DrawableAssistantCard extends DrawableObject
 
     /**
      * This method sets if the card is flipped or not
+     * 
      * @param flipped The status of the wanted card
      */
     public void setFlipped(boolean flipped)
     {
-        if(flipped)
+        if (flipped)
             backBox.setLayoutY(-2);
         else
             backBox.setLayoutY(2);
@@ -142,7 +140,7 @@ public class DrawableAssistantCard extends DrawableObject
     @Override
     public void addToGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableAssistantCard] Null group");
 
         // If all goes correct i assign the objects to the group
@@ -153,7 +151,7 @@ public class DrawableAssistantCard extends DrawableObject
     @Override
     public void removeFromGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableAssistantCard] Null group");
 
         // If all goes correct i remove the objects from the group
@@ -163,12 +161,13 @@ public class DrawableAssistantCard extends DrawableObject
 
     // This method does nothing, i want only to subscribe to ambient light
     @Override
-    public void subscribeToPointLight(PointLight light) {}
+    public void subscribeToPointLight(PointLight light)
+    {}
 
     @Override
     public void subscribeToAmbientLight(AmbientLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableAssistantCard] Null light");
 
         // if all is correct i add the objects to the scope
@@ -178,12 +177,13 @@ public class DrawableAssistantCard extends DrawableObject
 
     // This method does nothing, i want only to subscribe to ambient light
     @Override
-    public void unsubscribeFromPointLight(PointLight light) {}
+    public void unsubscribeFromPointLight(PointLight light)
+    {}
 
     @Override
     public void unsubscribeFromAmbientLight(AmbientLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableAssistantCard] Null light");
 
         light.getScope().remove(frontBox);
@@ -191,19 +191,21 @@ public class DrawableAssistantCard extends DrawableObject
     }
 
     @Override
-    public void enableVisibility() {
+    public void enableVisibility()
+    {
 
     }
 
     @Override
-    public void disableVisibility() {
+    public void disableVisibility()
+    {
 
     }
 
     @Override
     public void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableAssistantCard] Null 3D point");
 
         // If the point is not null i translate the two boxes
@@ -219,7 +221,7 @@ public class DrawableAssistantCard extends DrawableObject
     @Override
     public void addRotation(Rotate rotation)
     {
-        if(rotation == null)
+        if (rotation == null)
             throw new NullPointerException("[DrawableAssistantCard] Null rotation");
 
         // If the rotation is not null i rotate the two boxes
@@ -233,5 +235,8 @@ public class DrawableAssistantCard extends DrawableObject
         return new Point3D(frontBox.getTranslateX(), frontBox.getTranslateY(), frontBox.getTranslateZ());
     }
 
-    public int getTurnOrder() { return turnOrder; }
+    public int getTurnOrder()
+    {
+        return turnOrder;
+    }
 }
