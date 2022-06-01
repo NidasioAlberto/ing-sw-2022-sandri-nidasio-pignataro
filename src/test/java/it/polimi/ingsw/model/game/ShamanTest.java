@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
+import it.polimi.ingsw.network.Match;
+import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +37,8 @@ public class ShamanTest
         {
             e.printStackTrace();
         }
+        Match match = new Match(new Server(), "test", 2, GameMode.CLASSIC);
+        game.subscribe(match);
         game.setupGame();
         shaman = CharacterCard.createCharacterCard(CharacterCardType.SHAMAN, game);
         shaman.init();
@@ -287,5 +291,20 @@ public class ShamanTest
         assertEquals("[Shaman] No player selected", e1.getMessage());
 
         shaman.activated = false;
+    }
+
+    @Test
+    public void putStudentToDiningTest()
+    {
+        // Now there is still not a selected player
+        assertThrows(NoSuchElementException.class,
+                () -> game.putStudentToDining(new Student(SchoolColor.GREEN)));
+
+        // Select a player
+        shaman.selectPlayer(1);
+
+        // Put accurately a student to the dining
+        shaman.putStudentToDining(new Student(SchoolColor.BLUE));
+        assertEquals(1, player2.getBoard().getStudentsNumber(SchoolColor.BLUE));
     }
 }

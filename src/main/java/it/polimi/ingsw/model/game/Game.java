@@ -174,18 +174,13 @@ public class Game implements Publisher<ModelUpdate>
     {
         List<Player> sortedList = new ArrayList<>(players);
 
-        try
-        {
-            // If a player hasn't selected a card, its turnOrder will be 10, in order to be last
-            sortedList.sort((a, b) -> a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
-                    getTurnOrder() == b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
-                    getTurnOrder() ? computeDistance(a) - computeDistance(b)
-                    : a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder()
-                    - b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder());
-        } catch (NoSuchElementException e)
-        {
-            throw new NoSelectedAssistantCardException("[Game]");
-        }
+        // If a player hasn't selected a card, its turnOrder will be 10, in order to be last
+        sortedList.sort((a, b) -> a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
+                getTurnOrder() == b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
+                getTurnOrder() ? computeDistance(a) - computeDistance(b)
+                : a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder()
+                - b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder());
+
         return sortedList;
     }
 

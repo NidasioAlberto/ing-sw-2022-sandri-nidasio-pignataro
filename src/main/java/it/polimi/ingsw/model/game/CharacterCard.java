@@ -221,6 +221,11 @@ public abstract class CharacterCard extends Game implements Serializable
         instance.addPlayer(player);
     }
 
+    public void removePlayer(String playerName)
+    {
+        instance.removePlayer(playerName);
+    }
+
     public void selectPlayer(int index)
     {
         instance.selectPlayer(index);
@@ -373,8 +378,7 @@ public abstract class CharacterCard extends Game implements Serializable
 
     public Island getCurrentIsland() throws NoSuchElementException
     {
-        return islands
-                .get(motherNatureIndex.orElseThrow(() -> new NoSuchElementException("[Game] No mother nature index, is the game initialized?")));
+        return instance.getCurrentIsland();
     }
 
     public Optional<Integer> getMotherNatureIndex()

@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.network.Match;
+import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,6 +48,8 @@ public class JokerTest
         }
 
         // Setup the game
+        Match match = new Match(new Server(), "test", 2, GameMode.CLASSIC);
+        game.subscribe(match);
         game.setupGame();
 
         originalBagStudents = game.getStudentBag();
@@ -75,6 +79,9 @@ public class JokerTest
 
         // Verify the cost
         assertEquals(1, joker.cost);
+
+        // Verify the number of students
+        assertEquals(6, ((Joker) joker).getStudents().size());
     }
 
     @Test

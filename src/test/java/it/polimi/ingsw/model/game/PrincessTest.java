@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,6 +78,8 @@ public class PrincessTest
         assertEquals(false, princess.isActivated());
 
         assertNotEquals(null, princess.toString());
+
+        assertEquals(4, ((Princess) princess).getStudents().size());
     }
 
     @Test
@@ -199,5 +202,22 @@ public class PrincessTest
         }
 
         assertEquals(1, count);
+
+        // Remove all the students from the bag to test the princess when the game is ending
+        while (princess.getStudentBag().size() > 0)
+            try
+            {
+                princess.getStudentFromBag();
+            } catch (EndGameException e)
+            {
+            }
+
+        // Apply the action when the game is ending
+        princess.activated = true;
+        SchoolColor selected1 = ((Princess) princess).getStudents().get(0).getColor();
+        player1.clearSelections();
+        player1.selectColor(selected1);
+        assertDoesNotThrow(() -> princess.applyAction());
+        assertNotEquals(null, princess.toString());
     }
 }

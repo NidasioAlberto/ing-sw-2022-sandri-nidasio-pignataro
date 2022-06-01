@@ -25,7 +25,7 @@ public class CharacterCardTest
         Player player1 = new Player("Player1", TowerColor.WHITE, GameMode.CLASSIC);
         Player player2 = new Player("Player2", TowerColor.BLACK, GameMode.CLASSIC);
 
-        game = new Game();
+        game = new Game(2, GameMode.EXPERT);
         thief = CharacterCard.createCharacterCard(CharacterCardType.THIEF, game);
 
         // Too many players are added to the game
@@ -129,13 +129,38 @@ public class CharacterCardTest
         thief.fillClouds();
         assertEquals(3, thief.getCloudTiles().get(0).getStudents().size());
 
-        assertNotEquals(null, thief.toString());
-
-        // The game is in classic mode so there are no character cards
-        assertEquals(0, thief.getCharacterCards().size());
+        // The game is in expert mode so there are 3 character cards
+        assertEquals(3, thief.getCharacterCards().size());
         assertDoesNotThrow(() -> thief.clearTurn());
         assertDoesNotThrow(() -> thief.clearCharacterCard());
         assertDoesNotThrow(() -> thief.setCurrentCharacterCard(0));
+
+        // Add a student to bag
+        int bagSize = thief.getStudentBag().size();
+        thief.addStudentToBag(new Student(SchoolColor.BLUE));
+        assertEquals(bagSize + 1, thief.getStudentBag().size());
+
+        // Remove a professor
+        int professorSize = thief.getProfessors().size();
+        thief.removeProfessor(0);
+        assertEquals(professorSize - 1, thief.getProfessors().size());
+
+        // Check cloud tiles
+        assertEquals(2, thief.getCloudTiles().size());
+
+        // Check mother nature index
+        int motherNatureIndex = thief.getMotherNatureIndex().get();
+        assertEquals(motherNatureIndex, thief.getIslands().indexOf(thief.getCurrentIsland()));
+
+        // Check notify players
+        assertDoesNotThrow(() -> thief.notifyPlayers());
+
+        // Check to string
+        thief.activated = true;
+        assertNotEquals(null, thief.toString());
+
+        // Check game mode
+        assertEquals(GameMode.EXPERT, thief.getGameMode());
     }
 
     @Test

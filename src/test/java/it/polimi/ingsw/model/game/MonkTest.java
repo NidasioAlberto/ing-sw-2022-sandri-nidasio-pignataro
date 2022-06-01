@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.BeforeEach;
@@ -216,5 +217,24 @@ public class MonkTest
         assertEquals(4, ((Monk) monk).getStudents().size());
         // At the end the card deactivates by itself
         assertFalse(monk.activated);
+
+
+        // Remove all the students from the bag to test the princess when the game is ending
+        while (monk.getStudentBag().size() > 0)
+            try
+            {
+                monk.getStudentFromBag();
+            } catch (EndGameException e4)
+            {
+            }
+
+        // Apply the action when the game is ending
+        monk.activated = true;
+        SchoolColor selected1 = ((Monk) monk).getStudents().get(0).getColor();
+        player1.clearSelections();
+        player1.selectColor(selected1);
+        player1.selectIsland(0);
+        assertDoesNotThrow(() -> monk.applyAction());
+        assertNotEquals(null, monk.toString());
     }
 }

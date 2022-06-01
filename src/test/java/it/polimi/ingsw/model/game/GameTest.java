@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.module.FindException;
 import java.util.*;
 
 public class GameTest
@@ -195,6 +194,13 @@ public class GameTest
 
         // There should be a student in the selected island
         assertEquals(player2.getBoard().getStudentsNumber(SchoolColor.YELLOW), 1);
+
+        // Setup the game
+        game.setupGame();
+
+        // Put accurately a student to the dining
+        game.putStudentToDining(new Student(SchoolColor.BLUE));
+        assertEquals(1, player2.getBoard().getStudentsNumber(SchoolColor.BLUE));
     }
 
     @Test
@@ -211,6 +217,9 @@ public class GameTest
         assertDoesNotThrow(() -> game.addPlayer(player1));
         assertDoesNotThrow(() -> game.addPlayer(player2));
 
+        // Setup the game
+        game.setupGame();
+
         // This should fail because there isn't a selected player
         assertThrows(NoSuchElementException.class, () -> game.pickStudentFromEntrance());
 
@@ -218,9 +227,6 @@ public class GameTest
 
         // This should still fail because the selected player has not selected a color
         assertThrows(NoSuchElementException.class, () -> game.pickStudentFromEntrance());
-
-        // Setup the game
-        game.setupGame();
 
         // Select the first student's color in the player's entrance
         player2.selectColor(player2.getBoard().getStudentsInEntrance().get(0).getColor());
@@ -700,5 +706,66 @@ public class GameTest
         // Check the players number and the game mode
         assertEquals(2, game.getPlayersNumber());
         assertEquals(GameMode.EXPERT, game.getGameMode());
+    }
+
+    @Test
+    public void removePlayerTest()
+    {
+        // Create a player
+        Player player1 = new Player("player1", TowerColor.BLACK, GameMode.EXPERT);
+
+        try
+        {
+            // Add a player to the game
+            game.addPlayer(player1);
+        } catch (TooManyPlayersException e)
+        {
+        }
+
+        // Remove accurately the player
+        assertEquals(1, game.getPlayerTableList().size());
+        game.removePlayer(player1.getNickname());
+        assertEquals(0, game.getPlayerTableList().size());
+
+
+        try
+        {
+            // Add a player to the game
+            game.addPlayer(player1);
+        } catch (TooManyPlayersException e)
+        {
+        }
+
+        // Remove a player not present in the game, so an exception is thrown
+        assertThrows(NoSelectedPlayerException.class, () -> game.removePlayer("player2"));
+    }
+
+    @Test
+    public void generalTest()
+    {
+        // Create the players
+        Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
+        Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
+
+        // Add the players to the game
+        assertDoesNotThrow(() -> game.addPlayer(player1));
+        assertDoesNotThrow(() -> game.addPlayer(player2));
+
+        // Set up the game
+        game.setupGame();
+
+        // Set the current player
+        assertDoesNotThrow(() -> game.setCurrentPlayerIndexByTable(1));
+
+        // Notify the players
+        assertDoesNotThrow(() -> game.notifyPlayers());
+
+        // Remove student from a cloud tile
+        game.getCloudTiles().get(0).removeStudents();
+
+        // Remove students from the bag so that when fillClouds is called the EndGameException is thrown
+        while (game.getStudentBag().size() > 2)
+            game.getStudentFromBag();
+        assertDoesNotThrow(() -> game.fillClouds());
     }
 }

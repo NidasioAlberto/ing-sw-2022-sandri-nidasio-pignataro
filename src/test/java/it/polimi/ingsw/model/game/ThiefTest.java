@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.network.Match;
+import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +39,8 @@ public class ThiefTest
             game.addPlayer(player2);
         } catch (Exception e) {
         }
-
+        Match match = new Match(new Server(), "test", 2, GameMode.CLASSIC);
+        game.subscribe(match);
         // Setup the game
         game.setupGame();
 
@@ -198,5 +202,22 @@ public class ThiefTest
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.BLUE));
         assertEquals(1, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.RED));
+
+        // Toggle all the cards of one player to test the thief when the game is ending
+        for (AssistantCard card : player1.getCards())
+            card.toggleUsed();
+        thief.activated = true;
+        thief.applyAction();
+
+        // Remove all the students from the bag to test the thief when the game is ending
+        while (game.getStudentBag().size() > 0)
+            try
+            {
+                game.getStudentFromBag();
+            } catch (EndGameException e)
+            {
+            }
+        thief.activated = true;
+        thief.applyAction();
     }
 }

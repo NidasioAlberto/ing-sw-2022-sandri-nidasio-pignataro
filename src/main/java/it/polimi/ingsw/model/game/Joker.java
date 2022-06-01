@@ -134,7 +134,7 @@ public class Joker extends CharacterCard
         // Get the selected student from the card
         Optional<Student> cardStudent = students.stream().filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(1)).findFirst();
 
-        // If the selected student is not present on the card an exception is thrown and the student is replaced in the entrance
+        // If the selected student is not present on the card an exception is thrown and the student is re-placed in the entrance
         if (cardStudent.isEmpty())
         {
             currentPlayer.getBoard().addStudentToEntrance(entranceStudent);
