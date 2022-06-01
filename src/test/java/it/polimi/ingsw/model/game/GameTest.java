@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.game;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.*;
 
+import it.polimi.ingsw.network.Match;
+import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +18,10 @@ public class GameTest
     @BeforeEach
     public void init()
     {
-        game = new Game(2, GameMode.CLASSIC);
+        game = new Game(2, GameMode.EXPERT);
+        assertThrows(NullPointerException.class, () -> game.subscribe(null));
+        Match match = new Match(new Server(), "test", 2, GameMode.CLASSIC);
+        game.subscribe(match);
     }
 
     @Test
@@ -396,6 +401,44 @@ public class GameTest
 
         assertEquals(11, game.getIslands().size());
 
+        // Add a noEntryTile and the computeInfluence
+        game.getIslands().get(islandIndex).addNoEntryTile();
+        assertEquals(1, game.getIslands().get(islandIndex).getNoEntryTiles());
+        game.computeInfluence(islandIndex);
+        assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
+
+        // Player1 adds a student and conquers that professor
+        player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.BLUE));
+        game.conquerProfessors();
+
+        // Add a student of the same color on an island
+        int previousIslandIndex = islandIndex < 2 ? game.getIslands().size() - 2 : islandIndex - 2;
+        game.getIslands().get(previousIslandIndex).addStudent(new Student(SchoolColor.BLUE));
+
+        // Remove all the towers form player1, except 1, so that when the influence is computed
+        // an EndGameException will be thrown
+        for (int i = 0; i < player1.getBoard().getMaxTowers() - 2; i++)
+            player1.getBoard().removeTower(TowerColor.BLACK);
+        assertThrows(EndGameException.class, () -> game.computeInfluence(previousIslandIndex));
+
+        // Add a tower to player1 because has finished them
+        player1.getBoard().addTower(new Tower(TowerColor.BLACK));
+
+        // Player2 adds a student and conquers that professor
+        player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        game.conquerProfessors();
+
+        // Put some student of that color on the previous island so that player2 has more influence there
+        game.getIslands().get(previousIslandIndex).addStudent(new Student(SchoolColor.GREEN));
+        game.getIslands().get(previousIslandIndex).addStudent(new Student(SchoolColor.GREEN));
+        game.getIslands().get(previousIslandIndex).addStudent(new Student(SchoolColor.GREEN));
+        game.getIslands().get(previousIslandIndex).addStudent(new Student(SchoolColor.GREEN));
+
+        // Remove all the towers form player2, except 1, so that when the influence is computed
+        // an EndGameException will be thrown
+        for (int i = 0; i < player2.getBoard().getMaxTowers() - 1; i++)
+            player2.getBoard().removeTower(TowerColor.GREY);
+        assertThrows(EndGameException.class, () -> game.computeInfluence(previousIslandIndex));
     }
 
     @Test
@@ -572,8 +615,8 @@ public class GameTest
         // Setup the game
         game.setupGame();
 
-        // With a classic game the character cards should not be present
-        assertEquals(0, game.getCharacterCards().size());
+        // With an expert game there should be 3 character cards
+        assertEquals(3, game.getCharacterCards().size());
 
         // Setup an expert game
         game = new Game(2, GameMode.EXPERT);
@@ -656,6 +699,6 @@ public class GameTest
 
         // Check the players number and the game mode
         assertEquals(2, game.getPlayersNumber());
-        assertEquals(GameMode.CLASSIC, game.getGameMode());
+        assertEquals(GameMode.EXPERT, game.getGameMode());
     }
 }

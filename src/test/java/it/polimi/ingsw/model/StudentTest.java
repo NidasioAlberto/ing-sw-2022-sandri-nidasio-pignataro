@@ -15,6 +15,7 @@ public class StudentTest
         {
             Student s = new Student(color);
             assertEquals(color, s.getColor());
+            assertNotEquals(null, s.toString());
         }
     }
 

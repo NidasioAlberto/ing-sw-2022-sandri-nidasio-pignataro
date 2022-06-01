@@ -13,8 +13,9 @@ public class TowerTest
     {
         for (TowerColor color : TowerColor.values())
         {
-            Tower s = new Tower(color);
-            assertEquals(color, s.getColor());
+            Tower t = new Tower(color);
+            assertEquals(color, t.getColor());
+            assertNotEquals(null, t.toString());
         }
     }
 

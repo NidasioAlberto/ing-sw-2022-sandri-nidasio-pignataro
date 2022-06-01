@@ -98,6 +98,7 @@ public class CentaurTest
                     assertTrue(centaur.isValidAction(action));
                 else
                     assertFalse(centaur.isValidAction(action));
+                assertNotEquals(null, action.toString());
             }
         } catch (NotEnoughCoinsException e)
         {

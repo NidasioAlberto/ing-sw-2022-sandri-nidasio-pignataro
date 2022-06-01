@@ -76,6 +76,28 @@ public class PlayerConnection implements Runnable
 
     public void setPlayerName(String playerName)
     {
+        // Max length is 18 because otherwise it would be too long respect the string representation of the SchoolBoard
+        if (playerName.length() >= 18)
+        {
+            sendAnswer(new ErrorAnswer("The name is too long"));
+            return;
+        }
+        else
+        {
+            // Check the playerName isn't empty or composed only by empty characters
+            int i;
+            for (i = 0; i < playerName.length(); i++)
+            {
+                if (playerName.charAt(i) != ' ')
+                    break;
+            }
+            if (playerName.length() == 0 || i == playerName.length())
+            {
+                sendAnswer(new ErrorAnswer("The name is empty"));
+                return;
+            }
+        }
+
         this.playerName = Optional.of(playerName);
         sendAnswer(new SetNameAnswer(playerName));
 
@@ -191,7 +213,7 @@ public class PlayerConnection implements Runnable
         sendObject(update);
     }
 
-    private void sendObject(Object object)
+    private synchronized void sendObject(Object object)
     {
         System.out.println("[PlayerConnection] Sending " + object.getClass().getSimpleName() + " to player " + playerName.orElse(""));
         try
@@ -202,7 +224,6 @@ public class PlayerConnection implements Runnable
         } catch (IOException e)
         {
             System.err.println("[PlayerConnection] Error while writing: " + e.getMessage());
-            e.printStackTrace();
             close();
         }
     }

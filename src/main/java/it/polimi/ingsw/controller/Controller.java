@@ -146,7 +146,6 @@ public class Controller
             actionHandler = new GameActionHandler(game);
         } catch (NotEnoughPlayersException e)
         {
-            // TODO: Review how this should happen
             match.endMatch(e.getMessage());
         }
     }

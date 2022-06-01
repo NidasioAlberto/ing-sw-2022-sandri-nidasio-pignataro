@@ -38,7 +38,7 @@ public class Match implements Subscriber<ModelUpdate>
 
     private String matchId;
 
-    Match(Server server, String matchId, int playersNumber, GameMode mode)
+    public Match(Server server, String matchId, int playersNumber, GameMode mode)
     {
         this.server = server;
         this.matchId = matchId;
@@ -100,7 +100,7 @@ public class Match implements Subscriber<ModelUpdate>
 
                // Send the current status of the game to the player
                 gameController.getGame().notifyPlayers();
-                System.out.println("[Match] Previously disconnected player added to the match");
+                System.out.println("[Match] Previously disconnected player added to the match " + player.getPlayerName().get());
             }
 
             return true;

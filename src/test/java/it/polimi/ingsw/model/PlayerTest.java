@@ -1,10 +1,15 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.network.Match;
+import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -330,4 +335,19 @@ public class PlayerTest
         assertTrue(player.getSelectedCloudTile().isEmpty());
         assertTrue(player.getSelectedCharacterCard().isEmpty());
     }
+
+    @Test
+    public void notifySubscriberTest()
+    {
+        assertThrows(NullPointerException.class, () -> player.subscribe(null));
+
+        Match match = new Match(new Server(), "test", 2, GameMode.CLASSIC);
+        player.subscribe(match);
+
+        player.addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
+        player.addCard(new AssistantCard(Wizard.WIZARD_1, 2, 1));
+        player.selectCard(1);
+        player.notifySubscriber();
+    }
 }
+

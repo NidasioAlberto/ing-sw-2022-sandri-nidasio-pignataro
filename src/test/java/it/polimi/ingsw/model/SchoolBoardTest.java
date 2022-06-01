@@ -49,6 +49,7 @@ public class SchoolBoardTest
         // With 2 players the board has 7 students and 6 towers
         assertEquals(7, board.getMaxStudentsInEntrance());
         assertEquals(8, board.getMaxTowers());
+        assertEquals(GameMode.CLASSIC, board.getMode());
 
         board = new SchoolBoard(TowerColor.GREY, GameMode.CLASSIC);
         board.setPlayersNumber(3);

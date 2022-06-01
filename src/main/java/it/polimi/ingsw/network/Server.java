@@ -181,7 +181,7 @@ public class Server
             match.removePlayer(player);
             playersMapMatch.remove(player);
 
-            System.out.println("[Server] Removed player from match");
+            System.out.println("[Server] Removed player from match " + player.getPlayerName().get());
 
             // And add him to the lobby
             lobby.add(player);

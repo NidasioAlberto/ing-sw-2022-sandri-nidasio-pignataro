@@ -370,6 +370,7 @@ public class IslandTest
         // One student of this color on the island
         island.addStudent(student);
         assertEquals(1, island.getStudentsByColor(SchoolColor.BLUE));
+        assertNotEquals(null, island.toString());
 
         island.addTower(new Tower(TowerColor.WHITE));
         Island island2 = new Island();
@@ -383,6 +384,7 @@ public class IslandTest
         // Two students of this color on the island
         assertEquals(2, island.getStudentsByColor(SchoolColor.GREEN));
 
+        island.addNoEntryTile();
         assertNotEquals(null, island.toString());
     }
 }

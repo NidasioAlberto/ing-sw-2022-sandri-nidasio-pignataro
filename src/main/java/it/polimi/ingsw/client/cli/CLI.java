@@ -164,11 +164,6 @@ public class CLI implements Visualizable, Runnable
             {
                 PrintHelper.print("Player name: ");
                 String playerName = scanner.nextLine();
-                if (playerName.length() >= 18)
-                {
-                    PrintHelper.printMessage("The name is too long");
-                    break;
-                }
                 client.sendCommand(new SetNameCommand(playerName));
                 break;
             }
