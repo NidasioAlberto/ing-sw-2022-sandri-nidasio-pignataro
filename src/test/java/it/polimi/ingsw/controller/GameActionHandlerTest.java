@@ -64,6 +64,9 @@ public class GameActionHandlerTest
 
                 // At the beginning the FSM is in the PlanPhase
                 assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
+                // Set a null phase, so an exception is thrown
+                assertThrows(NullPointerException.class, () -> handler.setGamePhase(null));
         }
 
         @Test
@@ -74,7 +77,7 @@ public class GameActionHandlerTest
                                 () -> handler.handleAction(null, "player1"));
                 assertEquals("[GameActionHandler] Null action message", e1.getMessage());
 
-                // The action isn't legit because player1 should play and not player2
+               // The action isn't legit because player1 should play and not player2
                 assertThrows(WrongPlayerException.class, () -> handler
                                 .handleAction(new PlayAssistantCardMessage(1), "player2"));
 
@@ -276,6 +279,9 @@ public class GameActionHandlerTest
                                 assertEquals(card, game.getCurrentCharacterCard().get());
                                 assertTrue(card.isActivated());
 
+                                // An exception is thrown if the action is null
+                                assertThrows(NullPointerException.class, () -> handler.handleAction(null, "player3"));
+
                                 // player3 applies the action of the monk
                                 SchoolColor color9 = ((Monk) card).getStudents().get(0).getColor();
                                 List<SchoolColor> colors = new ArrayList<>();
@@ -464,6 +470,9 @@ public class GameActionHandlerTest
         }
 
         @Test
+        /**
+         * Test how the game behaves when two or more players play the same assistant card.
+         */
         public void matchingCardsTest()
         {
                 // player1 selects an assistant card
@@ -669,6 +678,10 @@ public class GameActionHandlerTest
 
                 for (CharacterCard card : game.getCharacterCards())
                 {
+                        // player1 tries to play a card with a wrong index, so an exception is thrown
+                        assertThrows(InvalidCharacterCardException.class, () -> handler.handleAction(
+                                new PlayCharacterCardMessage(game.getCharacterCards().indexOf(4)),"player1"));
+
                         if (card instanceof Centaur)
                         {
                                 game.getSelectedPlayer().get().getBoard().addCoins(10);
@@ -729,5 +742,130 @@ public class GameActionHandlerTest
 
                 // We now move to EndTurnPhase
                 assertDoesNotThrow(() -> handler.handleAction(new EndTurnMessage(), "player1"));
+        }
+
+        @Test
+        /**
+         * Test the possible phases of the FSM of the handler.
+         */
+        public void phaseTest()
+        {
+                // Plan Phase
+                // Set the plan phase
+                handler.setGamePhase(new PlanPhase());
+
+                // At the beginning the count is 0
+                assertEquals(0, ((PlanPhase) handler.getGamePhase()).getCount());
+
+
+                // MoveStudentPhase
+                // Set move student phase
+                handler.setGamePhase(new MoveStudentPhase());
+
+                // The given name and the name of the current player are different, so an exception is thrown
+                game.selectPlayer(0);
+                assertThrows(WrongPlayerException.class, () -> handler.getGamePhase().isLegitAction(handler, "wrongPlayer", BaseGameAction.END_TURN));
+
+
+                // MoveMotherNaturePhase
+                // Set move mother nature phase
+                handler.setGamePhase(new MoveMotherNaturePhase());
+
+                // The given name and the name of the current player are different, so an exception is thrown
+                game.selectPlayer(0);
+                assertThrows(WrongPlayerException.class, () -> handler.getGamePhase().isLegitAction(handler, "wrongPlayer", BaseGameAction.END_TURN));
+
+                // Toggle all the cards of one player to test the phase when the game is ending
+                for (AssistantCard card : game.getPlayerTableList().get(0).getCards())
+                        card.toggleUsed();
+                handler.getGamePhase().onValidAction(handler);
+                assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
+                game.getPlayerTableList().get(0).addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
+
+                // Remove all the students from the bag to test the phase when the game is ending
+                handler.setGamePhase(new MoveMotherNaturePhase());
+                while (game.getStudentBag().size() > 0)
+                        try
+                        {
+                                game.getStudentFromBag();
+                        } catch (EndGameException e)
+                        {
+                        }
+                handler.getGamePhase().onValidAction(handler);
+                assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
+
+
+                // SelectCloudTilePhase
+                // Set select cloud tile phase
+                handler.setGamePhase(new SelectCloudTilePhase());
+
+                // The given name and the name of the current player are different, so an exception is thrown
+                game.selectPlayer(0);
+                assertThrows(WrongPlayerException.class, () -> handler.getGamePhase().isLegitAction(handler, "wrongPlayer", BaseGameAction.END_TURN));
+
+
+                // EndTurnPhase
+                // Set end turn phase
+                handler.setGamePhase(new EndTurnPhase());
+
+                // The given name and the name of the current player are different, so an exception is thrown
+                game.selectPlayer(0);
+                assertThrows(WrongPlayerException.class, () -> handler.getGamePhase().isLegitAction(handler, "wrongPlayer", BaseGameAction.END_TURN));
+
+                // Toggle all the cards of one player to test the phase when the game is ending
+                for (AssistantCard card : game.getPlayerTableList().get(0).getCards())
+                        card.toggleUsed();
+                assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
+                assertTrue(handler.getGamePhase() instanceof EndGamePhase);
+
+                // Remove all the students from the bag to test the phase when the game is ending
+                handler.setGamePhase(new EndTurnPhase());
+                while (game.getStudentBag().size() > 0)
+                        try
+                        {
+                                game.getStudentFromBag();
+                        } catch (EndGameException e)
+                        {
+                        }
+                assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
+                assertTrue(handler.getGamePhase() instanceof EndGamePhase);
+
+
+                // EndGamePhase
+                // Set end game phase
+                handler.setGamePhase(new EndGamePhase());
+
+                // In end game phase isLegitAction always returns false
+                for (BaseGameAction action : BaseGameAction.values())
+                      assertFalse(handler.getGamePhase().isLegitAction(handler, "player1", action));
+
+
+                // SuspendedPhase
+                handler.setGamePhase(new SuspendedPhase(new PlanPhase(), controller));
+
+                ((SuspendedPhase) handler.getGamePhase()).getTimeout();
+
+                // The given name and the name of the current player are different, so an exception is thrown
+                game.selectPlayer(0);
+                assertThrows(WrongPlayerException.class, () -> handler.getGamePhase().isLegitAction(handler, "wrongPlayer", BaseGameAction.END_TURN));
+
+                // In suspended phase isLegitAction always returns false
+                game.selectPlayer(0);
+                for (Player player : game.getPlayerTableList())
+                        player.setActive(false);
+
+                for (BaseGameAction action : BaseGameAction.values())
+                        assertFalse(handler.getGamePhase().isLegitAction(handler, "player1", action));
+
+                // The current player is not active and we were in planPhase so at the end of
+                // SuspendedPhase we move back to PlanPhase
+                handler.getGamePhase().onValidAction(handler);
+                assertTrue(handler.getGamePhase() instanceof PlanPhase);
+
+                // The current player is not active and we were not in planPhase so at the end of
+                // SuspendedPhase we move to EndTurnPhase
+                handler.setGamePhase(new SuspendedPhase(new MoveStudentPhase(), controller));
+                assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
+                assertTrue(handler.getGamePhase() instanceof EndGamePhase);
         }
 }

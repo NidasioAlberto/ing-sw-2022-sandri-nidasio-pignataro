@@ -15,16 +15,16 @@ public class EndTurnPhase implements Phase
      */
     private boolean isGameEnding(GameActionHandler handler)
     {
-        // If the student bag is empty i return immediately true
-        if(handler.getGame().getStudentBag().size() == 0)
-            return true;
-
         // I can return true if i find a player with no assistant cards available anymore
         for(Player player : handler.getGame().getPlayerTableList())
         {
             if(player.getCards().stream().filter(c -> !c.isUsed()).findFirst().isEmpty())
                 return true;
         }
+
+        // If the student bag is empty i return immediately true
+        if(handler.getGame().getStudentBag().size() == 0)
+            return true;
 
         return false;
     }
