@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.ProfessorType;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.client.gui.objects.types.TowerType;
+import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.TowerColor;
 import javafx.geometry.Point3D;
@@ -50,12 +51,12 @@ public class DrawableSchoolBoard extends DrawableObject
     /**
      * X Dimension constant
      */
-    private final float X_DIMENSION;
+    private final double X_DIMENSION;
 
     /**
      * Y Dimension constant
      */
-    private final float Y_DIMENSION;
+    private final double Y_DIMENSION;
 
     /**
      * Box containing the SchoolBoard texture
@@ -77,7 +78,7 @@ public class DrawableSchoolBoard extends DrawableObject
      * 
      * @param x_dimension The x dimension of the board
      */
-    public DrawableSchoolBoard(float x_dimension, String playerName, AnimationHandler updater)
+    public DrawableSchoolBoard(double x_dimension, String playerName, AnimationHandler updater)
     {
         super(updater);
 
@@ -221,6 +222,68 @@ public class DrawableSchoolBoard extends DrawableObject
     }
 
     /**
+     * Method to update this board to match the passed one
+     * 
+     * @param board The goal board
+     */
+    public void update(SchoolBoard board, Group group, PointLight light)
+    {
+        // Entrance
+        for (SchoolColor color : SchoolColor.values())
+        {
+            // Calculate the actual number of students
+            long numBoard = board.getStudentsInEntrance().stream().filter((s) -> s.getColor() == color).count();
+            long num = entrance.stream().filter((s) -> s.getType().name().equals(color.name())).count();
+
+            // Remove or add the difference
+            if (num > numBoard)
+            {
+                for (long i = numBoard; i < num; i++)
+                    this.removeStudentFromEntrance(color, group, light);
+            } else if (numBoard > num)
+            {
+                for (long i = num; i < numBoard; i++)
+                    this.addStudentToEntrance(color, group, light);
+            }
+        }
+
+        // Dining
+        for (SchoolColor color : SchoolColor.values())
+        {
+            long numBoard = board.getStudentsNumber(color);
+            long num = dining.get(color).size();
+
+            // Remove or add the difference
+            if (num > numBoard)
+            {
+                for (long i = numBoard; i < num; i++)
+                    this.removeStudentFromDining(color, group, light);
+            } else if (numBoard > num)
+            {
+                for (long i = num; i < numBoard; i++)
+                    this.addStudentToDining(color, group, light);
+            }
+        }
+
+        // Towers
+        {
+            long numBoard = board.getTowers().size();
+            long num = towers.size();
+
+            // Remove or add the difference
+            if (num > numBoard)
+            {
+                for (long i = numBoard; i < num; i++)
+                    this.removeTower(group, light);
+            } else if (numBoard > num)
+            {
+                for (long i = num; i < numBoard; i++)
+                    this.addTower(board.getTowerColor(), group, light);
+            }
+        }
+    }
+
+    /**
      * Adds a student to the dining room
      * 
      * @param color The student color to be added
@@ -263,6 +326,32 @@ public class DrawableSchoolBoard extends DrawableObject
         // Add the student to the group and to the lights
         student.addToGroup(group);
         student.subscribeToPointLight(light);
+    }
+
+    /**
+     * Removes a student from the dining room
+     * 
+     * @param color The color to be removed
+     * @param group The group from which remove the student
+     * @param light The light from which unsubscribe the student
+     */
+    public void removeStudentFromDining(SchoolColor color, Group group, PointLight light)
+    {
+        // I do nothing if the size of students of that color is 0
+        if (dining.get(color).size() == 0)
+            return;
+
+        // Take the student instance
+        DrawableStudent student = dining.get(color).get(dining.get(color).size() - 1);
+
+        // Remove the student from the group
+        student.removeFromGroup(group);
+
+        // Unsubscribe the student from the light
+        student.unsubscribeFromPointLight(light);
+
+        // Remove the instance from the list
+        dining.get(color).remove(student);
     }
 
     /**
@@ -311,6 +400,32 @@ public class DrawableSchoolBoard extends DrawableObject
     }
 
     /**
+     * Removes a professor from the schoolboard
+     * 
+     * @param color The color to be removed
+     * @param group The group from which remove the professor
+     * @param light The light from which unsubscribe the professor
+     */
+    public void removeProfessor(SchoolColor color, Group group, PointLight light)
+    {
+        // I do nothing if there is no professor of that color
+        if (professors.stream().filter((p) -> p.getType().name().equals(color.name())).count() == 0)
+            return;
+
+        // Take the professor instance
+        DrawableProfessor professor = professors.stream().filter((p) -> p.getType().name().equals(color.name())).findFirst().get();
+
+        // Remove the professor from the group
+        professor.removeFromGroup(group);
+
+        // Unsubscribe the professor from the light
+        professor.unsubscribeFromPointLight(light);
+
+        // Remove the professor from the collection
+        professors.remove(professor);
+    }
+
+    /**
      * Adds a student to the entrance
      * 
      * @param color The student color
@@ -353,6 +468,48 @@ public class DrawableSchoolBoard extends DrawableObject
     }
 
     /**
+     * Removes a student from the entrance
+     * 
+     * @param color The student color
+     * @param group The group to which remove the student
+     * @param light The light to which unsubscribe the student
+     */
+    public void removeStudentFromEntrance(SchoolColor color, Group group, PointLight light)
+    {
+        // If the entrance doesn't have any student of that color i do nothing
+        if (entrance.stream().filter((s) -> s.getType().name().equals(color.name())).count() == 0)
+            return;
+
+        // Take the student to remove
+        DrawableStudent student = entrance.stream().filter((s) -> s.getType().name().equals(color.name())).findFirst().get();
+
+        // Remove the student from the group
+        student.removeFromGroup(group);
+
+        // Remove the student from the light
+        student.unsubscribeFromPointLight(light);
+
+        // Remove the student from the collection
+        entrance.remove(student);
+
+        // Update positionings
+        for (int i = 0; i < entrance.size(); i++)
+        {
+            // Create the corresponding coordinates
+            Point3D coordinates = new Point3D(FIRST_X_ENTRANCE * X_DIMENSION + ((i + 1) % 2) * ENTRANCE_X_STEP * X_DIMENSION, 0,
+                    FIRST_Y_ENTRANCE * X_DIMENSION - (int) ((i + 1) / 2) * DINING_Y_STEP * X_DIMENSION);
+
+            // Rotate the coordinates
+            for (Rotate rotation : rotations)
+                coordinates = rotation.transform(coordinates);
+
+            // Translate the student to the correct position
+            entrance.get(i).translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
+                    coordinates.getZ() + box.getTranslateZ()));
+        }
+    }
+
+    /**
      * Adds the tower to the schoolboard
      * 
      * @param color The color of the tower
@@ -391,6 +548,31 @@ public class DrawableSchoolBoard extends DrawableObject
         // Add the tower to the group and to the light
         tower.addToGroup(group);
         tower.subscribeToPointLight(light);
+    }
+
+    /**
+     * Method to remove a tower
+     * 
+     * @param group The group to which remove the tower
+     * @param light The light to which unsubscribe the tower
+     */
+    public void removeTower(Group group, PointLight light)
+    {
+        // If no tower can be removed i don't do that
+        if (towers.size() == 0)
+            return;
+
+        // Take the tower to be removed
+        DrawableTower tower = towers.get(towers.size() - 1);
+
+        // Unsubscribe from grup
+        tower.removeFromGroup(group);
+
+        // Unsubscribe from light
+        tower.unsubscribeFromPointLight(light);
+
+        // Remove the tower from the collection
+        towers.remove(towers.size() - 1);
     }
 
     /**

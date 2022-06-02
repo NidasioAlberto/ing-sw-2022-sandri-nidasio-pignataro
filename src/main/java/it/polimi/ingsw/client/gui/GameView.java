@@ -17,9 +17,6 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class represents the game window and draws all the needed stuff that the server updates and requests
  */
@@ -59,12 +56,7 @@ public class GameView extends Application implements Visualizable
     private DrawableIslandCollection islandCollection;
     private DrawableAssistantCollection assistantCollection;
     private DrawableCloudTileCollection cloudTileCollection;
-    private DrawableSchoolBoard schoolBoard;
-
-    /**
-     * Collection of all the drawable objects, useful for repetitive tasks
-     */
-    private List<DrawableObject> drawableObjects;
+    private DrawableSchoolBoardCollection schoolBoardCollection;
 
     /**
      * Client which calls the visualizable methods
@@ -106,9 +98,6 @@ public class GameView extends Application implements Visualizable
      */
     private void setup()
     {
-        // Create the collection of all the drawable objects
-        drawableObjects = new ArrayList<DrawableObject>();
-
         // Create the group and the scene
         Group group = new Group();
         scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
@@ -174,9 +163,11 @@ public class GameView extends Application implements Visualizable
         assistantCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
         cloudTileCollection = new DrawableCloudTileCollection(40, pointLight, ambientLight, group, updater);
         islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
+        schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
 
         assistantCollection.translate(new Point3D(0, -10, -290));
         islandCollection.translate(new Point3D(0, 0, 150));
+        cloudTileCollection.translate(new Point3D(0, 0, 100));
         // Start the time scheduled animations
         updater.start();
 
@@ -337,7 +328,8 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displaySchoolboard(SchoolBoardUpdate update)
     {
-
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> schoolBoardCollection.displayUpdate(update));
     }
 
     @Override

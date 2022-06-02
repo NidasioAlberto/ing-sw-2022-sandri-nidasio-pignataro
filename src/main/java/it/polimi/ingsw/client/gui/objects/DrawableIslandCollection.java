@@ -85,9 +85,6 @@ public class DrawableIslandCollection extends DrawableCollection
         motherNature.subscribeToAmbientLight(ambientLight);
         motherNature.subscribeToPointLight(pointLight);
 
-        // Create the first position on 0, 0, 0
-        position = new Point3D(0, 0, 0);
-
         // Old code
         // for (int i = 0; i < islands.length; i++)
         // {

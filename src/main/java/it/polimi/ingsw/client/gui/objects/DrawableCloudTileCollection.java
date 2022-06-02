@@ -53,7 +53,7 @@ public class DrawableCloudTileCollection extends DrawableCollection
     {
         for (int i = 0; i < tiles.size(); i++)
             tiles.get(i).translate(
-                    new Point3D(position.getX() - DIMENSION * tiles.size() / 2 + DIMENSION * (i + 1 / 2), position.getY(), position.getZ()));
+                    new Point3D(position.getX() - DIMENSION * tiles.size() / 2 + DIMENSION * (i + 1.0 / 2.0), position.getY(), position.getZ()));
     }
 
     /**
