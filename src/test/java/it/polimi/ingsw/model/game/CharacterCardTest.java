@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.Test;
 
@@ -161,6 +162,12 @@ public class CharacterCardTest
 
         // Check game mode
         assertEquals(GameMode.EXPERT, thief.getGameMode());
+
+        // Remove a wrong player doesn't throw an exception because the game is already started
+        assertDoesNotThrow(() -> thief.removePlayer("wrongPlayer"));
+
+        // Set current player
+        assertDoesNotThrow(() -> thief.setCurrentPlayerIndexByTable(0));
     }
 
     @Test

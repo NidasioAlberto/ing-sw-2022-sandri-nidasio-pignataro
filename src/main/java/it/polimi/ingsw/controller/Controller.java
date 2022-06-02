@@ -169,9 +169,6 @@ public class Controller
         } catch (EndGameException e)
         {
             endGame();
-            // se il gioco non è veramente terminato?
-            // forse conviene separare in isGameEnded and computeWinner o mi fido che il gioco sia
-            // terminato
         } catch (NoLegitActionException e)
         {
             getCurrentPlayer().clearSelections();

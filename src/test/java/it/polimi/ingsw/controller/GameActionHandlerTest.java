@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Handler;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -780,7 +782,9 @@ public class GameActionHandlerTest
                         card.toggleUsed();
                 handler.getGamePhase().onValidAction(handler);
                 assertTrue(handler.getGamePhase() instanceof EndTurnPhase);
-                game.getPlayerTableList().get(0).addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
+                game.getPlayerTableList().get(0).removeCard(1);
+                for (Wizard wizard : Wizard.values())
+                        game.getPlayerTableList().get(0).addCard(new AssistantCard(wizard, 1, 1));
 
                 // Remove all the students from the bag to test the phase when the game is ending
                 handler.setGamePhase(new MoveMotherNaturePhase());
@@ -812,14 +816,7 @@ public class GameActionHandlerTest
                 game.selectPlayer(0);
                 assertThrows(WrongPlayerException.class, () -> handler.getGamePhase().isLegitAction(handler, "wrongPlayer", BaseGameAction.END_TURN));
 
-                // Toggle all the cards of one player to test the phase when the game is ending
-                for (AssistantCard card : game.getPlayerTableList().get(0).getCards())
-                        card.toggleUsed();
-                assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
-                assertTrue(handler.getGamePhase() instanceof EndGamePhase);
-
                 // Remove all the students from the bag to test the phase when the game is ending
-                handler.setGamePhase(new EndTurnPhase());
                 while (game.getStudentBag().size() > 0)
                         try
                         {
@@ -829,6 +826,14 @@ public class GameActionHandlerTest
                         }
                 assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
                 assertTrue(handler.getGamePhase() instanceof EndGamePhase);
+
+                // Toggle all the cards of one player to test the phase when the game is ending
+                handler.setGamePhase(new EndTurnPhase());
+                for (AssistantCard card : game.getPlayerTableList().get(0).getCards())
+                        card.toggleUsed();
+                assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
+                assertTrue(handler.getGamePhase() instanceof EndGamePhase);
+                game.getPlayerTableList().get(0).addCard(new AssistantCard(Wizard.WIZARD_1, 1, 1));
 
 
                 // EndGamePhase
@@ -867,5 +872,66 @@ public class GameActionHandlerTest
                 handler.setGamePhase(new SuspendedPhase(new MoveStudentPhase(), controller));
                 assertThrows(EndGameException.class, () -> handler.getGamePhase().onValidAction(handler));
                 assertTrue(handler.getGamePhase() instanceof EndGamePhase);
+        }
+
+        @Test
+        public void boundariesTest()
+        {
+                // Move mother nature
+                game.moveMotherNature(0);
+
+                for (CharacterCard card : game.getCharacterCards())
+                        if (card instanceof Centaur)
+                        {
+                                // Mother nature has already moved so the centaur is not playable and
+                                // playCharacterCard throw an exception
+                                assertThrows(InvalidCharacterCardException.class,
+                                        () ->handler.playCharacterCard(game.getCharacterCards().indexOf(card)));
+                        }
+
+                // characterCardAction throws an exception if the action is null
+                assertThrows(NullPointerException.class, () -> handler.characterCardAction(null, null, null));
+
+                for (CharacterCard card : game.getCharacterCards())
+                        if (card instanceof Monk)
+                        {
+                                // Select the monk
+                                game.setCurrentCharacterCard(game.getCharacterCards().indexOf(card));
+
+                                // Activate the card
+                                game.selectPlayer(0);
+                                game.getSelectedPlayer().get().getBoard().addCoins(10);
+                                card.activate();
+
+                                // The action is not valid for monk so characterCardAction throws an exception
+                                assertThrows(NoLegitActionException.class,
+                                        () ->handler.characterCardAction(ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_DINING, Optional.empty(), Optional.empty()));
+                        }
+
+                // Set a classic game
+
+                Server server1 = new Server();
+                server1.createMatch("Game1", 2, GameMode.CLASSIC);
+                Match match1 = server1.getMatchById("Game1");
+                Controller controller1 = new Controller(match1, 2, GameMode.CLASSIC);
+                try
+                {
+                        controller1.addPlayer("player1");
+                        controller1.addPlayer("player2");
+                } catch (TooManyPlayersException e)
+                {
+                        e.printStackTrace();
+                }
+                GameActionHandler handler1 = controller1.getGameHandler();
+                Game game1 = handler1.getGame();
+                for (Player player : game1.getPlayerTableList())
+                        player.setActive(true);
+
+                // The game is classic so it doesn't accept to play a character card
+                assertThrows(NoLegitActionException.class, () -> handler1.playCharacterCard(1));
+
+                // The game is classic so it doesn't accept to do a character card's action
+                assertThrows(NoLegitActionException.class, () -> handler1.characterCardAction(ExpertGameAction.BASE_ACTION, null, null));
+
         }
 }

@@ -3,13 +3,12 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.controller.fsm.MoveMotherNaturePhase;
 import it.polimi.ingsw.controller.fsm.MoveStudentPhase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
+import it.polimi.ingsw.controller.fsm.SelectCloudTilePhase;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.game.CharacterCard;
-import it.polimi.ingsw.model.game.Monk;
+import it.polimi.ingsw.model.game.*;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.Match;
 import it.polimi.ingsw.protocol.messages.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,6 +115,9 @@ public class ControllerTest
             e.printStackTrace();
         }
 
+        // Add the fourth player, an exception is thrown
+        assertThrows(TooManyPlayersException.class, () -> controller.addPlayer("player4"));
+
         // Set up a game
         Game game = controller.getGameHandler().getGame();
 
@@ -179,6 +181,17 @@ public class ControllerTest
         Player player1 = controller.getGameHandler().getGame().getPlayerTableList().get(0);
         Player player2 = controller.getGameHandler().getGame().getPlayerTableList().get(1);
         Player player3 = controller.getGameHandler().getGame().getPlayerTableList().get(2);
+
+        // Only one player is active so that player wins
+        controller.setPlayerActive("player1", true);
+        controller.setPlayerActive("player2", false);
+        controller.setPlayerActive("player3", false);
+        controller.endGame();
+
+        controller.setPlayerActive("player2", true);
+        controller.setPlayerActive("player3", true);
+
+        assertDoesNotThrow(() -> controller.removePlayer("player1"));
 
         // player1 has built all the towers
         for (int i = 0; i < 5; i++)
@@ -267,6 +280,9 @@ public class ControllerTest
     @Test
     public void performActionTest()
     {
+        // An exception is thrown because it doesn't exist with the given nickname
+        assertThrows(IllegalArgumentException.class, () -> controller.performAction(null, "player1"));
+
         // Set up a game
         try
         {
@@ -300,6 +316,11 @@ public class ControllerTest
         assertDoesNotThrow(
                 () -> controller.performAction(new MoveMotherNatureMessage(2), "player2"));
 
+        // player2 selects the same assistant card as player1 so controller catches InvalidAssistantCardException
+        handler.setGamePhase(new PlanPhase());
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(1), "player2"));
+
         // player2 selects an assistant card
         assertDoesNotThrow(
                 () -> controller.performAction(new PlayAssistantCardMessage(2), "player2"));
@@ -309,6 +330,8 @@ public class ControllerTest
         assertDoesNotThrow(
                 () -> controller.performAction(new PlayAssistantCardMessage(3), "player3"));
         assertEquals(3, game.getPlayerTableList().get(2).getSelectedCard().get().getTurnOrder());
+
+        handler.setGamePhase(new MoveStudentPhase());
 
         // player1 moves a student to an island with a wrong index,
         // so an IslandIndexOutOfBounds is caught by the controller
@@ -449,5 +472,105 @@ public class ControllerTest
         // so a NoSuchAssistantCardException is caught by the controller
         assertDoesNotThrow(() -> controller.performAction(
                 new PlayAssistantCardMessage(1), "player1"));
-    }
+
+        // player1 selects an invalid cloud tile so the controller catches InvalidCloudTileException
+        handler.setGamePhase(new SelectCloudTilePhase());
+        assertDoesNotThrow(() -> controller.performAction(
+                new SelectCloudTileMessage(5), "player1"));
+
+        // player1 selects a card that doesn't have so the controller catches NoSuchAssistantCardException
+        handler.setGamePhase(new PlanPhase());
+        assertDoesNotThrow(() -> controller.performAction(
+                new PlayAssistantCardMessage(11), "player1"));
+
+        handler.setGamePhase(new MoveStudentPhase());
+        game.selectPlayer(0);
+        for (CharacterCard card : game.getCharacterCards())
+        {
+            if (card instanceof Minstrel)
+            {
+                game.getSelectedPlayer().get().getBoard().addCoins(5);
+
+                // player1 activates the minstrel card
+                assertDoesNotThrow(() -> controller.performAction(
+                        new PlayCharacterCardMessage(game.getCharacterCards().indexOf(card)),
+                        "player1"));
+                assertTrue(card.isActivated());
+
+                // Search a student color not present on the card
+                List<SchoolColor> colors = new ArrayList<>();
+
+                // Add a color present in the entrance to the list
+                colors.add(game.getPlayerTableList().get(0).getBoard().
+                        getStudentsInEntrance().get(0).getColor());
+
+                // Search a color not present in dining
+                SchoolColor color3 = null;
+                for (SchoolColor color : SchoolColor.values())
+                {
+                    if (game.getPlayerTableList().get(0).getBoard().getStudentsNumber(color) == 0)
+                    {
+                        color3 = color;
+                        break;
+                    }
+
+                }
+                colors.add(color3);
+
+                // player1 applies the action of the minstrel, but has selected a
+                // student that is not
+                // present in the dining, so a NoSuchStudentInDiningException is caught
+                // by the
+                // controller
+                assertDoesNotThrow(() -> controller.performAction(new CharacterCardActionMessage(
+                                ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_DINING, 5, colors),
+                        "player1"));
+                colors.clear();
+            }
+        }
+
+        handler.setGamePhase(new MoveStudentPhase());
+        game.selectPlayer(0);
+        for (CharacterCard card : game.getCharacterCards())
+        {
+            if (card instanceof GrandmaHerbs)
+            {
+                game.getSelectedPlayer().get().getBoard().addCoins(20);
+                game.getSelectedPlayer().get().selectIsland(0);
+
+                // Place all the noEntryTiles
+                for (int i = 0; i < 4; i++)
+                {
+                    card.activate();
+                    card.applyAction();
+                }
+
+                // player1 activates the grandma card
+                game.setCurrentCharacterCard(game.getCharacterCards().indexOf(card));
+                card.activate();
+
+                // player1 applies the action of the grandma, but the noEntryTiles are finished
+                // so a NoMoreNoEntryTilesException is caught by the controller
+                assertDoesNotThrow(() -> controller.performAction(new CharacterCardActionMessage(
+                                ExpertGameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND, 5, null),
+                        "player1"));
+            }
+        }
+
+        // Move some stuff so that when the influence is calculated the selected player places a tower
+        game.moveMotherNature(game.getIslands().size() - game.getMotherNatureIndex().get());
+        handler.setGamePhase(new MoveMotherNaturePhase());
+        Player selectedPlayer = game.getSelectedPlayer().get();
+        selectedPlayer.getBoard().addStudentToDiningRoom(new Student(SchoolColor.BLUE));
+        selectedPlayer.getBoard().addProfessor(new Professor(SchoolColor.BLUE));
+
+        // Remove all the towers from the selected player except 1
+        game.getIslands().get(1).addStudent(new Student(SchoolColor.BLUE));
+        for (int i = 0; i < 5; i++)
+            selectedPlayer.getBoard().removeTower(selectedPlayer.getColor());
+
+        // When the computeInfluence is called the last tower of the selected player is removed
+        // and GameEndException is caught by the controller
+        assertDoesNotThrow(() -> controller.performAction(new MoveMotherNatureMessage(1),selectedPlayer.getNickname()));
+}
 }

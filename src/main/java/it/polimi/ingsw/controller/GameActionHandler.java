@@ -300,14 +300,9 @@ public class GameActionHandler
                 game.getSortedPlayerList().subList(previousIndex + 1, game.getPlayersNumber()).
                 stream().filter(Player::isActive).count() == 0)
         {
-            try
-            {
-                game.fillClouds();
-                for (Player player : game.getPlayerTableList())
-                    player.clearSelectionEndRound();
-            } catch (Exception e)
-            {
-            }
+            game.fillClouds();
+            for (Player player : game.getPlayerTableList())
+                player.clearSelectionEndRound();
         }
     }
 
