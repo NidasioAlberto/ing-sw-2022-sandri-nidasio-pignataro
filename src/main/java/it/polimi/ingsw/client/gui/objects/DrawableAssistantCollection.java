@@ -62,6 +62,13 @@ public class DrawableAssistantCollection extends DrawableCollection
      */
     public void displayUpdate(AssistantCardsUpdate update)
     {
+        // Remove all the flagged assistant cards
+        for (int i = 0; i < update.getCards().size(); i++)
+        {
+            if (update.getCards().get(i).isUsed())
+                update.getCards().remove(i--);
+        }
+
         // Case when we have to create the cards
         if (assistantCards.size() == 0)
         {

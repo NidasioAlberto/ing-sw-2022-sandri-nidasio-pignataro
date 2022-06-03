@@ -1,7 +1,16 @@
 package it.polimi.ingsw.client.gui;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.protocol.messages.ActionMessage;
+import it.polimi.ingsw.protocol.messages.EndTurnMessage;
+import it.polimi.ingsw.protocol.messages.MoveMotherNatureMessage;
+import it.polimi.ingsw.protocol.messages.MoveStudentFromEntranceToDiningMessage;
+import it.polimi.ingsw.protocol.messages.MoveStudentFromEntranceToIslandMessage;
+import it.polimi.ingsw.protocol.messages.PlayAssistantCardMessage;
+import it.polimi.ingsw.protocol.messages.SelectCloudTileMessage;
 import java.util.*;
+import javax.swing.Action;
 
 /**
  * This singleton class is basically a map of lambdas that the graphical game objects use to translate the drag and drop movement into a network
@@ -17,6 +26,11 @@ public class ActionTranslator
      * Map of all the possible actions mapped with their corresponding functions
      */
     private final Map<String, Map<String, Runnable>> lookupMap;
+
+    /**
+     * Client throgh which send the messages
+     */
+    private Client client;
 
     /**
      * The two actors that determine the behaviour
@@ -78,6 +92,13 @@ public class ActionTranslator
 
         lookupMap.put("Island", new HashMap<>());
         lookupMap.get("Island").put("", () -> selectIsland());
+    }
+
+    public void setClient(Client client)
+    {
+        if (client == null)
+            throw new NullPointerException("[ActionTranslator] Null client");
+        this.client = client;
     }
 
     public void setDraggedItem(String draggedItem)
@@ -159,16 +180,40 @@ public class ActionTranslator
     }
 
     /**
+     * Method to send to the server the message
+     * 
+     * @param message The action message != null to send
+     */
+    private void sendMessage(ActionMessage message)
+    {
+        if (message == null)
+            throw new NullPointerException("[ActionTranslator] Null message");
+        try
+        {
+            client.sendAction(message);
+        } catch (Exception e)
+        {
+            System.err.println("Unable to send the message: " + e.getMessage());
+        }
+    }
+
+    /**
      * ACTION METHODS
      */
     private void moveStudentToIsland()
     {
-        System.out.println("Move student to island");
+        // System.out.println("Move student to island");
+
+        // Prepare the message
+        ActionMessage message = new MoveStudentFromEntranceToIslandMessage(selectedColors.get(0), selectedIsland);
+        sendMessage(message);
     }
 
     private void moveStudentToDining()
     {
-        System.out.println("Move student to dining");
+        // System.out.println("Move student to dining");
+        ActionMessage message = new MoveStudentFromEntranceToDiningMessage(selectedColors.get(0));
+        sendMessage(message);
     }
 
     private void swapStudentFromEntranceToDining()
@@ -198,17 +243,25 @@ public class ActionTranslator
 
     private void playAssistantCard()
     {
-        System.out.println("Play assistant card");
+        // System.out.println("Play assistant card");
+        ActionMessage message = new PlayAssistantCardMessage(selectedCard);
+        sendMessage(message);
     }
 
     private void moveMotherNature()
     {
-        System.out.println("Move mother nature");
+        // System.out.println("Move mother nature");
+        ActionMessage message = new MoveMotherNatureMessage(selectedIsland);
+        System.out.println(selectedIsland);
+        sendMessage(message);
     }
 
     private void selectCloudTile()
     {
-        System.out.println("Select cloud tile");
+        // System.out.println("Select cloud tile");
+        ActionMessage message = new SelectCloudTileMessage(selectedCloudTile);
+        sendMessage(message);
+        endTurn();
     }
 
     private void playCharacterCard()
@@ -231,7 +284,8 @@ public class ActionTranslator
      */
     public void endTurn()
     {
-
+        ActionMessage message = new EndTurnMessage();
+        sendMessage(message);
     }
 
     /**

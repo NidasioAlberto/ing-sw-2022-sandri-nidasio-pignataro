@@ -188,6 +188,9 @@ public class GameView extends Application implements Visualizable
         {
             System.out.println("Connection error");
         }
+
+        // Set the client to the action translator
+        ActionTranslator.getInstance().setClient(client);
     }
 
     /**
@@ -347,7 +350,7 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayError(ErrorAnswer answer)
     {
-
+        System.out.println(answer.getErrorMessage());
     }
 
     @Override

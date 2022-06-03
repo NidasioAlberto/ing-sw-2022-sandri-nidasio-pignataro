@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.CloudType;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
@@ -9,6 +10,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -23,6 +25,11 @@ public class DrawableCloudTile extends DrawableObject
      * The square box dimension
      */
     private final double DIMENSION;
+
+    /**
+     * Cloud tile in-game number
+     */
+    private int NUMBER;
 
     /**
      * Type of cloud tile
@@ -86,11 +93,39 @@ public class DrawableCloudTile extends DrawableObject
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
 
         // Set the tile mouse transparent
-        box.setMouseTransparent(true);
+        box.setMouseTransparent(false);
 
         // If not null subscribe to the updater
         if (updater != null)
             updater.subscribeObject(this);
+
+        // Set the click event
+        box.setOnMouseClicked((event) -> {
+            // Ensure that the click happened only one time
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1)
+            {
+                // Set the selected card and call the action
+                ActionTranslator.getInstance().setDraggedItem("CloudTile");
+
+                // Set the cloud number
+                ActionTranslator.getInstance().selectCloudTile(NUMBER);
+
+                // Execute the action
+                ActionTranslator.getInstance().execute();
+            }
+        });
+    }
+
+    /**
+     * Sets the in-game cloud tile number >= 0
+     * 
+     * @param number The number to be set
+     */
+    public void setNumber(int number)
+    {
+        if (number < 0)
+            throw new IllegalArgumentException("[DrawableCloudTile] Illegal in game number");
+        this.NUMBER = number;
     }
 
     /**

@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.objects;
 import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
+import it.polimi.ingsw.model.SchoolColor;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Cursor;
@@ -104,6 +105,9 @@ public class DrawableStudent extends DrawableObject
 
                 // Set the dragged element on the action translator
                 ActionTranslator.getInstance().setDraggedItem("Student");
+
+                // Set also the selected color
+                ActionTranslator.getInstance().selectColor(SchoolColor.valueOf(TYPE.name()));
             }
         });
 
@@ -127,6 +131,9 @@ public class DrawableStudent extends DrawableObject
 
             // Set the dragged on element
             ActionTranslator.getInstance().setDroppedOnItem("Student");
+
+            // Select the color
+            ActionTranslator.getInstance().selectColor(SchoolColor.valueOf(TYPE.name()));
 
             // Act the action translator
             ActionTranslator.getInstance().execute();

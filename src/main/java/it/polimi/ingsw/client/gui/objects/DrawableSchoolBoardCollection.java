@@ -82,9 +82,6 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
             board.subscribeToAmbientLight(ambientLight);
             board.subscribeToPointLight(pointLight);
 
-            // Add the board to the array
-            boards[update.getPlayerIndex()] = board;
-
             // Check if the board is this player board
             if (update.getPlayer().equals(playerName))
             {
@@ -97,13 +94,19 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
                 for (int i = 0; i < boards.length; i++)
                 {
                     if (boards[i] != null && !boards[i].getPlayerName().equals(playerName))
+                    {
                         number++;
+                        System.out.println(boards[i].getPlayerName() + " " + i);
+                    }
                 }
 
                 // Take the position based on the number of not main boards and translate/rotate the board
                 board.translate(otherPositions[number].add(position));
                 board.addRotation(otherRotations[number]);
             }
+
+            // Add the board to the array AFTER THE POSITION CHECK
+            boards[update.getPlayerIndex()] = board;
         }
 
         // Update the corresponding schoolboard

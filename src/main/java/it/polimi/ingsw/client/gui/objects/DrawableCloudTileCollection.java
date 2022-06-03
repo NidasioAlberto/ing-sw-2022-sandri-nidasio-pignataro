@@ -82,6 +82,10 @@ public class DrawableCloudTileCollection extends DrawableCollection
                 tile.subscribeToPointLight(pointLight);
             }
 
+            // Assign all the numbers
+            for (int i = 0; i < update.getCloudTiles().size(); i++)
+                tiles.get(i).setNumber(i);
+
             // Add the cards to the group
             this.addToGroup();
 

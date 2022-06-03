@@ -162,15 +162,25 @@ public class DrawableIslandCollection extends DrawableCollection
 
         // Update every island, keeping in mind that the islands can only be removed
         for (int i = 0; i < update.getIslands().size(); i++)
+        {
             islands.get(i).update(update.getIslands().get(i), group, pointLight);
+
+            // Set the island number also
+            islands.get(i).setNumber(i);
+        }
 
         // Delete the ones in excess
         for (int i = update.getIslands().size(); i < islands.size(); i++)
         {
             // Clear the island and delete it
             islands.get(i).clear(pointLight, group);
+            islands.get(i).removeFromGroup(group);
+            islands.get(i).unsubscribeFromAmbientLight(ambientLight);
             islands.remove(i);
         }
+
+        // I have to update the positions
+        updatePosition();
 
         // Set mother nature correctly removing it from every island and then assigning it to the correct one
         for (DrawableIsland island : islands)

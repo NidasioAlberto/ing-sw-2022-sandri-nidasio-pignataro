@@ -36,6 +36,11 @@ public class DrawableIsland extends DrawableObject
     private final int DIMENSION;
 
     /**
+     * In game island number
+     */
+    private int NUMBER;
+
+    /**
      * Positioning constants
      */
     private final double X_TOWER = -0.17;
@@ -141,6 +146,9 @@ public class DrawableIsland extends DrawableObject
             // Set the dropped on item
             ActionTranslator.getInstance().setDroppedOnItem("Island");
 
+            // Set the island number
+            ActionTranslator.getInstance().selectIsland(NUMBER);
+
             // Send the message
             ActionTranslator.getInstance().execute();
         });
@@ -225,6 +233,19 @@ public class DrawableIsland extends DrawableObject
         students.clear();
         tower = null;
         towerCount = 0;
+    }
+
+    /**
+     * Sets the in-game island number
+     * 
+     * @param number The island number >= 0
+     */
+    public void setNumber(int number)
+    {
+        if (number < 0)
+            throw new IllegalArgumentException("[DrawableIsland] Invalid island number");
+
+        this.NUMBER = number;
     }
 
     /**

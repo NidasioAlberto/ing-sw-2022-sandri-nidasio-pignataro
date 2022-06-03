@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.WizardType;
 import javafx.geometry.Point3D;
@@ -7,6 +8,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -122,6 +124,22 @@ public class DrawableAssistantCard extends DrawableObject
         frontBox.setOnMouseExited((event -> {
             this.addAnimationPosition(new Point3D(position.getX(), position.getY(), position.getZ()), 5);
         }));
+
+        // Set the double click property
+        frontBox.setOnMouseClicked((event) -> {
+            // Ensure that the click happened only one time
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1)
+            {
+                // Set the selected card and call the action
+                ActionTranslator.getInstance().setDraggedItem("AssistantCard");
+
+                // Set the card number
+                ActionTranslator.getInstance().selectCard(number);
+
+                // Execute the action
+                ActionTranslator.getInstance().execute();
+            }
+        });
     }
 
     /**

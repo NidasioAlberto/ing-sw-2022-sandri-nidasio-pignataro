@@ -281,6 +281,15 @@ public class DrawableSchoolBoard extends DrawableObject
                     this.addTower(board.getTowerColor(), group, light);
             }
         }
+
+        // Professors
+        for (SchoolColor color : SchoolColor.values())
+        {
+            if (board.getProfessors().stream().filter((p) -> p.getColor() == color).findFirst().isPresent())
+                this.addProfessor(color, group, light);
+            else
+                this.removeProfessor(color, group, light);
+        }
     }
 
     /**
