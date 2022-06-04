@@ -114,6 +114,15 @@ public class DrawableCloudTile extends DrawableObject
                 ActionTranslator.getInstance().execute();
             }
         });
+
+        // Set also the dragged over event because of reset purposes in case of a wron action
+        box.setOnMouseDragReleased((event) -> {
+            // Set the droppedOn target
+            ActionTranslator.getInstance().setDroppedOnItem("CloudTile");
+
+            // Execute the reset
+            ActionTranslator.getInstance().execute();
+        });
     }
 
     /**

@@ -63,7 +63,7 @@ public class DrawableTower extends DrawableObject
         towerMesh.setMaterial(material);
 
         // Set in general the object to mouse transparent
-        towerMesh.setMouseTransparent(false);
+        towerMesh.setMouseTransparent(true);
 
         // At the end if the updater != null i add the box to it
         if (this.updater != null)

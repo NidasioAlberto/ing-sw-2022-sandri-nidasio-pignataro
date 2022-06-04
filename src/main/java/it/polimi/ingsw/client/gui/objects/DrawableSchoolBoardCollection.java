@@ -66,6 +66,18 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
     }
 
     /**
+     * Update all the schoolboards positionings
+     */
+    public void updatePosition()
+    {
+        for (DrawableSchoolBoard board : boards)
+        {
+            if (board != null)
+                board.updatePosition();
+        }
+    }
+
+    /**
      * Method to display an update message
      * 
      * @param update The update to be rendered
@@ -102,9 +114,11 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
                     if (boards[i] != null && !boards[i].getPlayerName().equals(playerName))
                     {
                         number++;
-                        System.out.println(boards[i].getPlayerName() + " " + i);
                     }
                 }
+
+                // Set the board to mouse transparent because it's not the main one
+                board.disableVisibility();
 
                 // Take the position based on the number of not main boards and translate/rotate the board
                 board.translate(otherPositions[number].add(position));

@@ -233,7 +233,32 @@ public class DrawableSchoolBoard extends DrawableObject
     @Override
     public void disableVisibility()
     {
+        // Sets the mouse invisibility of the board and its future payloads to true
+        box.setMouseTransparent(true);
 
+        // Set the entrance students to not mouse visible
+        for (DrawableStudent student : entrance)
+            student.disableVisibility();
+    }
+
+    /**
+     * Puts everything that can be moved in the desired position
+     */
+    public void updatePosition()
+    {
+        // Entrance
+        for (int i = 0; i < entrance.size(); i++)
+        {
+            Point3D coordinates = new Point3D(FIRST_X_ENTRANCE * X_DIMENSION + ((i + 1) % 2) * ENTRANCE_X_STEP * X_DIMENSION, 0,
+                    FIRST_Y_ENTRANCE * X_DIMENSION - (int) ((i + 1) / 2) * DINING_Y_STEP * X_DIMENSION);
+
+            // For all the present rotations i rotate the student
+            for (Rotate rotation : rotations)
+                coordinates = rotation.transform(coordinates);
+
+            // Translate the student to the correct position
+            entrance.get(i).translate(coordinates.add(getPosition()));
+        }
     }
 
     /**
@@ -527,6 +552,10 @@ public class DrawableSchoolBoard extends DrawableObject
         // Translate the student to the correct position
         student.translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
                 coordinates.getZ() + box.getTranslateZ()));
+
+        // If the board itself is mouse transparent i make also the student mouse transparent
+        if (box.isMouseTransparent())
+            student.disableVisibility();
 
         // Add the student to the model
         entrance.add(student);

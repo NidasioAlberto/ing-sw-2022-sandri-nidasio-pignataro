@@ -203,6 +203,15 @@ public class DrawableIsland extends DrawableObject
 
             // Parity the number of towers
             towerCount = island.getTowers().size();
+        } else if (tower != null)
+        {
+            // I remove the towers
+            tower.removeFromGroup(group);
+            tower.unsubscribeFromPointLight(pointLight);
+            tower = null;
+
+            // Reset the counter
+            towerCount = 0;
         }
     }
 

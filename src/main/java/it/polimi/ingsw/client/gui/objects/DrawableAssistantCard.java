@@ -107,6 +107,9 @@ public class DrawableAssistantCard extends DrawableObject
         // The default card is set not flipped
         setFlipped(false);
 
+        // Set the backbox mouse invisible
+        backBox.setMouseTransparent(true);
+
         // If not null subscribe to the updater
         if (updater != null)
             updater.subscribeObject(this);
@@ -139,6 +142,15 @@ public class DrawableAssistantCard extends DrawableObject
                 // Execute the action
                 ActionTranslator.getInstance().execute();
             }
+        });
+
+        // Set the drag released event for wrong action resetting purposes
+        frontBox.setOnMouseDragReleased((event) -> {
+            // Set the dropped on element
+            ActionTranslator.getInstance().setDraggedItem("AssistantCard");
+
+            // Execute the reset
+            ActionTranslator.getInstance().execute();
         });
     }
 

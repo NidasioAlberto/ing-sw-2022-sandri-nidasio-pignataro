@@ -1,11 +1,13 @@
 package it.polimi.ingsw.client.gui;
 
+import java.util.Scanner;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.CreateMatchCommand;
+import it.polimi.ingsw.protocol.commands.JoinMatchCommand;
 import it.polimi.ingsw.protocol.commands.SetNameCommand;
 import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
@@ -43,6 +45,11 @@ public class GameView extends Application implements Visualizable
     private Scene scene;
 
     /**
+     * Group to which all the objects are added
+     */
+    private Group group;
+
+    /**
      * Scene lights
      */
     private AmbientLight ambientLight;
@@ -66,7 +73,7 @@ public class GameView extends Application implements Visualizable
     /**
      * The player name of this machine
      */
-    private final String playerName;
+    private String playerName;
 
     /**
      * Constructor
@@ -99,7 +106,7 @@ public class GameView extends Application implements Visualizable
     private void setup()
     {
         // Create the group and the scene
-        Group group = new Group();
+        group = new Group();
         scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
         // Set the scene background
         scene.setFill(Color.rgb(129, 202, 241));
@@ -117,47 +124,12 @@ public class GameView extends Application implements Visualizable
         // Set the camera up in perspective mode
         setupCamera();
 
-        // Old stuff
-        // Create all the game components
-        // group.getChildren().add(groundPlane);
-        // motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
-        // islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, updater);
-        // schoolBoard = new DrawableSchoolBoard(350, updater);
-        // DrawableSchoolBoard s2 = new DrawableSchoolBoard(350, updater);
-        // DrawableSchoolBoard s3 = new DrawableSchoolBoard(350, updater);
-        // DrawableCloudTile tile = new DrawableCloudTile(40, CloudType.CLOUD_4, updater);
-        // DrawableAssistantCollection collection = new DrawableAssistantCollection(500, WizardType.WIZARD_1, updater);
-        // DrawableIsland testIsland = new DrawableIsland(120, IslandType.ISLAND3, updater);
-        // testIsland.addStudent(StudentType.RED, group, pointLight);
-        // testIsland.addStudent(StudentType.RED, group, pointLight);
-        // testIsland.addStudent(StudentType.YELLOW, group, pointLight);
-        // testIsland.addStudent(StudentType.GREEN, group, pointLight);
-        // testIsland.addStudent(StudentType.PINK, group, pointLight);
-        // testIsland.addStudent(StudentType.BLUE, group, pointLight);
-        // testIsland.addTower(TowerType.GREY, group, pointLight);
-        // collection.translate(new Point3D(0, -10, -290));
+        // Setup the ground plane
+        setupGroundPlane();
 
-        // // Eventually modify the single objects for window design things islandCollection.translate(new Point3D(0, 0, 150));
-        // schoolBoard.translate(new Point3D(0, 0, -170));
-        // s2.translate(new Point3D(-400, 0, 150));
-        // s3.translate(new Point3D(400, 0, 150));
-        // s2.addRotation(new Rotate(90, new Point3D(0, 1, 0)));
-        // s3.addRotation(new Rotate(-90, new Point3D(0, 1, 0)));
-        // testIsland.translate(new Point3D(0, 0, 200));
-        // testIsland.addMotherNature(motherNature);
-        // tile.translate(new Point3D(0, 0, 100));
-        // tile.addStudent(StudentType.YELLOW, group, pointLight);
-        // tile.addStudent(StudentType.RED, group, pointLight);
-        // tile.addStudent(StudentType.BLUE, group, pointLight);
-        // tile.addStudent(StudentType.GREEN, group, pointLight);
-
-        // Create the ground plane so that the mouse ray casting hits something
-        // just below the playground
-        Box groundPlane = new Box(3000, 3000, 0);
-        groundPlane.translateYProperty().set(6f);
-        groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
-        groundPlane.setMaterial(new PhongMaterial(Color.TRANSPARENT));
-        group.getChildren().add(groundPlane);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Insert game name");
+        playerName = scanner.nextLine();
 
         // Set the game objects and collections
         assistantCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
@@ -184,13 +156,44 @@ public class GameView extends Application implements Visualizable
             Thread.sleep(1000);
             client.sendCommand(new SetNameCommand(playerName));
             client.sendCommand(new CreateMatchCommand("m", 2, GameMode.CLASSIC));
+            client.sendCommand(new JoinMatchCommand("m"));
         } catch (Exception e)
         {
             System.out.println("Connection error");
         }
+        scanner.close();
 
         // Set the client to the action translator
         ActionTranslator.getInstance().setClient(client);
+
+        // Set the gameview instance to the action translator for reset purposes
+        ActionTranslator.getInstance().setGameView(this);
+    }
+
+    /**
+     * This method creates a ground plane for mouse ray casting purposes and to reset the positions when an invalid action is performed
+     */
+    private void setupGroundPlane()
+    {
+        // Create the ground plane so that the mouse ray casting hits something
+        // just below the playground
+        Box groundPlane = new Box(3000, 3000, 0);
+        groundPlane.translateYProperty().set(6f);
+        groundPlane.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
+        groundPlane.setMaterial(new PhongMaterial(Color.TRANSPARENT));
+        group.getChildren().add(groundPlane);
+
+        // Set the on mouse drag function so that when an action is performed over the plane, the plane
+        // sets itself as on dragged item and the action translator resets all
+        groundPlane.setMouseTransparent(false);
+
+        groundPlane.setOnMouseDragReleased((event) -> {
+            // Set the target of the action
+            ActionTranslator.getInstance().setDroppedOnItem("Groundplane");
+
+            // Execute the reset
+            ActionTranslator.getInstance().execute();
+        });
     }
 
     /**
@@ -289,6 +292,12 @@ public class GameView extends Application implements Visualizable
     /**
      * Visualizable methods
      */
+    public void resetPosition()
+    {
+        // Resets the position of all the movable components
+        schoolBoardCollection.updatePosition(); // Called update instead of reset because the schoolboards actually perform this method
+    }
+
     @Override
     public void displayAssistantCards(AssistantCardsUpdate update)
     {
@@ -351,6 +360,8 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayError(ErrorAnswer answer)
     {
+        // Add the lambda to reset all the positions of movable things
+        updatesHandler.subscribeUpdate(() -> resetPosition());
         System.out.println(answer.getErrorMessage());
     }
 

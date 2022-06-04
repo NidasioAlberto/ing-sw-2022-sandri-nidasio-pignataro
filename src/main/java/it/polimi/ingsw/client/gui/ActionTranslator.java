@@ -10,7 +10,6 @@ import it.polimi.ingsw.protocol.messages.MoveStudentFromEntranceToIslandMessage;
 import it.polimi.ingsw.protocol.messages.PlayAssistantCardMessage;
 import it.polimi.ingsw.protocol.messages.SelectCloudTileMessage;
 import java.util.*;
-import javax.swing.Action;
 
 /**
  * This singleton class is basically a map of lambdas that the graphical game objects use to translate the drag and drop movement into a network
@@ -31,6 +30,11 @@ public class ActionTranslator
      * Client throgh which send the messages
      */
     private Client client;
+
+    /**
+     * The entire game view
+     */
+    private GameView gameView;
 
     /**
      * The two actors that determine the behaviour
@@ -101,6 +105,13 @@ public class ActionTranslator
         this.client = client;
     }
 
+    public void setGameView(GameView view)
+    {
+        if (view == null)
+            throw new NullPointerException("[ActionTranslator] Null game view");
+        this.gameView = view;
+    }
+
     public void setDraggedItem(String draggedItem)
     {
         if (draggedItem == null)
@@ -122,7 +133,13 @@ public class ActionTranslator
     {
         // Check the strings
         if (draggedItem != null && droppedOnItem != null)
-            Objects.requireNonNull(lookupMap.get(draggedItem).get(droppedOnItem)).run();
+        {
+            // If the action is registered i can execute it, otherwise i reset the positions
+            if (lookupMap.get(draggedItem) != null && lookupMap.get(draggedItem).get(droppedOnItem) != null)
+                lookupMap.get(draggedItem).get(droppedOnItem).run();
+            else
+                resetPosition();
+        }
 
         // At the end i clear all the selections
         clear();
@@ -195,6 +212,13 @@ public class ActionTranslator
         {
             System.err.println("Unable to send the message: " + e.getMessage());
         }
+    }
+
+    private void resetPosition()
+    {
+        // Method to reset the positions inside the gui because of a non reistered action
+        if (gameView != null)
+            gameView.resetPosition();
     }
 
     /**
