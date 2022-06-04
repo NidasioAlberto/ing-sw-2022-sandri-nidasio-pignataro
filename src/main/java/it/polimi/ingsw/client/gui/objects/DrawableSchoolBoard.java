@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.ProfessorType;
 import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.client.gui.objects.types.TowerType;
+import it.polimi.ingsw.client.gui.objects.types.WizardType;
+import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.TowerColor;
@@ -38,6 +40,7 @@ public class DrawableSchoolBoard extends DrawableObject
     private static final double FIRST_Y_ENTRANCE = 0.14286;
     private static final double FIRST_X_TOWER = 0.33857;
     private static final double FIRST_Y_TOWER = 0.10714;
+    private static final double ASSISTANT_X = -0.6;
     private static final Map<SchoolColor, Double> HEIGHTS = new HashMap<>();
 
     /**
@@ -47,6 +50,16 @@ public class DrawableSchoolBoard extends DrawableObject
     private List<DrawableTower> towers;
     private List<DrawableProfessor> professors;
     private Map<SchoolColor, List<DrawableStudent>> dining;
+
+    /**
+     * Associated played assistant card
+     */
+    private DrawableAssistantCard assistantCard;
+
+    /**
+     * Position of assistant card relative to the schoolboard: LEFT OR RIGHT
+     */
+    private boolean assistantFlip;
 
     /**
      * X Dimension constant
@@ -77,6 +90,8 @@ public class DrawableSchoolBoard extends DrawableObject
      * Constructor
      * 
      * @param x_dimension The x dimension of the board
+     * @param playerName The player name of this schoolboard
+     * @param updater The animation updater
      */
     public DrawableSchoolBoard(double x_dimension, String playerName, AnimationHandler updater)
     {
@@ -290,6 +305,51 @@ public class DrawableSchoolBoard extends DrawableObject
             else
                 this.removeProfessor(color, group, light);
         }
+    }
+
+    /**
+     * Method to update the played assistant card
+     * 
+     * @param card The card to be visualized
+     */
+    public void updateAssitantCard(AssistantCard card, Group group, AmbientLight light)
+    {
+        if (card == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null assistant card");
+
+        // If we have already a card i delete it
+        if (this.assistantCard != null)
+        {
+            assistantCard.removeFromGroup(group);
+            assistantCard.unsubscribeFromAmbientLight(light);
+        }
+
+        // Now i can create the card
+        assistantCard = new DrawableAssistantCard(Y_DIMENSION / 3, card.getTurnOrder(), WizardType.valueOf(card.getWizard().name()), updater);
+
+        // Define the coordinates without rotations
+        Point3D coordinates = new Point3D((assistantFlip ? -ASSISTANT_X : ASSISTANT_X) * X_DIMENSION, 0, 0);
+
+        // For all the present rotations i rotate the card
+        for (Rotate rotation : rotations)
+        {
+            // Update the coordinates relative to the rotation
+            coordinates = rotation.transform(coordinates);
+
+            // Add the rotation to the card
+            assistantCard.addRotation(
+                    new Rotate(rotation.getAngle(), new Point3D(rotation.getAxis().getX(), rotation.getAxis().getZ(), -rotation.getAxis().getY())));
+        }
+
+        // Translate the card in the correct position
+        assistantCard.translate(coordinates.add(getPosition()));
+
+        // Set it mouse transparent
+        assistantCard.disableVisibility();
+
+        // Add the card to the group and light
+        assistantCard.addToGroup(group);
+        assistantCard.subscribeToAmbientLight(light);
     }
 
     /**
@@ -584,11 +644,8 @@ public class DrawableSchoolBoard extends DrawableObject
         towers.remove(towers.size() - 1);
     }
 
-    /**
-     * Position setters need to be synchronized
-     */
     @Override
-    public synchronized void translate(Point3D point)
+    public void translate(Point3D point)
     {
         if (point == null)
             throw new NullPointerException("[DrawableSchoolBoard] Null point");
@@ -626,5 +683,10 @@ public class DrawableSchoolBoard extends DrawableObject
     public String getPlayerName()
     {
         return playerName;
+    }
+
+    public void setAssistantFlip(boolean flip)
+    {
+        this.assistantFlip = flip;
     }
 }

@@ -21,7 +21,7 @@ public class DrawableAssistantCard extends DrawableObject
     public static final double SCALE_FACTOR = 1.468;
 
     // Factor of spacing related to the card
-    public static final double SPACING_FACTOR = 0.05;
+    public static final double SPACING_FACTOR = 1.2;
 
     /**
      * X Dimension constant
@@ -150,9 +150,9 @@ public class DrawableAssistantCard extends DrawableObject
     public void setFlipped(boolean flipped)
     {
         if (flipped)
-            backBox.setLayoutY(-2);
+            backBox.setLayoutY(-SPACING_FACTOR);
         else
-            backBox.setLayoutY(2);
+            backBox.setLayoutY(SPACING_FACTOR);
     }
 
     @Override
@@ -211,13 +211,17 @@ public class DrawableAssistantCard extends DrawableObject
     @Override
     public void enableVisibility()
     {
-
+        // Set the two boxes transparency to false
+        frontBox.setMouseTransparent(false);
+        backBox.setMouseTransparent(false);
     }
 
     @Override
     public void disableVisibility()
     {
-
+        // Set the two boxes transparency to true
+        frontBox.setMouseTransparent(true);
+        backBox.setMouseTransparent(true);
     }
 
     @Override

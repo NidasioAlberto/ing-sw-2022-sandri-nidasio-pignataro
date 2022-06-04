@@ -109,8 +109,8 @@ public class Game implements Publisher<ModelUpdate>
         if (players.size() < playersNumber && players.size() > 0)
         {
             // Find the player to remove and remove it or throw an exception
-            Player playerToRemove = players.stream().filter(player -> player.getNickname().equals(playerName)).
-                    findFirst().orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
+            Player playerToRemove = players.stream().filter(player -> player.getNickname().equals(playerName)).findFirst()
+                    .orElseThrow(() -> new NoSelectedPlayerException("[Game]"));
             players.remove(playerToRemove);
         }
     }
@@ -132,8 +132,7 @@ public class Game implements Publisher<ModelUpdate>
     }
 
     /**
-     * Set the index of the current player in the table order. An update with this
-     * index is sent to the players.
+     * Set the index of the current player in the table order. An update with this index is sent to the players.
      *
      * @param currentPlayerIndexByTable The index of the current player in the table order.
      */
@@ -166,20 +165,19 @@ public class Game implements Publisher<ModelUpdate>
 
     /**
      * Return the players list sorted by their turn order based on the played assistant cards. In case of same turnOrder plays first the player that
-     * has played that card first.
-     * The size of the returned list is always the players number, but maybe some players are no more
-     * connected or have never played a card, so you may have to check these things.
+     * has played that card first. The size of the returned list is always the players number, but maybe some players are no more connected or have
+     * never played a card, so you may have to check these things.
      */
     public List<Player> getSortedPlayerList() throws NoSuchElementException
     {
         List<Player> sortedList = new ArrayList<>(players);
 
         // If a player hasn't selected a card, its turnOrder will be 10, in order to be last
-        sortedList.sort((a, b) -> a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
-                getTurnOrder() == b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).
-                getTurnOrder() ? computeDistance(a) - computeDistance(b)
-                : a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder()
-                - b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder());
+        sortedList.sort((a,
+                b) -> a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder() == b.getSelectedCard()
+                        .orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder() ? computeDistance(a) - computeDistance(b)
+                                : a.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder()
+                                        - b.getSelectedCard().orElse(new AssistantCard(Wizard.WIZARD_1, 10, 5)).getTurnOrder());
 
         return sortedList;
     }
@@ -448,8 +446,7 @@ public class Game implements Publisher<ModelUpdate>
                     Tower towerToMove = influencer.getBoard().getTowers().get(0);
                     currentIsland.addTower(towerToMove);
                     influencer.getBoard().removeTower(towerToMove);
-                }
-                catch (EndGameException e)
+                } catch (EndGameException e)
                 {
                     // The exception is thrown if a player finishes the towers
                     towerFinished = true;
@@ -466,8 +463,7 @@ public class Game implements Publisher<ModelUpdate>
                         // Add the tower to the island
                         currentIsland.addTower(t);
                     });
-                }
-                catch (EndGameException e)
+                } catch (EndGameException e)
                 {
                     // The exception is thrown if a player finishes the towers
                     towerFinished = true;
@@ -865,8 +861,8 @@ public class Game implements Publisher<ModelUpdate>
         {
             for (Player player : players)
             {
-                player.notifySubscriber();
                 subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), players.indexOf(player)));
+                player.notifySubscriber();
             }
 
             subscriber.get().onNext(new CurrentPlayerUpdate(currentPlayerIndexByTable));

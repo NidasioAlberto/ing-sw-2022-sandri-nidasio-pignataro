@@ -6,24 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
-import javax.swing.plaf.synth.SynthStyle;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.GameActionHandler;
 import it.polimi.ingsw.controller.fsm.EndTurnPhase;
 import it.polimi.ingsw.controller.fsm.Phase;
 import it.polimi.ingsw.controller.fsm.PlanPhase;
 import it.polimi.ingsw.controller.fsm.SuspendedPhase;
-import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.GameMode;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.messages.EndTurnMessage;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
-import it.polimi.ingsw.protocol.updates.PlayedAssistantCardUpdate;
 
 public class Match implements Subscriber<ModelUpdate>
 {
@@ -98,7 +94,7 @@ public class Match implements Subscriber<ModelUpdate>
                 // Notify the match's players
                 player.sendAnswer(new StartMatchAnswer(players));
 
-               // Send the current status of the game to the player
+                // Send the current status of the game to the player
                 gameController.getGame().notifyPlayers();
                 System.out.println("[Match] Previously disconnected player added to the match " + player.getPlayerName().get());
             }
@@ -115,8 +111,7 @@ public class Match implements Subscriber<ModelUpdate>
     }
 
     /**
-     * Remove the player from the match.
-     * Method used only to remove a player who quits or disconnects.
+     * Remove the player from the match. Method used only to remove a player who quits or disconnects.
      *
      * @param player to remove.
      */
@@ -137,8 +132,8 @@ public class Match implements Subscriber<ModelUpdate>
             if (players.size() == 1)
             {
                 GameActionHandler handler = gameController.getGameHandler();
-                players.get(0).sendAnswer(new ErrorAnswer("You are the only active player," +
-                        " if no other player reconnects before 1 minute you will win"));
+                players.get(0).sendAnswer(
+                        new ErrorAnswer("You are the only active player," + " if no other player reconnects before 1 minute you will win"));
                 handler.setGamePhase(new SuspendedPhase(handler.getGamePhase(), gameController));
             }
             // If the disconnected player was the current player, its turn ends
@@ -146,19 +141,18 @@ public class Match implements Subscriber<ModelUpdate>
             {
                 // Check if the player disconnected was the current one, we are in PlanPhase so the order
                 // is based on table order
-                if (gameController.getGame().getPlayerTableList().get(gameController.getGame().getSelectedPlayerIndex().
-                        get()).getNickname().equals(player.getPlayerName().get()))
+                if (gameController.getGame().getPlayerTableList().get(gameController.getGame().getSelectedPlayerIndex().get()).getNickname()
+                        .equals(player.getPlayerName().get()))
                 {
                     // The game is in plan phase so it moves on
                     currentPhase.onValidAction(gameController.getGameHandler());
                 }
-            }
-            else
+            } else
             {
                 // Check if the player disconnected was the current one, we are not in PlanPhase so the order
                 // is based on sorted order
-                if (gameController.getGame().getSortedPlayerList().get(gameController.getGame().getSelectedPlayerIndex().
-                        get()).getNickname().equals(player.getPlayerName().get()))
+                if (gameController.getGame().getSortedPlayerList().get(gameController.getGame().getSelectedPlayerIndex().get()).getNickname()
+                        .equals(player.getPlayerName().get()))
                 {
                     // If the game isn't in plan phase, the player's turn ends
                     gameController.getGameHandler().setGamePhase(new EndTurnPhase());
@@ -175,8 +169,7 @@ public class Match implements Subscriber<ModelUpdate>
                 gameController.removePlayer(player.getPlayerName().get());
                 for (PlayerConnection activePlayer : players)
                     activePlayer.sendAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just disconnected"));
-            }
-            catch (NoSelectedPlayerException e)
+            } catch (NoSelectedPlayerException e)
             {
                 System.out.println("[Match] The player to remove wasn't in a match.");
             }
@@ -199,7 +192,7 @@ public class Match implements Subscriber<ModelUpdate>
         // Find the player with the given name
         for (PlayerConnection player : players)
             if (player.getPlayerName().isPresent() && player.getPlayerName().get().equals(playerName))
-                    player.sendAnswer(new ErrorAnswer(message));
+                player.sendAnswer(new ErrorAnswer(message));
     }
 
     public void endMatch(String message)

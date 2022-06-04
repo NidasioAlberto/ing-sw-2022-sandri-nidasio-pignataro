@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
+import it.polimi.ingsw.protocol.updates.PlayedAssistantCardUpdate;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
@@ -18,6 +19,8 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
     {new Point3D(-400, 0, 150), new Point3D(400, 0, 150)};
     public static final Rotate[] otherRotations =
     {new Rotate(90, new Point3D(0, 1, 0)), new Rotate(-90, new Point3D(0, 1, 0))};
+    public static final boolean[] assistantFlips =
+    {true, false};
 
     /**
      * Schoolboard dimension
@@ -69,6 +72,9 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
      */
     public void displayUpdate(SchoolBoardUpdate update)
     {
+        if (update == null)
+            throw new NullPointerException("[DrawableSchoolBoardCollection] Null update");
+
         // Check if the corresponging player index is null, if so i have to create a schoolboard
         if (boards[update.getPlayerIndex()] == null)
         {
@@ -103,6 +109,7 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
                 // Take the position based on the number of not main boards and translate/rotate the board
                 board.translate(otherPositions[number].add(position));
                 board.addRotation(otherRotations[number]);
+                board.setAssistantFlip(assistantFlips[number]);
             }
 
             // Add the board to the array AFTER THE POSITION CHECK
@@ -111,6 +118,22 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
 
         // Update the corresponding schoolboard
         boards[update.getPlayerIndex()].update(update.getBoard(), group, pointLight);
+    }
+
+    /**
+     * Method to display an assistant played update
+     */
+    public void displayAssistantUpdate(PlayedAssistantCardUpdate update)
+    {
+        if (update == null)
+            throw new NullPointerException("[DrawableSchoolBoardCollection] Null update");
+
+        // Find the schoolboard whith the corresponding user and update it
+        for (DrawableSchoolBoard board : boards)
+        {
+            if (board != null && board.getPlayerName().equals(update.getPlayer()))
+                board.updateAssitantCard(update.getCard(), group, ambientLight);
+        }
     }
 
     @Override

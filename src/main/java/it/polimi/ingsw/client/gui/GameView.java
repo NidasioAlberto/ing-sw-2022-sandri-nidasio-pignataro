@@ -325,7 +325,8 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayPlayedAssistantCard(PlayedAssistantCardUpdate update)
     {
-
+        // Put the update labmda inside the updater
+        updatesHandler.subscribeUpdate(() -> schoolBoardCollection.displayAssistantUpdate(update));
     }
 
     @Override
