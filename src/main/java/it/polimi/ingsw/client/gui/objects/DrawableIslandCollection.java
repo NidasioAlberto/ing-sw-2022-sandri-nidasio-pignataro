@@ -211,9 +211,6 @@ public class DrawableIslandCollection extends DrawableCollection
         motherNature.removeFromGroup(group);
     }
 
-    /**
-     * Position setters, needs to be synchronized to handle the scheduled task
-     */
     @Override
     public void translate(Point3D point)
     {

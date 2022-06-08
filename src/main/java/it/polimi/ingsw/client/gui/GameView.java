@@ -127,6 +127,9 @@ public class GameView extends Application implements Visualizable
         // Setup the ground plane
         setupGroundPlane();
 
+        /**
+         * Collection creations
+         */
         Scanner scanner = new Scanner(System.in);
         System.out.println("Insert game name");
         playerName = scanner.nextLine();
@@ -155,7 +158,7 @@ public class GameView extends Application implements Visualizable
             new Thread(() -> client.run()).start();
             Thread.sleep(1000);
             client.sendCommand(new SetNameCommand(playerName));
-            client.sendCommand(new CreateMatchCommand("m", 2, GameMode.CLASSIC));
+            client.sendCommand(new CreateMatchCommand("m", 2, GameMode.EXPERT));
             client.sendCommand(new JoinMatchCommand("m"));
         } catch (Exception e)
         {

@@ -34,12 +34,15 @@ public class DrawableSchoolBoard extends DrawableObject
     private static final double ENTRANCE_X_STEP = 0.05857;
     private static final double TOWER_X_STEP = 0.07714;
     private static final double TOWER_Y_STEP = 0.07143;
+    private static final double COIN_X_STEP = 0.05857;
     private static final double FIRST_X_DINING = -0.29286;
     private static final double FIRST_X_PROFESSOR = 0.22857;
     private static final double FIRST_X_ENTRANCE = -0.44429;
     private static final double FIRST_Y_ENTRANCE = 0.14286;
     private static final double FIRST_X_TOWER = 0.33857;
     private static final double FIRST_Y_TOWER = 0.10714;
+    private static final double FIRST_X_COIN = -0.44429;
+    private static final double FIRST_Y_COIN = 0.21;
     private static final double ASSISTANT_X = -0.6;
     private static final Map<SchoolColor, Double> HEIGHTS = new HashMap<>();
 
@@ -49,6 +52,7 @@ public class DrawableSchoolBoard extends DrawableObject
     private List<DrawableStudent> entrance;
     private List<DrawableTower> towers;
     private List<DrawableProfessor> professors;
+    private List<DrawableCoin> coins;
     private Map<SchoolColor, List<DrawableStudent>> dining;
 
     /**
@@ -112,6 +116,7 @@ public class DrawableSchoolBoard extends DrawableObject
         professors = new ArrayList<>();
         towers = new ArrayList<>();
         dining = new HashMap<>();
+        coins = new ArrayList<>();
 
         for (SchoolColor color : SchoolColor.values())
             dining.put(color, new ArrayList<>());
@@ -330,6 +335,12 @@ public class DrawableSchoolBoard extends DrawableObject
             else
                 this.removeProfessor(color, group, light);
         }
+
+        // Coins
+        for (int i = coins.size(); i < board.getCoins(); i++)
+            addCoin(group, light);
+        for (int i = board.getCoins(); i > coins.size(); i--)
+            removeCoin(group, light);
     }
 
     /**
@@ -671,6 +682,68 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Remove the tower from the collection
         towers.remove(towers.size() - 1);
+    }
+
+    /**
+     * Method to add a coin to the schoolboard
+     * 
+     * @param group The group to which remove the coin
+     * @param light The light to which unsubscribe the coin
+     */
+    public void addCoin(Group group, PointLight light)
+    {
+        // Verify that it could actually be done
+        if (coins.size() >= 8)
+            return;
+
+        // Create a new coin
+        DrawableCoin coin = new DrawableCoin(updater);
+
+        // Coordinates without rotations
+        Point3D coordinates = new Point3D(FIRST_X_COIN * X_DIMENSION + coins.size() * COIN_X_STEP * X_DIMENSION, -5, FIRST_Y_COIN * X_DIMENSION);
+
+        // For all the present rotations i rotate the point
+        for (Rotate rotation : rotations)
+        {
+            coordinates = rotation.transform(coordinates);
+
+            // Rotate also the coin
+            coin.addRotation(rotation);
+        }
+
+        // Translate the coin in the correct position
+        coin.translate(coordinates.add(getPosition()));
+
+        // Add the coin to the group
+        coin.addToGroup(group);
+
+        // Subscribe the coin to the light and add it to the list
+        coin.subscribeToPointLight(light);
+        coins.add(coin);
+    }
+
+    /**
+     * Method to remove a coin from the schoolboard
+     * 
+     * @param group The group to which remove the coin
+     * @param light The light to which unsubscribe the coin
+     */
+    public void removeCoin(Group group, PointLight light)
+    {
+        if (coins.size() == 0)
+            return;
+
+        // Take the tower to be removed
+        DrawableCoin coin = coins.get(towers.size() - 1);
+
+        // Unsubscribe from grup
+        coin.removeFromGroup(group);
+
+        // Unsubscribe from light
+        coin.unsubscribeFromPointLight(light);
+
+        // Remove the tower from the collection
+        coins.remove(coins.size() - 1);
     }
 
     @Override
