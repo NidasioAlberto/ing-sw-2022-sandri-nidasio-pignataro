@@ -49,6 +49,8 @@ public class DrawableIsland extends DrawableObject
     {new Point2D(0, 0.120), new Point2D(0.125, 0.030), new Point2D(0.0875, -0.130), new Point2D(-0.0875, -0.130), new Point2D(-0.125, 0.030)};
     private final double X_MOTHER = 0.17;
     private final double Y_MOTHER = 0.25;
+    private final double X_NO_ENTRY = 0;
+    private final double Y_NO_ENTRY = 0.280;
 
     /**
      * Island draw type
@@ -64,7 +66,9 @@ public class DrawableIsland extends DrawableObject
      * Island payloads
      */
     private DrawableTower tower;
+    private DrawableNoEntryTile noEntryTile;
     private int towerCount;
+    private int noEntryCount;
     // List of all the drawn students
     private List<DrawableStudent> drawnStudents;
     // List of all the student types inside the island, for counting purposes
@@ -102,6 +106,9 @@ public class DrawableIsland extends DrawableObject
 
         // Set the initial tower count to 0
         towerCount = 0;
+
+        // Set the initial noEntry count to 0
+        noEntryCount = 0;
 
         // Random set the first angle
         floatingAngle = new Random().nextFloat(360);
@@ -205,13 +212,29 @@ public class DrawableIsland extends DrawableObject
             towerCount = island.getTowers().size();
         } else if (tower != null)
         {
-            // I remove the towers
-            tower.removeFromGroup(group);
-            tower.unsubscribeFromPointLight(pointLight);
-            tower = null;
+            // Remove graphically the tower
+            removeTower(group, pointLight);
 
             // Reset the counter
             towerCount = 0;
+        }
+
+        // Check if there are some no entry tiles
+        if (island.getNoEntryTiles() > 0)
+        {
+            // I need to add the no entry
+            if (noEntryTile == null)
+                addNoEntry(group, pointLight);
+
+            // Paritythe number of no entry tiles
+            noEntryCount = island.getNoEntryTiles();
+        } else if (noEntryTile != null)
+        {
+            // I remove the existing no entry
+            removeNoEntry(group, pointLight);
+
+            // Reset the counter
+            noEntryCount = 0;
         }
     }
 
@@ -232,16 +255,19 @@ public class DrawableIsland extends DrawableObject
 
         // Remove the tower if existing
         if (tower != null)
-        {
-            tower.unsubscribeFromPointLight(light);
-            tower.removeFromGroup(group);
-        }
+            removeTower(group, light);
+
+        // Remove the noEntry if existing
+        if (noEntryTile != null)
+            removeNoEntry(group, light);
 
         // Clear the lists
         drawnStudents.clear();
         students.clear();
         tower = null;
+        noEntryTile = null;
         towerCount = 0;
+        noEntryCount = 0;
     }
 
     /**
@@ -258,6 +284,59 @@ public class DrawableIsland extends DrawableObject
     }
 
     /**
+     * Method to add a no Entry tile graphically
+     * 
+     * @param group The group to which subscribe the no Entry
+     * @param light The light to which subscribe the no Entry
+     */
+    public void addNoEntry(Group group, PointLight light)
+    {
+        if (noEntryTile != null)
+            return;
+
+        // Create the drawable noEntry
+        noEntryTile = new DrawableNoEntryTile(updater);
+
+        // Translate the no Entry
+        noEntryTile.translate(new Point3D(X_NO_ENTRY * DIMENSION, -HEIGHT_SPAN - 10, Y_NO_ENTRY * DIMENSION).add(getPosition()));
+
+        // Make the no Entry invisible to mouse (we don't want drag and drop)
+        noEntryTile.disableVisibility();
+
+        // Add the noEntry to the group and light
+        noEntryTile.addToGroup(group);
+        noEntryTile.subscribeToPointLight(light);
+
+        // Set the counter to 1
+        noEntryCount = 1;
+    }
+
+    /**
+     * Method to remove the no entry tile graphically
+     * 
+     * @param group The group from which unsubscribe the tile
+     * @param light The light from which unsubscribe the tile
+     */
+    public void removeNoEntry(Group group, PointLight light)
+    {
+        // If already not present i do nothing
+        if (noEntryTile == null)
+            return;
+
+        // Remove the noEntryTile from group
+        noEntryTile.removeFromGroup(group);
+
+        // Remove the noEntryTile from the light
+        noEntryTile.unsubscribeFromPointLight(light);
+
+        // Remove the object itself
+        noEntryTile = null;
+
+        // Set the counter to 0
+        noEntryCount = 0;
+    }
+
+    /**
      * Metho to add a tower to the floating island
      * 
      * @param type The type of tower
@@ -268,11 +347,7 @@ public class DrawableIsland extends DrawableObject
     {
         // I add the tower only if there isn't already one
         if (tower != null)
-        {
-            // increment the counter
-            towerCount++;
             return;
-        }
 
         // Create the drawable tower
         tower = new DrawableTower(type, updater);
@@ -287,8 +362,8 @@ public class DrawableIsland extends DrawableObject
         tower.addToGroup(group);
         tower.subscribeToPointLight(light);
 
-        // Increment the counter
-        towerCount++;
+        // Set the counter to 1
+        towerCount = 1;
     }
 
     /**
@@ -309,8 +384,8 @@ public class DrawableIsland extends DrawableObject
         // Remove the object itself
         tower = null;
 
-        // Decrement the counter
-        towerCount--;
+        // Set the counter to 0
+        towerCount = 0;
     }
 
     /**
@@ -519,6 +594,10 @@ public class DrawableIsland extends DrawableObject
         if (motherNature != null && !motherNature.isDragging())
             motherNature.translate(new Point3D(X_MOTHER * DIMENSION + getPosition().getX(), getPosition().getY() - HEIGHT_SPAN,
                     Y_MOTHER * DIMENSION + getPosition().getZ()));
+
+        // Update eventual no entry tile
+        if (noEntryTile != null)
+            noEntryTile.translate(new Point3D(X_NO_ENTRY * DIMENSION, -HEIGHT_SPAN - 10, Y_NO_ENTRY * DIMENSION).add(point));
     }
 
     @Override
