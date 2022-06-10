@@ -28,13 +28,14 @@ public class DrawableProfessor extends DrawableObject
 
     /**
      * Constructor
+     * 
      * @param type The type of the professor (Color and therefore it's shape)
      */
     public DrawableProfessor(ProfessorType type, AnimationHandler updater)
     {
         super(updater);
 
-        if(type == null)
+        if (type == null)
             throw new NullPointerException("[DrawableProfessor] Null professor type");
 
         // Assign the constants
@@ -66,16 +67,12 @@ public class DrawableProfessor extends DrawableObject
 
         // Set the node to mouse transparent
         professorMesh.setMouseTransparent(true);
-
-        // At the end if the updater != null i add the box to it
-        if(this.updater != null)
-            this.updater.subscribeObject(this);
     }
 
     @Override
     public void addToGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableProfessor] Null group");
 
         // Add the mesh to the group
@@ -85,7 +82,7 @@ public class DrawableProfessor extends DrawableObject
     @Override
     public void removeFromGroup(Group group)
     {
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableProfessor] Null group");
 
         // Remove the mesh from the group
@@ -95,7 +92,7 @@ public class DrawableProfessor extends DrawableObject
     @Override
     public void subscribeToPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableProfessor] Null point light");
 
         // Subscribe to the point light
@@ -104,12 +101,13 @@ public class DrawableProfessor extends DrawableObject
 
     // This method does nothing because the professor needs to be subscribed only to point lights
     @Override
-    public void subscribeToAmbientLight(AmbientLight light) {}
+    public void subscribeToAmbientLight(AmbientLight light)
+    {}
 
     @Override
     public void unsubscribeFromPointLight(PointLight light)
     {
-        if(light == null)
+        if (light == null)
             throw new NullPointerException("[DrawableProfessor] Null point light");
 
         // unsubscribe from the point light
@@ -118,7 +116,8 @@ public class DrawableProfessor extends DrawableObject
 
     // This method does nothing because the professor needs to be subscribed only to point lights
     @Override
-    public void unsubscribeFromAmbientLight(AmbientLight light) {}
+    public void unsubscribeFromAmbientLight(AmbientLight light)
+    {}
 
     @Override
     public void enableVisibility()
@@ -135,7 +134,7 @@ public class DrawableProfessor extends DrawableObject
     @Override
     public void translate(Point3D point)
     {
-        if(point == null)
+        if (point == null)
             throw new NullPointerException("[DrawableProfessor] Null point");
 
         // Translate all the coordinates
@@ -147,7 +146,7 @@ public class DrawableProfessor extends DrawableObject
     @Override
     public void addRotation(Rotate rotation)
     {
-        if(rotation == null)
+        if (rotation == null)
             throw new NullPointerException("[DrawableProfessor] Null rotation");
 
         // Add the rotation to the object
@@ -160,5 +159,8 @@ public class DrawableProfessor extends DrawableObject
         return new Point3D(professorMesh.getTranslateX(), professorMesh.getTranslateY(), professorMesh.getTranslateZ());
     }
 
-    public ProfessorType getType() { return TYPE; }
+    public ProfessorType getType()
+    {
+        return TYPE;
+    }
 }

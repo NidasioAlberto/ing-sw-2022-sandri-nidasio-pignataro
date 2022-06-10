@@ -138,10 +138,6 @@ public class DrawableStudent extends DrawableObject
             // Act the action translator
             ActionTranslator.getInstance().execute();
         });
-
-        // At the end if the updater != null i add the box to it
-        if (this.updater != null)
-            this.updater.subscribeObject(this);
     }
 
     @Override

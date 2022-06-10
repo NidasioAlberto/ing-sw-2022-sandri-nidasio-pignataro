@@ -159,10 +159,6 @@ public class DrawableSchoolBoard extends DrawableObject
             // Send the message
             ActionTranslator.getInstance().execute();
         });
-
-        // At the end if the updater != null i add the box to it
-        if (this.updater != null)
-            this.updater.subscribeObject(this);
     }
 
     @Override

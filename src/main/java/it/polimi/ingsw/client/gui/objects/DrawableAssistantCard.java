@@ -110,10 +110,6 @@ public class DrawableAssistantCard extends DrawableObject
         // Set the backbox mouse invisible
         backBox.setMouseTransparent(true);
 
-        // If not null subscribe to the updater
-        if (updater != null)
-            updater.subscribeObject(this);
-
         // Animation settings
         frontBox.setOnMouseEntered((event) -> {
             if (positions.size() == 0)

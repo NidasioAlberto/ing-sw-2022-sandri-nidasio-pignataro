@@ -95,10 +95,6 @@ public class DrawableCloudTile extends DrawableObject
         // Set the tile mouse transparent
         box.setMouseTransparent(false);
 
-        // If not null subscribe to the updater
-        if (updater != null)
-            updater.subscribeObject(this);
-
         // Set the click event
         box.setOnMouseClicked((event) -> {
             // Ensure that the click happened only one time

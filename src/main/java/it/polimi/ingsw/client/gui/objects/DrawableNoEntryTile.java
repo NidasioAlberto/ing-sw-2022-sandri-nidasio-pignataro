@@ -1,10 +1,12 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import java.util.Objects;
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.ObjectModelParser;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
@@ -13,6 +15,7 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 
 public class DrawableNoEntryTile extends DrawableObject
 {
@@ -24,6 +27,12 @@ public class DrawableNoEntryTile extends DrawableObject
      */
     private final TriangleMesh triangleMesh;
     private final MeshView noEntryMesh;
+
+    /**
+     * Drag and drop movement variables
+     */
+    private volatile double offsetPosX;
+    private volatile double offsetPosZ;
 
     /**
      * Constructor
@@ -59,7 +68,46 @@ public class DrawableNoEntryTile extends DrawableObject
         // Add the initial rotation
         addRotation(new Rotate(180, new Point3D(0, 1, 0)));
 
-        // TODO mouse drag and drop
+        // Set drag and drop features
+        noEntryMesh.setOnDragDetected((event) -> {
+            offsetPosX = event.getX();
+            offsetPosZ = event.getZ();
+            noEntryMesh.setMouseTransparent(true);
+            noEntryMesh.setCursor(Cursor.MOVE);
+            noEntryMesh.startFullDrag();
+
+            // Set the dragged element on the action translator
+            ActionTranslator.getInstance().setDraggedItem("NoEntryTile");
+        });
+
+        noEntryMesh.setOnMouseDragged((event) -> {
+            Point3D translation = new Point3D(event.getX(), 0, event.getZ());
+
+            // For every transform inside the mesh i adapt the translation
+            for (Transform transform : noEntryMesh.getTransforms())
+                translation = transform.transform(translation);
+
+            // Delete the offset
+            translation.add(new Point3D(-offsetPosX, 0, -offsetPosZ));
+
+            // Translate the object
+            translate(translation.add(getPosition()));
+        });
+
+        noEntryMesh.setOnMouseReleased((event) -> {
+            // Reset the default mouse settings
+            noEntryMesh.setCursor(Cursor.DEFAULT);
+            noEntryMesh.setMouseTransparent(false);
+        });
+
+        // For reset purposes
+        noEntryMesh.setOnMouseDragReleased((event) -> {
+            // Set the dragged on element
+            ActionTranslator.getInstance().setDroppedOnItem("NoEntryTile");
+
+            // Act the action translator
+            ActionTranslator.getInstance().execute();
+        });
     }
 
     @Override
@@ -109,15 +157,13 @@ public class DrawableNoEntryTile extends DrawableObject
     @Override
     public void enableVisibility()
     {
-        // TODO Auto-generated method stub
-
+        noEntryMesh.setMouseTransparent(false);
     }
 
     @Override
     public void disableVisibility()
     {
-        // TODO Auto-generated method stub
-
+        noEntryMesh.setMouseTransparent(true);
     }
 
     @Override

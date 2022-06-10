@@ -133,10 +133,6 @@ public class DrawableIsland extends DrawableObject
         // Set the node to mouse transparent
         box.setMouseTransparent(false);
 
-        // At the end if the updater != null i add the box to it
-        if (this.updater != null)
-            this.updater.subscribeObject(this);
-
         // Set a little light when the mouse drags over
         box.setOnMouseDragEntered((event) -> {
             material.setDiffuseColor(Color.color(1, 1, 1, 0.9));

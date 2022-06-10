@@ -5,18 +5,8 @@ package it.polimi.ingsw.model.game;
  */
 public enum CharacterCardType
 {
-    MONK("Monk"),
-    SHAMAN("Shaman"),
-    HERALD("Herald"),
-    POSTMAN("Postman"),
-    GRANDMA_HERBS("Grandma"),
-    JOKER("Joker"),
-    KNIGHT("Knight"),
-    MUSHROOM_MAN("Mushroom"),
-    MINSTREL("Minstrel"),
-    PRINCESS("Princess"),
-    THIEF("Thief"),
-    CENTAUR("Centaur");
+    MONK("Monk"), SHAMAN("Shaman"), HERALD("Herald"), POSTMAN("Postman"), GRANDMA_HERBS("Grandma"), JOKER("Joker"), KNIGHT("Knight"), MUSHROOM_MAN(
+            "Mushroom"), MINSTREL("Minstrel"), PRINCESS("Princess"), THIEF("Thief"), CENTAUR("Centaur");
 
     private String name;
 

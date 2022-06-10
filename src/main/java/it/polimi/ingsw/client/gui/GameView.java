@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.game.CharacterCardType;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.CreateMatchCommand;
 import it.polimi.ingsw.protocol.commands.JoinMatchCommand;
@@ -126,6 +127,13 @@ public class GameView extends Application implements Visualizable
 
         // Setup the ground plane
         setupGroundPlane();
+
+        /**
+         * TEST
+         */
+        DrawableCharacterCard card = new DrawableCharacterCard(75, CharacterCardType.THIEF, updater);
+        card.addToGroup(group);
+        card.subscribeToAmbientLight(ambientLight);
 
         /**
          * Collection creations
@@ -290,6 +298,30 @@ public class GameView extends Application implements Visualizable
         // Set the scene
         stage.setScene(scene);
         stage.show();
+
+        // // Set the onClose event
+        // stage.setOnCloseRequest((event) -> {
+
+        // });
+    }
+
+    /**
+     * Method to stop the executions and the client thread. CALLED BY JAVAFX!
+     */
+    @Override
+    public void stop()
+    {
+        // Stop the client
+        try
+        {
+            client.stop();
+        } catch (Exception e)
+        {
+            System.err.println("Unable to stop: " + e.getMessage());
+        }
+
+        // Terminate the application anyway
+        System.exit(0);
     }
 
     /**

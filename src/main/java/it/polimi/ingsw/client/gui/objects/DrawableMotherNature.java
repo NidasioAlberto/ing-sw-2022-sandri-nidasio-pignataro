@@ -102,6 +102,7 @@ public class DrawableMotherNature extends DrawableObject
             // Set the dragging element in action translator
             ActionTranslator.getInstance().setDraggedItem("MotherNature");
         });
+
         spheres[0].setOnMouseReleased((event) -> {
             for (Sphere sphere1 : spheres)
                 sphere1.setMouseTransparent(false);
@@ -119,10 +120,6 @@ public class DrawableMotherNature extends DrawableObject
             posZ = event.getZ() - offsetPosZ;
             this.translate(new Point3D(getPosition().getX() + posX, 0, getPosition().getZ() + posZ));
         });
-
-        // At the end if the updater != null i add the box to it
-        if (this.updater != null)
-            this.updater.subscribeObject(this);
     }
 
     @Override
