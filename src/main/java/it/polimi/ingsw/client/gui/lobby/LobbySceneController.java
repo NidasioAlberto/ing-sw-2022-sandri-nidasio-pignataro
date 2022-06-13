@@ -38,6 +38,5 @@ public class LobbySceneController implements Controllable
     public void displayName(SetNameAnswer answer)
     {
         nicknameLabel.setText("Your nickname is " + answer.getName());
-       // Platform.runLater(() -> nicknameLabel.setText("Your nickname is " + answer.getName()));
     }
 }

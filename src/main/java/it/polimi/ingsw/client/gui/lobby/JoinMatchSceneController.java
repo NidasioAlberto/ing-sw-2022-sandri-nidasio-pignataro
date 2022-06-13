@@ -11,16 +11,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 
 public class JoinMatchSceneController implements Controllable
 {
-    @FXML
-    private TextField gameNameJoinTextField;
     @FXML
     TableView<MatchLine> matchesTableView;
     @FXML
@@ -29,34 +25,6 @@ public class JoinMatchSceneController implements Controllable
     TableColumn<MatchLine, GameMode> modeColumn;
     @FXML
     TableColumn<MatchLine, String> playersColumn;
-
-    /**
-     * Pressing enter in gameNameJoinTextField is like clicking the button join.
-     */
-    public void checkEnter(KeyEvent event)
-    {
-        if (event.getCode().equals(KeyCode.ENTER))
-            join(new ActionEvent());
-    }
-
-    /**
-     * Method executed when the player is in the joinMatch scene and presses Join button,
-     * check that has inserted a game name, if so send a JoinMatchCommand.
-     */
-    public void join(ActionEvent event)
-    {
-        // Check that the data inserted from the player are valid
-        if (gameNameJoinTextField.getText().isBlank())
-        {
-            System.out.println("You must insert a valid game name");
-        }
-        else
-        {
-            // If all goes well send a join match command
-            String gameName = gameNameJoinTextField.getText();
-            SceneController.sendCommand(new JoinMatchCommand(gameName));
-        }
-    }
 
     /**
      * Method executed when the player press the Back button, so the scene goes back to lobby.
@@ -85,8 +53,21 @@ public class JoinMatchSceneController implements Controllable
                         answer.getNumPlayers().get(matchName) + "/" + answer.getMaxNumPlayers().get(matchName)));
 
             matchesTableView.setItems(list);
-            //Platform.runLater(() -> matchesTableView.setItems(list));
         }
         else matchesTableView.setPlaceholder(new Label("There aren't matches at the moment"));
+    }
+
+    /**
+     * When the player does a double click on a row can join the selected match.
+     */
+    public void joinSelectedMatch(MouseEvent event)
+    {
+        // Check the event was a double click
+        if (event.getClickCount() == 2)
+        {
+            // Send a joinMatchCommand with the name of the selected match
+            String gameName = matchesTableView.getSelectionModel().getSelectedItem().getName();
+            SceneController.sendCommand(new JoinMatchCommand(gameName));
+        }
     }
 }

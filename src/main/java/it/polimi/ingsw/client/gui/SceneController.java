@@ -27,7 +27,7 @@ public class SceneController
 
     private static Parent currentRoot;
 
-    // TODO popup per errori, joinare match dalla lista
+    // TODO popup per errori
 
     public SceneController(GameView view, Client client, Scene mainScene)
     {
