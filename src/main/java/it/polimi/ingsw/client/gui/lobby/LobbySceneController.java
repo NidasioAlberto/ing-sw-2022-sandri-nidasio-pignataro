@@ -12,7 +12,7 @@ import javafx.scene.control.Label;
 public class LobbySceneController implements Controllable
 {
     @FXML
-   private Label nicknameLabel;
+    private Label nicknameLabel;
 
     /**
      * Method executed when the player is in the lobby scene and presses create match button,
@@ -26,27 +26,18 @@ public class LobbySceneController implements Controllable
 
     /**
      * Method executed when the player is in the lobby scene and presses join match button,
-     * the scene moves to joinMatch.
+     * a GetMatchesList command is sent to the server and the scene moves to joinMatch.
      */
     public void joinMatch(ActionEvent event)
     {
         // Move to joinMatch scene
         SceneController.setRoot("/Lobby/joinMatch.fxml");
-    }
-
-    /**
-     * Method executed when the player is in the lobby scene and presses matches' list button,
-     * a GetMatchesList command is sent to the server and the scene moves to matchesList.
-     */
-    public void matchesList(ActionEvent event)
-    {
-        // Move to matchesList scene
-        SceneController.setRoot("/Lobby/matchesList.fxml");
         SceneController.sendCommand(new GetMatchesListCommand());
     }
 
     public void displayName(SetNameAnswer answer)
     {
-        Platform.runLater(() -> nicknameLabel.setText("Your nickname is " + answer.getName()));
+        nicknameLabel.setText("Your nickname is " + answer.getName());
+       // Platform.runLater(() -> nicknameLabel.setText("Your nickname is " + answer.getName()));
     }
 }

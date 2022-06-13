@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -16,5 +18,13 @@
       <Label layoutX="7.0" layoutY="102.0" prefHeight="17.0" prefWidth="1280.0" text="Type the name of the game you want to join" />
       <Label layoutY="50.0" prefHeight="17.0" prefWidth="1280.0" text="Join match" />
       <Button layoutX="54.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Label layoutY="421.0" prefHeight="17.0" prefWidth="1280.0" text="These are the available matches" />
+      <TableView fx:id="matchesTableView" layoutX="297.0" layoutY="405.0" prefHeight="200.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="300.0" text="Name" />
+          <TableColumn fx:id="modeColumn" prefWidth="100.0" text="Mode" />
+            <TableColumn fx:id="playersColumn" prefWidth="300.0" text="Players Number" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

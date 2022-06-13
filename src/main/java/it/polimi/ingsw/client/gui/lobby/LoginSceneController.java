@@ -53,7 +53,7 @@ public class LoginSceneController implements Controllable
                 int port = Integer.parseInt(portTextField.getText());
                 SceneController.clientConnect(ip, port);
 
-                Thread.sleep(1000);
+                //Thread.sleep(1000);
 
                 // If all goes well set the name
                 SceneController.sendCommand(new SetNameCommand(nicknameTextField.getText()));

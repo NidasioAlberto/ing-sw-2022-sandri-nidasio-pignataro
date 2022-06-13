@@ -5,8 +5,8 @@
 
 .label
 {
-    -fx-font-size: 30;
-    -fx-font-family: "Brush Script MT";
+    -fx-font-size: 23;
+    -fx-font-family: "Verdana";
     -fx-font-style: italic;
     -fx-text-fill: rgb(20, 66, 146);
     -fx-alignment: center;
@@ -14,16 +14,16 @@
 
 .radio-button
 {
-    -fx-font-size: 20;
-    -fx-font-family: "Brush Script MT";
+    -fx-font-size: 18;
+    -fx-font-family: "Verdana";
     -fx-font-style: italic;
     -fx-text-fill: rgb(20, 66, 146);
 }
 
 .button
 {
-    -fx-font-size: 18;
+    -fx-font-size: 15;
     -fx-background-color: rgb(20, 66, 146);
-    -fx-font-family: "Brush Script MT";
+    -fx-font-family: "Verdana";
     -fx-text-fill: WHITE;
 }

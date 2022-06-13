@@ -2,8 +2,8 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.gui.lobby.Controllable;
+import it.polimi.ingsw.client.gui.lobby.JoinMatchSceneController;
 import it.polimi.ingsw.client.gui.lobby.LobbySceneController;
-import it.polimi.ingsw.client.gui.lobby.MatchesListSceneController;
 import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.answers.MatchesListAnswer;
@@ -27,7 +27,7 @@ public class SceneController
 
     private static Parent currentRoot;
 
-    // TODO popup per errori, chiedere se sicuro di uscire, joinare match dalla lista, lista vuota stampa roba in italian
+    // TODO popup per errori, joinare match dalla lista
 
     public SceneController(GameView view, Client client, Scene mainScene)
     {
@@ -70,9 +70,9 @@ public class SceneController
      */
     public void displayMatchesList(MatchesListAnswer answer)
     {
-        if (currentController instanceof MatchesListSceneController)
+        if (currentController instanceof JoinMatchSceneController)
         {
-            ((MatchesListSceneController) currentController).displayMatchesList(answer);
+            ((JoinMatchSceneController) currentController).displayMatchesList(answer);
         }
     }
 
