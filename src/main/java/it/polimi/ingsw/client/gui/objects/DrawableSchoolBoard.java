@@ -269,19 +269,34 @@ public class DrawableSchoolBoard extends DrawableObject
      */
     public void update(SchoolBoard board, Group group, PointLight light)
     {
+        if (board == null)
+            throw new NullPointerException("[DrawableSchoolBoard] Null update board");
+
         // Entrance
+        // First i remove all the students in excess
         for (SchoolColor color : SchoolColor.values())
         {
             // Calculate the actual number of students
             long numBoard = board.getStudentsInEntrance().stream().filter((s) -> s.getColor() == color).count();
             long num = entrance.stream().filter((s) -> s.getType().name().equals(color.name())).count();
 
-            // Remove or add the difference
+            // // Remove or add the difference
             if (num > numBoard)
             {
                 for (long i = numBoard; i < num; i++)
                     this.removeStudentFromEntrance(color, group, light);
-            } else if (numBoard > num)
+            }
+        }
+
+        // After i add all the student needed. IMPORTANT IT NEEDS TO BE DONE IN TWO STEPS
+        for (SchoolColor color : SchoolColor.values())
+        {
+            // Calculate the actual number of students
+            long numBoard = board.getStudentsInEntrance().stream().filter((s) -> s.getColor() == color).count();
+            long num = entrance.stream().filter((s) -> s.getType().name().equals(color.name())).count();
+
+            // Now i add the remaining students
+            if (numBoard > num)
             {
                 for (long i = num; i < numBoard; i++)
                     this.addStudentToEntrance(color, group, light);
@@ -598,20 +613,7 @@ public class DrawableSchoolBoard extends DrawableObject
         entrance.remove(student);
 
         // Update positionings
-        for (int i = 0; i < entrance.size(); i++)
-        {
-            // Create the corresponding coordinates
-            Point3D coordinates = new Point3D(FIRST_X_ENTRANCE * X_DIMENSION + ((i + 1) % 2) * ENTRANCE_X_STEP * X_DIMENSION, 0,
-                    FIRST_Y_ENTRANCE * X_DIMENSION - (int) ((i + 1) / 2) * DINING_Y_STEP * X_DIMENSION);
-
-            // Rotate the coordinates
-            for (Rotate rotation : rotations)
-                coordinates = rotation.transform(coordinates);
-
-            // Translate the student to the correct position
-            entrance.get(i).translate(new Point3D(coordinates.getX() + box.getTranslateX(), coordinates.getY() + box.getTranslateY(),
-                    coordinates.getZ() + box.getTranslateZ()));
-        }
+        updatePosition();
     }
 
     /**

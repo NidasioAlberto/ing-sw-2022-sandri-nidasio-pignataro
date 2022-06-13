@@ -111,7 +111,7 @@ public class DrawableCloudTile extends DrawableObject
             }
         });
 
-        // Set also the dragged over event because of reset purposes in case of a wron action
+        // Set also the dragged over event because of reset purposes in case of a wrong action
         box.setOnMouseDragReleased((event) -> {
             // Set the droppedOn target
             ActionTranslator.getInstance().setDroppedOnItem("CloudTile");

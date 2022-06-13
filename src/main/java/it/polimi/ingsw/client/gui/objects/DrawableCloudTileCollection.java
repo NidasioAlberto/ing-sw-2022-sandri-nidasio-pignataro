@@ -39,10 +39,7 @@ public class DrawableCloudTileCollection extends DrawableCollection
         // Assign all the variables
         this.DIMENSION = dimension;
 
-        // Initialize the first position to 0
-        position = new Point3D(0, 0, 0);
-
-        // Initialize all the cloud tiles
+        // Initialize the cloud tiles arraylist
         tiles = new ArrayList<>();
     }
 
@@ -86,7 +83,7 @@ public class DrawableCloudTileCollection extends DrawableCollection
             for (int i = 0; i < update.getCloudTiles().size(); i++)
                 tiles.get(i).setNumber(i);
 
-            // Add the cards to the group
+            // Add the tiles to the group
             this.addToGroup();
 
             // Update their positionings

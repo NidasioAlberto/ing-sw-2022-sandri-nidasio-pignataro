@@ -1,14 +1,17 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import java.util.Objects;
+import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.CharacterType;
 import it.polimi.ingsw.model.game.CharacterCardType;
+import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -31,6 +34,11 @@ public class DrawableCharacterCard extends DrawableObject
     private final double Y_DIMENSION;
 
     /**
+     * Character card number inside the array
+     */
+    private final int CHARACTER_NUMBER;
+
+    /**
      * The card type
      */
     private final CharacterCardType TYPE;
@@ -45,18 +53,21 @@ public class DrawableCharacterCard extends DrawableObject
      * 
      * @param updater
      */
-    public DrawableCharacterCard(double x_dimension, CharacterCardType type, AnimationHandler updater)
+    public DrawableCharacterCard(double x_dimension, int characterNumber, CharacterCardType type, AnimationHandler updater)
     {
         super(updater);
 
         if (x_dimension <= 0)
             throw new IllegalArgumentException("[DrawableCharacterCard] Zero or less X dimension");
+        if (characterNumber < 0)
+            throw new IllegalArgumentException("[DrawableCharacterCard] Less than zero character number");
         if (type == null)
             throw new NullPointerException("[DrawableCharacterCard] Null card type");
 
         // Set the constants
         X_DIMENSION = x_dimension;
         Y_DIMENSION = x_dimension * SCALE_FACTOR;
+        CHARACTER_NUMBER = characterNumber;
         TYPE = type;
 
         // Create the box
@@ -75,6 +86,47 @@ public class DrawableCharacterCard extends DrawableObject
         // Add the rotations
         box.getTransforms().add(new Rotate(90, new Point3D(1, 0, 0)));
         box.getTransforms().add(new Rotate(180, new Point3D(0, 0, 1)));
+
+        // Add the mouse click feature
+        box.setOnMouseClicked((event) -> {
+            // Ensure that the click happened only one time
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1)
+            {
+                // Set the selected card and call the action
+                ActionTranslator.getInstance().setDraggedItem("CharacterCard");
+
+                // Set the card number
+                ActionTranslator.getInstance().selectCard(CHARACTER_NUMBER);
+
+                // Execute the action
+                ActionTranslator.getInstance().execute();
+            }
+        });
+
+        // Set also the dragged over event because of reset purposes in case of a wrong action
+        box.setOnMouseDragReleased((event) -> {
+            // Set the droppedOn target
+            ActionTranslator.getInstance().setDroppedOnItem("CharacterCard");
+
+            // Execute the reset
+            ActionTranslator.getInstance().execute();
+        });
+    }
+
+    public void update(CharacterCardPayloadUpdate update, Group group, PointLight light)
+    {
+        if (update == null)
+            throw new NullPointerException("[DrawableCharacterCard] Null payload update");
+
+        // Determine if the payload is no entry tiles or not
+        if (update.getNoEntryTiles() != 0)
+        {
+            // No entry
+
+        } else
+        {
+            // Students
+        }
     }
 
     @Override

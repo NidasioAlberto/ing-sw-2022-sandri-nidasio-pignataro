@@ -60,6 +60,7 @@ public class GameView extends Application implements Visualizable
     private DrawableAssistantCollection assistantCollection;
     private DrawableCloudTileCollection cloudTileCollection;
     private DrawableSchoolBoardCollection schoolBoardCollection;
+    private DrawableCharacterCardCollection characterCardCollection;
 
     /**
      * Client which calls the visualizable methods
@@ -136,8 +137,7 @@ public class GameView extends Application implements Visualizable
 
             // Set the gameview instance to the action translator for reset purposes
             ActionTranslator.getInstance().setGameView(this);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             System.out.println("Error while creating the scene");
@@ -286,7 +286,8 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayCharacterCards(CharacterCardsUpdate update)
     {
-
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> characterCardCollection.displayUpdate(update));
     }
 
     @Override
@@ -397,10 +398,12 @@ public class GameView extends Application implements Visualizable
         cloudTileCollection = new DrawableCloudTileCollection(40, pointLight, ambientLight, group, updater);
         islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
         schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
+        characterCardCollection = new DrawableCharacterCardCollection(60, pointLight, ambientLight, group, updater);
 
         assistantCollection.translate(new Point3D(0, -10, -290));
         islandCollection.translate(new Point3D(0, 0, 150));
-        cloudTileCollection.translate(new Point3D(0, 0, 100));
+        cloudTileCollection.translate(new Point3D(0, 0, 200));
+        characterCardCollection.translate(new Point3D(0, 0, 100));
     }
 
     /**
