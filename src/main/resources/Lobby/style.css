@@ -1,0 +1,29 @@
+.root
+{
+    -fx-background-color: rgb(129, 202, 241);
+}
+
+.label
+{
+    -fx-font-size: 30;
+    -fx-font-family: "Brush Script MT";
+    -fx-font-style: italic;
+    -fx-text-fill: rgb(20, 66, 146);
+    -fx-alignment: center;
+}
+
+.radio-button
+{
+    -fx-font-size: 20;
+    -fx-font-family: "Brush Script MT";
+    -fx-font-style: italic;
+    -fx-text-fill: rgb(20, 66, 146);
+}
+
+.button
+{
+    -fx-font-size: 18;
+    -fx-background-color: rgb(20, 66, 146);
+    -fx-font-family: "Brush Script MT";
+    -fx-text-fill: WHITE;
+}

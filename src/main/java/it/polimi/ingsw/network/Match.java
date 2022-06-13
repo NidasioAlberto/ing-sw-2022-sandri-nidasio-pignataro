@@ -70,8 +70,6 @@ public class Match implements Subscriber<ModelUpdate>
                 gameController.getGame().getPlayerTableList().stream().filter((p) -> p.getNickname().equals(player.getPlayerName().get())).findFirst()
                         .ifPresent((p) -> p.subscribe(this));
 
-                sendAllAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just joined"));
-
                 System.out.println("[Match] New player added to the match");
             } else
             {
@@ -82,8 +80,6 @@ public class Match implements Subscriber<ModelUpdate>
                 Phase currentPhase = gameController.getGameHandler().getGamePhase();
                 if (currentPhase instanceof SuspendedPhase)
                     ((SuspendedPhase) currentPhase).getTimeout().cancel(true);
-
-                sendAllAnswer(new ErrorAnswer(player.getPlayerName().get() + " has just reconnected"));
 
                 player.sendAnswer(new JoinedMatchAnswer(matchId));
 

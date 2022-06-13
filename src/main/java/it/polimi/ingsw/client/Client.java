@@ -69,9 +69,12 @@ public class Client implements Runnable
     {
         try
         {
-            outputStream.writeObject(command);
-            outputStream.flush();
-            outputStream.reset();
+            synchronized (outputStream)
+            {
+                outputStream.writeObject(command);
+                outputStream.flush();
+                outputStream.reset();
+            }
         } catch (IOException e)
         {
             PrintHelper.printMessage("Error while writing: " + e.getMessage());
@@ -83,9 +86,12 @@ public class Client implements Runnable
     {
         try
         {
-            outputStream.writeObject(action);
-            outputStream.flush();
-            outputStream.reset();
+            synchronized (outputStream)
+            {
+                outputStream.writeObject(action);
+                outputStream.flush();
+                outputStream.reset();
+            }
         } catch (IOException e)
         {
             PrintHelper.printMessage("Error while writing: " + e.getMessage());
@@ -119,7 +125,12 @@ public class Client implements Runnable
             while (true)
                 try
                 {
-                    outputStream.writeObject(new PingCommand());
+                    synchronized (outputStream)
+                    {
+                        outputStream.writeObject(new PingCommand());
+                        outputStream.flush();
+                        outputStream.reset();
+                    }
                     Thread.sleep(1000);
                 } catch (Exception e)
                 {
@@ -156,4 +167,15 @@ public class Client implements Runnable
             visualizer.displayError(new ErrorAnswer("[Client] Generic error: " + e.getMessage()));
         }
     }
+
+    public void setIp(String ip)
+    {
+        this.ip = ip;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+
 }

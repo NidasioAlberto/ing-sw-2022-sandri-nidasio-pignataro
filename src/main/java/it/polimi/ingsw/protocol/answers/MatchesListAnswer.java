@@ -38,6 +38,11 @@ public class MatchesListAnswer extends Answer
         return numPlayers;
     }
 
+    public Map<String, Integer> getMaxNumPlayers()
+    {
+        return maxNumPlayers;
+    }
+
     public Map<String, GameMode> getGameModes()
     {
         return gameModes;

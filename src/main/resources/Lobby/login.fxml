@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.LoginSceneController">
+   <children>
+      <Label layoutY="24.0" prefHeight="30.0" prefWidth="1280.0" text="Qua ci va il logo di Eryantis">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutY="124.0" prefHeight="17.0" prefWidth="1280.0" text="Insert your nickname" />
+      <Label layoutY="254.0" prefHeight="17.0" prefWidth="1280.0" text="Insert the server's IP" />
+      <Label layoutY="384.0" prefHeight="17.0" prefWidth="1280.0" text="Insert the server's port" />
+      <TextField fx:id="nicknameTextField" layoutX="565.0" layoutY="161.0" />
+      <TextField fx:id="ipTextField" layoutX="565.0" layoutY="291.0" />
+      <TextField fx:id="portTextField" layoutX="565.0" layoutY="421.0" onKeyPressed="#checkEnter" />
+      <Button fx:id="submitButton" layoutX="600.0" layoutY="501.0" mnemonicParsing="false" onAction="#submit" text="Submit">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+   </children>
+</AnchorPane>

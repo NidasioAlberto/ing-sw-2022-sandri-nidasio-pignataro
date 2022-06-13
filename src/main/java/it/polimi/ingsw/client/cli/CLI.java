@@ -548,7 +548,7 @@ public class CLI implements Visualizable, Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString());
+        PrintHelper.printMessage(answer.toString()  +  PrintHelper.moveCursorAbsolute(23,2) + "Press enter to choose a command");
         displayBoard();
         clear();
     }

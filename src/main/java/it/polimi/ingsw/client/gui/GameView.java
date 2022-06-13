@@ -1,19 +1,14 @@
 package it.polimi.ingsw.client.gui;
 
-import java.util.Scanner;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
-import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.game.CharacterCardType;
 import it.polimi.ingsw.protocol.answers.*;
-import it.polimi.ingsw.protocol.commands.CreateMatchCommand;
-import it.polimi.ingsw.protocol.commands.JoinMatchCommand;
-import it.polimi.ingsw.protocol.commands.SetNameCommand;
 import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -76,9 +71,11 @@ public class GameView extends Application implements Visualizable
      */
     private String playerName;
 
+    private SceneController sceneController;
+
     /**
      * Constructor
-     * 
+     *
      * @param mode The view mode that we want the game to start with
      */
     public GameView(ViewMode mode)
@@ -90,7 +87,6 @@ public class GameView extends Application implements Visualizable
             throw new NullPointerException("[GameView] Null view mode");
 
         this.viewMode = mode;
-        playerName = "pippo";
     }
 
     /**
@@ -106,79 +102,46 @@ public class GameView extends Application implements Visualizable
      */
     private void setup()
     {
-        // Create the group and the scene
-        group = new Group();
-        scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
-        // Set the scene background
-        scene.setFill(Color.rgb(129, 202, 241));
-
-        // Create the updater to update the objects every period
-        updater = new AnimationHandler(ANIMATION_UPDATE_PERIOD_MILLIS);
-
-        // Create the updates handler
-        updatesHandler = new UpdatesHandler(UPDATES_HANDLER_PERIOD_MILLIS);
-
-        // Create a mix with ambient and point light
-        setupLights();
-        group.getChildren().add(ambientLight);
-        group.getChildren().add(pointLight);
-        // Set the camera up in perspective mode
-        setupCamera();
-
-        // Setup the ground plane
-        setupGroundPlane();
-
-        /**
-         * TEST
-         */
-        DrawableCharacterCard card = new DrawableCharacterCard(75, CharacterCardType.THIEF, updater);
-        card.addToGroup(group);
-        card.subscribeToAmbientLight(ambientLight);
-
-        /**
-         * Collection creations
-         */
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert game name");
-        playerName = scanner.nextLine();
-
-        // Set the game objects and collections
-        assistantCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
-        cloudTileCollection = new DrawableCloudTileCollection(40, pointLight, ambientLight, group, updater);
-        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
-        schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
-
-        assistantCollection.translate(new Point3D(0, -10, -290));
-        islandCollection.translate(new Point3D(0, 0, 150));
-        cloudTileCollection.translate(new Point3D(0, 0, 100));
-        // Start the time scheduled animations
-        updater.start();
-
-        // Start the updates handler
-        updatesHandler.start();
-
-        // Setup the client
-        client = new Client();
-        client.setVisualizer(this);
         try
         {
-            client.connect();
-            new Thread(() -> client.run()).start();
-            Thread.sleep(1000);
-            client.sendCommand(new SetNameCommand(playerName));
-            client.sendCommand(new CreateMatchCommand("m", 2, GameMode.EXPERT));
-            client.sendCommand(new JoinMatchCommand("m"));
-        } catch (Exception e)
-        {
-            System.out.println("Connection error");
+            // Create the group and the scene
+            group = new Group();
+            scene = new Scene(new Group(), WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
+
+            // Set the scene background
+            scene.setFill(Color.rgb(129, 202, 241));
+            scene.getStylesheets().add(getClass().getResource("/Lobby/style.css").toExternalForm());
+
+            // Create the updater to update the objects every period
+            updater = new AnimationHandler(ANIMATION_UPDATE_PERIOD_MILLIS);
+
+            // Create the updates handler
+            updatesHandler = new UpdatesHandler(UPDATES_HANDLER_PERIOD_MILLIS);
+
+            // Start the time scheduled animations
+            updater.start();
+
+            // Start the updates handler
+            updatesHandler.start();
+
+            // Setup the client
+            client = new Client();
+            client.setVisualizer(this);
+            sceneController = new SceneController(this, client, scene);
+            sceneController.setRoot("/Lobby/login.fxml");
+
+
+            // Set the client to the action translator
+            ActionTranslator.getInstance().setClient(client);
+
+            // Set the gameview instance to the action translator for reset purposes
+            ActionTranslator.getInstance().setGameView(this);
         }
-        scanner.close();
-
-        // Set the client to the action translator
-        ActionTranslator.getInstance().setClient(client);
-
-        // Set the gameview instance to the action translator for reset purposes
-        ActionTranslator.getInstance().setGameView(this);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("Error while creating the scene");
+        }
     }
 
     /**
@@ -266,7 +229,7 @@ public class GameView extends Application implements Visualizable
 
     /**
      * This method sets the camera view and updates the view
-     * 
+     *
      * @param mode The new view
      */
     public void setViewMode(ViewMode mode)
@@ -290,38 +253,12 @@ public class GameView extends Application implements Visualizable
         // to all the needed objects
         setup();
 
-        // Set the current visualization and position the camera according to that
-        updateCameraView();
-
         // Show the window with the correct title
         stage.setTitle("Eriantys Game");
+        stage.getIcons().add(new Image("EryantisIcon.png"));
         // Set the scene
         stage.setScene(scene);
         stage.show();
-
-        // // Set the onClose event
-        // stage.setOnCloseRequest((event) -> {
-
-        // });
-    }
-
-    /**
-     * Method to stop the executions and the client thread. CALLED BY JAVAFX!
-     */
-    @Override
-    public void stop()
-    {
-        // Stop the client
-        try
-        {
-            client.stop();
-        } catch (Exception e)
-        {
-            System.err.println("Unable to stop: " + e.getMessage());
-        }
-
-        // Terminate the application anyway
-        System.exit(0);
     }
 
     /**
@@ -396,32 +333,93 @@ public class GameView extends Application implements Visualizable
     public void displayError(ErrorAnswer answer)
     {
         // Add the lambda to reset all the positions of movable things
-        updatesHandler.subscribeUpdate(() -> resetPosition());
-        System.out.println(answer.getErrorMessage());
+        if (playerName != null)
+        {
+            updatesHandler.subscribeUpdate(() -> resetPosition());
+            System.out.println(answer.getErrorMessage());
+        }
+        updatesHandler.subscribeUpdate(() -> sceneController.displayError(answer));
     }
 
     @Override
     public void displayJoinedMatch(JoinedMatchAnswer answer)
     {
-
+        updatesHandler.subscribeUpdate(() -> sceneController.displayJoinedMatch());
     }
 
     @Override
     public void displayMatchesList(MatchesListAnswer answer)
     {
-
+        updatesHandler.subscribeUpdate(() -> sceneController.displayMatchesList(answer));
     }
 
     @Override
     public void displaySetName(SetNameAnswer answer)
     {
-
+        playerName = answer.getName();
+        createCollections();
+        updatesHandler.subscribeUpdate(() -> sceneController.displaySetName(answer));
     }
 
     @Override
     public void displayStartMatch(StartMatchAnswer answer)
     {
 
+    }
+
+    public void matchBegin()
+    {
+        // Set the camera up in perspective mode
+        setupCamera();
+
+        // Setup the ground plane
+        setupGroundPlane();
+
+        scene.setRoot(group);
+
+        // Set the current visualization and position the camera according to that
+        updateCameraView();
+    }
+
+    private void createCollections()
+    {
+
+        setupLights();
+        group.getChildren().add(ambientLight);
+        group.getChildren().add(pointLight);
+
+
+        /**
+         * Collection creations
+         */
+        // Set the game objects and collections
+        assistantCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
+        cloudTileCollection = new DrawableCloudTileCollection(40, pointLight, ambientLight, group, updater);
+        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
+        schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
+
+        assistantCollection.translate(new Point3D(0, -10, -290));
+        islandCollection.translate(new Point3D(0, 0, 150));
+        cloudTileCollection.translate(new Point3D(0, 0, 100));
+    }
+
+    /**
+     * Method to stop the executions and the client thread. CALLED BY JAVAFX!
+     */
+    @Override
+    public void stop()
+    {
+        // Stop the client
+        try
+        {
+            client.stop();
+        } catch (Exception e)
+        {
+            System.err.println("Unable to stop: " + e.getMessage());
+        }
+
+        // Terminate the application anyway
+        System.exit(0);
     }
 
     /**

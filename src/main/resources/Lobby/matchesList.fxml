@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.MatchesListSceneController">
+   <children>
+      <Button layoutX="54.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Label layoutY="50.0" prefHeight="17.0" prefWidth="1280.0" text="These are the available matches" />
+      <TableView fx:id="matchesTableView" accessibleText="There are no games" layoutX="340.0" layoutY="147.0" prefHeight="482.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="300.0" text="Name" />
+          <TableColumn fx:id="modeColumn" minWidth="0.0" prefWidth="100.0" text="Mode" />
+            <TableColumn fx:id="playersColumn" prefWidth="200.0" text="Players number" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
