@@ -17,7 +17,7 @@ public class Professor implements Serializable
     private SchoolColor color;
 
     /**
-     * Constructor.
+     * Creates a professor object
      * 
      * @param color The pawn color.
      * @throws NullPointerException Thrown if the specified color is invalid.
@@ -30,11 +30,21 @@ public class Professor implements Serializable
         this.color = color;
     }
 
+    /**
+     * Returns the professor's color.
+     * 
+     * @return Professor's color.
+     */
     public SchoolColor getColor()
     {
         return color;
     }
 
+    /**
+     * Returns a representation of the professor as a colored character.
+     * 
+     * @return The professor's string representation.
+     */
     @Override
     public String toString()
     {

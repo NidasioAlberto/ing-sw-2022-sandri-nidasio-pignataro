@@ -10,14 +10,17 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * This class represents the school board. Every player has one of these, it represents the internal state of each single player and his capabilities
- * to "beat" or not other players during professors and islands exchanges.
+ * This class represents the school board. Every player has one and it represents the internal state of each single player and his capabilities to
+ * "beat" or not other players during professors and islands exchanges.
  */
 public class SchoolBoard implements Serializable
 {
     @Serial
     private static final long serialVersionUID = -1601566713757416304L;
 
+    /**
+     * Absolute maximum number of students per room.
+     */
     public static final int MAX_STUDENTS_PER_ROOM = 10;
 
     /**
@@ -26,24 +29,12 @@ public class SchoolBoard implements Serializable
     private Integer maxStudentsInEntrance = null;
     private Integer maxTowers = null;
 
-    /**
-     * The entrance zone.
-     */
     private List<Student> entrance;
 
-    /**
-     * The dining room zone.
-     */
     private Map<SchoolColor, List<Student>> diningRoom;
 
-    /**
-     * The professor table zone.
-     */
     private List<Professor> professorTable;
 
-    /**
-     * The towers list.
-     */
     private List<Tower> towers;
 
     /**
@@ -51,9 +42,6 @@ public class SchoolBoard implements Serializable
      */
     private TowerColor towerColor;
 
-    /**
-     * The modality of the game.
-     */
     private GameMode mode;
 
     /**
@@ -62,10 +50,11 @@ public class SchoolBoard implements Serializable
     private int coins;
 
     /**
-     * Constructor.
-     *
-     * @throws IllegalArgumentException Thrown if maxStudents is neither 7 nor 9
-     * @throws NullPointerException Thrown if the color passed is null
+     * Creats a SchoolBoard object.
+     * 
+     * @param color Color for the board's towers.
+     * @param mode Game mode.
+     * @throws NullPointerException Thrown if the color or the mode are null.
      */
     public SchoolBoard(TowerColor color, GameMode mode) throws NullPointerException
     {
@@ -98,6 +87,14 @@ public class SchoolBoard implements Serializable
         diningRoom.put(SchoolColor.YELLOW, new ArrayList<Student>());
     }
 
+
+    /**
+     * Sets the players number.
+     * 
+     * @param playersNumber Number of players in the game..
+     * @throws IllegalArgumentException Thrown if the given number of players is invalid.
+     * @throws IllegalStateException Thrown if the maxStudentsInEntrance and maxTowers are set.
+     */
     public void setPlayersNumber(Integer playersNumber) throws IllegalArgumentException, IllegalStateException
     {
         // The number of players must be 2 or 3
@@ -123,8 +120,8 @@ public class SchoolBoard implements Serializable
     /**
      * Adds the professor to the professors table.
      * 
-     * @param professor the professor that has to be added
-     * @throws NullPointerException Thrown if the professor passed is null
+     * @param professor The professor that has to be added.
+     * @throws NullPointerException Thrown if the professor passed is null.
      */
     public void addProfessor(Professor professor) throws NullPointerException
     {
@@ -140,9 +137,9 @@ public class SchoolBoard implements Serializable
     /**
      * Removes the specified professor from the professors table.
      * 
-     * @param professor the professor that has to be removed
-     * @throws NullPointerException Thrown if the professor passed is null
-     * @throws NoSuchElementException Thrown if there is no such professor
+     * @param professor The professor that has to be removed.
+     * @throws NullPointerException Thrown if the professor passed is null.
+     * @throws NoSuchElementException Thrown if there is no such professor.
      */
     public void removeProfessor(Professor professor) throws NullPointerException, NoSuchElementException
     {
@@ -155,10 +152,10 @@ public class SchoolBoard implements Serializable
     }
 
     /**
-     * Tells if the board has that professor color
+     * Tells if the board has that professor color.
      *
-     * @param color the color to be checked
-     * @return boolean that represents whether there is the professor
+     * @param color The color to be checked.
+     * @return Boolean that represents whether there is the professor.
      */
     public boolean hasProfessor(SchoolColor color)
     {
@@ -168,8 +165,8 @@ public class SchoolBoard implements Serializable
     /**
      * Adds the tower to the list, with maximum of 6 or 8 towers depending on the number of players.
      * 
-     * @param tower the tower that has to be added
-     * @throws NullPointerException Thrown if the tower passed is null
+     * @param tower The tower that has to be added.
+     * @throws NullPointerException Thrown if the tower passed is null.
      */
     public void addTower(Tower tower) throws NullPointerException
     {
@@ -187,9 +184,9 @@ public class SchoolBoard implements Serializable
     /**
      * Removes the tower from the list.
      * 
-     * @param tower the tower that has to be removed.
-     * @throws NullPointerException if the parameter is null.
-     * @throws EndGameException if there are no more towers.
+     * @param tower The tower that has to be removed.
+     * @throws NullPointerException If the parameter is null.
+     * @throws EndGameException If there are no more towers.
      */
     public void removeTower(Tower tower) throws NullPointerException, EndGameException
     {
@@ -208,11 +205,11 @@ public class SchoolBoard implements Serializable
     }
 
     /**
-     * Same as removeTower(Tower) but removes a tower of that color
+     * Same as removeTower(Tower) but removes a tower of that color.
      * 
-     * @param color the color of the removed tower
-     * @throws NullPointerException if the parameter is null.
-     * @throws EndGameException if there are no more towers.
+     * @param color The color of the removed tower.
+     * @throws NullPointerException If the parameter is null.
+     * @throws EndGameException If there are no more towers.
      */
     public void removeTower(TowerColor color)
     {
@@ -225,10 +222,10 @@ public class SchoolBoard implements Serializable
     }
 
     /**
-     * Adds the student to the entrance room
+     * Adds the student to the entrance room.
      * 
-     * @param student the student that has to be added to the entrance room
-     * @throws NullPointerException Thrown if the student passed is null
+     * @param student The student that has to be added to the entrance room.
+     * @throws NullPointerException Thrown if the student passed is null.
      */
     public void addStudentToEntrance(Student student) throws NullPointerException
     {
@@ -250,8 +247,8 @@ public class SchoolBoard implements Serializable
     /**
      * Adds the student to the dining room.
      * 
-     * @param student the student that has to be added to the dining room
-     * @throws NullPointerException Thrown if the student passed is null
+     * @param student The student that has to be added to the dining room.
+     * @throws NullPointerException Thrown if the student passed is null.
      */
     public void addStudentToDiningRoom(Student student) throws NullPointerException
     {
@@ -275,7 +272,7 @@ public class SchoolBoard implements Serializable
     /**
      * Removes the student from the entrance.
      * 
-     * @param student the student that has to be removed from the entrance
+     * @param student The student that has to be removed from the entrance.
      */
     public void removeStudentFromEntrance(Student student)
     {
@@ -290,10 +287,10 @@ public class SchoolBoard implements Serializable
     }
 
     /**
-     * Removes the student from the entrance
+     * Removes the student from the entrance.
      * 
-     * @param color the student color to be removed
-     * @return the removed student
+     * @param color The student color to be removed.
+     * @return The removed student.
      */
     public Optional<Student> removeStudentFromEntrance(SchoolColor color) throws NullPointerException
     {
@@ -346,8 +343,8 @@ public class SchoolBoard implements Serializable
     /**
      * Removes the student from the dining room.
      *
-     * @param color the color of the student that has to be removed from the dining room
-     * @return the student removed
+     * @param color The color of the student that has to be removed from the dining room
+     * @return The student removed
      */
     public Optional<Student> removeStudentFromDining(SchoolColor color)
     {
@@ -364,8 +361,8 @@ public class SchoolBoard implements Serializable
     /**
      * Moves the student to the dining room from the entrance.
      * 
-     * @param student The student that has to be moved from entrance to dining room
-     * @throws NullPointerException Thrown if the student passed is null
+     * @param student The student that has to be moved from entrance to dining room.
+     * @throws NullPointerException Thrown if the student passed is null.
      */
     public void moveStudentToDining(Student student) throws NullPointerException
     {
@@ -384,9 +381,9 @@ public class SchoolBoard implements Serializable
     }
 
     /**
-     * Same as the moveStudentToDining(Student student) but with the SchoolColor parameter
+     * Same as the moveStudentToDining(Student student) but with the SchoolColor parameter.
      * 
-     * @param color the color of the student to be moved
+     * @param color the color of the student to be moved.
      */
     public void moveStudentToDining(SchoolColor color) throws NullPointerException, NoSuchElementException
     {
@@ -399,16 +396,31 @@ public class SchoolBoard implements Serializable
         addStudentToDiningRoom(removed);
     }
 
+    /**
+     * Returns the list of towers on the board.
+     * 
+     * @return Towers on the board.
+     */
     public List<Tower> getTowers()
     {
         return new ArrayList<>(towers);
     }
 
+    /**
+     * Returns the list of professors on the board.
+     * 
+     * @return Professors on the board.
+     */
     public List<Professor> getProfessors()
     {
         return new ArrayList<>(professorTable);
     }
 
+    /**
+     * Returns teh list of students in the entrance.
+     * 
+     * @return Students in the entrance.
+     */
     public List<Student> getStudentsInEntrance()
     {
         return new ArrayList<>(entrance);
@@ -417,13 +429,19 @@ public class SchoolBoard implements Serializable
     /**
      * Returns the number of students with the specified color inside the dining room.
      * 
-     * @param color Color of the students
+     * @param color Color of the students.
      */
     public int getStudentsNumber(SchoolColor color)
     {
         return diningRoom.get(color).size();
     }
 
+    /**
+     * Returns the number of remaining students that can still be moved from the entrance.
+     * 
+     * @return Number of students still movable from the entrance.
+     * @throws NullPointerException Thrown if the maxStudentsInEntrance parameter is null.
+     */
     public int getRemainingMovableStudentsInEntrance() throws NullPointerException
     {
         if (maxStudentsInEntrance == null)
@@ -433,26 +451,51 @@ public class SchoolBoard implements Serializable
         return movableStudents - (maxStudentsInEntrance - entrance.size());
     }
 
+    /**
+     * Returns the maximum number of students in the entrance.
+     * 
+     * @return Maximum number of students in the entrance.
+     */
     public int getMaxStudentsInEntrance()
     {
         return maxStudentsInEntrance;
     }
 
+    /**
+     * Returns the maximum number of towers the board can hold.
+     * 
+     * @return Maximum number of towers the board can hold.
+     */
     public int getMaxTowers()
     {
         return maxTowers;
     }
 
+    /**
+     * Returns the board's towers color.
+     * 
+     * @return Board's towers color.
+     */
     public TowerColor getTowerColor()
     {
         return towerColor;
     }
 
+    /**
+     * Returns the number of coins available on the board.
+     * 
+     * @return Coins available on the board.
+     */
     public int getCoins()
     {
         return coins;
     }
 
+    /**
+     * Returns the game mode for which the board is setup.
+     * 
+     * @return The board's game mode.
+     */
     public GameMode getMode()
     {
         return mode;

@@ -79,11 +79,24 @@ public class Player implements Publisher<ModelUpdate>
      */
     private boolean hasPlayedCard;
 
+    /**
+     * Creates a Player object.
+     * 
+     * @param nickname Player's name.
+     * @param color Color of the player's towers.
+     * @param mode Mode of the game the player is in.
+     */
     public Player(String nickname, TowerColor color, GameMode mode)
     {
         this(nickname, new SchoolBoard(color, mode));
     }
 
+    /**
+     * Creates a Player object from a school board.
+     * 
+     * @param nickname Player's name.
+     * @param board School board from where to get the towers color and game board.
+     */
     public Player(String nickname, SchoolBoard board) throws NullPointerException
     {
         if (nickname == null)
@@ -120,7 +133,7 @@ public class Player implements Publisher<ModelUpdate>
                 selectedCard = Optional.of(cards.get(i));
 
                 // Toggle the selected card to be used
-                cards.get(i).toggleUsed();
+                cards.get(i).use();
                 hasPlayedCard = true;
                 lastAssistantCardUsed = i;
 
@@ -133,6 +146,9 @@ public class Player implements Publisher<ModelUpdate>
         throw new NoSuchAssistantCardException("[Player]");
     }
 
+    /**
+     * Notifies the subscribers.
+     */
     public void notifySubscriber()
     {
         if (subscriber.isPresent())
@@ -176,8 +192,8 @@ public class Player implements Publisher<ModelUpdate>
      * Method to remove an AssistantCard from the player's list of cards.
      * 
      * @param turnOrder The number of turn of the card.
-     * @throws NoSuchAssistantCardException if the player doesn't have the selected card.
-     * @throws EndGameException if the last card is removed.
+     * @throws NoSuchAssistantCardException If the player doesn't have the selected card.
+     * @throws EndGameException If the last card is removed.
      */
     public void removeCard(int turnOrder) throws NoSuchAssistantCardException, EndGameException
     {
@@ -250,7 +266,7 @@ public class Player implements Publisher<ModelUpdate>
     }
 
     /**
-     * Method to call after every player's action to clear island and colors selected
+     * Method to call after every player's action to clear island and colors selected.
      */
     public void clearSelections()
     {
@@ -259,7 +275,7 @@ public class Player implements Publisher<ModelUpdate>
     }
 
     /**
-     * Method to call at the end of the turn to clear all the selections
+     * Method to call at the end of the turn to clear all the selections.
      */
     public void clearSelectionsEndTurn()
     {
@@ -270,59 +286,108 @@ public class Player implements Publisher<ModelUpdate>
     }
 
     /**
-     * Method to call at the end of the round to clear the fact that
-     * the player may have played a card.
+     * Method to call at the end of the round to clear the fact that the player may have played a card.
      */
     public void clearSelectionEndRound()
     {
         hasPlayedCard = false;
     }
 
+    /**
+     * Returns the player's nickname.
+     * 
+     * @return The player's nickname.
+     */
     public String getNickname()
     {
         return nickname;
     }
 
+    /**
+     * Returns the player's board.
+     * 
+     * @return The player's board.
+     */
     public SchoolBoard getBoard()
     {
         return board;
     }
 
+    /**
+     * Returns the player's selected card.
+     * 
+     * @return Selected card.
+     */
     public Optional<AssistantCard> getSelectedCard()
     {
         return selectedCard;
     }
 
+    /**
+     * Returns the player's selected island.
+     * 
+     * @return The selected island.
+     */
     public Optional<Integer> getSelectedIsland()
     {
         return selectedIsland;
     }
 
+    /**
+     * Returns the player's selected colors.
+     * 
+     * @return Selected color.
+     */
     public List<SchoolColor> getSelectedColors()
     {
         return new ArrayList<>(selectedColors);
     }
 
+    /**
+     * Returns the player's selected cloud tile.
+     * 
+     * @return Selected cloud tile.
+     */
     public Optional<Integer> getSelectedCloudTile()
     {
         return selectedCloudTile;
     }
 
+    /**
+     * Returns the player's selected character card.
+     * 
+     * @return Selected character card.
+     */
     public Optional<Integer> getSelectedCharacterCard()
     {
         return selectedCharacterCard;
     }
 
+    /**
+     * Returns teh player's assistant cards.
+     * 
+     * @return Assistant cards.
+     */
     public List<AssistantCard> getCards()
     {
         return new ArrayList<AssistantCard>(cards);
     }
 
+    /**
+     * Returns the player's tower color.
+     * 
+     * @return Towers color.
+     */
     public TowerColor getColor()
     {
         return color;
     }
 
+    /**
+     * Updates the subscriber with the given element.
+     * 
+     * @param subscriber New subscriber.
+     */
     @Override
     public void subscribe(Subscriber<? super ModelUpdate> subscriber)
     {
@@ -334,16 +399,31 @@ public class Player implements Publisher<ModelUpdate>
             this.subscriber = Optional.of(subscriber);
     }
 
+    /**
+     * Tells whether the player is active or not.
+     * 
+     * @return True if the player is active.
+     */
     public boolean isActive()
     {
         return active;
     }
 
+    /**
+     * Set the active status of the player.
+     * 
+     * @param active Active status.
+     */
     public void setActive(boolean active)
     {
         this.active = active;
     }
 
+    /**
+     * Tells whether the player has played an assistant card.
+     * 
+     * @return True if the player has played an assistant card.
+     */
     public boolean hasPlayedCard()
     {
         return hasPlayedCard;

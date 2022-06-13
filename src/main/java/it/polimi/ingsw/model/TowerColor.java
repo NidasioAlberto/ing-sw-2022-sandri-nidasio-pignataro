@@ -1,10 +1,22 @@
 package it.polimi.ingsw.model;
 
 /**
- * Tower colors enumeration
+ * Enumeration for the tower colors.
  */
-
 public enum TowerColor
 {
-    BLACK, GREY, WHITE;
+    /**
+     * Black color.
+     */
+    BLACK,
+
+    /**
+     * Grey color.
+     */
+    GREY,
+
+    /**
+     * White color.
+     */
+    WHITE;
 }

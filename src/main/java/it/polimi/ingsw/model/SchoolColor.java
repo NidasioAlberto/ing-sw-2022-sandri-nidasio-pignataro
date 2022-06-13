@@ -1,9 +1,32 @@
 package it.polimi.ingsw.model;
 
 /**
- * Game colors enumeration for students and professors
+ * Enumeration for the colors used for students and professors.
  */
 public enum SchoolColor
 {
-    BLUE, GREEN, PINK, RED, YELLOW;
+    /**
+     * Blue color.
+     */
+    BLUE,
+
+    /**
+     * Green color.
+     */
+    GREEN,
+
+    /**
+     * Pink color.
+     */
+    PINK,
+
+    /**
+     * Red color.
+     */
+    RED,
+
+    /**
+     * Yellow color.
+     */
+    YELLOW;
 }

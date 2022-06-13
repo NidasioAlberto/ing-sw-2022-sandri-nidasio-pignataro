@@ -27,14 +27,14 @@ public class CloudTileTest
     @Test
     public void addStudentNull()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
 
         // Add a normal student
         cloud.addStudent(new Student(SchoolColor.GREEN));
-        assertEquals(SchoolColor.GREEN ,cloud.getStudents().get(0).getColor());
+        assertEquals(SchoolColor.GREEN, cloud.getStudents().get(0).getColor());
 
         // Add a null student
-        assertThrows(NullPointerException.class, () ->  cloud.addStudent(null));
+        assertThrows(NullPointerException.class, () -> cloud.addStudent(null));
         assertEquals(SchoolColor.GREEN, cloud.getStudents().get(0).getColor());
         assertEquals(1, cloud.getStudents().size());
     }
@@ -45,7 +45,7 @@ public class CloudTileTest
     @Test
     public void addStudentDuplicate()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
         Student student = new Student(SchoolColor.RED);
 
         // Add a normal student
@@ -64,8 +64,8 @@ public class CloudTileTest
     @Test
     public void addStudentMaxDimension()
     {
-        CloudTile cloud_2_4 = new CloudTile(CloudTileType.TILE_2);
-        CloudTile cloud_3 = new CloudTile(CloudTileType.TILE_3);
+        CloudTile cloud_2_4 = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
+        CloudTile cloud_3 = new CloudTile(CloudTileType.TILE_3_PLAYERS);
         Student student1 = new Student(SchoolColor.RED);
         Student student2 = new Student(SchoolColor.BLUE);
         Student student3 = new Student(SchoolColor.YELLOW);
@@ -119,13 +119,12 @@ public class CloudTileTest
     }
 
     /**
-     * Test that a contained student is removed instead if the student is not contained or it is
-     * null nothing changes
+     * Test that a contained student is removed instead if the student is not contained or it is null nothing changes
      */
     @Test
     public void removeStudentNull()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
         Student student = new Student(SchoolColor.GREEN);
 
         // Add a normal student
@@ -133,7 +132,7 @@ public class CloudTileTest
         assertEquals(student, cloud.getStudents().get(0));
 
         // Remove a null student
-        assertThrows(NullPointerException.class, () ->  cloud.removeStudent(null));
+        assertThrows(NullPointerException.class, () -> cloud.removeStudent(null));
         assertEquals(student, cloud.getStudents().get(0));
         assertEquals(1, cloud.getStudents().size());
 
@@ -153,7 +152,7 @@ public class CloudTileTest
     @Test
     public void removeStudents()
     {
-        CloudTile cloud = new CloudTile(CloudTileType.TILE_2);
+        CloudTile cloud = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
         Student student1 = new Student(SchoolColor.GREEN);
         Student student2 = new Student(SchoolColor.BLUE);
 
@@ -176,8 +175,7 @@ public class CloudTileTest
     }
 
     /**
-     * The cloud tile constructor should throw NullPointerException if an invalid parameter is
-     * passed.
+     * The cloud tile constructor should throw NullPointerException if an invalid parameter is passed.
      */
     @Test
     public void nullParameterTest()

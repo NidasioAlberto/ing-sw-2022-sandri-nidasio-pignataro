@@ -8,8 +8,8 @@ import java.util.Optional;
 import it.polimi.ingsw.model.exceptions.NoLegitActionException;
 
 /**
- * This class represents the physical island tile displayed in the game. It differs from the island
- * because the last one can actually be the composition of more tiles.
+ * This class represents the physical island tile displayed in the game. It differs from the island because the last one can actually be the
+ * composition of multiple tiles.
  */
 public class IslandTile implements Serializable
 {
@@ -17,17 +17,17 @@ public class IslandTile implements Serializable
     private static final long serialVersionUID = -6662308214804626348L;
 
     /**
-     * List of students positioned on this tile
+     * List of students positioned on this tile.
      */
     private List<Student> students;
 
     /**
-     * The tower that can be or not on the island
+     * The tower that can be or not on the island.
      */
     private Tower tower;
 
     /**
-     * Constructor
+     * Creates an IslandTile object.
      */
     public IslandTile()
     {
@@ -39,10 +39,10 @@ public class IslandTile implements Serializable
     }
 
     /**
-     * Method to add a new student to the tile (not null)
+     * Adds a new student to the tile (not null).
      * 
-     * @param student The student to be added
-     * @throws NullPointerException thrown if the student is null
+     * @param student The student to be added.
+     * @throws NullPointerException Thrown if the student is null.
      */
     public void addStudent(Student student) throws NullPointerException
     {
@@ -58,10 +58,10 @@ public class IslandTile implements Serializable
     }
 
     /**
-     * Method to add a tower to the tile if not already present
+     * Method to add a tower to the tile if not already present.
      * 
-     * @param tower The tower (not null) to be added
-     * @throws NullPointerException if the tower is null
+     * @param tower The tower (not null) to be added.
+     * @throws NullPointerException if the tower is null.
      */
     public void addTower(Tower tower) throws NullPointerException, NoLegitActionException
     {
@@ -76,8 +76,7 @@ public class IslandTile implements Serializable
     }
 
     /**
-     * Method to remove the tower, no matter what tower it is. Keep in mind that this method does
-     * not move the removed tower back its player's board!
+     * Method to remove the tower, no matter what tower it is. Keep in mind that this method does not move the removed tower back its player's board!
      */
     public void removeTower()
     {
@@ -87,7 +86,7 @@ public class IslandTile implements Serializable
     /**
      * Method to remove the tower passed via parameter. If not equal I don't remove the tower.
      * 
-     * @param tower The tower that has to be removed
+     * @param tower The tower that has to be removed.
      */
     public void removeTower(Tower tower)
     {
@@ -98,11 +97,21 @@ public class IslandTile implements Serializable
         }
     }
 
+    /**
+     * Returns the list of students on the tile.
+     * 
+     * @return Students on the tile.
+     */
     public List<Student> getStudents()
     {
         return new ArrayList<Student>(students);
     }
 
+    /**
+     * Returns the tower on the tile.
+     * 
+     * @return Tower on the tile.
+     */
     public Optional<Tower> getTower()
     {
         return tower == null ? Optional.empty() : Optional.of(tower);

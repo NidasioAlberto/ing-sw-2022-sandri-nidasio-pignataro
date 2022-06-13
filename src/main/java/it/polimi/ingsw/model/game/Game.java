@@ -616,8 +616,8 @@ public class Game implements Publisher<ModelUpdate>
             IntStream.range(0, 24).forEach(i -> addStudentToBag(new Student(color)));
 
         // 5. Place the cloud tiles
-        IntStream.range(0, players.size())
-                .forEach(i -> cloudTiles.add(playersNumber == 3 ? new CloudTile(CloudTileType.TILE_3) : new CloudTile(CloudTileType.TILE_2)));
+        IntStream.range(0, players.size()).forEach(i -> cloudTiles
+                .add(playersNumber == 3 ? new CloudTile(CloudTileType.TILE_3_PLAYERS) : new CloudTile(CloudTileType.TILE_2_4_PLAYERS)));
 
         // 6. Place the professors
         for (SchoolColor color : SchoolColor.values())

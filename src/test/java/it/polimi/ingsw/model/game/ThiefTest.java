@@ -34,10 +34,12 @@ public class ThiefTest
         game = new Game();
 
         // Add the player to the game
-        try {
+        try
+        {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
         Match match = new Match(new Server(), "test", 2, GameMode.CLASSIC);
         game.subscribe(match);
@@ -52,17 +54,17 @@ public class ThiefTest
     @Test
     public void constructorTest()
     {
-        //Null pointers inside the factory method
+        // Null pointers inside the factory method
         assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(null, game));
         assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(CharacterCardType.THIEF, null));
 
-        //Type confirmation
+        // Type confirmation
         assertEquals(CharacterCardType.THIEF, thief.getCardType());
 
-        //Cost
+        // Cost
         assertEquals(3, thief.cost);
 
-        //Not already used
+        // Not already used
         assertEquals(false, thief.firstUsed);
         assertEquals(false, thief.isActivated());
     }
@@ -130,17 +132,17 @@ public class ThiefTest
     @Test
     public void isPlayableTest()
     {
-        //This card should always be playable
+        // This card should always be playable
         assertEquals(true, thief.isPlayable());
     }
 
     @Test
     public void isValidActionTest()
     {
-        //The only valid action is the select color action
-        for(ExpertGameAction action : ExpertGameAction.values())
+        // The only valid action is the select color action
+        for (ExpertGameAction action : ExpertGameAction.values())
         {
-            if(action == ExpertGameAction.SELECT_COLOR)
+            if (action == ExpertGameAction.SELECT_COLOR)
                 assertEquals(true, thief.isValidAction(action));
             else
                 assertEquals(false, thief.isValidAction(action));
@@ -150,7 +152,7 @@ public class ThiefTest
     @Test
     public void applyActionTest()
     {
-        //Set up the environment
+        // Set up the environment
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.BLUE));
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
@@ -161,43 +163,43 @@ public class ThiefTest
         player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.RED));
         player2.getBoard().addStudentToDiningRoom(new Student(SchoolColor.RED));
 
-        //Call the apply action without having selected a player
+        // Call the apply action without having selected a player
         thief.activated = true;
         assertThrows(NoSuchElementException.class, () -> thief.applyAction());
         assertEquals(true, thief.activated);
-        //Check that nothing changed
+        // Check that nothing changed
         assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.BLUE));
         assertEquals(4, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.RED));
 
-        //Select the player but not the color
+        // Select the player but not the color
         game.selectPlayer(0);
         assertThrows(NoSuchElementException.class, () -> thief.applyAction());
         assertEquals(true, thief.activated);
-        //Check that nothing changed
+        // Check that nothing changed
         assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.BLUE));
         assertEquals(4, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.RED));
 
-        //Select a non present color
+        // Select a non present color
         player1.selectColor(SchoolColor.PINK);
         thief.applyAction();
         assertEquals(false, thief.activated);
-        //Check that nothing changed
+        // Check that nothing changed
         assertEquals(2, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.BLUE));
         assertEquals(4, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(2, player2.getBoard().getStudentsNumber(SchoolColor.RED));
 
-        //Select an existing color
+        // Select an existing color
         player1.clearSelections();
         player1.selectColor(SchoolColor.GREEN);
         thief.activated = true;
         thief.applyAction();
         assertEquals(false, thief.activated);
-        //Check that something changed
+        // Check that something changed
         assertEquals(0, player1.getBoard().getStudentsNumber(SchoolColor.GREEN));
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.BLUE));
         assertEquals(1, player2.getBoard().getStudentsNumber(SchoolColor.GREEN));
@@ -205,7 +207,7 @@ public class ThiefTest
 
         // Toggle all the cards of one player to test the thief when the game is ending
         for (AssistantCard card : player1.getCards())
-            card.toggleUsed();
+            card.use();
         thief.activated = true;
         thief.applyAction();
 

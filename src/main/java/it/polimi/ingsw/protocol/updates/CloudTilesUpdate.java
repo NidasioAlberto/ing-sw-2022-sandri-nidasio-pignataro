@@ -75,12 +75,12 @@ public class CloudTilesUpdate extends ModelUpdate
     {
         List<CloudTile> cloudTiles = new ArrayList<>();
 
-        CloudTile cloudTile1 = new CloudTile(CloudTileType.TILE_2);
+        CloudTile cloudTile1 = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
         cloudTile1.addStudent(new Student(SchoolColor.PINK));
         cloudTile1.addStudent(new Student(SchoolColor.RED));
         cloudTile1.addStudent(new Student(SchoolColor.GREEN));
 
-        CloudTile cloudTile2 = new CloudTile(CloudTileType.TILE_2);
+        CloudTile cloudTile2 = new CloudTile(CloudTileType.TILE_2_4_PLAYERS);
         cloudTile2.addStudent(new Student(SchoolColor.YELLOW));
         cloudTile2.addStudent(new Student(SchoolColor.BLUE));
         cloudTile2.addStudent(new Student(SchoolColor.GREEN));

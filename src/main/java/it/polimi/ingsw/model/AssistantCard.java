@@ -13,8 +13,14 @@ public class AssistantCard implements Serializable
     @Serial
     private static final long serialVersionUID = 3254487044517145211L;
 
+    /**
+     * Absolute maximum value for the turn order parameter.
+     */
     public static final int MAX_TURN_ORDER = 10;
 
+    /**
+     * Absolute maximum value for the steps parameter.
+     */
     public static final int MAX_STEPS = 5;
 
     /**
@@ -38,7 +44,7 @@ public class AssistantCard implements Serializable
     private boolean used;
 
     /**
-     * Constructor.
+     * Creates an AssistantCard object.
      * 
      * @param wizard The wizard type.
      * @param turnOrder The number of turn.
@@ -66,33 +72,56 @@ public class AssistantCard implements Serializable
         this.used = false;
     }
 
+    /**
+     * Returns the card's wizard.
+     * 
+     * @return The card's wizard.
+     */
     public Wizard getWizard()
     {
         return wizard;
     }
 
+    /**
+     * Returns the card's turn order.
+     * 
+     * @return The card's turn order.
+     */
     public int getTurnOrder()
     {
         return turnOrder;
     }
 
+    /**
+     * Returns the card's number of steps.
+     * 
+     * @return The card's number of steps.
+     */
     public int getSteps()
     {
         return steps;
     }
 
+    /**
+     * Tells whether the card has been used or not.
+     * 
+     * @return True if the card has been used.
+     */
     public boolean isUsed()
     {
         return used;
     }
 
-    public void toggleUsed()
+    /**
+     * Flags the card as used.
+     */
+    public void use()
     {
         this.used = true;
     }
 
     /**
-     * Draws a 4x6 representation of the card.
+     * Draws a 4x6 representation of the card. Uses escape characters to be printed everywhere on the terminal.
      */
     @Override
     public String toString()

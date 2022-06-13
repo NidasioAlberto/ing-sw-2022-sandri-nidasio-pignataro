@@ -27,7 +27,7 @@ public class SceneController
 
     private static Parent currentRoot;
 
-    //TODO popup per errori,  chiedere se sicuro di uscire, joinare match dalla lista, lista vuota stampa roba in italian
+    // TODO popup per errori, chiedere se sicuro di uscire, joinare match dalla lista, lista vuota stampa roba in italian
 
     public SceneController(GameView view, Client client, Scene mainScene)
     {
@@ -36,13 +36,12 @@ public class SceneController
             this.view = view;
             this.client = client;
             this.mainScene = mainScene;
-        }
-        else throw new NullPointerException();
+        } else
+            throw new NullPointerException();
     }
 
     public void displayError(ErrorAnswer answer)
-    {
-    }
+    {}
 
     /**
      * If I receive a SetNameAnswer, the nickname inserted by the player is valid, so I change scene to lobby.
@@ -91,8 +90,7 @@ public class SceneController
             client.setPort(port);
             client.connect();
             new Thread(() -> client.run()).start();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println("Connection error");
             e.printStackTrace();
@@ -110,9 +108,9 @@ public class SceneController
         {
             if (command != null)
                 client.sendCommand(command);
-            else System.out.println("sei scemo");
-        }
-        catch (Exception e)
+            else
+                System.out.println("sei scemo");
+        } catch (Exception e)
         {
             System.out.println("Error while sending a command");
             e.printStackTrace();
@@ -132,8 +130,7 @@ public class SceneController
             currentRoot = loader.load();
             currentController = loader.getController();
             mainScene.setRoot(currentRoot);
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             System.out.println("Error while changing root");
             e.printStackTrace();

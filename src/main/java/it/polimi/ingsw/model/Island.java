@@ -19,17 +19,17 @@ public class Island implements Serializable
     private static final long serialVersionUID = -5547031297637105565L;
 
     /**
-     * Collection of tiles
+     * Collection of tiles.
      */
     private List<IslandTile> tiles;
 
     /**
-     * Number of no entry tiles on this island
+     * Number of no entry tiles on this island.
      */
     private int noEntryTiles;
 
     /**
-     * Constructor
+     * Created an Island object. It initializes one island child tile.
      */
     public Island()
     {
@@ -43,10 +43,10 @@ public class Island implements Serializable
     }
 
     /**
-     * Method to add a student to the island (group)
+     * Method to add a student to the island (group).
      *
-     * @param student The student that has to be added
-     * @throws NullPointerException if the student is null
+     * @param student The student that has to be added.
+     * @throws NullPointerException If the student is null.
      */
     public void addStudent(Student student) throws NullPointerException
     {
@@ -75,10 +75,10 @@ public class Island implements Serializable
     }
 
     /**
-     * This method adds the tower passed via argument to one of the tiles (the first with tower free)
+     * This method adds the tower passed via argument to one of the tiles (the first with tower free).
      *
-     * @param tower The tower that has to be added
-     * @throws NullPointerException if the tower is null
+     * @param tower The tower that has to be added.
+     * @throws NullPointerException If the tower is null.
      */
     public void addTower(Tower tower) throws NullPointerException, IllegalArgumentException
     {
@@ -112,7 +112,7 @@ public class Island implements Serializable
     /**
      * Method to remove a specific tower. Keep in mind that this method does not move the removed tower its player board!
      *
-     * @param tower The tower that has to be removed
+     * @param tower The tower that has to be removed.
      */
     public void removeTower(Tower tower)
     {
@@ -128,10 +128,10 @@ public class Island implements Serializable
     }
 
     /**
-     * Method to merge the island tiles in this island
+     * Method to merge the island tiles in this island.
      *
-     * @param island The island to be merged
-     * @throws NullPointerException If the island is null
+     * @param island The island to be merged.
+     * @throws NullPointerException If the island is null.
      */
     public void mergeIsland(Island island) throws NullPointerException, IllegalArgumentException
     {
@@ -161,6 +161,11 @@ public class Island implements Serializable
         }
     }
 
+    /**
+     * Returns the list of student currently on the island cluster.
+     * 
+     * @return All the students on the Island.
+     */
     public List<Student> getStudents()
     {
         // Create the result list
@@ -172,6 +177,11 @@ public class Island implements Serializable
         return list;
     }
 
+    /**
+     * Returns all the towers on the island cluster.
+     * 
+     * @return All teh towers on the island.
+     */
     public List<Tower> getTowers()
     {
         return tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream).collect(Collectors.toList());
@@ -185,31 +195,58 @@ public class Island implements Serializable
         return (int) tiles.stream().flatMap(t -> t.getStudents().stream()).filter(s -> s.getColor().equals(color)).count();
     }
 
+    /**
+     * Returns the number of no entry tiles on the island cluster.
+     * 
+     * @return The number of no entry tile on the island.
+     */
     public int getNoEntryTiles()
     {
         return noEntryTiles;
     }
 
+    /**
+     * Add one no entry tile to the island by increasing an internal counter.
+     */
     public void addNoEntryTile()
     {
         noEntryTiles++;
     }
 
+    /**
+     * Removes one no entry tile form the island.
+     */
     public void removeNoEntryTile()
     {
         noEntryTiles = noEntryTiles > 0 ? noEntryTiles - 1 : 0;
     }
 
+    /**
+     * Returns the list of island tiles inside of the cluster.
+     * 
+     * @return The list of island tiles.
+     */
     public List<IslandTile> getIslands()
     {
         return new ArrayList<>(tiles);
     }
 
+    /**
+     * Returns the number of students for the given color in string format.
+     * 
+     * @param color Color to filer the students.
+     * @return Number of students with the given color.
+     */
     private String drawStudentsNumber(SchoolColor color)
     {
         return PrintHelper.drawStudentsNumber(getStudentsByColor(color), color);
     }
 
+    /**
+     * Returns the number of towers in string format.
+     * 
+     * @return Number of towers on the island.
+     */
     private String drawTowers()
     {
         if (getTowers().size() == 0)
@@ -219,6 +256,11 @@ public class Island implements Serializable
 
     }
 
+    /**
+     * Returns the number of no entry tiles in string format.
+     * 
+     * @return Number of no entry tiles on the island.
+     */
     private String drawNoEntryTiles()
     {
         if (getNoEntryTiles() == 0)
@@ -228,7 +270,7 @@ public class Island implements Serializable
     }
 
     /**
-     * Draws a 4x10 representation of the island.
+     * Draws a 4x10 representation of the island. Uses escape characters to be printed everywhere on the terminal.
      */
     @Override
     public String toString()

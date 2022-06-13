@@ -103,8 +103,8 @@ public class AssistantCardsUpdate extends ModelUpdate
         IntStream.range(0, 10).forEach(i -> {
             player.addCard(new AssistantCard(Wizard.WIZARD_3, i + 1, i / 2 + 1));
         });
-        player.getCards().get(0).toggleUsed();
-        player.getCards().get(4).toggleUsed();
+        player.getCards().get(0).use();
+        player.getCards().get(4).use();
         AssistantCardsUpdate update = new AssistantCardsUpdate("", player.getCards());
 
         System.out.print(update);

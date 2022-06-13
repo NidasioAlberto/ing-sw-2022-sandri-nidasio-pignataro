@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the cloud tile. During the setup phase, these tiles are positioned with some students on them depending on the actual game
- * players.
+ * This class represents a cloud tile. During the setup phase, multiple cloud tiles are positioned with some students on them depending on the number
+ * of game players.
  */
 public class CloudTile implements Serializable
 {
@@ -28,9 +28,9 @@ public class CloudTile implements Serializable
     private CloudTileType type;
 
     /**
-     * Constructor.
+     * Created a CloudTile object.
      * 
-     * @param type The CloudTileType (2 or 3).
+     * @param type The tile type indicating how many students the tile can hold (2 or 3).
      * @throws NullPointerException Thrown if the specified color is invalid.
      */
     public CloudTile(CloudTileType type) throws NullPointerException
@@ -43,10 +43,10 @@ public class CloudTile implements Serializable
     }
 
     /**
-     * Method to add the student on the tile.
+     * Adds the given student on the tile.
      * 
      * @param student The student to be added.
-     * @throws NullPointerException if the student is null
+     * @throws NullPointerException Ff the student is null.
      */
     public void addStudent(Student student) throws NullPointerException
     {
@@ -63,10 +63,10 @@ public class CloudTile implements Serializable
     }
 
     /**
-     * Method to remove a specific student from the cloud tile.
+     * Removes a specific student from the cloud tile.
      * 
      * @param student The student that has to be removed.
-     * @throws NullPointerException if the student is null
+     * @throws NullPointerException If the student is null.
      */
     public void removeStudent(Student student) throws NullPointerException
     {
@@ -89,11 +89,21 @@ public class CloudTile implements Serializable
         students.clear();
     }
 
+    /**
+     * Returns the cloud tile's type, indicating its capacity in term of students.
+     * 
+     * @return The cloud tile's type.
+     */
     public CloudTileType getType()
     {
         return type;
     }
 
+    /***
+     * Returns the students on the tile without removing them.
+     * 
+     * @return The tile's students.
+     */
     public List<Student> getStudents()
     {
         return new ArrayList<Student>(students);
@@ -102,8 +112,8 @@ public class CloudTile implements Serializable
     /**
      * Draws the student at position index of students if present.
      * 
-     * @param index of the student.
-     * @return the student if present or blank.
+     * @param index Index of the student.
+     * @return The representation of the student at the given index.
      */
     private String drawStudent(int index)
     {
@@ -115,7 +125,7 @@ public class CloudTile implements Serializable
     }
 
     /**
-     * Draws a 4x6 representation of the cloud tile.
+     * Draws a 4x6 representation of the cloud tile. Uses escape characters to be printed everywhere on the terminal.
      */
     @Override
     public String toString()
