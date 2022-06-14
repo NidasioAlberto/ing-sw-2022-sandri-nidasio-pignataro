@@ -20,7 +20,10 @@ import javafx.scene.transform.Transform;
 public class DrawableNoEntryTile extends DrawableObject
 {
     // The object parser
-    private static final ObjectModelParser parser = new ObjectModelParser("Models/noEntry.obj", 5);
+    private static final ObjectModelParser parser = new ObjectModelParser("Models/noEntry.obj", 4);
+
+    // The little y offset
+    private static final double Y_OFFSET = 2;
 
     /**
      * Object mesh and texture
@@ -64,6 +67,9 @@ public class DrawableNoEntryTile extends DrawableObject
 
         // Set the material
         noEntryMesh.setMaterial(material);
+
+        // Set a little height offset
+        noEntryMesh.layoutYProperty().set(-Y_OFFSET);
 
         // Add the initial rotation
         addRotation(new Rotate(180, new Point3D(0, 1, 0)));

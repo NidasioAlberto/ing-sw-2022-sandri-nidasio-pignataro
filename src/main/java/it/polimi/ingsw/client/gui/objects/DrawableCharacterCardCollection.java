@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.objects;
 import java.util.ArrayList;
 import java.util.List;
 import it.polimi.ingsw.client.gui.AnimationHandler;
+import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import it.polimi.ingsw.protocol.updates.CharacterCardsUpdate;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
@@ -83,6 +84,18 @@ public class DrawableCharacterCardCollection extends DrawableCollection
             // Update their positionings
             updatePosition();
         }
+    }
+
+    /**
+     * Method to display the character cards payload update
+     */
+    public void displayUpdate(CharacterCardPayloadUpdate update)
+    {
+        // Verify that it could be done
+        if (cards.size() == 0)
+            return;
+
+        cards.get(update.getIndex()).update(update, group, pointLight);
     }
 
     @Override

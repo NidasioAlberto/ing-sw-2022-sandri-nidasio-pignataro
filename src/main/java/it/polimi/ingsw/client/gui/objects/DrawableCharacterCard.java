@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.gui.objects;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
@@ -22,6 +24,14 @@ public class DrawableCharacterCard extends DrawableObject
      * Scale factor between X and Y dimensions
      */
     public static final double SCALE_FACTOR = 1.516;
+
+    /**
+     * Payload positionings
+     */
+    public static final double FIRST_X_PAYLOAD = -0.25;
+    public static final double FIRST_Y_PAYLOAD = -0.25;
+    public static final double STEP_X_PAYLOAD = 0.25;
+    public static final double STEP_Y_PAYLOAD = 0.30;
 
     /**
      * X Dimension constant
@@ -49,6 +59,11 @@ public class DrawableCharacterCard extends DrawableObject
     private final Box box;
 
     /**
+     * Card payloads
+     */
+    private List<DrawableNoEntryTile> tiles;
+
+    /**
      * Constructor
      * 
      * @param updater
@@ -72,6 +87,9 @@ public class DrawableCharacterCard extends DrawableObject
 
         // Create the box
         box = new Box(X_DIMENSION, Y_DIMENSION, 0);
+
+        // Create the payload collections
+        tiles = new ArrayList<>();
 
         // Create the texture
         PhongMaterial material = new PhongMaterial();
@@ -119,14 +137,71 @@ public class DrawableCharacterCard extends DrawableObject
             throw new NullPointerException("[DrawableCharacterCard] Null payload update");
 
         // Determine if the payload is no entry tiles or not
-        if (update.getNoEntryTiles() != 0)
+        if (update.getNoEntryTiles() != null && update.getNoEntryTiles() != 0)
         {
-            // No entry
+            // Memorize these before, DON'T USE THEM INSIDE THE FOR LOOPS
+            int numOfUpdate = update.getNoEntryTiles();
+            int actualNum = tiles.size();
+
+            // Check if the no entry are less or more
+            if (numOfUpdate > actualNum)
+                for (int i = numOfUpdate; i > actualNum; i--)
+                    addNoEntry(group, light);
+            else if (numOfUpdate < actualNum)
+                for (int i = numOfUpdate; i < actualNum; i++)
+                    removeNoEntry(group, light);
 
         } else
         {
             // Students
         }
+    }
+
+    /**
+     * Method to add No entry tile
+     */
+    public void addNoEntry(Group group, PointLight light)
+    {
+        // Check if it is actually possible
+        if (tiles.size() >= 6)
+            return;
+
+        // Create the tile
+        DrawableNoEntryTile tile = new DrawableNoEntryTile(updater);
+
+        // Coordinates without rotations
+        Point3D coordinates = new Point3D(FIRST_X_PAYLOAD * X_DIMENSION + (tiles.size() % 3) * STEP_X_PAYLOAD * X_DIMENSION, 0,
+                FIRST_Y_PAYLOAD * X_DIMENSION - (int) (tiles.size() / 3) * STEP_Y_PAYLOAD * X_DIMENSION);
+
+        // Translate the tile to the correct position
+        tile.translate(coordinates.add(getPosition()));
+
+        // Add the tile to the list
+        tiles.add(tile);
+
+        // Add the tile to group and light
+        tile.addToGroup(group);
+        tile.subscribeToPointLight(light);
+    }
+
+    /**
+     * Method to remove no entry tiles
+     */
+    public void removeNoEntry(Group group, PointLight light)
+    {
+        // Make sure that it could be done
+        if (tiles.size() == 0)
+            return;
+
+        // Take the tile to remove
+        DrawableNoEntryTile tile = tiles.get(tiles.size() - 1);
+
+        // Remove the tile from the group and lightings
+        tile.removeFromGroup(group);
+        tile.unsubscribeFromPointLight(light);
+
+        // Remove the tile from the collection
+        tiles.remove(tile);
     }
 
     @Override

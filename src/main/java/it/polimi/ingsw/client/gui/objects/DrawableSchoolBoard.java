@@ -352,6 +352,9 @@ public class DrawableSchoolBoard extends DrawableObject
             addCoin(group, light);
         for (int i = board.getCoins(); i > coins.size(); i--)
             removeCoin(group, light);
+
+        // Update positionings
+        updatePosition();
     }
 
     /**
@@ -611,9 +614,6 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Remove the student from the collection
         entrance.remove(student);
-
-        // Update positionings
-        updatePosition();
     }
 
     /**

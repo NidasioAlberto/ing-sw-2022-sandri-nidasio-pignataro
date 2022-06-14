@@ -280,7 +280,8 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayCharacterCardPayload(CharacterCardPayloadUpdate update)
     {
-
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> characterCardCollection.displayUpdate(update));
     }
 
     @Override
