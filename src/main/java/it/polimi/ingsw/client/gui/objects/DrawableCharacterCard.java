@@ -6,6 +6,8 @@ import java.util.Objects;
 import it.polimi.ingsw.client.gui.ActionTranslator;
 import it.polimi.ingsw.client.gui.AnimationHandler;
 import it.polimi.ingsw.client.gui.objects.types.CharacterType;
+import it.polimi.ingsw.client.gui.objects.types.StudentType;
+import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.model.game.CharacterCardType;
 import it.polimi.ingsw.protocol.updates.CharacterCardPayloadUpdate;
 import javafx.geometry.Point3D;
@@ -28,9 +30,9 @@ public class DrawableCharacterCard extends DrawableObject
     /**
      * Payload positionings
      */
-    public static final double FIRST_X_PAYLOAD = -0.25;
+    public static final double FIRST_X_PAYLOAD = -0.30;
     public static final double FIRST_Y_PAYLOAD = -0.25;
-    public static final double STEP_X_PAYLOAD = 0.25;
+    public static final double STEP_X_PAYLOAD = 0.30;
     public static final double STEP_Y_PAYLOAD = 0.30;
 
     /**
@@ -62,6 +64,7 @@ public class DrawableCharacterCard extends DrawableObject
      * Card payloads
      */
     private List<DrawableNoEntryTile> tiles;
+    private List<DrawableStudent> students;
 
     /**
      * Constructor
@@ -90,6 +93,7 @@ public class DrawableCharacterCard extends DrawableObject
 
         // Create the payload collections
         tiles = new ArrayList<>();
+        students = new ArrayList<>();
 
         // Create the texture
         PhongMaterial material = new PhongMaterial();
@@ -121,7 +125,8 @@ public class DrawableCharacterCard extends DrawableObject
             }
         });
 
-        // Set also the dragged over event because of reset purposes in case of a wrong action
+        // Set also the dragged over event because of reset purposes in case of a wrong
+        // action
         box.setOnMouseDragReleased((event) -> {
             // Set the droppedOn target
             ActionTranslator.getInstance().setDroppedOnItem("CharacterCard");
@@ -131,6 +136,45 @@ public class DrawableCharacterCard extends DrawableObject
         });
     }
 
+    /**
+     * Method to reset all the movable things on the character card to the correct position
+     */
+    public void updatePosition()
+    {
+        if (tiles.size() != 0)
+        {
+            // Reset the no entry tiles
+            for (int i = 0; i < tiles.size(); i++)
+            {
+                // Coordinates without rotations
+                Point3D coordinates = new Point3D(FIRST_X_PAYLOAD * X_DIMENSION + (i % 3) * STEP_X_PAYLOAD * X_DIMENSION, 0,
+                        FIRST_Y_PAYLOAD * X_DIMENSION - (int) (i / 3) * STEP_Y_PAYLOAD * X_DIMENSION);
+
+                // Translate the tile to the correct position
+                tiles.get(i).translate(coordinates.add(getPosition()));
+            }
+        } else if (students.size() != 0)
+        {
+            // Reset the students
+            for (int i = 0; i < students.size(); i++)
+            {
+                // Coordinates without rotations
+                Point3D coordinates = new Point3D(FIRST_X_PAYLOAD * X_DIMENSION + (i % 3) * STEP_X_PAYLOAD * X_DIMENSION, 0,
+                        FIRST_Y_PAYLOAD * X_DIMENSION - (int) (i / 3) * STEP_Y_PAYLOAD * X_DIMENSION);
+
+                // Translate the student in the correct position
+                students.get(i).translate(coordinates.add(getPosition()));
+            }
+        }
+    }
+
+    /**
+     * Method to update the character card payload
+     * 
+     * @param update The update message
+     * @param group The group to which add or remove eventual new stuff
+     * @param light The light to which add or remove eventual stuff
+     */
     public void update(CharacterCardPayloadUpdate update, Group group, PointLight light)
     {
         if (update == null)
@@ -151,10 +195,95 @@ public class DrawableCharacterCard extends DrawableObject
                 for (int i = numOfUpdate; i < actualNum; i++)
                     removeNoEntry(group, light);
 
-        } else
+        } else if (update.getStudents() != null && update.getStudents().size() != 0)
         {
-            // Students
+            // Parse all the colors and first remove the eccess and the add the new
+            for (SchoolColor color : SchoolColor.values())
+            {
+                // Calculate the number of students
+                long cardNum = update.getStudents().stream().filter((s) -> s.getColor() == color).count();
+                long num = students.stream().filter((s) -> s.getType().name().equals(color.name())).count();
+
+                if (num > cardNum)
+                {
+                    for (long i = cardNum; i < num; i++)
+                        this.removeStudent(color, group, light);
+                }
+            }
+
+            // Add the missing students TO BE DONE LATER
+            for (SchoolColor color : SchoolColor.values())
+            {
+                // Calculate the number of students
+                long cardNum = update.getStudents().stream().filter((s) -> s.getColor() == color).count();
+                long num = students.stream().filter((s) -> s.getType().name().equals(color.name())).count();
+
+                if (num < cardNum)
+                {
+                    for (long i = num; i < cardNum; i++)
+                        this.addStudent(color, group, light);
+                }
+            }
         }
+        // Update the general positionings
+        updatePosition();
+    }
+
+    /**
+     * Method to add a student to the card
+     * 
+     * @param color The color of the student to be added
+     * @param group The group to which subscribe the student
+     * @param light The point light to which subscribe the student
+     */
+    public void addStudent(SchoolColor color, Group group, PointLight light)
+    {
+        // Check if it is possible
+        if (students.size() >= 6)
+            return;
+
+        // Create the new student of the same color
+        DrawableStudent student = new DrawableStudent(StudentType.valueOf(color.name()), updater);
+
+        // Coordinates without rotations
+        Point3D coordinates = new Point3D(FIRST_X_PAYLOAD * X_DIMENSION + (students.size() % 3) * STEP_X_PAYLOAD * X_DIMENSION, 0,
+                FIRST_Y_PAYLOAD * X_DIMENSION - (int) (students.size() / 3) * STEP_Y_PAYLOAD * X_DIMENSION);
+
+        // Translate the student in the correct position
+        student.translate(coordinates.add(getPosition()));
+
+        // Add the student to the list
+        students.add(student);
+
+        // Add the student to the group and light
+        student.addToGroup(group);
+        student.subscribeToPointLight(light);
+    }
+
+    /**
+     * Method to remove a student of a certain color
+     * 
+     * @param color Color of the student to be removed
+     * @param group Group from which unsubscribe the student
+     * @param light Point light from which unsubscribe the student
+     */
+    public void removeStudent(SchoolColor color, Group group, PointLight light)
+    {
+        // Check if it is actually possible
+        if (students.stream().filter((s) -> s.getType().name().equals(color.name())).count() == 0)
+            return;
+
+        // Extract the student to remove
+        DrawableStudent student = students.stream().filter((s) -> s.getType().name().equals(color.name())).findFirst().get();
+
+        // Remove the student from the group
+        student.removeFromGroup(group);
+
+        // Unsubscribe the student from the light
+        student.unsubscribeFromPointLight(light);
+
+        // Remove the student from the list
+        students.remove(student);
     }
 
     /**
