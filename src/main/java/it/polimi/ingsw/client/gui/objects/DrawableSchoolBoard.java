@@ -15,6 +15,8 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -81,6 +83,12 @@ public class DrawableSchoolBoard extends DrawableObject
     private final Box box;
 
     /**
+     * Two types of image (grayed and not)
+     */
+    private Image normalImage;
+    private WritableImage grayedImage;
+
+    /**
      * Collection of rotations to perform on the drawable objects
      */
     private List<Rotate> rotations;
@@ -136,8 +144,27 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Create the correct texture
         PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(
-                new Image(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("schoolboard.png"))));
+
+        normalImage = new Image(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("schoolboard.png")));
+        grayedImage = new WritableImage(normalImage.getPixelReader(), (int) normalImage.getWidth(), (int) normalImage.getHeight());
+
+        /**
+         * GRAY the normal image
+         */
+        for (int i = 0; i < normalImage.getWidth(); i++)
+        {
+            for (int j = 0; j < normalImage.getHeight(); j++)
+            {
+                Color color = normalImage.getPixelReader().getColor(i, j);
+                double mean = (color.getRed() + color.getBlue() + color.getGreen()) / 3;
+                Color gray = new Color(mean, mean, mean, 1);
+
+                // Apply the gray color
+                grayedImage.getPixelWriter().setColor(i, j, gray);
+            }
+        }
+
+        material.setDiffuseMap(grayedImage);
 
         // Assign the texture
         box.setMaterial(material);
@@ -350,11 +377,29 @@ public class DrawableSchoolBoard extends DrawableObject
         // Coins
         for (int i = coins.size(); i < board.getCoins(); i++)
             addCoin(group, light);
-        for (int i = board.getCoins(); i > coins.size(); i--)
+        for (int i = board.getCoins(); i < coins.size(); i++)
             removeCoin(group, light);
 
         // Update positionings
         updatePosition();
+    }
+
+    /**
+     * Method to set the grayed image or the colored one
+     */
+    public void setActive(boolean status)
+    {
+        if (status)
+        {
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseMap(normalImage);
+            box.setMaterial(material);
+        } else
+        {
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseMap(grayedImage);
+            box.setMaterial(material);
+        }
     }
 
     /**
@@ -732,7 +777,7 @@ public class DrawableSchoolBoard extends DrawableObject
             return;
 
         // Take the tower to be removed
-        DrawableCoin coin = coins.get(towers.size() - 1);
+        DrawableCoin coin = coins.get(coins.size() - 1);
 
         // Unsubscribe from grup
         coin.removeFromGroup(group);

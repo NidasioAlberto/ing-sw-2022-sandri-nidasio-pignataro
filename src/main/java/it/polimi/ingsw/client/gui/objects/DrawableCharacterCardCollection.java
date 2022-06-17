@@ -52,10 +52,16 @@ public class DrawableCharacterCardCollection extends DrawableCollection
     public void updatePosition()
     {
         for (int i = 0; i < cards.size(); i++)
+        {
             cards.get(i)
                     .translate(new Point3D(
                             position.getX() - (DIMENSION + SPACING / 2.0) * cards.size() / 2 + (DIMENSION + SPACING / 2.0) * (i + 1.0 / 2.0),
                             position.getY(), position.getZ()));
+
+            // Reset the position also on the character cards
+            cards.get(i).updatePosition();
+        }
+
     }
 
     /**
@@ -83,6 +89,11 @@ public class DrawableCharacterCardCollection extends DrawableCollection
 
             // Update their positionings
             updatePosition();
+        } else
+        {
+            // I update the cards conditions (for example if the had been activated or not)
+            for (int i = 0; i < cards.size(); i++)
+                cards.get(i).setActive(update.getCards().get(i).isActivated());
         }
     }
 

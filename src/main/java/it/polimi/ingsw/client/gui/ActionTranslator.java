@@ -1,13 +1,16 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.model.ExpertGameAction;
 import it.polimi.ingsw.model.SchoolColor;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
+import it.polimi.ingsw.protocol.messages.CharacterCardActionMessage;
 import it.polimi.ingsw.protocol.messages.EndTurnMessage;
 import it.polimi.ingsw.protocol.messages.MoveMotherNatureMessage;
 import it.polimi.ingsw.protocol.messages.MoveStudentFromEntranceToDiningMessage;
 import it.polimi.ingsw.protocol.messages.MoveStudentFromEntranceToIslandMessage;
 import it.polimi.ingsw.protocol.messages.PlayAssistantCardMessage;
+import it.polimi.ingsw.protocol.messages.PlayCharacterCardMessage;
 import it.polimi.ingsw.protocol.messages.SelectCloudTileMessage;
 import java.util.*;
 
@@ -72,11 +75,11 @@ public class ActionTranslator
         lookupMap.get("Student").put("Island", () -> moveStudentToIsland());
         lookupMap.get("Student").put("Dining", () -> moveStudentToDining());
         lookupMap.get("Student").put("Student", () -> swapStudentFromEntranceToDining());
+        lookupMap.get("Student").put("CharacterStudent", () -> swapStudentFromEntranceToCharacterCard());
         lookupMap.get("Student").put("", () -> selectColor());
 
         lookupMap.put("CharacterStudent", new HashMap<>());
         lookupMap.get("CharacterStudent").put("Island", () -> moveStudentFromCharacterCardToIsland());
-        lookupMap.get("CharacterStudent").put("Student", () -> swapStudentFromCharacterCardToEntrance());
         lookupMap.get("CharacterStudent").put("Dining", () -> moveStudentFromCharacterCardToDining());
 
         lookupMap.put("AssistantCard", new HashMap<>());
@@ -242,27 +245,38 @@ public class ActionTranslator
 
     private void swapStudentFromEntranceToDining()
     {
-        System.out.println("Swap student from entrance to dining");
+        ActionMessage message = new CharacterCardActionMessage(ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_DINING, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
     private void selectColor()
     {
-        System.out.println("Select color");
+        ActionMessage message = new CharacterCardActionMessage(ExpertGameAction.SELECT_COLOR, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
     private void moveStudentFromCharacterCardToIsland()
     {
-        System.out.println("Move student from character card to island");
+        // System.out.println("Move student from character card to island");
+        ActionMessage message =
+                new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
-    private void swapStudentFromCharacterCardToEntrance()
+    private void swapStudentFromEntranceToCharacterCard()
     {
-        System.out.println("Swap student from character card to entrance");
+        // System.out.println("Swap student from character card to entrance");
+        ActionMessage message =
+                new CharacterCardActionMessage(ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
     private void moveStudentFromCharacterCardToDining()
     {
-        System.out.println("Move student from character card to dining");
+        // System.out.println("Move student from character card to dining");
+        ActionMessage message =
+                new CharacterCardActionMessage(ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
     private void playAssistantCard()
@@ -290,17 +304,24 @@ public class ActionTranslator
 
     private void playCharacterCard()
     {
-        System.out.println("Play character card");
+        // System.out.println("Play character card");
+        ActionMessage message = new PlayCharacterCardMessage(selectedCard);
+        sendMessage(message);
     }
 
     private void moveNoEntryFromCharacterCardToIsland()
     {
-        System.out.println("Move no entry tile from character card to island");
+        // System.out.println("Move no entry tile from character card to island");
+        ActionMessage message =
+                new CharacterCardActionMessage(ExpertGameAction.MOVE_NO_ENTRY_FROM_CHARACTER_CARD_TO_ISLAND, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
     private void selectIsland()
     {
-        System.out.println("Select island");
+        // System.out.println("Select island");
+        ActionMessage message = new CharacterCardActionMessage(ExpertGameAction.SELECT_ISLAND, selectedIsland, selectedColors);
+        sendMessage(message);
     }
 
     /**

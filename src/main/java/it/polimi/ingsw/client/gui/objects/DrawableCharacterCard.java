@@ -15,7 +15,9 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -61,6 +63,12 @@ public class DrawableCharacterCard extends DrawableObject
     private final Box box;
 
     /**
+     * Two types of image (greyed and not)
+     */
+    private Image normalImage;
+    private WritableImage grayedImage;
+
+    /**
      * Card payloads
      */
     private List<DrawableNoEntryTile> tiles;
@@ -99,8 +107,27 @@ public class DrawableCharacterCard extends DrawableObject
         PhongMaterial material = new PhongMaterial();
 
         // Extract the image texture from the character type
-        material.setDiffuseMap(new Image(Objects.requireNonNull(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(CharacterType.valueOf(TYPE.name()).getFilename()))));
+        normalImage = new Image(Objects.requireNonNull(
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(CharacterType.valueOf(TYPE.name()).getFilename())));
+        grayedImage = new WritableImage(normalImage.getPixelReader(), (int) normalImage.getWidth(), (int) normalImage.getHeight());
+
+        /**
+         * GRAY the normal image
+         */
+        for (int i = 0; i < normalImage.getWidth(); i++)
+        {
+            for (int j = 0; j < normalImage.getHeight(); j++)
+            {
+                Color color = normalImage.getPixelReader().getColor(i, j);
+                double mean = (color.getRed() + color.getBlue() + color.getGreen()) / 3;
+                Color gray = new Color(mean, mean, mean, 1);
+
+                // Apply the gray color
+                grayedImage.getPixelWriter().setColor(i, j, gray);
+            }
+        }
+
+        material.setDiffuseMap(grayedImage);
 
         // Set the material
         box.setMaterial(material);
@@ -227,6 +254,24 @@ public class DrawableCharacterCard extends DrawableObject
         }
         // Update the general positionings
         updatePosition();
+    }
+
+    /**
+     * Method to set the card active (color of gray)
+     */
+    public void setActive(boolean status)
+    {
+        if (status)
+        {
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseMap(normalImage);
+            box.setMaterial(material);
+        } else
+        {
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseMap(grayedImage);
+            box.setMaterial(material);
+        }
     }
 
     /**

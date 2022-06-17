@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.objects;
 
 import it.polimi.ingsw.client.gui.AnimationHandler;
+import it.polimi.ingsw.protocol.updates.CurrentPlayerUpdate;
 import it.polimi.ingsw.protocol.updates.PlayedAssistantCardUpdate;
 import it.polimi.ingsw.protocol.updates.SchoolBoardUpdate;
 import javafx.geometry.Point3D;
@@ -132,6 +133,20 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
 
         // Update the corresponding schoolboard
         boards[update.getPlayerIndex()].update(update.getBoard(), group, pointLight);
+    }
+
+    /**
+     * Displays the current player turn
+     */
+    public void displayUpdate(CurrentPlayerUpdate update)
+    {
+        // Gray all the schoolboards
+        for (DrawableSchoolBoard board : boards)
+            if (board != null)
+                board.setActive(false);
+
+        if (boards[update.getCurrentPlayerIndex()] != null)
+            boards[update.getCurrentPlayerIndex()].setActive(true);
     }
 
     /**

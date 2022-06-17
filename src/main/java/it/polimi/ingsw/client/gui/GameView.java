@@ -268,6 +268,7 @@ public class GameView extends Application implements Visualizable
     {
         // Resets the position of all the movable components
         schoolBoardCollection.updatePosition(); // Called update instead of reset because the schoolboards actually perform this method
+        characterCardCollection.updatePosition();
     }
 
     @Override
@@ -322,7 +323,8 @@ public class GameView extends Application implements Visualizable
     @Override
     public void setCurrentPlayer(CurrentPlayerUpdate update)
     {
-
+        // Put the update lambda inside the updater
+        updatesHandler.subscribeUpdate(() -> schoolBoardCollection.displayUpdate(update));
     }
 
     @Override
