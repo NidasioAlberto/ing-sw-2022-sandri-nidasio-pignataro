@@ -73,6 +73,11 @@ public class LobbySceneController implements Controllable, Initializable
         else matchesTableView.setPlaceholder(new Label("There aren't matches at the moment"));
     }
 
+    /**
+     * Set the nickname of the player in order to visualize it.
+     *
+     * @param answer contains the player's nickname.
+     */
     public void displayName(SetNameAnswer answer)
     {
         nicknameLabel.setText("Your nickname is " + answer.getName());

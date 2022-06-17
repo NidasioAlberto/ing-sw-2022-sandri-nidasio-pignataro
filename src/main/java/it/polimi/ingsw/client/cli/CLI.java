@@ -65,20 +65,36 @@ public class CLI implements Visualizable, Runnable
 
     public void start()
     {
+        Scanner scanner = new Scanner(System.in);
         // Clear the screen
         PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
         printTitle(2, 2);
 
-        try
+        while (!active)
         {
-            client.connect();
+            try
+            {
+                PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.print("Insert the server's IP: ");
+                String ip = scanner.nextLine();
+                PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Insert the server's port: ");
+                int port = Integer.parseInt(scanner.nextLine());
 
-            active = true;
-            executor.submit(client);
-            executor.submit(this);
-        } catch (IOException e)
-        {
-            PrintHelper.print("[Client] Unable to connect to the server");
+
+                client.setIp(ip);
+                client.setPort(port);
+                client.connect();
+
+                active = true;
+                executor.submit(client);
+                executor.submit(this);
+            } catch (NumberFormatException e)
+            {
+                PrintHelper.printMessage("You must insert a valid number");
+            } catch (IOException e)
+            {
+                PrintHelper.printMessage("Unable to connect to the server");
+            }
         }
     }
 
@@ -148,8 +164,7 @@ public class CLI implements Visualizable, Runnable
         msg += "\t2 - Create match\n";
         msg += "\t3 - Get matches list\n";
         msg += "\t4 - Join match\n";
-        msg += "\t5 - Quit match\n";
-        msg += "\t6 - Quit game\n";
+        msg += "\t5 - Quit game\n";
         PrintHelper.print(msg);
 
         // I need this when the match ends
@@ -194,13 +209,6 @@ public class CLI implements Visualizable, Runnable
                 break;
             }
             case 5:
-            {
-                PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
-                if (scanner.nextLine().equals("Y"))
-                    client.sendCommand(new QuitMatchCommand());
-                break;
-            }
-            case 6:
             {
                 PrintHelper.print("Are you sure to quit the game? Type 'Y' if you are sure\n");
                 if (scanner.nextLine().equals("Y"))
