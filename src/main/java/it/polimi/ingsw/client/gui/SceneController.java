@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.gui.lobby.Controllable;
-import it.polimi.ingsw.client.gui.lobby.JoinMatchSceneController;
 import it.polimi.ingsw.client.gui.lobby.LobbySceneController;
 import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.answers.ErrorAnswer;
@@ -70,9 +69,9 @@ public class SceneController
      */
     public void displayMatchesList(MatchesListAnswer answer)
     {
-        if (currentController instanceof JoinMatchSceneController)
+        if (currentController instanceof LobbySceneController)
         {
-            ((JoinMatchSceneController) currentController).displayMatchesList(answer);
+            ((LobbySceneController) currentController).displayMatchesList(answer);
         }
     }
 
