@@ -26,8 +26,6 @@ public class SceneController
 
     private static Parent currentRoot;
 
-    // TODO popup per errori
-
     public SceneController(GameView view, Client client, Scene mainScene)
     {
         if (view != null && client != null && mainScene != null)
@@ -108,7 +106,7 @@ public class SceneController
             if (command != null)
                 client.sendCommand(command);
             else
-                System.out.println("sei scemo");
+                System.out.println("The command is null");
         } catch (Exception e)
         {
             System.out.println("Error while sending a command");

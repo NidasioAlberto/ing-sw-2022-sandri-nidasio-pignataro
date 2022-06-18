@@ -671,7 +671,7 @@ public class Game implements Publisher<ModelUpdate>
             // types.remove(CharacterCardType.MINSTREL);
 
             // Choose 3 random cards
-            for (int j = 1; j < CHARACTER_CARDS_NUMBER; j++)
+            for (int j = 0; j < CHARACTER_CARDS_NUMBER; j++)
                 characterCards.add(CharacterCard.createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
 
             // Init all the random cards

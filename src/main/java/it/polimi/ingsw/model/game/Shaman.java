@@ -184,7 +184,8 @@ public class Shaman extends CharacterCard
     }
 
     /**
-     * Only for this card when it is activated I must apply immediately the action in order to call the conquerProfessor.
+     * Only for this card when it is activated I must apply immediately the action in order
+     * to call the conquerProfessor.
      */
     @Override
     public void activate()

@@ -131,7 +131,6 @@ public class GameView extends Application implements Visualizable
             sceneController = new SceneController(this, client, scene);
             sceneController.setRoot("/Lobby/login.fxml");
 
-
             // Set the client to the action translator
             ActionTranslator.getInstance().setClient(client);
 
@@ -387,11 +386,9 @@ public class GameView extends Application implements Visualizable
 
     private void createCollections()
     {
-
         setupLights();
         group.getChildren().add(ambientLight);
         group.getChildren().add(pointLight);
-
 
         /**
          * Collection creations

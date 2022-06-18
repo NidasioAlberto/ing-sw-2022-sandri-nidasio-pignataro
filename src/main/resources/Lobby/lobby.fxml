@@ -4,19 +4,36 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.LobbySceneController">
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.LobbySceneController">
    <children>
-      <Label fx:id="nicknameLabel" layoutY="51.0" prefHeight="17.0" prefWidth="1280.0" text="Your nickname is" />
-      <Button fx:id="createMatchButton" layoutX="597.0" layoutY="106.0" mnemonicParsing="false" onAction="#createMatch" text="Create match" />
-      <TableView fx:id="matchesTableView" layoutX="289.0" layoutY="226.0" onMouseClicked="#joinSelectedMatch" prefHeight="350.0" prefWidth="700.0">
-         <columns>
-            <TableColumn fx:id="nameColumn" prefWidth="300.0" text="Name" />
-            <TableColumn fx:id="modeColumn" prefWidth="100.0" text="Mode" />
-            <TableColumn fx:id="playersColumn" prefWidth="300.0" text="Players Number" />
-         </columns>
-      </TableView>
-      <Label layoutY="173.0" prefHeight="17.0" prefWidth="1280.0" text="Double click the match you want to join" />
+      <VBox alignment="TOP_CENTER" prefHeight="331.0" prefWidth="1280.0">
+         <children>
+            <Label fx:id="nicknameLabel" alignment="CENTER" prefHeight="72.0" prefWidth="600.0" text="Your nickname is" textAlignment="CENTER" />
+            <VBox prefHeight="57.0" prefWidth="1280.0" />
+            <Button fx:id="createMatchButton" alignment="CENTER" mnemonicParsing="false" onAction="#createMatch" text="Create match" textAlignment="CENTER" />
+            <VBox prefHeight="73.0" prefWidth="1280.0" />
+            <Label fx:id="joinLabel" text="Double click the match you want to join" />
+         </children>
+      </VBox>
+      <VBox alignment="BOTTOM_CENTER" prefHeight="316.0" prefWidth="1280.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="369.0" prefWidth="1280.0">
+               <children>
+                  <TableView fx:id="matchesTableView" onMouseClicked="#joinSelectedMatch" prefHeight="350.0" prefWidth="700.0">
+                    <columns>
+                      <TableColumn fx:id="nameColumn" prefWidth="300.0" text="Name" />
+                      <TableColumn fx:id="modeColumn" prefWidth="100.0" text="Mode" />
+                        <TableColumn fx:id="playersColumn" prefWidth="300.0" text="Players Number" />
+                    </columns>
+                  </TableView>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="103.0" prefWidth="1280.0" />
    </children>
-</AnchorPane>
+</VBox>
