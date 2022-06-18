@@ -3,28 +3,117 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.LoginSceneController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.LoginSceneController">
    <children>
-      <Label layoutY="124.0" prefHeight="17.0" prefWidth="1280.0" text="Insert your nickname" />
-      <Label layoutY="254.0" prefHeight="17.0" prefWidth="1280.0" text="Insert the server's IP" />
-      <Label layoutY="384.0" prefHeight="17.0" prefWidth="1280.0" text="Insert the server's port" />
-      <TextField fx:id="nicknameTextField" layoutX="565.0" layoutY="161.0" />
-      <TextField fx:id="ipTextField" layoutX="565.0" layoutY="291.0" />
-      <TextField fx:id="portTextField" layoutX="565.0" layoutY="421.0" onKeyPressed="#checkEnter" />
-      <Button fx:id="submitButton" layoutX="600.0" layoutY="501.0" mnemonicParsing="false" onAction="#submit" text="Submit">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <ImageView fitHeight="355.0" fitWidth="619.72" layoutX="420.0" layoutY="-120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="/Eryantis.png" />
-         </image>
-      </ImageView>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="400.0" />
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="480.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="/Eryantis.png" />
+                         </image>
+                         </ImageView>
+                     </children></HBox>
+                  <HBox prefHeight="100.0" prefWidth="400.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Insert your nickname" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="400.0" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
+                           <children>
+                              <TextField fx:id="nicknameTextField" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="400.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Insert the server's IP" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="400.0" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
+                           <children>
+                              <TextField fx:id="ipTextField" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="400.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Insert the server's port" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="400.0" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
+                           <children>
+                              <TextField fx:id="portTextField" onKeyPressed="#checkEnter" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="400.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="400.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
+                     <children>
+                        <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submit" text="Submit" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="400.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </children>
-</AnchorPane>
+</VBox>
