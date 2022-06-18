@@ -666,8 +666,12 @@ public class Game implements Publisher<ModelUpdate>
         {
             List<CharacterCardType> types = new ArrayList<>(Arrays.asList(CharacterCardType.values()));
 
+            // UNCOMMENT IF YOU WANT TO FORCE A CERTAIN TYPE OF CARD
+            // characterCards.add(CharacterCard.createCharacterCard(CharacterCardType.MINSTREL, this));
+            // types.remove(CharacterCardType.MINSTREL);
+
             // Choose 3 random cards
-            for (int j = 0; j < CHARACTER_CARDS_NUMBER; j++)
+            for (int j = 1; j < CHARACTER_CARDS_NUMBER; j++)
                 characterCards.add(CharacterCard.createCharacterCard(types.remove(getRandomNumber(0, types.size())), this));
 
             // Init all the random cards

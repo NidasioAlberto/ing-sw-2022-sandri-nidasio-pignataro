@@ -297,6 +297,9 @@ public class DrawableCharacterCard extends DrawableObject
         // Translate the student in the correct position
         student.translate(coordinates.add(getPosition()));
 
+        // Set the student to character one
+        student.setCharacter(true);
+
         // Add the student to the list
         students.add(student);
 

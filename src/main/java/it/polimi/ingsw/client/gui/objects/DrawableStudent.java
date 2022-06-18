@@ -22,6 +22,11 @@ public class DrawableStudent extends DrawableObject
     private final StudentType TYPE;
 
     /**
+     * Determines if the student is on a character card or not
+     */
+    private boolean characterStudent;
+
+    /**
      * Object mesh
      */
     private final TriangleMesh triangleMesh;
@@ -53,6 +58,9 @@ public class DrawableStudent extends DrawableObject
 
         // Assign the constant parameters
         TYPE = type;
+
+        // I set the character student to false
+        characterStudent = false;
 
         // Create the mesh referring to the Object file
         triangleMesh = new TriangleMesh();
@@ -104,7 +112,10 @@ public class DrawableStudent extends DrawableObject
                 studentMesh.startFullDrag();
 
                 // Set the dragged element on the action translator
-                ActionTranslator.getInstance().setDraggedItem("Student");
+                if (!characterStudent)
+                    ActionTranslator.getInstance().setDraggedItem("Student");
+                else
+                    ActionTranslator.getInstance().setDraggedItem("CharacterStudent");
 
                 // Set also the selected color
                 ActionTranslator.getInstance().selectColor(SchoolColor.valueOf(TYPE.name()));
@@ -129,8 +140,11 @@ public class DrawableStudent extends DrawableObject
             // Set the original color
             material.setDiffuseColor(type.getColor());
 
-            // Set the dragged on element
-            ActionTranslator.getInstance().setDroppedOnItem("Student");
+            // Set the dropped on element
+            if (!characterStudent)
+                ActionTranslator.getInstance().setDroppedOnItem("Student");
+            else
+                ActionTranslator.getInstance().setDroppedOnItem("CharacterStudent");
 
             // Select the color
             ActionTranslator.getInstance().selectColor(SchoolColor.valueOf(TYPE.name()));
@@ -208,6 +222,14 @@ public class DrawableStudent extends DrawableObject
     public void setDraggable(boolean drag)
     {
         this.draggable = drag;
+    }
+
+    /**
+     * Sets the student to character
+     */
+    public void setCharacter(boolean character)
+    {
+        this.characterStudent = character;
     }
 
     @Override

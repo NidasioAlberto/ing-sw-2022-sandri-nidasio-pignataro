@@ -13,8 +13,7 @@ import java.io.Serial;
 import java.util.NoSuchElementException;
 
 /**
- * Character card Minstrel. Effect: You may exchange up to 2 Students between your Entrance and your
- * Dining Room.
+ * Character card Minstrel. Effect: You may exchange up to 2 Students between your Entrance and your Dining Room.
  */
 public class Minstrel extends CharacterCard
 {
@@ -65,12 +64,11 @@ public class Minstrel extends CharacterCard
     }
 
     /**
-     * Swap the selected students between entrance and dining. The first color selected by the
-     * player must be the entrance student's color and the second one must be the dining student's
-     * color.
+     * Swap the selected students between entrance and dining. The first color selected by the player must be the entrance student's color and the
+     * second one must be the dining student's color.
      *
-     * @throws NoSuchElementException If there isn't a current player or the number of selected
-     *         student is wrong or there isn't a student of the selected color in the dining.
+     * @throws NoSuchElementException If there isn't a current player or the number of selected student is wrong or there isn't a student of the
+     *         selected color in the dining.
      */
     @Override
     public void applyAction() throws NoSuchElementException
@@ -80,8 +78,7 @@ public class Minstrel extends CharacterCard
             return;
 
         // Get the current player
-        Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Minstrel]"));
+        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Minstrel]"));
 
         // Check that the player has selected two students to swap
         if (currentPlayer.getSelectedColors().size() != 2)
@@ -90,23 +87,23 @@ public class Minstrel extends CharacterCard
         // Take the student instance that needs to be moved.
         // IMPORTANT: I can't use pickStudentFromEntrance because if the second selected color
         // doesn't exist in dining, i would lose the entrance student due to immediate remove
-        Student studentEntrance = currentPlayer.getBoard().getStudentsInEntrance().stream()
-                .filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(0)).findFirst()
-                .orElseThrow(() -> new NoSuchStudentInEntranceException("[Minstrel]"));
+        Student studentEntrance =
+                currentPlayer.getBoard().getStudentsInEntrance().stream().filter(s -> s.getColor() == currentPlayer.getSelectedColors().get(0))
+                        .findFirst().orElseThrow(() -> new NoSuchStudentInEntranceException("[Minstrel]"));
 
         // Remove the student from the dining
-        Student student = currentPlayer.getBoard()
-                .removeStudentFromDining(currentPlayer.getSelectedColors().get(1))
+        Student student = currentPlayer.getBoard().removeStudentFromDining(currentPlayer.getSelectedColors().get(1))
                 .orElseThrow(() -> new NoSuchStudentInDiningException("[Minstrel]"));
+
+        // Remove the entrance student from entrance FIRST REMOVE THE STUDENT FROM ENTRANCE
+        // IF NOT THE NWE STUDENT WILL NOT BE ADDED DUE TO MAXIMUM STUDENT NUMBER
+        currentPlayer.getBoard().removeStudentFromEntrance(studentEntrance);
 
         // Add the student to the entrance
         currentPlayer.getBoard().addStudentToEntrance(student);
 
         // Add the student to the dining
         instance.putStudentToDining(studentEntrance);
-
-        // Remove the entrance student from entrance
-        currentPlayer.getBoard().removeStudentFromEntrance(studentEntrance);
 
         // Check if the player gain a professor
         instance.conquerProfessors();
@@ -115,8 +112,7 @@ public class Minstrel extends CharacterCard
         if (instance.subscriber.isPresent())
         {
             for (Player player : instance.players)
-                instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
         }
 
