@@ -247,6 +247,9 @@ public class DrawableIsland extends DrawableObject
         {
             student.unsubscribeFromPointLight(light);
             student.removeFromGroup(group);
+
+            // Unsubscribe from updater
+            updater.unsubscribeObject(student);
         }
 
         // Remove the tower if existing
@@ -325,6 +328,9 @@ public class DrawableIsland extends DrawableObject
         // Remove the noEntryTile from the light
         noEntryTile.unsubscribeFromPointLight(light);
 
+        // Unsubscribe from updater
+        updater.unsubscribeObject(noEntryTile);
+
         // Remove the object itself
         noEntryTile = null;
 
@@ -376,6 +382,9 @@ public class DrawableIsland extends DrawableObject
 
         // Remove the tower from the light
         tower.unsubscribeFromPointLight(light);
+
+        // Unsubscribe from updater
+        updater.unsubscribeObject(tower);
 
         // Remove the object itself
         tower = null;
@@ -446,6 +455,9 @@ public class DrawableIsland extends DrawableObject
 
             // Unsubscribe the student from the light
             student.unsubscribeFromPointLight(light);
+
+            // Unsubscribe from updater
+            updater.unsubscribeObject(student);
 
             // Remove the student from the drawn list
             drawnStudents.remove(student);

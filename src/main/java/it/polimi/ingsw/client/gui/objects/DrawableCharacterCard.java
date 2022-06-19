@@ -36,6 +36,8 @@ public class DrawableCharacterCard extends DrawableObject
     public static final double FIRST_Y_PAYLOAD = -0.25;
     public static final double STEP_X_PAYLOAD = 0.30;
     public static final double STEP_Y_PAYLOAD = 0.30;
+    public static final double COIN_X = 0;
+    public static final double COIN_Y = 0.95;
 
     /**
      * X Dimension constant
@@ -78,6 +80,7 @@ public class DrawableCharacterCard extends DrawableObject
      */
     private List<DrawableNoEntryTile> tiles;
     private List<DrawableStudent> students;
+    private DrawableCoin coin;
 
     /**
      * Constructor
@@ -302,6 +305,57 @@ public class DrawableCharacterCard extends DrawableObject
     }
 
     /**
+     * Method to add a coin to the card to represent that it has already been activated
+     * 
+     * @param group The group to which add the coin
+     * @param light The light to which subscribe the coin
+     */
+    public void addCoin(Group group, PointLight light)
+    {
+        // If there is already a coin i don't add it
+        if (coin != null)
+            return;
+
+        // Create the coin
+        coin = new DrawableCoin(updater);
+
+        // Coordinates without rotations
+        Point3D coordinates = new Point3D(COIN_X * X_DIMENSION, 0, COIN_Y * X_DIMENSION);
+
+        // Translate the coin in the correct position
+        coin.translate(coordinates.add(getPosition()));
+
+        // Add the coin to group and light
+        coin.addToGroup(group);
+        coin.subscribeToPointLight(light);
+    }
+
+    /**
+     * Method to remove the coin
+     * 
+     * @param group The group from which remove the coin
+     * @param light The light from which unsubscribe the coin
+     */
+    public void removeCoin(Group group, PointLight light)
+    {
+        // I do nothing if there isn't any coin
+        if (coin == null)
+            return;
+
+        // Remove the coin from the group
+        coin.removeFromGroup(group);
+
+        // Unsubscribe the coin from light
+        coin.unsubscribeFromPointLight(light);
+
+        // Unsubscribe from updater
+        updater.unsubscribeObject(coin);
+
+        // Null the coin
+        coin = null;
+    }
+
+    /**
      * Method to add a student to the card
      * 
      * @param color The color of the student to be added
@@ -361,6 +415,9 @@ public class DrawableCharacterCard extends DrawableObject
         // Unsubscribe the student from the light
         student.unsubscribeFromPointLight(light);
 
+        // Unsubscribe from updater
+        updater.unsubscribeObject(student);
+
         // Remove the student from the list
         students.remove(student);
     }
@@ -411,6 +468,9 @@ public class DrawableCharacterCard extends DrawableObject
         // Remove the tile from the group and lightings
         tile.removeFromGroup(group);
         tile.unsubscribeFromPointLight(light);
+
+        // Unsubscribe from updater
+        updater.unsubscribeObject(tile);
 
         // Remove the tile from the collection
         tiles.remove(tile);

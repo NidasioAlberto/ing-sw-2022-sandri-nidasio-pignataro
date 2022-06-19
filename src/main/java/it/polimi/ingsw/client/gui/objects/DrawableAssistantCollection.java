@@ -102,6 +102,7 @@ public class DrawableAssistantCollection extends DrawableCollection
                     assistantCards.get(i).removeFromGroup(group);
                     assistantCards.get(i).unsubscribeFromPointLight(pointLight);
                     assistantCards.get(i).unsubscribeFromAmbientLight(ambientLight);
+                    updater.unsubscribeObject(assistantCards.get(i));
                     assistantCards.remove(i--);
                 }
             }
@@ -112,6 +113,7 @@ public class DrawableAssistantCollection extends DrawableCollection
                 assistantCards.get(i).removeFromGroup(group);
                 assistantCards.get(i).unsubscribeFromPointLight(pointLight);
                 assistantCards.get(i).unsubscribeFromAmbientLight(ambientLight);
+                updater.unsubscribeObject(assistantCards.get(i));
                 assistantCards.remove(i--);
             }
         }

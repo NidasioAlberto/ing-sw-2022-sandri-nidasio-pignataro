@@ -176,6 +176,9 @@ public class DrawableIslandCollection extends DrawableCollection
             islands.get(i).clear(pointLight, group);
             islands.get(i).removeFromGroup(group);
             islands.get(i).unsubscribeFromAmbientLight(ambientLight);
+
+            // Unsubscribe from updater
+            updater.unsubscribeObject(islands.get(i));
             islands.remove(i);
         }
 

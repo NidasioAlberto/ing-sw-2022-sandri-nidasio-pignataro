@@ -97,7 +97,16 @@ public class DrawableCharacterCardCollection extends DrawableCollection
         {
             // I update the cards conditions (for example if the had been activated or not)
             for (int i = 0; i < cards.size(); i++)
+            {
                 cards.get(i).setActive(update.getCards().get(i).isActivated());
+
+                // If the card has already been activated once, i put a coin over
+                if (update.getCards().get(i).hasBeenFirstUsed())
+                    cards.get(i).addCoin(group, pointLight);
+                else
+                    cards.get(i).removeCoin(group, pointLight);
+            }
+
         }
     }
 

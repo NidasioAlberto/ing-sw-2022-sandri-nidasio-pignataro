@@ -417,6 +417,8 @@ public class DrawableSchoolBoard extends DrawableObject
         {
             assistantCard.removeFromGroup(group);
             assistantCard.unsubscribeFromAmbientLight(light);
+            // Unsubscribe from updater
+            updater.unsubscribeObject(assistantCard);
         }
 
         // Now i can create the card
@@ -514,6 +516,9 @@ public class DrawableSchoolBoard extends DrawableObject
         // Unsubscribe the student from the light
         student.unsubscribeFromPointLight(light);
 
+        // Unsubscribe from updater
+        updater.unsubscribeObject(student);
+
         // Remove the instance from the list
         dining.get(color).remove(student);
     }
@@ -584,6 +589,9 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Unsubscribe the professor from the light
         professor.unsubscribeFromPointLight(light);
+
+        // Unsubscribe from updater
+        updater.unsubscribeObject(professor);
 
         // Remove the professor from the collection
         professors.remove(professor);
@@ -657,6 +665,9 @@ public class DrawableSchoolBoard extends DrawableObject
         // Remove the student from the light
         student.unsubscribeFromPointLight(light);
 
+        // Unsubscribe from updater
+        updater.unsubscribeObject(student);
+
         // Remove the student from the collection
         entrance.remove(student);
     }
@@ -723,6 +734,9 @@ public class DrawableSchoolBoard extends DrawableObject
         // Unsubscribe from light
         tower.unsubscribeFromPointLight(light);
 
+        // Unsubscribe from updater
+        updater.unsubscribeObject(tower);
+
         // Remove the tower from the collection
         towers.remove(towers.size() - 1);
     }
@@ -784,6 +798,9 @@ public class DrawableSchoolBoard extends DrawableObject
 
         // Unsubscribe from light
         coin.unsubscribeFromPointLight(light);
+
+        // Unsubscribe from updater
+        updater.unsubscribeObject(coin);
 
         // Remove the tower from the collection
         coins.remove(coins.size() - 1);

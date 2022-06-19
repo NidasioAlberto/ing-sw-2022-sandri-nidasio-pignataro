@@ -406,6 +406,11 @@ public abstract class CharacterCard extends Game implements Serializable
         instance.notifyPlayers();
     }
 
+    public boolean hasBeenFirstUsed()
+    {
+        return firstUsed;
+    }
+
     public static CharacterCard createCharacterCard(CharacterCardType type, Game game) throws NullPointerException
     {
         // Check if the parameters are not null

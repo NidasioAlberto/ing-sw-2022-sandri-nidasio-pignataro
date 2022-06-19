@@ -181,6 +181,8 @@ public class DrawableCloudTile extends DrawableObject
         {
             student.unsubscribeFromPointLight(light);
             student.removeFromGroup(group);
+            // Unsubscribe from updater
+            updater.unsubscribeObject(student);
         }
         // At the end i clear the drawable list
         students.clear();
