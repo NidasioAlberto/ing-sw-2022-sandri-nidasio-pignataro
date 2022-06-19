@@ -331,7 +331,20 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
+        updatesHandler.subscribeUpdate(() -> {
+            // visualize the error
+            errorMessage.setTextColor(Color.BLACK);
+            errorMessage.setText(answer.toString());
+            errorMessage.setBackground(Color.rgb(132, 245, 66));
+            errorMessage.addAnimationPosition(new Point3D(150, 0, -110), 30);
 
+            // Add a lot of positions so that it stays where it should for a while
+            for (int i = 0; i < 200; i++)
+                errorMessage.addAnimationPosition(new Point3D(150, 0, -110), 30);
+
+            // After the message is done return back
+            errorMessage.addAnimationPosition(new Point3D(300, 0, -110), 30);
+        });
     }
 
     @Override
@@ -343,12 +356,13 @@ public class GameView extends Application implements Visualizable
             updatesHandler.subscribeUpdate(() -> resetPosition());
             updatesHandler.subscribeUpdate(() -> {
                 // visualize the error
+                errorMessage.setTextColor(Color.WHITE);
                 errorMessage.setText(answer.getErrorMessage());
-                errorMessage.setBackground(Color.rgb(255, 0, 0));
+                errorMessage.setBackground(Color.rgb(245, 66, 66));
                 errorMessage.addAnimationPosition(new Point3D(150, 0, -110), 30);
 
                 // Add a lot of positions so that it stays where it should for a while
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 200; i++)
                     errorMessage.addAnimationPosition(new Point3D(150, 0, -110), 30);
 
                 // After the message is done return back

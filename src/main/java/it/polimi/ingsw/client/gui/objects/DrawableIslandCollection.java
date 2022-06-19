@@ -169,17 +169,21 @@ public class DrawableIslandCollection extends DrawableCollection
             islands.get(i).setNumber(i);
         }
 
-        // Delete the ones in excess
-        for (int i = update.getIslands().size(); i < islands.size(); i++)
+        // Calculate before the number of islands to be removed
+        int removed = islands.size() - update.getIslands().size();
+
+        // Delete the ones in excess (always the last ones for n times like the n islands to remove)
+        // this is done to fix a minor visualization bug
+        for (int i = 0; i < removed; i++)
         {
             // Clear the island and delete it
-            islands.get(i).clear(pointLight, group);
-            islands.get(i).removeFromGroup(group);
-            islands.get(i).unsubscribeFromAmbientLight(ambientLight);
+            islands.get(islands.size() - 1).clear(pointLight, group);
+            islands.get(islands.size() - 1).removeFromGroup(group);
+            islands.get(islands.size() - 1).unsubscribeFromAmbientLight(ambientLight);
 
             // Unsubscribe from updater
-            updater.unsubscribeObject(islands.get(i));
-            islands.remove(i);
+            updater.unsubscribeObject(islands.get(islands.size() - 1));
+            islands.remove(islands.size() - 1);
         }
 
         // I have to update the positions

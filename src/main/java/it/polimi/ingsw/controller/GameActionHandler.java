@@ -27,6 +27,11 @@ public class GameActionHandler
     private Game game;
 
     /**
+     * Flag to remember if we are using table index or not
+     */
+    private boolean tableIndex;
+
+    /**
      * The FSM that checks whether the action is legit.
      */
     private Phase gamePhase;
@@ -45,6 +50,7 @@ public class GameActionHandler
         this.game = game;
 
         // Before instantiating the FSM i need to select the first player
+        tableIndex = true;
         game.selectPlayer(0);
         game.setCurrentPlayerIndexByTable(0);
 
@@ -105,8 +111,7 @@ public class GameActionHandler
             {
                 // Remove from usableCards the card with the same turnOrder as the one
                 // played by the previous player
-                usableCards =
-                        usableCards.stream().filter((card) -> card.getTurnOrder() != player.getSelectedCard().get().getTurnOrder()).toList();
+                usableCards = usableCards.stream().filter((card) -> card.getTurnOrder() != player.getSelectedCard().get().getTurnOrder()).toList();
 
                 // Check if the current player has played a card with the same turnOrder
                 // as the card played by the previous player
@@ -238,8 +243,8 @@ public class GameActionHandler
             game.getSelectedPlayer().get().selectCharacterCard(selectedCharacterCard);
             game.setCurrentCharacterCard(selectedCharacterCard);
             game.getCharacterCards().get(selectedCharacterCard).activate();
-        }
-        else throw new InvalidCharacterCardException("This card is not playable right now");
+        } else
+            throw new InvalidCharacterCardException("This card is not playable right now");
         // IMPORTANT: I DON'T STEP THE FSM BECAUSE THIS IS A CHARACTER CARD'S PLAY
     }
 
@@ -265,7 +270,8 @@ public class GameActionHandler
         // If the action is valid i execute the action
         if (currentCard.isValidAction(action))
             currentCard.applyAction();
-        else throw new NoLegitActionException();
+        else
+            throw new NoLegitActionException();
 
         // Clear the selections
         game.getSelectedPlayer().get().clearSelections();
@@ -296,9 +302,8 @@ public class GameActionHandler
         gamePhase.onValidAction(this);
 
         // If all active players have done their turn, I fill up the clouds
-        if (previousIndex == game.getPlayerTableList().size() - 1 ||
-                game.getSortedPlayerList().subList(previousIndex + 1, game.getPlayersNumber()).
-                stream().filter(Player::isActive).count() == 0)
+        if (previousIndex == game.getPlayerTableList().size() - 1
+                || game.getSortedPlayerList().subList(previousIndex + 1, game.getPlayersNumber()).stream().filter(Player::isActive).count() == 0)
         {
             game.fillClouds();
             for (Player player : game.getPlayerTableList())
@@ -321,6 +326,16 @@ public class GameActionHandler
     public Game getGame()
     {
         return game;
+    }
+
+    public boolean isTableIndex()
+    {
+        return tableIndex;
+    }
+
+    public void setTableIndex(boolean table)
+    {
+        this.tableIndex = table;
     }
 
     private void checkIfCharacterCardIsStillApplicable()

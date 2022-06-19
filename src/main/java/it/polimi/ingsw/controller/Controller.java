@@ -339,6 +339,8 @@ public class Controller
 
     public Player getCurrentPlayer()
     {
+        if (actionHandler.isTableIndex())
+            return game.getPlayerTableList().get(game.getSelectedPlayerIndex().orElseThrow(() -> new NoSelectedPlayerException("[Controller]")));
         return game.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Controller]"));
     }
 

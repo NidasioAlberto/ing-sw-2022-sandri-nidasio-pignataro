@@ -13,6 +13,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -140,6 +141,21 @@ public class DrawableIsland extends DrawableObject
 
         box.setOnMouseDragExited((event) -> {
             material.setDiffuseColor(Color.color(1, 1, 1, 1));
+        });
+
+        box.setOnMouseClicked((event) -> {
+            // Check that the mouse have been clicked twice
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2)
+            {
+                // Set the dragged island
+                ActionTranslator.getInstance().setDraggedItem("Island");
+
+                // Set the correct island
+                ActionTranslator.getInstance().selectIsland(NUMBER);
+
+                // Execute the command
+                ActionTranslator.getInstance().execute();
+            }
         });
 
         box.setOnMouseDragReleased((event) -> {

@@ -109,6 +109,19 @@ public class DrawableErrorMessage extends DrawableObject
         pane.setStyle("-fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18; -fx-background-color: #" + parsed + ";");
     }
 
+    /**
+     * Sets the text color
+     * 
+     * @param color The color to be set
+     */
+    public void setTextColor(Color color)
+    {
+        if (color == null)
+            throw new NullPointerException("[DrawableErrorMessage] Null text color");
+
+        text.setFill(color);
+    }
+
     @Override
     public void addToGroup(Group group)
     {
@@ -167,7 +180,7 @@ public class DrawableErrorMessage extends DrawableObject
         // First call super
         super.updateAnimation();
 
-        if (positions.size() == 0)
+        if (positions.size() == 0 && pane != null)
             // If the animation ends i make this object camera invisible
             pane.setVisible(false);
     }

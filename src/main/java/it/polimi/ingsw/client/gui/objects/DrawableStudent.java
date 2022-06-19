@@ -9,6 +9,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
@@ -98,6 +99,21 @@ public class DrawableStudent extends DrawableObject
 
         studentMesh.setOnMouseDragExited((event) -> {
             material.setDiffuseColor(type.getColor());
+        });
+
+        studentMesh.setOnMouseClicked((event) -> {
+            // Ensure that it is a double click
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2)
+            {
+                // Set the dragged item
+                ActionTranslator.getInstance().setDraggedItem("Student");
+
+                // Set the selected color
+                ActionTranslator.getInstance().selectColor(SchoolColor.valueOf(TYPE.name()));
+
+                // Execute the action
+                ActionTranslator.getInstance().execute();
+            }
         });
 
         studentMesh.setOnDragDetected((event) -> {
