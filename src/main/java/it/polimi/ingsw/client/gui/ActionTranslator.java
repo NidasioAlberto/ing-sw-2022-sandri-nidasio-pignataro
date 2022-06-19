@@ -290,7 +290,6 @@ public class ActionTranslator
     {
         // System.out.println("Move mother nature");
         ActionMessage message = new MoveMotherNatureMessage(selectedIsland);
-        System.out.println(selectedIsland);
         sendMessage(message);
     }
 

@@ -53,6 +53,11 @@ public class DrawableCharacterCard extends DrawableObject
     private final int CHARACTER_NUMBER;
 
     /**
+     * The character card activation state
+     */
+    private boolean active;
+
+    /**
      * The card type
      */
     private final CharacterCardType TYPE;
@@ -95,6 +100,9 @@ public class DrawableCharacterCard extends DrawableObject
         Y_DIMENSION = x_dimension * SCALE_FACTOR;
         CHARACTER_NUMBER = characterNumber;
         TYPE = type;
+
+        // Set default not active
+        active = false;
 
         // Create the box
         box = new Box(X_DIMENSION, Y_DIMENSION, 0);
@@ -266,12 +274,31 @@ public class DrawableCharacterCard extends DrawableObject
             PhongMaterial material = new PhongMaterial();
             material.setDiffuseMap(normalImage);
             box.setMaterial(material);
+
+            // Set the eventual payloads to mouse visible
+            if (tiles.size() != 0)
+                for (DrawableNoEntryTile tile : tiles)
+                    tile.enableVisibility();
+            if (students.size() != 0)
+                for (DrawableStudent student : students)
+                    student.enableVisibility();
         } else
         {
             PhongMaterial material = new PhongMaterial();
             material.setDiffuseMap(grayedImage);
             box.setMaterial(material);
+
+            // Set the eventual payloads to mouse invisible
+            if (tiles.size() != 0)
+                for (DrawableNoEntryTile tile : tiles)
+                    tile.disableVisibility();
+            if (students.size() != 0)
+                for (DrawableStudent student : students)
+                    student.disableVisibility();
         }
+
+        // Update the active status
+        active = status;
     }
 
     /**
@@ -293,6 +320,10 @@ public class DrawableCharacterCard extends DrawableObject
         // Coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_PAYLOAD * X_DIMENSION + (students.size() % 3) * STEP_X_PAYLOAD * X_DIMENSION, 0,
                 FIRST_Y_PAYLOAD * X_DIMENSION - (int) (students.size() / 3) * STEP_Y_PAYLOAD * X_DIMENSION);
+
+        // If not active i disable the visibility
+        if (!active)
+            student.disableVisibility();
 
         // Translate the student in the correct position
         student.translate(coordinates.add(getPosition()));
@@ -349,6 +380,10 @@ public class DrawableCharacterCard extends DrawableObject
         // Coordinates without rotations
         Point3D coordinates = new Point3D(FIRST_X_PAYLOAD * X_DIMENSION + (tiles.size() % 3) * STEP_X_PAYLOAD * X_DIMENSION, 0,
                 FIRST_Y_PAYLOAD * X_DIMENSION - (int) (tiles.size() / 3) * STEP_Y_PAYLOAD * X_DIMENSION);
+
+        // If not active i disable the visibility
+        if (!active)
+            tile.disableVisibility();
 
         // Translate the tile to the correct position
         tile.translate(coordinates.add(getPosition()));

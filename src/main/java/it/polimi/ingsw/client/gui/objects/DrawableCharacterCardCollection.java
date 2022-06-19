@@ -80,6 +80,10 @@ public class DrawableCharacterCardCollection extends DrawableCollection
             // Subscribe all the cards to the lights
             for (DrawableCharacterCard card : cards)
             {
+                // Set the card to mouse invisible and deactivated
+                card.setActive(false);
+
+                // Subscribe to group and light
                 card.subscribeToAmbientLight(ambientLight);
                 card.subscribeToPointLight(pointLight);
             }

@@ -25,6 +25,8 @@ public class GameView extends Application implements Visualizable
 
     public static final int ANIMATION_UPDATE_PERIOD_MILLIS = 20;
     public static final int UPDATES_HANDLER_PERIOD_MILLIS = 100;
+
+    public static final int CAMERA_ANGLE = 55;
     /**
      * This is the camera view, it can be moved around (switch from 3D to 2D)
      */
@@ -61,6 +63,7 @@ public class GameView extends Application implements Visualizable
     private DrawableCloudTileCollection cloudTileCollection;
     private DrawableSchoolBoardCollection schoolBoardCollection;
     private DrawableCharacterCardCollection characterCardCollection;
+    private DrawableErrorMessage errorMessage;
 
     /**
      * Client which calls the visualizable methods
@@ -215,14 +218,13 @@ public class GameView extends Application implements Visualizable
             camera.rotateProperty().set(-90);
         } else if (viewMode == ViewMode.MODE_3D)
         {
-            int angle = 55;
             // camera.translateYProperty().set(-1000 * Math.sin(angle));
             // camera.translateZProperty().set(-1000 * Math.cos(angle));
 
-            camera.translateYProperty().set(-1000 * Math.sin(Math.toRadians(angle)));
-            camera.translateZProperty().set(-1000 * Math.cos(Math.toRadians(angle)));
+            camera.translateYProperty().set(-1000 * Math.sin(Math.toRadians(CAMERA_ANGLE)));
+            camera.translateZProperty().set(-1000 * Math.cos(Math.toRadians(CAMERA_ANGLE)));
             camera.setRotationAxis(new Point3D(1, 0, 0));
-            camera.rotateProperty().set(-angle);
+            camera.rotateProperty().set(-CAMERA_ANGLE);
         }
     }
 
@@ -339,7 +341,20 @@ public class GameView extends Application implements Visualizable
         if (playerName != null)
         {
             updatesHandler.subscribeUpdate(() -> resetPosition());
-            System.out.println(answer.getErrorMessage());
+            updatesHandler.subscribeUpdate(() -> {
+                // visualize the error
+                errorMessage.setText(answer.getErrorMessage());
+                errorMessage.setBackground(Color.rgb(255, 0, 0));
+                errorMessage.addAnimationPosition(new Point3D(150, 0, -110), 30);
+
+                // Add a lot of positions so that it stays where it should for a while
+                for (int i = 0; i < 100; i++)
+                    errorMessage.addAnimationPosition(new Point3D(150, 0, -110), 30);
+
+                // After the message is done return back
+                errorMessage.addAnimationPosition(new Point3D(300, 0, -110), 30);
+            });
+            // System.out.println(answer.getErrorMessage());
         }
         updatesHandler.subscribeUpdate(() -> sceneController.displayError(answer));
     }
@@ -399,11 +414,18 @@ public class GameView extends Application implements Visualizable
         islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
         schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
         characterCardCollection = new DrawableCharacterCardCollection(60, pointLight, ambientLight, group, updater);
+        errorMessage = new DrawableErrorMessage(CAMERA_ANGLE, 400, updater);
+
+        // Add the error message to group and light
+        errorMessage.addToGroup(group);
+        errorMessage.subscribeToAmbientLight(ambientLight);
 
         assistantCollection.translate(new Point3D(0, -10, -290));
         islandCollection.translate(new Point3D(0, 0, 150));
         cloudTileCollection.translate(new Point3D(0, 0, 200));
         characterCardCollection.translate(new Point3D(0, 0, 100));
+        // X = 300 hidden, X=150 visible
+        errorMessage.translate(new Point3D(300, 0, -110));
     }
 
     /**
