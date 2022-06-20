@@ -204,9 +204,9 @@ public class ShamanTest
             e.printStackTrace();
         }
 
-        // Player1 adds a red student
+        // Player1 adds a red student and immediately gets the professor
         player1.getBoard().addStudentToDiningRoom(new Student(SchoolColor.RED));
-        assertEquals(0, player1.getBoard().getProfessors().size());
+        assertEquals(1, player1.getBoard().getProfessors().size());
         assertEquals(1, player1.getBoard().getStudentsNumber(SchoolColor.RED));
 
         // The card is active so if I apply the action player gets the green and red professors

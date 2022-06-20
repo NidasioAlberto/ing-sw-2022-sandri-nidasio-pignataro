@@ -139,11 +139,11 @@ public class Island implements Serializable
         if (island == null)
         {
             throw new NullPointerException("[Island] A null island was provided");
-        } else if (island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0
-                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() > 0 || island.tiles.stream().map(tile -> tile.getTower())
+        } else if (island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() == island.tiles.size()
+                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() == this.tiles.size() || island.tiles.stream().map(tile -> tile.getTower())
                         .flatMap(Optional::stream).filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor()).count() > 0)
         {
-            // There is at least one tile without a tower in one of the two merging islands
+            // There is at least one island that has all the tiles without tower
             // or the color of towers is different on the tiles
             throw new IllegalArgumentException("[Island] Not possible to merge islands, towers are not correct");
         } else
