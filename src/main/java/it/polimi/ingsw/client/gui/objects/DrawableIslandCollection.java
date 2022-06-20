@@ -52,15 +52,21 @@ public class DrawableIslandCollection extends DrawableCollection
     private DrawableMotherNature motherNature;
 
     /**
+     * The index that the islands update
+     */
+    private DrawableIndex index;
+
+    /**
      * Constructor
      * 
      * @param island_dimension The single island dimensions
      * @param x_multiply The parameter of radius that is multiplied in the x axis
      * @param y_multiply The parameter of radius that is multiplied in the y axis
      * @param radius The base circle diameter
+     * @param index The index that the islands update with their content
      */
-    public DrawableIslandCollection(int island_dimension, float x_multiply, float y_multiply, float radius, PointLight pointLight,
-            AmbientLight ambientLight, Group group, AnimationHandler updater)
+    public DrawableIslandCollection(int island_dimension, float x_multiply, float y_multiply, float radius, DrawableIndex index,
+            PointLight pointLight, AmbientLight ambientLight, Group group, AnimationHandler updater)
     {
         super(pointLight, ambientLight, group, updater);
 
@@ -70,12 +76,15 @@ public class DrawableIslandCollection extends DrawableCollection
             throw new IllegalArgumentException("[DrawableIslandCollection] Negative multiply factor");
         if (radius < 0)
             throw new IllegalArgumentException("[DrawableIslandCollection] Negative circle radius");
+        if (index == null)
+            throw new NullPointerException("[DrawableIslandCollection] Null index");
 
         // Constants assign
         ISLAND_DIMENSION = island_dimension;
         X_MULTIPLY = x_multiply;
         Y_MULTIPLY = y_multiply;
         RADIUS = radius;
+        this.index = index;
 
         // Create the array of islands and position them in respect of all the parameters
         islands = new ArrayList<>();
@@ -84,27 +93,6 @@ public class DrawableIslandCollection extends DrawableCollection
         motherNature = new DrawableMotherNature(3, 7.5f, 1.5f, updater);
         motherNature.subscribeToAmbientLight(ambientLight);
         motherNature.subscribeToPointLight(pointLight);
-
-        // Old code
-        // for (int i = 0; i < islands.length; i++)
-        // {
-        // islands[i] = new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)], updater);
-        // float angle = i * ((float) 360.0 / NUMBER_OF_ISLANDS);
-
-        // // Angle compensation for centering
-        // float delta = i == 0 || i == NUMBER_OF_ISLANDS / 2 ? 0 : (float) Math.abs(Math.cos(Math.toRadians(angle))) * 5;
-        // if ((angle >= 0 && angle <= 90) || (angle >= 180 && angle <= 270))
-        // // I need to increase the angle
-        // angle += delta;
-        // else
-        // // I need to decrease the angle
-        // angle -= delta;
-
-        // // Set the actual coordinates
-        // float coordX = (float) Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY;
-        // float coordZ = (float) Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY;
-        // islands[i].translate(new Point3D(coordX + point.getX(), point.getY(), coordZ + point.getZ()));
-        // }
     }
 
     /**
@@ -144,7 +132,8 @@ public class DrawableIslandCollection extends DrawableCollection
         {
             // Create all the islands instances
             for (int i = 0; i < update.getIslands().size(); i++)
-                islands.add(new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)], updater));
+                islands.add(
+                        new DrawableIsland(ISLAND_DIMENSION, IslandType.values()[new Random().nextInt(IslandType.values().length)], index, updater));
 
             // Subscribe all the islands to the lights
             for (DrawableIsland island : islands)

@@ -64,6 +64,7 @@ public class GameView extends Application implements Visualizable
     private DrawableSchoolBoardCollection schoolBoardCollection;
     private DrawableCharacterCardCollection characterCardCollection;
     private DrawableErrorMessage errorMessage;
+    private DrawableIndex index;
 
     /**
      * Client which calls the visualizable methods
@@ -110,7 +111,7 @@ public class GameView extends Application implements Visualizable
         {
             // Create the group and the scene
             group = new Group();
-            scene = new Scene(new Group(), WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
+            scene = new Scene(group, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
 
             // Set the scene background
             scene.setFill(Color.rgb(129, 202, 241));
@@ -423,12 +424,17 @@ public class GameView extends Application implements Visualizable
          * Collection creations
          */
         // Set the game objects and collections
+        index = new DrawableIndex(CAMERA_ANGLE, updater);
         assistantCollection = new DrawableAssistantCollection(50, pointLight, ambientLight, group, updater);
         cloudTileCollection = new DrawableCloudTileCollection(40, pointLight, ambientLight, group, updater);
-        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, pointLight, ambientLight, group, updater);
+        islandCollection = new DrawableIslandCollection(120, 2.5f, 1.75f, 105, index, pointLight, ambientLight, group, updater);
         schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
         characterCardCollection = new DrawableCharacterCardCollection(60, pointLight, ambientLight, group, updater);
         errorMessage = new DrawableErrorMessage(CAMERA_ANGLE, 400, updater);
+
+        // Add the index to group and light
+        index.addToGroup(group);
+        index.subscribeToAmbientLight(ambientLight);
 
         // Add the error message to group and light
         errorMessage.addToGroup(group);
@@ -440,6 +446,7 @@ public class GameView extends Application implements Visualizable
         characterCardCollection.translate(new Point3D(0, 0, 100));
         // X = 300 hidden, X=150 visible
         errorMessage.translate(new Point3D(300, 0, -110));
+        index.translate(new Point3D(-650, 0, -25));
     }
 
     /**

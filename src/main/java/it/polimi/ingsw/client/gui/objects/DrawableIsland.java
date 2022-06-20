@@ -7,6 +7,7 @@ import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.client.gui.objects.types.TowerType;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.SchoolColor;
+import it.polimi.ingsw.model.TowerColor;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
@@ -78,6 +79,11 @@ public class DrawableIsland extends DrawableObject
     private DrawableMotherNature motherNature;
 
     /**
+     * The index to update with the content
+     */
+    private DrawableIndex index;
+
+    /**
      * Animation angle (to which apply the Math.sin and float the island)
      */
     private float floatingAngle;
@@ -88,7 +94,7 @@ public class DrawableIsland extends DrawableObject
      * @param dimension The square dimensions
      * @param type The texture island type
      */
-    public DrawableIsland(int dimension, IslandType type, AnimationHandler updater)
+    public DrawableIsland(int dimension, IslandType type, DrawableIndex index, AnimationHandler updater)
     {
         super(updater);
 
@@ -96,10 +102,13 @@ public class DrawableIsland extends DrawableObject
             throw new IllegalArgumentException("[DrawableIsland] Negative island dimensions");
         if (type == null)
             throw new NullPointerException("[DrawableIsland] Null island type pointer");
+        if (index == null)
+            throw new NullPointerException("[DrawableIsland] Null index");
 
         // Set the island constants
         DIMENSION = dimension;
         TYPE = type;
+        this.index = index;
 
         // Create the collection of students
         drawnStudents = new ArrayList<>();
@@ -141,6 +150,33 @@ public class DrawableIsland extends DrawableObject
 
         box.setOnMouseDragExited((event) -> {
             material.setDiffuseColor(Color.color(1, 1, 1, 1));
+        });
+
+        box.setOnMouseEntered((event) -> {
+            // Reset the index first
+            index.resetNumbers();
+
+            // Set the students
+            for (StudentType studentType : StudentType.values())
+            {
+                // Count how many students of that type are inside the island
+                int num = (int) students.stream().filter(s -> s == studentType).count();
+
+                // Set the index
+                index.setStudentNumber(SchoolColor.valueOf(studentType.name()), num);
+            }
+
+            // Set the towers
+            if (tower != null)
+                index.setTowerNumber(TowerColor.valueOf(tower.getType().name()), towerCount);
+
+            // Set the no entry
+            index.setNoEntryNumber(noEntryCount);
+        });
+
+        box.setOnMouseExited((event) -> {
+            // Reset the index
+            index.resetNumbers();
         });
 
         box.setOnMouseClicked((event) -> {
