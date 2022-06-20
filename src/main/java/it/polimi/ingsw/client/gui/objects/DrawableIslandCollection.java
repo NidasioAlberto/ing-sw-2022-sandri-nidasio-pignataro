@@ -126,8 +126,8 @@ public class DrawableIslandCollection extends DrawableCollection
                 angle -= delta;
 
             // Set the actual coordinates
-            float coordX = (float) Math.cos(Math.toRadians(angle)) * RADIUS * X_MULTIPLY;
-            float coordZ = (float) Math.sin(Math.toRadians(angle)) * RADIUS * Y_MULTIPLY;
+            float coordX = (float) Math.cos(Math.toRadians(-angle)) * RADIUS * X_MULTIPLY;
+            float coordZ = (float) Math.sin(Math.toRadians(-angle)) * RADIUS * Y_MULTIPLY;
             islands.get(i).translate(new Point3D(coordX + position.getX(), position.getY(), coordZ + position.getZ()));
         }
     }

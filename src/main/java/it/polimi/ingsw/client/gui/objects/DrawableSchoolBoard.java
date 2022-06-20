@@ -155,9 +155,13 @@ public class DrawableSchoolBoard extends DrawableObject
         {
             for (int j = 0; j < normalImage.getHeight(); j++)
             {
+                // Darker colors
                 Color color = normalImage.getPixelReader().getColor(i, j);
-                double mean = (color.getRed() + color.getBlue() + color.getGreen()) / 3;
-                Color gray = new Color(mean, mean, mean, 1);
+                Color gray = new Color(color.getRed() * 0.8, color.getGreen() * 0.8, color.getBlue() * 0.8, 1);
+
+                // Black and white
+                // double mean = (color.getRed() + color.getBlue() + color.getGreen()) / 3;
+                // Color gray = new Color(mean, mean, mean, 1);
 
                 // Apply the gray color
                 grayedImage.getPixelWriter().setColor(i, j, gray);
