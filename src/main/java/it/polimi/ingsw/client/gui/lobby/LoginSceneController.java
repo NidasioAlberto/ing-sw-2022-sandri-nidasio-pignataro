@@ -5,6 +5,7 @@ import it.polimi.ingsw.protocol.commands.SetNameCommand;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -16,6 +17,8 @@ public class LoginSceneController implements Controllable
     private TextField ipTextField;
     @FXML
     private TextField portTextField;
+    @FXML
+    private ImageView logoImage;
 
     /**
      * Pressing enter in portTextField is like clicking the button submit.
@@ -51,16 +54,29 @@ public class LoginSceneController implements Controllable
                 // Set the ip and port of the client and try to connect
                 String ip = ipTextField.getText();
                 int port = Integer.parseInt(portTextField.getText());
-                SceneController.clientConnect(ip, port);
 
-                // If all goes well set the name
-                SceneController.sendCommand(new SetNameCommand(nicknameTextField.getText()));
+                if(SceneController.clientConnect(ip, port))
+                    // If all goes well set the name
+                    SceneController.sendCommand(new SetNameCommand(nicknameTextField.getText()));
+
             } catch (NumberFormatException e) {
                 // If port is not a number
                 System.out.println("You must insert a valid port");
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Connection error");
             }
         }
+    }
+
+    @Override
+    /**
+     * Set properly the image with the logo.
+     */
+    public void initialize()
+    {
+
+        logoImage.setScaleX(2);
+        logoImage.setScaleY(2);
+        logoImage.translateXProperty().set(+25);
     }
 }

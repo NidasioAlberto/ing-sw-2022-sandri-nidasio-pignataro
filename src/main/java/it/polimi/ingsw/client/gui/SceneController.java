@@ -78,8 +78,9 @@ public class SceneController
      *
      * @param ip of the server.
      * @param port of the server.
+     * @return true if the connection is established.
      */
-    public static void clientConnect(String ip, int port)
+    public static boolean clientConnect(String ip, int port)
     {
         try
         {
@@ -87,10 +88,13 @@ public class SceneController
             client.setPort(port);
             client.connect();
             new Thread(() -> client.run()).start();
+
+            return true;
         } catch (Exception e)
         {
             System.out.println("Connection error");
-            e.printStackTrace();
+
+            return false;
         }
     }
 
@@ -110,7 +114,6 @@ public class SceneController
         } catch (Exception e)
         {
             System.out.println("Error while sending a command");
-            e.printStackTrace();
         }
     }
 
@@ -127,6 +130,7 @@ public class SceneController
             currentRoot = loader.load();
             currentController = loader.getController();
             mainScene.setRoot(currentRoot);
+            currentController.initialize();
         } catch (IOException e)
         {
             System.out.println("Error while changing root");

@@ -20,7 +20,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LobbySceneController implements Controllable, Initializable
+public class LobbySceneController implements Controllable
 {
     @FXML
     private Label nicknameLabel;
@@ -34,7 +34,11 @@ public class LobbySceneController implements Controllable, Initializable
     private TableColumn<MatchLine, String> playersColumn;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
+    /**
+     * Sends a GetMatchesList to the client in order to display the current available matches,
+     * otherwise displays a message.
+     */
+    public void initialize()
     {
         matchesTableView.setPlaceholder(new Label("There aren't matches at the moment"));
         SceneController.sendCommand(new GetMatchesListCommand());

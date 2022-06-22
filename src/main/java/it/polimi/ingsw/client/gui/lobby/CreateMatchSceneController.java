@@ -52,4 +52,9 @@ public class CreateMatchSceneController implements Controllable
     {
         SceneController.setRoot("/Lobby/lobby.fxml");
     }
+
+    @Override
+    public void initialize()
+    {
+    }
 }

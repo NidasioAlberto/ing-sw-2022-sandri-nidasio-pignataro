@@ -5,4 +5,8 @@ package it.polimi.ingsw.client.gui.lobby;
  */
 public interface Controllable
 {
+    /**
+     * Method called when the controller becomes the current one in order to set properly the scene.
+     */
+    public abstract void initialize();
 }
