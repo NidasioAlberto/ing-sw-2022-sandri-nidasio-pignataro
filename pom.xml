@@ -20,11 +20,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20220320</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -65,21 +61,6 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                    <archive>
-                        <manifest>
-                            <mainClass>it.polimi.ingsw.client.gui.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
                 </configuration>
             </plugin>
             <plugin>
@@ -145,6 +126,9 @@
                         </goals>
                         <configuration>
                             <outputFile>jars/Eriantys_GUI_${project.artifactId}.jar</outputFile>
+                            <artifactSet>
+                                <excludes></excludes>
+                            </artifactSet>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>it.polimi.ingsw.client.gui.Main</mainClass>
@@ -160,11 +144,23 @@
                         </goals>
                         <configuration>
                             <outputFile>jars/Eriantys_CLI_${project.artifactId}.jar</outputFile>
-                            <!-- <artifactSet>
+                            <artifactSet>
                                 <excludes>
-                                    <exclude>org.openjfx</exclude>
+                                    <exclude>org.openjfx:*</exclude>
                                 </excludes>
-                            </artifactSet> -->
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>**/*.png</exclude>
+                                        <exclude>**/*.jpg</exclude>
+                                        <exclude>**/*.fxml</exclude>
+                                        <exclude>**/*.css</exclude>
+                                        <exclude>**/*.obj</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>it.polimi.ingsw.client.cli.CLI</mainClass>
@@ -182,9 +178,21 @@
                             <outputFile>jars/Eriantys_Server_${project.artifactId}.jar</outputFile>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>org.openjfx</exclude>
+                                    <exclude>org.openjfx:*</exclude>
                                 </excludes>
                             </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>**/*.png</exclude>
+                                        <exclude>**/*.jpg</exclude>
+                                        <exclude>**/*.fxml</exclude>
+                                        <exclude>**/*.css</exclude>
+                                        <exclude>**/*.obj</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>it.polimi.ingsw.network.Server</mainClass>
