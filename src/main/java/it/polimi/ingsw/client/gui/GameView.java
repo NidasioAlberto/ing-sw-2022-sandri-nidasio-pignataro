@@ -76,7 +76,16 @@ public class GameView extends Application implements Visualizable
      */
     private String playerName;
 
+
+    /**
+     * Controller of lobby's scenes.
+     */
     private SceneController sceneController;
+
+    /**
+     * Set true when a StartMatchAnswer is received.
+     */
+    private boolean isMatchStarted;
 
     /**
      * Constructor
@@ -352,7 +361,7 @@ public class GameView extends Application implements Visualizable
     public void displayError(ErrorAnswer answer)
     {
         // Add the lambda to reset all the positions of movable things
-        if (playerName != null)
+        if (isMatchStarted)
         {
             updatesHandler.subscribeUpdate(() -> resetPosition());
             updatesHandler.subscribeUpdate(() -> {
@@ -371,7 +380,7 @@ public class GameView extends Application implements Visualizable
             });
             // System.out.println(answer.getErrorMessage());
         }
-        updatesHandler.subscribeUpdate(() -> sceneController.displayError(answer));
+        else updatesHandler.subscribeUpdate(() -> sceneController.displayError(answer.getErrorMessage()));
     }
 
     @Override
@@ -397,7 +406,7 @@ public class GameView extends Application implements Visualizable
     @Override
     public void displayStartMatch(StartMatchAnswer answer)
     {
-
+        isMatchStarted = true;
     }
 
     public void matchBegin()

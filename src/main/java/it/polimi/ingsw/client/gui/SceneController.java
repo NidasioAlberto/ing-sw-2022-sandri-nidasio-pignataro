@@ -4,13 +4,13 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.gui.lobby.Controllable;
 import it.polimi.ingsw.client.gui.lobby.LobbySceneController;
 import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
-import it.polimi.ingsw.protocol.answers.ErrorAnswer;
 import it.polimi.ingsw.protocol.answers.MatchesListAnswer;
 import it.polimi.ingsw.protocol.answers.SetNameAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 
@@ -37,9 +37,6 @@ public class SceneController
             throw new NullPointerException();
     }
 
-    public void displayError(ErrorAnswer answer)
-    {}
-
     /**
      * If I receive a SetNameAnswer, the nickname inserted by the player is valid, so I change scene to lobby.
      */
@@ -55,11 +52,6 @@ public class SceneController
     public void displayJoinedMatch()
     {
         view.matchBegin();
-    }
-
-    public void displayEndMatch(EndMatchAnswer answer)
-    {
-
     }
 
     /**
@@ -92,7 +84,7 @@ public class SceneController
             return true;
         } catch (Exception e)
         {
-            System.out.println("Connection error");
+            SceneController.displayError("Connection error");
 
             return false;
         }
@@ -110,10 +102,10 @@ public class SceneController
             if (command != null)
                 client.sendCommand(command);
             else
-                System.out.println("The command is null");
+                SceneController.displayError("The command is null");
         } catch (Exception e)
         {
-            System.out.println("Error while sending a command");
+            SceneController.displayError("Error while sending a command");
         }
     }
 
@@ -133,8 +125,21 @@ public class SceneController
             currentController.initialize();
         } catch (IOException e)
         {
-            System.out.println("Error while changing root");
+            SceneController.displayError("Error while changing root");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Display an alert with the given message.
+     * @param errorMessage to display.
+     */
+    public static void displayError(String errorMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error");
+        alert.setContentText(errorMessage);
+        alert.show();
     }
 }

@@ -211,7 +211,7 @@ public class CLI implements Visualizable, Runnable
             case 5:
             {
                 PrintHelper.print("Are you sure to quit the game? Type 'Y' if you are sure\n");
-                if (scanner.nextLine().equals("Y"))
+                if (scanner.nextLine().toUpperCase().equals("Y"))
                 {
                     client.sendCommand(new QuitGameCommand());
                     System.exit(0);
@@ -332,10 +332,11 @@ public class CLI implements Visualizable, Runnable
             {
                 PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
-                if (scanner.nextLine().equals("Y"))
+                if (scanner.nextLine().toUpperCase().equals("Y"))
                 {
                     isMatchStarted = false;
                     client.sendCommand(new QuitMatchCommand());
+                    PrintHelper.printMR(20, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 }
                 break;
             }
@@ -350,7 +351,7 @@ public class CLI implements Visualizable, Runnable
         {
             selectedColors.add(selectSchoolColors(scanner));
             PrintHelper.print("Type 'Y' to select another\n");
-        } while (scanner.nextLine().equals("Y") && selectedColors.size() < SchoolColor.values().length);
+        } while (scanner.nextLine().toUpperCase().equals("Y") && selectedColors.size() < SchoolColor.values().length);
 
         return selectedColors;
     }
@@ -621,7 +622,7 @@ public class CLI implements Visualizable, Runnable
             {
                 msg += "To see other matches type 'Y'\n";
                 PrintHelper.printMR(1, 2, msg);
-                if (scanner.nextLine().equals("Y"))
+                if (scanner.nextLine().toUpperCase().equals("Y"))
                 {
                     msg = "";
                     PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);

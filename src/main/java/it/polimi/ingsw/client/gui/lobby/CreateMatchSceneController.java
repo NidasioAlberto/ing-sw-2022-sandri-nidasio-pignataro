@@ -25,15 +25,15 @@ public class CreateMatchSceneController implements Controllable
         // Check that the data inserted from the player are valid
         if (gameNameCreateTextField.getText().isBlank())
         {
-            System.out.println("You must insert a valid game name");
+            SceneController.displayError("You must insert a valid game name");
         }
         else if (!classicRbutton.isSelected() && !expertRbutton.isSelected())
         {
-            System.out.println("You must choose a game mode");
+            SceneController.displayError("You must choose a game mode");
         }
         else if (!twoRbutton.isSelected() && !threeRbutton.isSelected())
         {
-            System.out.println("You must choose a number of players");
+            SceneController.displayError("You must choose a number of players");
         }
         else
         {

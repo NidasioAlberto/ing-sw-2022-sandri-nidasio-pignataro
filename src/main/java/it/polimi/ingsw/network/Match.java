@@ -100,7 +100,7 @@ public class Match implements Subscriber<ModelUpdate>
         } catch (Exception e)
         {
             players.remove(player);
-            System.out.print(e.toString());
+            System.out.print(e);
             player.sendAnswer(new ErrorAnswer(e.getMessage()));
             return false;
         }
@@ -113,6 +113,11 @@ public class Match implements Subscriber<ModelUpdate>
      */
     public void removePlayer(PlayerConnection player)
     {
+        if (player == null)
+        {
+            return;
+        }
+
         // Check if the game is started
         if (getPlayersNumber() == gameController.getPlayersNumber())
         {

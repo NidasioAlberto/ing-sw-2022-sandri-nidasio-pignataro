@@ -39,15 +39,15 @@ public class LoginSceneController implements Controllable
         // Check that the data inserted from the player are valid
         if (nicknameTextField.getText().isBlank())
         {
-            System.out.println("You must insert a valid nickname");
+            SceneController.displayError("You must insert a valid nickname");
         }
         else if (ipTextField.getText().isBlank())
         {
-            System.out.println("You must insert a valid IP");
+            SceneController.displayError("You must insert a valid IP");
         }
         else if (portTextField.getText().isBlank())
         {
-            System.out.println("You must insert a valid port");
+            SceneController.displayError("You must insert a valid port");
         }
         else {
             try {
@@ -61,9 +61,9 @@ public class LoginSceneController implements Controllable
 
             } catch (NumberFormatException e) {
                 // If port is not a number
-                System.out.println("You must insert a valid port");
+                SceneController.displayError("You must insert a valid port");
             } catch (Exception e) {
-                System.out.println("Connection error");
+                SceneController.displayError("Connection error");
             }
         }
     }
@@ -74,7 +74,6 @@ public class LoginSceneController implements Controllable
      */
     public void initialize()
     {
-
         logoImage.setScaleX(2);
         logoImage.setScaleY(2);
         logoImage.translateXProperty().set(+25);
