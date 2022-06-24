@@ -657,6 +657,13 @@ public class CLI implements Visualizable, Runnable
         }
     }
 
+    @Override
+    public void displayConnectionError(ErrorAnswer answer)
+    {
+        PrintHelper.printMessage(answer.toString());
+        System.exit(0);
+    }
+
     public static void main(String[] args)
     {
         Client client = new Client();

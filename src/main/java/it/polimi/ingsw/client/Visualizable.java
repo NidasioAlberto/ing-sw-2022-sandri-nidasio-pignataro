@@ -36,4 +36,6 @@ public interface Visualizable
     void displaySetName(SetNameAnswer answer);
 
     void displayStartMatch(StartMatchAnswer answer);
+
+    void displayConnectionError(ErrorAnswer answer);
 }

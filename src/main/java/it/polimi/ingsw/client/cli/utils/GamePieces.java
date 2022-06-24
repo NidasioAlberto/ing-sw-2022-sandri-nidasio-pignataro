@@ -2,8 +2,8 @@ package it.polimi.ingsw.client.cli.utils;
 
 public enum GamePieces
 {
-    //Original ● ⬣ ☗ ◉ ⊠ 💰
-    STUDENT("●", "●"), PROFESSOR("⯂", "⬣"), TOWER("♜", "☗"), MOTHER_NATURE("⭗", "◉"), NO_ENTRY_TILE("⮽", "⊠"), COINS_MARKER("€", "\uD83D\uDCB0");
+    //Original ● ⬣ ☗ ◉ ⊠ 💰                                                                                                                                         For windows ⮽ ⮾ ☒ X
+    STUDENT("●", "●"), PROFESSOR("⯂", "⬣"), TOWER("♜", "☗"), MOTHER_NATURE("⭗", "◉"), NO_ENTRY_TILE("☒", "⊠"), COINS_MARKER("€", "\uD83D\uDCB0");
 
     private String pieceWindows;
     private String piece;

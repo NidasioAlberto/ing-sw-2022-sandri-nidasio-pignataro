@@ -7,10 +7,14 @@ import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.answers.MatchesListAnswer;
 import it.polimi.ingsw.protocol.answers.SetNameAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogEvent;
 
 import java.io.IOException;
 
@@ -84,7 +88,7 @@ public class SceneController
             return true;
         } catch (Exception e)
         {
-            SceneController.displayError("Connection error");
+            SceneController.displayError("Unable to connect to the server");
 
             return false;
         }
@@ -141,5 +145,34 @@ public class SceneController
         alert.setHeaderText("Error");
         alert.setContentText(errorMessage);
         alert.show();
+    }
+
+    /**
+     * Display an alert with the given message and close the game.
+     * @param errorMessage to display.
+     */
+    public static void displayConnectionError(String errorMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error");
+        alert.setContentText(errorMessage);
+
+        // Terminate the application if the player closes the alert
+        alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
+            @Override
+            public void handle(DialogEvent e) {
+                System.exit(0);
+            }
+        });
+
+        // Terminate the application if the player presses OK
+        Platform.runLater(() ->
+                alert.showAndWait().ifPresent(response -> {
+                     if (response == ButtonType.OK) {
+                         System.exit(0);
+                     }
+                })
+        );
     }
 }

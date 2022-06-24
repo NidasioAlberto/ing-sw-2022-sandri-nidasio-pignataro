@@ -423,6 +423,12 @@ public class GameView extends Application implements Visualizable
         updateCameraView();
     }
 
+    @Override
+    public void displayConnectionError(ErrorAnswer answer)
+    {
+        updatesHandler.subscribeUpdate(() -> sceneController.displayConnectionError(answer.getErrorMessage()));
+    }
+
     private void createCollections()
     {
         setupLights();

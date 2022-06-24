@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
+import java.net.SocketException;
 import java.util.concurrent.Executors;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.commands.Command;
@@ -75,7 +76,11 @@ public class Client implements Runnable
                 outputStream.flush();
                 outputStream.reset();
             }
-        } catch (IOException e)
+        } catch (SocketException e)
+        {
+            // This exception is thrown when the server goes down
+            visualizer.displayConnectionError(new ErrorAnswer("The server is currently down, the match ends here."));
+        }catch (IOException e)
         {
             PrintHelper.printMessage("Error while writing: " + e.getMessage());
             stop();
@@ -92,6 +97,10 @@ public class Client implements Runnable
                 outputStream.flush();
                 outputStream.reset();
             }
+        }  catch (SocketException e)
+        {
+            // This exception is thrown when the server goes down
+            visualizer.displayConnectionError(new ErrorAnswer("The server is currently down, the match ends here."));
         } catch (IOException e)
         {
             PrintHelper.printMessage("Error while writing: " + e.getMessage());
@@ -138,24 +147,26 @@ public class Client implements Runnable
                 }
         });
 
-        try
-        {
-            while (isActive())
-            {
+        try {
+            while (isActive()) {
                 Object input = inputStream.readObject();
 
                 // Updates
                 if (input instanceof ModelUpdate)
                     ((ModelUpdate) input).handleUpdate(visualizer);
 
-                // Answers
+                    // Answers
                 else if (input instanceof Answer)
                     ((Answer) input).handleAnswer(visualizer);
 
-                // Unrecognized
+                    // Unrecognized
                 else
                     visualizer.displayError(new ErrorAnswer("[Client] Unable to recognize the received object: " + input.getClass().getName()));
             }
+        } catch (SocketException e)
+        {
+            // This exception is thrown when the server goes down
+            visualizer.displayConnectionError(new ErrorAnswer("The server is currently down, the match ends here."));
         } catch (IOException e)
         {
             visualizer.displayError(new ErrorAnswer("[Client] Error while reading an object: " + e.getMessage()));
