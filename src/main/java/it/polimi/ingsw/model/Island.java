@@ -265,8 +265,9 @@ public class Island implements Serializable
     {
         if (getNoEntryTiles() == 0)
             return "  ";
+        // Print red noEntryTiles
         else
-            return getNoEntryTiles() + GamePieces.NO_ENTRY_TILE.toString();
+            return getNoEntryTiles() + "\u001B[31m" + GamePieces.NO_ENTRY_TILE + "\u001B[97m";
     }
 
     /**
@@ -278,12 +279,12 @@ public class Island implements Serializable
         String rep = "";
 
         rep += "  ______ " + PrintHelper.moveCursorRelative(-1, -9);
-        rep += " ╱" + drawStudentsNumber(SchoolColor.BLUE) + " " + drawStudentsNumber(SchoolColor.GREEN) + " ╲"
+        rep += " " + GamePieces.SLASH + drawStudentsNumber(SchoolColor.BLUE) + " " + drawStudentsNumber(SchoolColor.GREEN) + " " + GamePieces.BACKSLASH
                 + PrintHelper.moveCursorRelative(-1, -9);
-        rep += "╱" + drawStudentsNumber(SchoolColor.PINK) + " " + drawStudentsNumber(SchoolColor.RED) + " " + drawStudentsNumber(SchoolColor.YELLOW)
-                + "╲" + PrintHelper.moveCursorRelative(-1, -10);
-        rep += "╲" + drawTowers() + " " + drawNoEntryTiles() + "   ╱" + PrintHelper.moveCursorRelative(-1, -10);
-        rep += " ╲______╱ ";
+        rep += GamePieces.SLASH + drawStudentsNumber(SchoolColor.PINK) + " " + drawStudentsNumber(SchoolColor.RED) + " " + drawStudentsNumber(SchoolColor.YELLOW)
+                + GamePieces.BACKSLASH + PrintHelper.moveCursorRelative(-1, -10);
+        rep += GamePieces.BACKSLASH + drawTowers() + " " + drawNoEntryTiles() + "   "+ GamePieces.SLASH + PrintHelper.moveCursorRelative(-1, -10);
+        rep += " " + GamePieces.BACKSLASH + "______" + GamePieces.SLASH + " ";
 
         return rep;
     }

@@ -175,7 +175,8 @@ public class GrandmaHerbs extends CharacterCard
     {
         String rep = super.toString();
 
-        rep += PrintHelper.moveCursorRelative(2, -6) + noEntryTiles + GamePieces.NO_ENTRY_TILE;
+        // Print red noEntryTiles
+        rep += PrintHelper.moveCursorRelative(2, -6) + noEntryTiles + "\u001B[31m" + GamePieces.NO_ENTRY_TILE + "\u001B[97m";
         rep += PrintHelper.moveCursorRelative(-2, 4);
 
         return rep;

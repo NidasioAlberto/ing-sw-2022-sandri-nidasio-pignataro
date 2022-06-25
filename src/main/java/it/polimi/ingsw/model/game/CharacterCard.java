@@ -476,13 +476,16 @@ public abstract class CharacterCard extends Game implements Serializable
         rep += paintIfActive(this, getCardType().toString());
         rep += PrintHelper.moveCursorRelative(-1, -getCardType().toString().length());
 
-        rep += paintIfActive(this, "┏━━━━━━━┓") + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, "┃  " + GamePieces.COINS_MARKER + getCost() + "   ┃") + PrintHelper.moveCursorRelative(-1, -9);
-        // rep += "║ " + coinsSign[card.getCost() - 1] + " ║ ";
-        rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, "┃       ┃") + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, "┗━━━━━━━┛");
+        rep += paintIfActive(this, "" + GamePieces.TOP_LEFT_CORNER + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
+                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
+                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.TOP_RIGHT_CORNER) + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "  " + GamePieces.COINS_MARKER + getCost() + "   " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, "" + GamePieces.BOTTOM_LEFT_CORNER + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
+                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
+                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.BOTTOM_RIGHT_CORNER);
 
         return rep;
     }

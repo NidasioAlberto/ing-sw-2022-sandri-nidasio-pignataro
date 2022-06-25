@@ -97,10 +97,10 @@ public class IslandsUpdate extends ModelUpdate
             rep += PrintHelper.moveCursorRelative(4, 2);
         }
 
-        // Draw mother nature
+        // Draw colored mother nature
         rep += PrintHelper.moveToBeginningOfLine(-3);
         rep += PrintHelper.moveCursorRelative(0, 9 + motherNatureIndex * 12);
-        rep += GamePieces.MOTHER_NATURE.toString();
+        rep += "\u001B[38;5;214m" + GamePieces.MOTHER_NATURE.toString() + "\u001B[97m";
         rep += PrintHelper.moveToBeginningOfLine(-2);
 
         return rep;

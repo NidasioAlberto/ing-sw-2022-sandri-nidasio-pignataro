@@ -78,14 +78,14 @@ public class SchoolBoardUpdate extends ModelUpdate
         for (int i = 0; i < 18 - player.length(); i++)
             rep += "═";
 
-        rep += "╤═╦════╗";
+        rep += "╦═╦════╗";
 
         return rep;
     }
 
     private String drawBottomRow()
     {
-        return "╚═══╩═══════════════════╧═╩════╝";
+        return "╚═══╩═══════════════════╩═╩════╝";
     }
 
     private String drawStudent(int index)
@@ -143,15 +143,15 @@ public class SchoolBoardUpdate extends ModelUpdate
         String rep = "";
 
         rep += drawTopRow() + PrintHelper.moveCursorRelative(-1, -32);
-        rep += "║  " + drawStudent(0) + "║" + drawDiningRoom(SchoolColor.GREEN) + "│" + drawProfessor(SchoolColor.GREEN) + "║"
+        rep += "║  " + drawStudent(0) + "║" + drawDiningRoom(SchoolColor.GREEN) + "║" + drawProfessor(SchoolColor.GREEN) + "║"
                 + drawTower(0) + "  " + drawTower(1) + "║" + PrintHelper.moveCursorRelative(-1, -32);
-        rep += "║" + drawStudent(1) + " " + drawStudent(2) + "║" + drawDiningRoom(SchoolColor.RED) + "│" + drawProfessor(SchoolColor.RED) + "║"
+        rep += "║" + drawStudent(1) + " " + drawStudent(2) + "║" + drawDiningRoom(SchoolColor.RED) + "║" + drawProfessor(SchoolColor.RED) + "║"
                 + drawTower(2) + "  " + drawTower(3) + "║" + PrintHelper.moveCursorRelative(-1, -32);
-        rep += "║" + drawStudent(3) + " " + drawStudent(4) + "║" + drawDiningRoom(SchoolColor.YELLOW) + "│" + drawProfessor(SchoolColor.YELLOW) + "║"
+        rep += "║" + drawStudent(3) + " " + drawStudent(4) + "║" + drawDiningRoom(SchoolColor.YELLOW) + "║" + drawProfessor(SchoolColor.YELLOW) + "║"
                 + drawTower(4) + "  " + drawTower(5) + "║" + PrintHelper.moveCursorRelative(-1, -32);
-        rep += "║" + drawStudent(5) + " " + drawStudent(6) + "║" + drawDiningRoom(SchoolColor.PINK) + "│" + drawProfessor(SchoolColor.PINK) + "║"
+        rep += "║" + drawStudent(5) + " " + drawStudent(6) + "║" + drawDiningRoom(SchoolColor.PINK) + "║" + drawProfessor(SchoolColor.PINK) + "║"
                 + drawTower(6) + "  " + drawTower(7) + "║" + PrintHelper.moveCursorRelative(-1, -32);
-        rep += "║" + drawStudent(7) + " " + drawStudent(8) + "║" + drawDiningRoom(SchoolColor.BLUE) + "│" + drawProfessor(SchoolColor.BLUE) + "║    ║"
+        rep += "║" + drawStudent(7) + " " + drawStudent(8) + "║" + drawDiningRoom(SchoolColor.BLUE) + "║" + drawProfessor(SchoolColor.BLUE) + "║    ║"
                 + PrintHelper.moveCursorRelative(-1, -32);
         rep += drawBottomRow();
 
@@ -174,15 +174,15 @@ public class SchoolBoardUpdate extends ModelUpdate
         String rep = "";
 
         rep += ACTIVE + drawTopRow() + PrintHelper.moveCursorRelative(-1, -32) + DEACTIVE;
-        rep += ACTIVE + "║" + DEACTIVE + "  " + drawStudent(0) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.GREEN) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.GREEN) + ACTIVE + "║" + DEACTIVE
+        rep += ACTIVE + "║" + DEACTIVE + "  " + drawStudent(0) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.GREEN) + ACTIVE + "║" + DEACTIVE + drawProfessor(SchoolColor.GREEN) + ACTIVE + "║" + DEACTIVE
                 + drawTower(0) + "  " + drawTower(1) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
-        rep += ACTIVE + "║" + DEACTIVE + drawStudent(1) + " " + drawStudent(2) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.RED) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.RED) + ACTIVE + "║" + DEACTIVE
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(1) + " " + drawStudent(2) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.RED) + ACTIVE + "║" + DEACTIVE + drawProfessor(SchoolColor.RED) + ACTIVE + "║" + DEACTIVE
                 + drawTower(2) + "  " + drawTower(3) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
-        rep += ACTIVE + "║"  + DEACTIVE+ drawStudent(3) + " " + drawStudent(4) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.YELLOW) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.YELLOW) + ACTIVE + "║" + DEACTIVE
+        rep += ACTIVE + "║"  + DEACTIVE+ drawStudent(3) + " " + drawStudent(4) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.YELLOW) + ACTIVE + "║" + DEACTIVE + drawProfessor(SchoolColor.YELLOW) + ACTIVE + "║" + DEACTIVE
                 + drawTower(4) + "  " + drawTower(5) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
-        rep += ACTIVE + "║" + DEACTIVE + drawStudent(5) + " " + drawStudent(6) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.PINK) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.PINK) + ACTIVE + "║" + DEACTIVE
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(5) + " " + drawStudent(6) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.PINK) + ACTIVE + "║" + DEACTIVE + drawProfessor(SchoolColor.PINK) + ACTIVE + "║" + DEACTIVE
                 + drawTower(6) + "  " + drawTower(7) + ACTIVE + "║" + DEACTIVE + PrintHelper.moveCursorRelative(-1, -32);
-        rep += ACTIVE + "║" + DEACTIVE + drawStudent(7) + " " + drawStudent(8) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.BLUE) + ACTIVE + "│" + DEACTIVE + drawProfessor(SchoolColor.BLUE) + ACTIVE + "║    ║" + DEACTIVE
+        rep += ACTIVE + "║" + DEACTIVE + drawStudent(7) + " " + drawStudent(8) + ACTIVE + "║" + DEACTIVE + drawDiningRoom(SchoolColor.BLUE) + ACTIVE + "║" + DEACTIVE + drawProfessor(SchoolColor.BLUE) + ACTIVE + "║    ║" + DEACTIVE
                 + PrintHelper.moveCursorRelative(-1, -32);
         rep += ACTIVE + drawBottomRow() + DEACTIVE;
 
