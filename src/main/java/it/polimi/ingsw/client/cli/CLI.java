@@ -74,7 +74,7 @@ public class CLI implements Visualizable, Runnable
         {
             try
             {
-                PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print("Insert the server's IP: ");
                 String ip = scanner.nextLine();
                 PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Insert the server's port: ");
@@ -131,7 +131,7 @@ public class CLI implements Visualizable, Runnable
 
     public void choosePacket(Scanner scanner) throws IOException
     {
-        PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
         msg += "Choose between:\n";
         msg += "\t1 - Commands\n";
@@ -157,7 +157,7 @@ public class CLI implements Visualizable, Runnable
 
     public void chooseCommand(Scanner scanner) throws IOException
     {
-        PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = "";
         msg += "Choose between:\n";
         msg += "\t1 - Set name\n";
@@ -190,7 +190,7 @@ public class CLI implements Visualizable, Runnable
                 GameMode gameMode = GameMode.valueOf(scanner.nextLine());
                 PrintHelper.print("Players number [2-3]: ");
                 int playersNumber = Integer.parseInt(scanner.nextLine());
-                PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+                PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 client.sendCommand(new CreateMatchCommand(matchId, playersNumber, gameMode));
                 break;
             }
@@ -204,7 +204,7 @@ public class CLI implements Visualizable, Runnable
             {
                 PrintHelper.print("Match name: ");
                 String matchId = scanner.nextLine();
-                PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+                PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 client.sendCommand(new JoinMatchCommand(matchId));
                 break;
             }
@@ -240,7 +240,7 @@ public class CLI implements Visualizable, Runnable
         msg += "\t8 - Character card action\n";
         msg += "\t9 - Character cards effects\n";
         msg += "\t10 - Quit match\n";
-        PrintHelper.printM(26, 2, msg);
+        PrintHelper.printAbsolute(26, 2, msg);
 
         // I need this when the match ends
         String strChoice = scanner.nextLine();
@@ -252,7 +252,7 @@ public class CLI implements Visualizable, Runnable
         {
             case 1:
             {
-                PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.moveCursorRelative(0, 1);
                 PrintHelper.print("Selected card:\n");
                 int selectedCard = Integer.parseInt(scanner.nextLine());
@@ -280,7 +280,7 @@ public class CLI implements Visualizable, Runnable
             }
             case 5:
             {
-                PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.moveCursorRelative(0, 1);
                 PrintHelper.print("Select cloud tile:\n");
                 int selectedCloudTile = Integer.parseInt(scanner.nextLine());
@@ -294,7 +294,7 @@ public class CLI implements Visualizable, Runnable
             }
             case 7:
             {
-                PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.moveCursorRelative(0, 1);
                 PrintHelper.print("Selected character card:\n");
                 int selectedCharacterCard = Integer.parseInt(scanner.nextLine());
@@ -303,7 +303,7 @@ public class CLI implements Visualizable, Runnable
             }
             case 8:
             {
-                PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print("If you don't have to select an island nor colors choose 'Base action'\n");
                 PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Expert game action:\n");
                 for (int i = 0; i < ExpertGameAction.values().length; i++)
@@ -311,18 +311,18 @@ public class CLI implements Visualizable, Runnable
                 int action = Integer.parseInt(scanner.nextLine());
                 if (action < 0 || action >= ExpertGameAction.values().length)
                     break;
-                PrintHelper.printMR(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
-                PrintHelper.printMR(26, 2, "If you don't need to select an island just type '0'\n");
+                PrintHelper.printAbsoluteAndReset(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsoluteAndReset(26, 2, "If you don't need to select an island just type '0'\n");
                 int selectedIsland = selectIsland(scanner);
-                PrintHelper.printMR(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
-                PrintHelper.printMR(26, 2, "If you don't need to select a color just type '0'\n");
+                PrintHelper.printAbsoluteAndReset(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsoluteAndReset(26, 2, "If you don't need to select a color just type '0'\n");
                 List<SchoolColor> selectedColors = chooseSchoolColors(scanner);
                 client.sendAction(new CharacterCardActionMessage(ExpertGameAction.values()[action], selectedIsland, selectedColors));
                 break;
             }
             case 9:
             {
-                PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print(characterCardsEffects());
                 PrintHelper.print("\nPress enter when you are done\n");
                 scanner.nextLine();
@@ -330,13 +330,13 @@ public class CLI implements Visualizable, Runnable
             }
             case 10:
             {
-                PrintHelper.printM(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+                PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
                 PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
                 if (scanner.nextLine().toUpperCase().equals("Y"))
                 {
                     isMatchStarted = false;
                     client.sendCommand(new QuitMatchCommand());
-                    PrintHelper.printMR(20, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+                    PrintHelper.printAbsoluteAndReset(20, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 }
                 break;
             }
@@ -358,7 +358,7 @@ public class CLI implements Visualizable, Runnable
 
     private SchoolColor selectSchoolColors(Scanner scanner)
     {
-        PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = PrintHelper.moveCursorRelative(0, 1);
         msg += "Choose a color:\n";
         for (int i = 0; i < SchoolColor.values().length; i++)
@@ -370,7 +370,7 @@ public class CLI implements Visualizable, Runnable
 
     private int selectIsland(Scanner scanner)
     {
-        PrintHelper.printM(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
+        PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
         String msg = PrintHelper.moveCursorRelative(0, 1);
         msg += "Select island:\n";
         PrintHelper.print(msg);
@@ -417,29 +417,30 @@ public class CLI implements Visualizable, Runnable
 
     private void printTitle(int row, int column)
     {
-        PrintHelper.printMR(row, column, " ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄ ");
-        PrintHelper.printMR(row + 1, column,
+        PrintHelper.printAbsoluteAndReset(row, column,
+                " ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄ ");
+        PrintHelper.printAbsoluteAndReset(row + 1, column,
                 "▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░▌      ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌");
-        PrintHelper.printMR(row + 2, column,
+        PrintHelper.printAbsoluteAndReset(row + 2, column,
                 "▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌ ▀▀▀▀█░█▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌▐░▌░▌     ▐░▌ ▀▀▀▀█░█▀▀▀▀ ▐░▌       ▐░▌▐░█▀▀▀▀▀▀▀▀▀ ");
-        PrintHelper.printMR(row + 3, column,
+        PrintHelper.printAbsoluteAndReset(row + 3, column,
                 "▐░▌          ▐░▌       ▐░▌     ▐░▌     ▐░▌       ▐░▌▐░▌▐░▌    ▐░▌     ▐░▌     ▐░▌       ▐░▌▐░▌          ");
-        PrintHelper.printMR(row + 4, column,
+        PrintHelper.printAbsoluteAndReset(row + 4, column,
                 "▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌▐░▌ ▐░▌   ▐░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄▄▄ ");
-        PrintHelper.printMR(row + 5, column,
+        PrintHelper.printAbsoluteAndReset(row + 5, column,
                 "▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░▌  ▐░▌  ▐░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌");
-        PrintHelper.printMR(row + 6, column,
+        PrintHelper.printAbsoluteAndReset(row + 6, column,
                 "▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀█░█▀▀      ▐░▌     ▐░█▀▀▀▀▀▀▀█░▌▐░▌   ▐░▌ ▐░▌     ▐░▌      ▀▀▀▀█░█▀▀▀▀  ▀▀▀▀▀▀▀▀▀█░▌");
-        PrintHelper.printMR(row + 7, column,
+        PrintHelper.printAbsoluteAndReset(row + 7, column,
                 "▐░▌          ▐░▌     ▐░▌       ▐░▌     ▐░▌       ▐░▌▐░▌    ▐░▌▐░▌     ▐░▌          ▐░▌               ▐░▌");
-        PrintHelper.printMR(row + 8, column,
+        PrintHelper.printAbsoluteAndReset(row + 8, column,
                 "▐░█▄▄▄▄▄▄▄▄▄ ▐░▌      ▐░▌  ▄▄▄▄█░█▄▄▄▄ ▐░▌       ▐░▌▐░▌     ▐░▐░▌     ▐░▌          ▐░▌      ▄▄▄▄▄▄▄▄▄█░▌");
-        PrintHelper.printMR(row + 9, column,
+        PrintHelper.printAbsoluteAndReset(row + 9, column,
                 "▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░▌      ▐░░▌     ▐░▌          ▐░▌     ▐░░░░░░░░░░░▌");
-        PrintHelper.printMR(row + 10, column,
+        PrintHelper.printAbsoluteAndReset(row + 10, column,
                 " ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀        ▀▀       ▀            ▀       ▀▀▀▀▀▀▀▀▀▀▀ ");
-        PrintHelper.printMR(row + 11, column, "Authors: Alberto Nidasio, Matteo Pignataro, Alberto Sandri");
-        PrintHelper.printMR(row + 12, column, "Original site with rules: https://craniointernational.com/products/eriantys/");
+        PrintHelper.printAbsoluteAndReset(row + 11, column, "Authors: Alberto Nidasio, Matteo Pignataro, Alberto Sandri");
+        PrintHelper.printAbsoluteAndReset(row + 12, column, "Original site with rules: https://craniointernational.com/products/eriantys/");
     }
 
     // Updates
@@ -450,7 +451,7 @@ public class CLI implements Visualizable, Runnable
         if (update != null)
         {
             assistantCards = update;
-            PrintHelper.printMR(7, 25, update.toString());
+            PrintHelper.printAbsoluteAndReset(7, 25, update.toString());
         }
     }
 
@@ -464,7 +465,7 @@ public class CLI implements Visualizable, Runnable
         if (update != null)
         {
             characterCards = update;
-            PrintHelper.printMR(12, 2 + 33 * players.size() + 1, update.toString());
+            PrintHelper.printAbsoluteAndReset(12, 2 + 33 * players.size() + 1, update.toString());
         }
     }
 
@@ -474,7 +475,7 @@ public class CLI implements Visualizable, Runnable
         if (update != null)
         {
             cloudTiles = update;
-            PrintHelper.printMR(7, 2, update.toString());
+            PrintHelper.printAbsoluteAndReset(7, 2, update.toString());
         }
     }
 
@@ -484,7 +485,7 @@ public class CLI implements Visualizable, Runnable
         if (update != null)
         {
             islands = update;
-            PrintHelper.printMR(1, 2, update.toString());
+            PrintHelper.printAbsoluteAndReset(1, 2, update.toString());
         }
     }
 
@@ -502,7 +503,7 @@ public class CLI implements Visualizable, Runnable
                 playedAssistantCards.put(players.get(update.getPlayer()), update);
             }
 
-            PrintHelper.printMR(19, 2 + 33 * players.get(update.getPlayer()), update.toString());
+            PrintHelper.printAbsoluteAndReset(19, 2 + 33 * players.get(update.getPlayer()), update.toString());
         }
     }
 
@@ -521,8 +522,9 @@ public class CLI implements Visualizable, Runnable
 
             for (Integer playerIndex : schoolBoards.keySet())
                 if (schoolBoards.get(playerIndex) != null)
-                    PrintHelper.printMR(12, 2 + 33 * playerIndex, (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
-                            : schoolBoards.get(playerIndex).toString()));
+                    PrintHelper.printAbsoluteAndReset(12, 2 + 33 * playerIndex,
+                            (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
+                                    : schoolBoards.get(playerIndex).toString()));
         }
     }
 
@@ -543,7 +545,8 @@ public class CLI implements Visualizable, Runnable
                 {
                     if (name.equals(currentName))
                         PrintHelper.printMessage("It's your turn");
-                    else PrintHelper.printMessage("It's " + currentName + "'s turn");
+                    else
+                        PrintHelper.printMessage("It's " + currentName + "'s turn");
                     break;
                 }
 
@@ -557,7 +560,7 @@ public class CLI implements Visualizable, Runnable
     @Override
     public void displayEndMatch(EndMatchAnswer answer)
     {
-        PrintHelper.printMessage(answer.toString()  +  PrintHelper.moveCursorAbsolute(23,2) + "Press enter to choose a command");
+        PrintHelper.printMessage(answer.toString() + PrintHelper.moveCursorAbsolute(23, 2) + "Press enter to choose a command");
         displayBoard();
         clear();
     }
@@ -578,14 +581,14 @@ public class CLI implements Visualizable, Runnable
     public void displayMatchesList(MatchesListAnswer answer)
     {
         // Clear the screen
-        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
         printTitle(2, 2);
 
         matchesList = answer;
 
         if (!isMatchStarted)
         {
-            PrintHelper.printMR(15, 2, "Matches list:");
+            PrintHelper.printAbsoluteAndReset(15, 2, "Matches list:");
             int counter = 0;
 
             // Create the string with all the matches
@@ -594,7 +597,7 @@ public class CLI implements Visualizable, Runnable
                 counter++;
 
                 if (counter <= 8)
-                    PrintHelper.printMR(15 + counter, 2, matchesList.singleMatchToString(key));
+                    PrintHelper.printAbsoluteAndReset(15 + counter, 2, matchesList.singleMatchToString(key));
             }
         }
     }
@@ -608,7 +611,7 @@ public class CLI implements Visualizable, Runnable
         int counter = 0;
 
         // Clear all the terminal above the area where error are displayed
-        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
 
         // Create the string with all the matches
         for (String key : matchesList.getNumPlayers().keySet())
@@ -621,20 +624,20 @@ public class CLI implements Visualizable, Runnable
             if (counter % 20 == 19 && counter != matchesList.getNumPlayers().size())
             {
                 msg += "To see other matches type 'Y'\n";
-                PrintHelper.printMR(1, 2, msg);
+                PrintHelper.printAbsoluteAndReset(1, 2, msg);
                 if (scanner.nextLine().toUpperCase().equals("Y"))
                 {
                     msg = "";
-                    PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+                    PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
                 } else
                     break;
             }
         }
 
         // At the end I print again the list of matches, it is necessary when there are less than 20 matches
-        PrintHelper.printMR(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
-        PrintHelper.printMR(1, 2, msg);
-        PrintHelper.printMR(21, 1, PrintHelper.ERASE_ENTIRE_LINE);
+        PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printAbsoluteAndReset(1, 2, msg);
+        PrintHelper.printAbsoluteAndReset(21, 1, PrintHelper.ERASE_ENTIRE_LINE);
     }
 
     @Override
@@ -650,7 +653,7 @@ public class CLI implements Visualizable, Runnable
         if (!isMatchStarted)
         {
             isMatchStarted = true;
-            PrintHelper.printMessage(answer.toString()  +  PrintHelper.moveCursorAbsolute(23,2) + "Press enter to play an action");
+            PrintHelper.printMessage(answer.toString() + PrintHelper.moveCursorAbsolute(23, 2) + "Press enter to play an action");
 
             if (answer.getPlayers().size() != 0)
                 players = answer.getPlayers();
@@ -679,28 +682,29 @@ public class CLI implements Visualizable, Runnable
     private void displayBoard()
     {
         // Clear the area
-        PrintHelper.printMR(20, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+        PrintHelper.printAbsoluteAndReset(20, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
 
         if (assistantCards != null)
-            PrintHelper.printMR(7, 25, assistantCards.toString());
+            PrintHelper.printAbsoluteAndReset(7, 25, assistantCards.toString());
 
         if (characterCards != null)
-            PrintHelper.printMR(12, 2 + 33 * players.size() + 1, characterCards.toString());
+            PrintHelper.printAbsoluteAndReset(12, 2 + 33 * players.size() + 1, characterCards.toString());
 
         if (cloudTiles != null)
-            PrintHelper.printMR(7, 2, cloudTiles.toString());
+            PrintHelper.printAbsoluteAndReset(7, 2, cloudTiles.toString());
 
         if (islands != null)
-            PrintHelper.printMR(1, 2, islands.toString());
+            PrintHelper.printAbsoluteAndReset(1, 2, islands.toString());
 
         for (Integer playerIndex : playedAssistantCards.keySet())
             if (playerIndex != null && playedAssistantCards.get(playerIndex) != null)
-                PrintHelper.printMR(19, 2 + 33 * playerIndex, playedAssistantCards.get(playerIndex).toString());
+                PrintHelper.printAbsoluteAndReset(19, 2 + 33 * playerIndex, playedAssistantCards.get(playerIndex).toString());
 
         for (Integer playerIndex : schoolBoards.keySet())
             if (playerIndex != null && schoolBoards.get(playerIndex) != null)
-                PrintHelper.printMR(12, 2 + 33 * playerIndex, (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
-                        : schoolBoards.get(playerIndex).toString()));
+                PrintHelper.printAbsoluteAndReset(12, 2 + 33 * playerIndex,
+                        (playerIndex == currentPlayerIndex ? schoolBoards.get(playerIndex).toStringActive()
+                                : schoolBoards.get(playerIndex).toString()));
     }
 
     /**

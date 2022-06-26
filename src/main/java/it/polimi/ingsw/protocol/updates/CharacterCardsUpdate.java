@@ -107,8 +107,8 @@ public class CharacterCardsUpdate extends ModelUpdate
         game.getSelectedPlayer().get().getBoard().addCoins(5);
         game.getCharacterCards().get(1).activate();
 
-        PrintHelper.printM(0,2, PrintHelper.ERASE_ENTIRE_SCREEN + update);
+        PrintHelper.printAbsolute(0, 2, PrintHelper.ERASE_ENTIRE_SCREEN + update);
 
-        PrintHelper.printM(20,2, update1.toString());
+        PrintHelper.printAbsolute(20, 2, update1.toString());
     }
 }

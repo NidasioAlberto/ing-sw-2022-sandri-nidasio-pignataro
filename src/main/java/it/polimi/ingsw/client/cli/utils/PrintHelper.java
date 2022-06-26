@@ -15,6 +15,9 @@ public class PrintHelper
 
     static public String ERASE_ENTIRE_LINE = "\u001B[2K";
 
+    /**
+     * Returns the given string with the color specified.
+     */
     static public String drawColor(SchoolColor color, String content)
     {
         String rep = "\u001B[";
@@ -46,6 +49,9 @@ public class PrintHelper
         return rep;
     }
 
+    /**
+     * Returns the given string with the color specified.
+     */
     static public String drawColor(TowerColor color, String content)
     {
         String rep = "\u001B[38;5;";
@@ -71,6 +77,9 @@ public class PrintHelper
         return rep;
     }
 
+    /**
+     * Returns the student number nicely formatted.
+     */
     static public String drawStudentsNumber(int count, SchoolColor color)
     {
         if (count == 0)
@@ -102,6 +111,9 @@ public class PrintHelper
         return movement;
     }
 
+    /**
+     * Move the cursor to an absolute position.
+     */
     static public String moveCursorAbsolute(int row, int column)
     {
         String movement = "";
@@ -111,6 +123,9 @@ public class PrintHelper
         return movement;
     }
 
+    /**
+     * Moves the cursor to the beginning of the specified line moving relatively.
+     */
     static public String moveToBeginningOfLine(int up)
     {
         if (up > 0)
@@ -121,12 +136,31 @@ public class PrintHelper
             return "";
     }
 
+    /**
+     * Saves the cursor current position.
+     */
+    static public String savePosition()
+    {
+        return "\u001B[s";
+    }
+
+    /**
+     * Restores the last saved current position.
+     */
+    static public String restorePosition()
+    {
+        return "\u001B[u";
+    }
+
     static public synchronized void print(String msg)
     {
         System.out.print(msg);
     }
 
-    static public void printM(int row, int column, String msg)
+    /**
+     * Moves to the given absolute position and prints the message.
+     */
+    static public void printAbsolute(int row, int column, String msg)
     {
         String toPrint = "";
 
@@ -139,12 +173,15 @@ public class PrintHelper
         print(toPrint);
     }
 
-    static public void printMR(int row, int column, String msg)
+    /**
+     * Moves to the given absolute position, prints the message and then resets the cursor position.
+     */
+    static public void printAbsoluteAndReset(int row, int column, String msg)
     {
         String toPrint = "";
 
         // Save the cursor position
-        toPrint += "\u001B[s";
+        toPrint += savePosition();
 
         // Move the cursor
         toPrint += moveCursorAbsolute(row, column);
@@ -153,13 +190,51 @@ public class PrintHelper
         toPrint += msg;
 
         // Restore cursor position
-        toPrint += "\u001B[u";
+        toPrint += restorePosition();
+
+        print(toPrint);
+    }
+
+    /**
+     * Moves to the given relative position and prints the message.
+     */
+    static public void printRelative(int row, int column, String msg)
+    {
+        String toPrint = "";
+
+        // Move the cursor
+        toPrint += moveCursorRelative(row, column);
+
+        // Print the message
+        toPrint += msg;
+
+        print(toPrint);
+    }
+
+    /**
+     * Moves to the given relative position, prints the message and then resets the cursor position.
+     */
+    static public void printRelativeAndReset(int row, int column, String msg)
+    {
+        String toPrint = "";
+
+        // Save the cursor position
+        toPrint += savePosition();
+
+        // Move the cursor
+        toPrint += moveCursorRelative(row, column);
+
+        // Print the message
+        toPrint += msg;
+
+        // Restore cursor position
+        toPrint += restorePosition();
 
         print(toPrint);
     }
 
     static public void printMessage(String error)
     {
-        printMR(24, 2, moveCursorRelative(-1, 0) + ERASE_ENTIRE_LINE + moveCursorRelative(1, 0) + ERASE_ENTIRE_LINE + error);
+        printAbsoluteAndReset(24, 2, moveCursorRelative(-1, 0) + ERASE_ENTIRE_LINE + moveCursorRelative(1, 0) + ERASE_ENTIRE_LINE + error);
     }
 }

@@ -476,16 +476,24 @@ public abstract class CharacterCard extends Game implements Serializable
         rep += paintIfActive(this, getCardType().toString());
         rep += PrintHelper.moveCursorRelative(-1, -getCardType().toString().length());
 
-        rep += paintIfActive(this, "" + GamePieces.TOP_LEFT_CORNER + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
-                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
-                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.TOP_RIGHT_CORNER) + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "  " + GamePieces.COINS_MARKER + getCost() + "   " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this,
+                "" + GamePieces.TOP_LEFT_CORNER + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE
+                        + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE
+                        + GamePieces.TOP_RIGHT_CORNER)
+                + PrintHelper.moveCursorRelative(-1, -9);
+        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
+
+        // Print the COINS MARKER character, on Unix it occupies 2 characters
+        rep += PrintHelper.savePosition() + PrintHelper.moveCursorRelative(1, 3) + GamePieces.COINS_MARKER + getCost()
+                + PrintHelper.restorePosition();
+
         rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
         rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
         rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, "" + GamePieces.BOTTOM_LEFT_CORNER + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
-                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE +
-                GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.BOTTOM_RIGHT_CORNER);
+        rep += paintIfActive(this,
+                "" + GamePieces.BOTTOM_LEFT_CORNER + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE
+                        + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE
+                        + GamePieces.BOTTOM_RIGHT_CORNER);
 
         return rep;
     }
