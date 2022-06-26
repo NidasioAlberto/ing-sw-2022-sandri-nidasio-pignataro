@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
+import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
@@ -65,6 +66,13 @@ public class GameView extends Application implements Visualizable
     private DrawableCharacterCardCollection characterCardCollection;
     private DrawableErrorMessage errorMessage;
     private DrawableIndex index;
+
+    // Selectable students
+    private DrawableStudent redSelectableStudent;
+    private DrawableStudent greenSelectableStudent;
+    private DrawableStudent blueSelectableStudent;
+    private DrawableStudent pinkSelectableStudent;
+    private DrawableStudent yellowSelectableStudent;
 
     /**
      * Client which calls the visualizable methods
@@ -379,8 +387,8 @@ public class GameView extends Application implements Visualizable
                 errorMessage.addAnimationPosition(new Point3D(300, 0, -110), 30);
             });
             // System.out.println(answer.getErrorMessage());
-        }
-        else updatesHandler.subscribeUpdate(() -> sceneController.displayError(answer.getErrorMessage()));
+        } else
+            updatesHandler.subscribeUpdate(() -> sceneController.displayError(answer.getErrorMessage()));
     }
 
     @Override
@@ -446,6 +454,11 @@ public class GameView extends Application implements Visualizable
         schoolBoardCollection = new DrawableSchoolBoardCollection(350, playerName, pointLight, ambientLight, group, updater);
         characterCardCollection = new DrawableCharacterCardCollection(60, pointLight, ambientLight, group, updater);
         errorMessage = new DrawableErrorMessage(CAMERA_ANGLE, 400, updater);
+        redSelectableStudent = new DrawableStudent(StudentType.RED, updater);
+        greenSelectableStudent = new DrawableStudent(StudentType.GREEN, updater);
+        blueSelectableStudent = new DrawableStudent(StudentType.BLUE, updater);
+        pinkSelectableStudent = new DrawableStudent(StudentType.PINK, updater);
+        yellowSelectableStudent = new DrawableStudent(StudentType.YELLOW, updater);
 
         // Add the index to group and light
         index.addToGroup(group);
@@ -455,6 +468,18 @@ public class GameView extends Application implements Visualizable
         errorMessage.addToGroup(group);
         errorMessage.subscribeToAmbientLight(ambientLight);
 
+        // Add to group and light selectable students
+        redSelectableStudent.addToGroup(group);
+        redSelectableStudent.subscribeToPointLight(pointLight);
+        greenSelectableStudent.addToGroup(group);
+        greenSelectableStudent.subscribeToPointLight(pointLight);
+        blueSelectableStudent.addToGroup(group);
+        blueSelectableStudent.subscribeToPointLight(pointLight);
+        pinkSelectableStudent.addToGroup(group);
+        pinkSelectableStudent.subscribeToPointLight(pointLight);
+        yellowSelectableStudent.addToGroup(group);
+        yellowSelectableStudent.subscribeToPointLight(pointLight);
+
         assistantCollection.translate(new Point3D(0, -10, -290));
         islandCollection.translate(new Point3D(0, 0, 150));
         cloudTileCollection.translate(new Point3D(0, 0, 200));
@@ -462,6 +487,20 @@ public class GameView extends Application implements Visualizable
         // X = 300 hidden, X=150 visible
         errorMessage.translate(new Point3D(300, 0, -110));
         index.translate(new Point3D(-650, 0, -25));
+
+        // Position the selectable students
+        redSelectableStudent.translate(new Point3D(-60, 0, 250));
+        greenSelectableStudent.translate(new Point3D(-30, 0, 250));
+        blueSelectableStudent.translate(new Point3D(0, 0, 250));
+        pinkSelectableStudent.translate(new Point3D(30, 0, 250));
+        yellowSelectableStudent.translate(new Point3D(60, 0, 250));
+
+        // Make the students not draggable
+        redSelectableStudent.setDraggable(false);
+        greenSelectableStudent.setDraggable(false);
+        blueSelectableStudent.setDraggable(false);
+        pinkSelectableStudent.setDraggable(false);
+        yellowSelectableStudent.setDraggable(false);
     }
 
     /**
