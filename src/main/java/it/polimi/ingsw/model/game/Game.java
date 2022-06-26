@@ -457,11 +457,11 @@ public class Game implements Publisher<ModelUpdate>
                 try
                 {
                     towersToAdd.forEach(t -> {
-                        // Remove the tower from the player's board
-                        influencer.getBoard().removeTower(t);
-
                         // Add the tower to the island
                         currentIsland.addTower(t);
+
+                        // Remove the tower from the player's board
+                        influencer.getBoard().removeTower(t);
                     });
                 } catch (EndGameException e)
                 {

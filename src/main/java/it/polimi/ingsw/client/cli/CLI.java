@@ -173,6 +173,9 @@ public class CLI implements Visualizable, Runnable
             return;
         int choice = Integer.parseInt(strChoice);
 
+        if (isMatchStarted)
+            return;
+
         switch (choice)
         {
             case 1:
@@ -247,6 +250,9 @@ public class CLI implements Visualizable, Runnable
         if (strChoice.equals(""))
             return;
         int choice = Integer.parseInt(strChoice);
+
+        if (!isMatchStarted)
+            return;
 
         switch (choice)
         {
@@ -415,7 +421,8 @@ public class CLI implements Visualizable, Runnable
         return rules;
     }
 
-    private void printTitle(int row, int column)
+    // This version doesn't work with Windows
+    private void printTitle2(int row, int column)
     {
         PrintHelper.printAbsoluteAndReset(row, column,
                 " ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄ ");
@@ -439,6 +446,35 @@ public class CLI implements Visualizable, Runnable
                 "▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░▌      ▐░░▌     ▐░▌          ▐░▌     ▐░░░░░░░░░░░▌");
         PrintHelper.printAbsoluteAndReset(row + 10, column,
                 " ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀        ▀▀       ▀            ▀       ▀▀▀▀▀▀▀▀▀▀▀ ");
+        PrintHelper.printAbsoluteAndReset(row + 11, column, "Authors: Alberto Nidasio, Matteo Pignataro, Alberto Sandri");
+        PrintHelper.printAbsoluteAndReset(row + 12, column, "Original site with rules: https://craniointernational.com/products/eriantys/");
+    }
+
+    // This version works for all OS
+    private void printTitle(int row, int column)
+    {
+        PrintHelper.printAbsoluteAndReset(row, column,
+                " ▄▄▄▄▄▄▄▄▄▄▄   ▄▄▄▄▄▄▄▄▄▄▄   ▄▄▄▄▄▄▄▄▄▄▄   ▄▄▄▄▄▄▄▄▄▄▄   ▄▄        ▄   ▄▄▄▄▄▄▄▄▄▄▄   ▄         ▄   ▄▄▄▄▄▄▄▄▄▄▄ ");
+        PrintHelper.printAbsoluteAndReset(row + 1, column,
+                "█░░░░░░░░░░░█ █░░░░░░░░░░░█ █░░░░░░░░░░░█ █░░░░░░░░░░░█ █░░█      █░█ █░░░░░░░░░░░█ █░█       █░█ █░░░░░░░░░░░█");
+        PrintHelper.printAbsoluteAndReset(row + 2, column,
+                "█░█▀▀▀▀▀▀▀▀▀  █░█▀▀▀▀▀▀▀█░█  ▀▀▀▀█░█▀▀▀▀  █░█▀▀▀▀▀▀▀█░█ █░█░█     █░█  ▀▀▀▀█░█▀▀▀▀  █░█       █░█ █░█▀▀▀▀▀▀▀▀▀ ");
+        PrintHelper.printAbsoluteAndReset(row + 3, column,
+                "█░█           █░█       █░█      █░█      █░█       █░█ █░██░█    █░█      █░█      █░█       █░█ █░█          ");
+        PrintHelper.printAbsoluteAndReset(row + 4, column,
+                "█░█▄▄▄▄▄▄▄▄▄  █░█▄▄▄▄▄▄▄█░█      █░█      █░█▄▄▄▄▄▄▄█░█ █░█ █░█   █░█      █░█      █░█▄▄▄▄▄▄▄█░█ █░█▄▄▄▄▄▄▄▄▄ ");
+        PrintHelper.printAbsoluteAndReset(row + 5, column,
+                "█░░░░░░░░░░░█ █░░░░░░░░░░░█      █░█      █░░░░░░░░░░░█ █░█  █░█  █░█      █░█      █░░░░░░░░░░░█ █░░░░░░░░░░░█");
+        PrintHelper.printAbsoluteAndReset(row + 6, column,
+                "█░█▀▀▀▀▀▀▀▀▀  █░█▀▀▀▀█░█▀▀       █░█      █░█▀▀▀▀▀▀▀█░█ █░█   █░█ █░█      █░█       ▀▀▀▀█░█▀▀▀▀   ▀▀▀▀▀▀▀▀▀█░█");
+        PrintHelper.printAbsoluteAndReset(row + 7, column,
+                "█░█           █░█     █░█        █░█      █░█       █░█ █░█    █░██░█      █░█           █░█                █░█");
+        PrintHelper.printAbsoluteAndReset(row + 8, column,
+                "█░█▄▄▄▄▄▄▄▄▄  █░█      █░█   ▄▄▄▄█░█▄▄▄▄  █░█       █░█ █░█     █░█░█      █░█           █░█       ▄▄▄▄▄▄▄▄▄█░█");
+        PrintHelper.printAbsoluteAndReset(row + 9, column,
+                "█░░░░░░░░░░░█ █░█       █░█ █░░░░░░░░░░░█ █░█       █░█ █░█      █░░█      █░█           █░█      █░░░░░░░░░░░█");
+        PrintHelper.printAbsoluteAndReset(row + 10, column,
+                " ▀▀▀▀▀▀▀▀▀▀▀   ▀         ▀   ▀▀▀▀▀▀▀▀▀▀▀   ▀         ▀   ▀        ▀▀        ▀             ▀        ▀▀▀▀▀▀▀▀▀▀▀ ");
         PrintHelper.printAbsoluteAndReset(row + 11, column, "Authors: Alberto Nidasio, Matteo Pignataro, Alberto Sandri");
         PrintHelper.printAbsoluteAndReset(row + 12, column, "Original site with rules: https://craniointernational.com/products/eriantys/");
     }

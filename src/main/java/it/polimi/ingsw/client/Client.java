@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import it.polimi.ingsw.client.cli.utils.PrintHelper;
@@ -60,7 +61,8 @@ public class Client implements Runnable
 
     public void connect() throws IOException
     {
-        socket = new Socket(ip, port);
+        socket = new Socket();
+        socket.connect(new InetSocketAddress(ip, port), 2000);
 
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         inputStream = new ObjectInputStream(socket.getInputStream());

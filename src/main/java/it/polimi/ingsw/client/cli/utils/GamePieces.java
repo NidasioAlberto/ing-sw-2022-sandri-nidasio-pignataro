@@ -8,7 +8,7 @@ public enum GamePieces
     TOWER("T", "☗"), // ♜
     MOTHER_NATURE("@", "◉"), // ⭗
     NO_ENTRY_TILE("X", "⊠"), // ☒
-    COINS_MARKER("$ ", "\uD83D\uDCB0"), // €, 💰
+    COINS_MARKER(" $", "\uD83D\uDCB0"), // €, 💰
     SLASH("/", "╱"), // Used for islands
     BACKSLASH("\\", "╲"), // Used for islands
     ORIZONTAL_LINE("─", "━"), // Used for character cards

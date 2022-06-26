@@ -481,7 +481,7 @@ public abstract class CharacterCard extends Game implements Serializable
                         + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE + GamePieces.ORIZONTAL_LINE
                         + GamePieces.TOP_RIGHT_CORNER)
                 + PrintHelper.moveCursorRelative(-1, -9);
-        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "  " + GamePieces.COINS_MARKER + "   " + GamePieces.VERTICAL_LINE)
+        rep += paintIfActive(this, GamePieces.VERTICAL_LINE + " " + GamePieces.COINS_MARKER + getCost() + "   " + GamePieces.VERTICAL_LINE)
                 + PrintHelper.moveCursorRelative(-1, -9);
         rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
         rep += paintIfActive(this, GamePieces.VERTICAL_LINE + "       " + GamePieces.VERTICAL_LINE) + PrintHelper.moveCursorRelative(-1, -9);
