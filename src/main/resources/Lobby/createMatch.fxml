@@ -58,8 +58,9 @@
                <children>
                   <HBox prefHeight="59.0" prefWidth="1119.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="640.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="640.0">
                            <children>
+                              <HBox prefHeight="100.0" prefWidth="320.0" />
                               <RadioButton fx:id="classicRbutton" mnemonicParsing="false" text="Classic">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="gameMode" />
@@ -67,8 +68,9 @@
                               </RadioButton>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="640.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="640.0">
                            <children>
+                              <HBox prefHeight="100.0" prefWidth="230.0" />
                               <RadioButton fx:id="expertRbutton" mnemonicParsing="false" text="Expert" toggleGroup="$gameMode" />
                            </children>
                         </HBox>
@@ -89,8 +91,9 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="640.0">
                            <children>
+                              <HBox prefHeight="100.0" prefWidth="320.0" />
                               <RadioButton fx:id="twoRbutton" mnemonicParsing="false" text="2">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="playersNumer" />
@@ -98,8 +101,9 @@
                               </RadioButton>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="640.0">
                            <children>
+                              <HBox prefHeight="100.0" prefWidth="230.0" />
                               <RadioButton fx:id="threeRbutton" mnemonicParsing="false" text="3" toggleGroup="$playersNumer" />
                            </children>
                         </HBox>

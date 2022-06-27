@@ -9,6 +9,7 @@ import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.image.Image;
@@ -39,6 +40,11 @@ public class GameView extends Application implements Visualizable
      * This tells the applications what is the view that the player wants
      */
     private ViewMode viewMode;
+
+    /**
+     * This is the stage that contains the scene.
+     */
+    private Stage stage;
 
     /**
      * This is the window scene. It contains all the components
@@ -299,10 +305,14 @@ public class GameView extends Application implements Visualizable
         // It has all the references to this object, and can pass it as argument
         // to all the needed objects
         setup();
-
+        this.stage = stage;
         // Show the window with the correct title
         stage.setTitle("Eriantys Game");
         stage.getIcons().add(new Image("EryantisIcon.png"));
+
+        // The lobby is not resizable
+        stage.setResizable(false);
+
         // Set the scene
         stage.setScene(scene);
         stage.show();
@@ -400,6 +410,8 @@ public class GameView extends Application implements Visualizable
             }, 10, TimeUnit.SECONDS);
 
         });
+        // Moving to lobby which is not resizable
+        Platform.runLater(() -> stage.setResizable(false));
     }
 
     @Override
@@ -471,6 +483,9 @@ public class GameView extends Application implements Visualizable
 
         // Set the match started to true
         isMatchStarted = true;
+
+        // The match is resizable
+        stage.setResizable(true);
     }
 
     @Override
