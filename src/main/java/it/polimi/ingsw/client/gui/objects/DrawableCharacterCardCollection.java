@@ -123,6 +123,23 @@ public class DrawableCharacterCardCollection extends DrawableCollection
     }
 
     @Override
+    public void clearAll()
+    {
+        for (DrawableCharacterCard card : cards)
+        {
+            // Clear the card payload first
+            card.clear(group, ambientLight, pointLight);
+            card.removeFromGroup(group);
+            card.unsubscribeFromAmbientLight(ambientLight);
+            card.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(card);
+        }
+
+        // Clear the whole array list
+        cards.clear();
+    }
+
+    @Override
     public void addToGroup()
     {
         for (DrawableCharacterCard card : cards)

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.gui;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.Visualizable;
 import it.polimi.ingsw.client.gui.objects.*;
@@ -247,6 +249,32 @@ public class GameView extends Application implements Visualizable
     }
 
     /**
+     * This method is used to delete all the graphical objects and unsubscribe them from every possible javafx thing, to let the garbage collector
+     * destroy all the instances
+     */
+    public void clearAll()
+    {
+        // Only if the match is already started
+        if (!isMatchStarted)
+            return;
+
+        assistantCollection.clearAll();
+        cloudTileCollection.clearAll();
+        islandCollection.clearAll();
+        schoolBoardCollection.clearAll();
+        characterCardCollection.clearAll();
+
+        // Destroy also the camera
+        scene.setCamera(new ParallelCamera());
+
+        // Set the camera pointer to null
+        camera = null;
+
+        // Set the match not started
+        isMatchStarted = false;
+    }
+
+    /**
      * This method sets the camera view and updates the view
      *
      * @param mode The new view
@@ -362,6 +390,15 @@ public class GameView extends Application implements Visualizable
 
             // After the message is done return back
             errorMessage.addAnimationPosition(new Point3D(300, 0, -110), 30);
+
+            // Set a timer to return to lobby
+            Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+                updatesHandler.subscribeUpdate(() -> {
+                    clearAll();
+                    sceneController.setRoot("/Lobby/lobby.fxml");
+                });
+            }, 10, TimeUnit.SECONDS);
+
         });
     }
 
@@ -373,6 +410,7 @@ public class GameView extends Application implements Visualizable
         {
             updatesHandler.subscribeUpdate(() -> resetPosition());
             updatesHandler.subscribeUpdate(() -> {
+                // this.clearAll();
                 // visualize the error
                 errorMessage.setTextColor(Color.WHITE);
                 errorMessage.setText(answer.getErrorMessage());
@@ -422,13 +460,17 @@ public class GameView extends Application implements Visualizable
         // Set the camera up in perspective mode
         setupCamera();
 
-        // Setup the ground plane
-        setupGroundPlane();
+        // Setup the ground plane if nothing has already been created once (i use index but we can use every drawable object/collection)
+        if (index == null)
+            setupGroundPlane();
 
         scene.setRoot(group);
 
         // Set the current visualization and position the camera according to that
         updateCameraView();
+
+        // Set the match started to true
+        isMatchStarted = true;
     }
 
     @Override

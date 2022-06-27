@@ -39,13 +39,13 @@ public abstract class DrawableCollection
     protected DrawableCollection(PointLight pointLight, AmbientLight ambientLight, Group group, AnimationHandler updater)
     {
         // Check the validity of all the attributes
-        if(pointLight == null)
+        if (pointLight == null)
             throw new NullPointerException("[DrawableCollection] Null point light");
-        if(ambientLight == null)
+        if (ambientLight == null)
             throw new NullPointerException("[DrawableCollection] Null ambient light");
-        if(group == null)
+        if (group == null)
             throw new NullPointerException("[DrawableCollection] Null group");
-        if(updater == null)
+        if (updater == null)
             throw new NullPointerException("[DrawableCollection] Null animation handler");
 
         // Assign all the attributes
@@ -55,8 +55,13 @@ public abstract class DrawableCollection
         this.updater = updater;
 
         // Init the position to 0
-        position = new Point3D(0, 0,0);
+        position = new Point3D(0, 0, 0);
     }
+
+    /**
+     * Method to clear, unsubscribe all the collection objects
+     */
+    abstract void clearAll();
 
     /**
      * Method to add all the collection elements to the group
@@ -70,6 +75,7 @@ public abstract class DrawableCollection
 
     /**
      * Method to translate the whole collection
+     * 
      * @param point The 3D point representing the translation
      */
     abstract void translate(Point3D point);
@@ -77,5 +83,8 @@ public abstract class DrawableCollection
     /**
      * Position getter
      */
-    public Point3D getPosition() { return position; }
+    public Point3D getPosition()
+    {
+        return position;
+    }
 }

@@ -476,6 +476,52 @@ public class DrawableCharacterCard extends DrawableObject
         tiles.remove(tile);
     }
 
+    /**
+     * Method to clear and unsubscribe the payload
+     */
+    public void clear(Group group, AmbientLight ambientLight, PointLight pointLight)
+    {
+        if (tiles.size() != 0)
+        {
+            for (DrawableNoEntryTile tile : tiles)
+            {
+                tile.removeFromGroup(group);
+                tile.unsubscribeFromAmbientLight(ambientLight);
+                tile.unsubscribeFromPointLight(pointLight);
+                updater.unsubscribeObject(tile);
+            }
+
+            // Clear the no entry tiles array
+            tiles.clear();
+        }
+
+        if (students.size() != 0)
+        {
+            for (DrawableStudent student : students)
+            {
+                student.removeFromGroup(group);
+                student.unsubscribeFromAmbientLight(ambientLight);
+                student.unsubscribeFromPointLight(pointLight);
+                updater.unsubscribeObject(student);
+            }
+
+            // Clear the student array
+            students.clear();
+        }
+
+        // Clear eventual coin
+        if (coin != null)
+        {
+            coin.removeFromGroup(group);
+            coin.unsubscribeFromAmbientLight(ambientLight);
+            coin.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(coin);
+
+            // Remove the coin
+            coin = null;
+        }
+    }
+
     @Override
     public void addToGroup(Group group)
     {

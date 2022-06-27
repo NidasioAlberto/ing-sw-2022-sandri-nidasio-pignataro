@@ -81,7 +81,7 @@ public class DrawableIsland extends DrawableObject
     /**
      * The index to update with the content
      */
-    private DrawableIndex index;
+    // private DrawableIndex index;
 
     /**
      * Animation angle (to which apply the Math.sin and float the island)
@@ -108,7 +108,7 @@ public class DrawableIsland extends DrawableObject
         // Set the island constants
         DIMENSION = dimension;
         TYPE = type;
-        this.index = index;
+        // this.index = index;
 
         // Create the collection of students
         drawnStudents = new ArrayList<>();

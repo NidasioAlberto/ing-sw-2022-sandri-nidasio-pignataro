@@ -186,14 +186,43 @@ public class DrawableIslandCollection extends DrawableCollection
     }
 
     @Override
+    public void clearAll()
+    {
+        for (DrawableIsland island : islands)
+        {
+            // Clear first the island payload
+            island.clear(pointLight, group);
+            island.removeFromGroup(group);
+            island.unsubscribeFromAmbientLight(ambientLight);
+            island.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(island);
+        }
+
+        // Clear also mother nature
+        // motherNature.removeFromGroup(group);
+        // motherNature.unsubscribeFromAmbientLight(ambientLight);
+        // motherNature.unsubscribeFromPointLight(pointLight);
+        // updater.unsubscribeObject(motherNature);
+        // motherNature = null;
+
+        // Clear the array
+        islands.clear();
+    }
+
+    @Override
     public void addToGroup()
     {
         // Add the box to the group
         for (DrawableIsland island : islands)
             island.addToGroup(group);
 
-        // Add mother nature
-        motherNature.addToGroup(group);
+        // Add mother nature ignoring exceptions because it could already been added due to previous matches
+        try
+        {
+            motherNature.addToGroup(group);
+        } catch (Exception e)
+        {
+        }
     }
 
     @Override

@@ -166,6 +166,26 @@ public class DrawableSchoolBoardCollection extends DrawableCollection
     }
 
     @Override
+    public void clearAll()
+    {
+        for (DrawableSchoolBoard board : boards)
+        {
+            if (board != null)
+            {
+                board.clear(group, pointLight, ambientLight);
+                board.removeFromGroup(group);
+                board.unsubscribeFromAmbientLight(ambientLight);
+                board.unsubscribeFromPointLight(pointLight);
+                updater.unsubscribeObject(board);
+            }
+        }
+
+        // Clear the array
+        for (int i = 0; i < boards.length; i++)
+            boards[i] = null;
+    }
+
+    @Override
     public void addToGroup()
     {
         // Add all the schoolboard to the group

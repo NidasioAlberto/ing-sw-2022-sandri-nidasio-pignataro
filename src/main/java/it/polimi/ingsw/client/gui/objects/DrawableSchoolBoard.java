@@ -810,6 +810,76 @@ public class DrawableSchoolBoard extends DrawableObject
         coins.remove(coins.size() - 1);
     }
 
+    /**
+     * Method to clear and unsubscribe all the board payloads
+     */
+    public void clear(Group group, PointLight pointLight, AmbientLight ambientLight)
+    {
+        // Entrance
+        for (DrawableStudent student : entrance)
+        {
+            student.removeFromGroup(group);
+            student.unsubscribeFromAmbientLight(ambientLight);
+            student.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(student);
+        }
+
+        // Clear the entrance array
+        entrance.clear();
+
+        // Dining
+        for (SchoolColor color : SchoolColor.values())
+        {
+            for (DrawableStudent student : dining.get(color))
+            {
+                student.removeFromGroup(group);
+                student.unsubscribeFromAmbientLight(ambientLight);
+                student.unsubscribeFromPointLight(pointLight);
+                updater.unsubscribeObject(student);
+            }
+
+            // Clear the array
+            dining.get(color).clear();
+        }
+
+        // Towers
+        for (DrawableTower tower : towers)
+        {
+            tower.removeFromGroup(group);
+            tower.unsubscribeFromAmbientLight(ambientLight);
+            tower.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(tower);
+        }
+
+        // Clear the towers array
+        towers.clear();
+
+        // Coins
+        for (DrawableCoin coin : coins)
+        {
+            coin.removeFromGroup(group);
+            coin.unsubscribeFromAmbientLight(ambientLight);
+            coin.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(coin);
+        }
+
+        // Clear the coin array
+        coins.clear();
+
+        // Assistant card
+        if (assistantCard != null)
+        {
+            assistantCard.removeFromGroup(group);
+            assistantCard.unsubscribeFromAmbientLight(ambientLight);
+            assistantCard.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(assistantCard);
+            assistantCard = null;
+        }
+
+        // Clear all the rotations
+        rotations.clear();
+    }
+
     @Override
     public void translate(Point3D point)
     {

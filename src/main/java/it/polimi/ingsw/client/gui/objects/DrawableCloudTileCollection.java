@@ -105,6 +105,23 @@ public class DrawableCloudTileCollection extends DrawableCollection
     }
 
     @Override
+    public void clearAll()
+    {
+        for (DrawableCloudTile tile : tiles)
+        {
+            // First clear the cloud tile payload
+            tile.clear(group, pointLight);
+            tile.removeFromGroup(group);
+            tile.unsubscribeFromAmbientLight(ambientLight);
+            tile.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(tile);
+        }
+
+        // Clear the array
+        tiles.clear();
+    }
+
+    @Override
     public void addToGroup()
     {
         for (DrawableCloudTile tile : tiles)

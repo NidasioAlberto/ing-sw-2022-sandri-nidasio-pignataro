@@ -123,6 +123,21 @@ public class DrawableAssistantCollection extends DrawableCollection
     }
 
     @Override
+    public void clearAll()
+    {
+        for (DrawableAssistantCard card : assistantCards)
+        {
+            card.removeFromGroup(group);
+            card.unsubscribeFromAmbientLight(ambientLight);
+            card.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(card);
+        }
+
+        // Delete al the cards from the arraylist
+        assistantCards.clear();
+    }
+
+    @Override
     public void addToGroup()
     {
         // I subscribe every card
