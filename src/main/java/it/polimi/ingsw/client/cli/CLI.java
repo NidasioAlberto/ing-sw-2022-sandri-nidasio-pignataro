@@ -66,6 +66,7 @@ public class CLI implements Visualizable, Runnable
     public void start()
     {
         Scanner scanner = new Scanner(System.in);
+
         // Clear the screen
         PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
         printTitle(2, 2);
@@ -79,7 +80,6 @@ public class CLI implements Visualizable, Runnable
                 String ip = scanner.nextLine();
                 PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Insert the server's port: ");
                 int port = Integer.parseInt(scanner.nextLine());
-
 
                 client.setIp(ip);
                 client.setPort(port);
@@ -419,35 +419,6 @@ public class CLI implements Visualizable, Runnable
         return rules;
     }
 
-    // This version doesn't work with Windows
-    private void printTitle2(int row, int column)
-    {
-        PrintHelper.printAbsoluteAndReset(row, column,
-                " ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄ ");
-        PrintHelper.printAbsoluteAndReset(row + 1, column,
-                "▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░▌      ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌");
-        PrintHelper.printAbsoluteAndReset(row + 2, column,
-                "▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌ ▀▀▀▀█░█▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌▐░▌░▌     ▐░▌ ▀▀▀▀█░█▀▀▀▀ ▐░▌       ▐░▌▐░█▀▀▀▀▀▀▀▀▀ ");
-        PrintHelper.printAbsoluteAndReset(row + 3, column,
-                "▐░▌          ▐░▌       ▐░▌     ▐░▌     ▐░▌       ▐░▌▐░▌▐░▌    ▐░▌     ▐░▌     ▐░▌       ▐░▌▐░▌          ");
-        PrintHelper.printAbsoluteAndReset(row + 4, column,
-                "▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌▐░▌ ▐░▌   ▐░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄▄▄ ");
-        PrintHelper.printAbsoluteAndReset(row + 5, column,
-                "▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░▌  ▐░▌  ▐░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌");
-        PrintHelper.printAbsoluteAndReset(row + 6, column,
-                "▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀█░█▀▀      ▐░▌     ▐░█▀▀▀▀▀▀▀█░▌▐░▌   ▐░▌ ▐░▌     ▐░▌      ▀▀▀▀█░█▀▀▀▀  ▀▀▀▀▀▀▀▀▀█░▌");
-        PrintHelper.printAbsoluteAndReset(row + 7, column,
-                "▐░▌          ▐░▌     ▐░▌       ▐░▌     ▐░▌       ▐░▌▐░▌    ▐░▌▐░▌     ▐░▌          ▐░▌               ▐░▌");
-        PrintHelper.printAbsoluteAndReset(row + 8, column,
-                "▐░█▄▄▄▄▄▄▄▄▄ ▐░▌      ▐░▌  ▄▄▄▄█░█▄▄▄▄ ▐░▌       ▐░▌▐░▌     ▐░▐░▌     ▐░▌          ▐░▌      ▄▄▄▄▄▄▄▄▄█░▌");
-        PrintHelper.printAbsoluteAndReset(row + 9, column,
-                "▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░▌      ▐░░▌     ▐░▌          ▐░▌     ▐░░░░░░░░░░░▌");
-        PrintHelper.printAbsoluteAndReset(row + 10, column,
-                " ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀        ▀▀       ▀            ▀       ▀▀▀▀▀▀▀▀▀▀▀ ");
-        PrintHelper.printAbsoluteAndReset(row + 11, column, "Authors: Alberto Nidasio, Matteo Pignataro, Alberto Sandri");
-        PrintHelper.printAbsoluteAndReset(row + 12, column, "Original site with rules: https://craniointernational.com/products/eriantys/");
-    }
-
     // This version works for all OS
     private void printTitle(int row, int column)
     {
@@ -653,7 +624,8 @@ public class CLI implements Visualizable, Runnable
             msg += matchesList.singleMatchToString(key);
             counter++;
 
-            // Every 20 matches I display them and ask the player if wants to see more (if there are)
+            // Every 20 matches I display them and ask the player if wants to see more (if
+            // there are)
             // 20 matches in order to not relocate other elements in the terminal
             if (counter % 20 == 19 && counter != matchesList.getNumPlayers().size())
             {
@@ -668,7 +640,8 @@ public class CLI implements Visualizable, Runnable
             }
         }
 
-        // At the end I print again the list of matches, it is necessary when there are less than 20 matches
+        // At the end I print again the list of matches, it is necessary when there are
+        // less than 20 matches
         PrintHelper.printAbsoluteAndReset(24, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
         PrintHelper.printAbsoluteAndReset(1, 2, msg);
         PrintHelper.printAbsoluteAndReset(21, 1, PrintHelper.ERASE_ENTIRE_LINE);

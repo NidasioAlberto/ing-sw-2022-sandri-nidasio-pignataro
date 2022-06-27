@@ -6,9 +6,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * This class is a runnable which handles the server's socket by listening for new connection. When
- * a new client connects, a PlayerConnection is created and started. The PlayerConnection will need
- * to register itself to the Server when the client sets up the player information.
+ * This class is a runnable which handles the server's socket by listening for new connection. When a new client connects, a PlayerConnection is
+ * created and started. The PlayerConnection will need to register itself to the Server when the client sets up the player information.
  */
 public class ServerConnection implements Runnable
 {
@@ -59,14 +58,12 @@ public class ServerConnection implements Runnable
         try
         {
             ServerSocket socket = new ServerSocket(port);
-            System.out
-                    .println("[ServerConnection] Server socket started, listening on port " + port);
+            System.out.println("[ServerConnection] Server socket started, listening on port " + port);
 
             acceptConnections(socket);
         } catch (IOException e)
         {
-            System.err
-                    .println("[ServerConnection] Error during Socket initialization, quitting...");
+            System.err.println("[ServerConnection] Error during Socket initialization, quitting...");
             System.exit(-1);
         }
     }

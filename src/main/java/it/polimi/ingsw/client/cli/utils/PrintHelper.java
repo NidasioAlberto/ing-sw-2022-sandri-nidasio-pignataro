@@ -141,7 +141,7 @@ public class PrintHelper
      */
     static public String savePosition()
     {
-        return "\u001B[s";
+        return "\u001B7";
     }
 
     /**
@@ -149,7 +149,7 @@ public class PrintHelper
      */
     static public String restorePosition()
     {
-        return "\u001B[u";
+        return "\u001B8";
     }
 
     static public synchronized void print(String msg)
@@ -233,8 +233,8 @@ public class PrintHelper
         print(toPrint);
     }
 
-    static public void printMessage(String error)
+    static public void printMessage(String message)
     {
-        printAbsoluteAndReset(24, 2, moveCursorRelative(-1, 0) + ERASE_ENTIRE_LINE + moveCursorRelative(1, 0) + ERASE_ENTIRE_LINE + error);
+        printAbsoluteAndReset(24, 2, moveCursorRelative(-1, 0) + ERASE_ENTIRE_LINE + moveCursorRelative(1, 0) + ERASE_ENTIRE_LINE + message);
     }
 }

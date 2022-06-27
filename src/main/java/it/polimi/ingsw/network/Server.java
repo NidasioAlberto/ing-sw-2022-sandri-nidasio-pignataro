@@ -69,6 +69,11 @@ public class Server
         return matches.get(id);
     }
 
+    public List<PlayerConnection> getLobby()
+    {
+        return lobby;
+    }
+
     public void createMatch(String matchId, int playersNumber, GameMode mode) throws IllegalArgumentException
     {
         // Check if a match with the same id already exists

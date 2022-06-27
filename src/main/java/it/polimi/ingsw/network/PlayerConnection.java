@@ -81,8 +81,7 @@ public class PlayerConnection implements Runnable
         {
             sendAnswer(new ErrorAnswer("The name is too long"));
             return;
-        }
-        else
+        } else
         {
             // Check the playerName isn't empty or composed only by empty characters
             int i;
@@ -97,6 +96,23 @@ public class PlayerConnection implements Runnable
                 return;
             }
         }
+
+        // Check if there is already a player with this name
+        System.out.println("[PlayerConnection] Checking if there is already a player with the name \"" + playerName + "\"");
+        for (PlayerConnection playerConnection : server.getLobby())
+            if (playerConnection.getPlayerName().isPresent())
+                if (playerConnection.getPlayerName().isPresent() && playerConnection.getPlayerName().get().equals(playerName))
+                {
+                    sendAnswer(new ErrorAnswer("This name is already in use"));
+                    return;
+                }
+        for (Match match : server.getAllMatches().values())
+            for (PlayerConnection playerConnection : match.getPlayers())
+                if (playerConnection.getPlayerName().isPresent() && playerConnection.getPlayerName().get().equals(playerName))
+                {
+                    sendAnswer(new ErrorAnswer("This name is already in use"));
+                    return;
+                }
 
         this.playerName = Optional.of(playerName);
         sendAnswer(new SetNameAnswer(playerName));
