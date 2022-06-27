@@ -20,6 +20,8 @@ public class LoginSceneController implements Controllable
     @FXML
     private ImageView logoImage;
 
+    private SceneController controller;
+
     /**
      * Pressing enter in portTextField is like clicking the button submit.
      */
@@ -39,15 +41,15 @@ public class LoginSceneController implements Controllable
         // Check that the data inserted from the player are valid
         if (nicknameTextField.getText().isBlank())
         {
-            SceneController.displayError("You must insert a valid nickname");
+            controller.displayError("You must insert a valid nickname");
         }
         else if (ipTextField.getText().isBlank())
         {
-            SceneController.displayError("You must insert a valid IP");
+            controller.displayError("You must insert a valid IP");
         }
         else if (portTextField.getText().isBlank())
         {
-            SceneController.displayError("You must insert a valid port");
+            controller.displayError("You must insert a valid port");
         }
         else {
             try {
@@ -55,15 +57,15 @@ public class LoginSceneController implements Controllable
                 String ip = ipTextField.getText();
                 int port = Integer.parseInt(portTextField.getText());
 
-                if(SceneController.clientConnect(ip, port))
+                if(controller.clientConnect(ip, port))
                     // If all goes well set the name
-                    SceneController.sendCommand(new SetNameCommand(nicknameTextField.getText()));
+                    controller.sendCommand(new SetNameCommand(nicknameTextField.getText()));
 
             } catch (NumberFormatException e) {
                 // If port is not a number
-                SceneController.displayError("You must insert a valid port");
+                controller.displayError("You must insert a valid port");
             } catch (Exception e) {
-                SceneController.displayError("Connection error");
+                controller.displayError("Connection error");
             }
         }
     }
@@ -72,8 +74,9 @@ public class LoginSceneController implements Controllable
     /**
      * Set properly the image with the logo.
      */
-    public void initialize()
+    public void initialize(SceneController controller)
     {
+        this.controller = controller;
         logoImage.setScaleX(2);
         logoImage.setScaleY(2);
         logoImage.translateXProperty().set(+25);

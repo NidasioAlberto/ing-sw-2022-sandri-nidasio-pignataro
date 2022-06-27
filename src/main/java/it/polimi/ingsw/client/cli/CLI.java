@@ -242,7 +242,7 @@ public class CLI implements Visualizable, Runnable
         msg += "\t7 - Play character card\n";
         msg += "\t8 - Character card action\n";
         msg += "\t9 - Character cards effects\n";
-        msg += "\t10 - Quit match\n";
+        msg += "\t10 - Quit game\n";
         PrintHelper.printAbsolute(26, 2, msg);
 
         // I need this when the match ends
@@ -336,13 +336,11 @@ public class CLI implements Visualizable, Runnable
             }
             case 10:
             {
-                PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
-                PrintHelper.print("Are you sure to quit match? Type 'Y' if you are sure\n");
+                PrintHelper.print("Are you sure to quit the game? Type 'Y' if you are sure\n");
                 if (scanner.nextLine().toUpperCase().equals("Y"))
                 {
-                    isMatchStarted = false;
-                    client.sendCommand(new QuitMatchCommand());
-                    PrintHelper.printAbsoluteAndReset(20, 1, PrintHelper.ERASE_FROM_CURSOR_TILL_BEGINNING_OF_SCREEN);
+                    client.sendCommand(new QuitGameCommand());
+                    System.exit(0);
                 }
                 break;
             }

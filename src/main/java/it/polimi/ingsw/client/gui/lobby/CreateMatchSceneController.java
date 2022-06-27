@@ -16,6 +16,8 @@ public class CreateMatchSceneController implements Controllable
     @FXML
     private RadioButton expertRbutton, classicRbutton, twoRbutton, threeRbutton;
 
+    private SceneController controller;
+
     /**
      * Method executed when the player is in the createMatch scene and presses Create button,
      * check that the parameter are valid, if so send a CreateMatchCommand.
@@ -25,15 +27,15 @@ public class CreateMatchSceneController implements Controllable
         // Check that the data inserted from the player are valid
         if (gameNameCreateTextField.getText().isBlank())
         {
-            SceneController.displayError("You must insert a valid game name");
+            controller.displayError("You must insert a valid game name");
         }
         else if (!classicRbutton.isSelected() && !expertRbutton.isSelected())
         {
-            SceneController.displayError("You must choose a game mode");
+            controller.displayError("You must choose a game mode");
         }
         else if (!twoRbutton.isSelected() && !threeRbutton.isSelected())
         {
-            SceneController.displayError("You must choose a number of players");
+            controller.displayError("You must choose a number of players");
         }
         else
         {
@@ -41,7 +43,7 @@ public class CreateMatchSceneController implements Controllable
             String gameName = gameNameCreateTextField.getText();
             GameMode mode = classicRbutton.isSelected() ? GameMode.CLASSIC : GameMode.EXPERT;
             int players = twoRbutton.isSelected() ? 2 : 3;
-            SceneController.sendCommand(new CreateMatchCommand(gameName, players, mode));
+            controller.sendCommand(new CreateMatchCommand(gameName, players, mode));
         }
     }
 
@@ -50,11 +52,12 @@ public class CreateMatchSceneController implements Controllable
      */
     public void back(ActionEvent event)
     {
-        SceneController.setRoot("/Lobby/lobby.fxml");
+        controller.setRoot("/Lobby/lobby.fxml");
     }
 
     @Override
-    public void initialize()
+    public void initialize(SceneController controller)
     {
+        this.controller = controller;
     }
 }

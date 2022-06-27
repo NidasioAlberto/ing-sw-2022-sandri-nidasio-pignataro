@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.gui.lobby.Controllable;
 import it.polimi.ingsw.client.gui.lobby.LobbySceneController;
-import it.polimi.ingsw.protocol.answers.EndMatchAnswer;
 import it.polimi.ingsw.protocol.answers.MatchesListAnswer;
 import it.polimi.ingsw.protocol.answers.SetNameAnswer;
 import it.polimi.ingsw.protocol.commands.Command;
@@ -20,15 +19,15 @@ import java.io.IOException;
 
 public class SceneController
 {
-    private static Scene mainScene;
+    private Scene mainScene;
 
-    private static Client client;
+    private Client client;
 
-    private static GameView view;
+    private GameView view;
 
-    private static Controllable currentController;
+    private Controllable currentController;
 
-    private static Parent currentRoot;
+    private Parent currentRoot;
 
     public SceneController(GameView view, Client client, Scene mainScene)
     {
@@ -76,7 +75,7 @@ public class SceneController
      * @param port of the server.
      * @return true if the connection is established.
      */
-    public static boolean clientConnect(String ip, int port)
+    public boolean clientConnect(String ip, int port)
     {
         try
         {
@@ -88,7 +87,7 @@ public class SceneController
             return true;
         } catch (Exception e)
         {
-            SceneController.displayError("Unable to connect to the server");
+            displayError("Unable to connect to the server");
 
             return false;
         }
@@ -99,17 +98,17 @@ public class SceneController
      *
      * @param command to send.
      */
-    public static void sendCommand(Command command)
+    public void sendCommand(Command command)
     {
         try
         {
             if (command != null)
                 client.sendCommand(command);
             else
-                SceneController.displayError("The command is null");
+                displayError("The command is null");
         } catch (Exception e)
         {
-            SceneController.displayError("Error while sending a command");
+            displayError("Error while sending a command");
         }
     }
 
@@ -118,7 +117,7 @@ public class SceneController
      *
      * @param fxml of the new scene.
      */
-    public static void setRoot(String fxml)
+    public void setRoot(String fxml)
     {
         try
         {
@@ -126,10 +125,10 @@ public class SceneController
             currentRoot = loader.load();
             currentController = loader.getController();
             mainScene.setRoot(currentRoot);
-            currentController.initialize();
+            currentController.initialize(this);
         } catch (IOException e)
         {
-            SceneController.displayError("Error while changing root");
+            displayError("Error while changing root");
             e.printStackTrace();
         }
     }
@@ -138,7 +137,7 @@ public class SceneController
      * Display an alert with the given message.
      * @param errorMessage to display.
      */
-    public static void displayError(String errorMessage)
+    public void displayError(String errorMessage)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -151,7 +150,7 @@ public class SceneController
      * Display an alert with the given message and close the game.
      * @param errorMessage to display.
      */
-    public static void displayConnectionError(String errorMessage)
+    public void displayConnectionError(String errorMessage)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");

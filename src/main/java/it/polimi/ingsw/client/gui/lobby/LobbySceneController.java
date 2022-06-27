@@ -29,15 +29,18 @@ public class LobbySceneController implements Controllable
     @FXML
     private TableColumn<MatchLine, String> playersColumn;
 
+    private SceneController controller;
+
     @Override
     /**
      * Sends a GetMatchesList to the client in order to display the current available matches,
      * otherwise displays a message.
      */
-    public void initialize()
+    public void initialize(SceneController controller)
     {
+        this.controller = controller;
         matchesTableView.setPlaceholder(new Label("There aren't matches at the moment"));
-        SceneController.sendCommand(new GetMatchesListCommand());
+        controller.sendCommand(new GetMatchesListCommand());
     }
 
     /**
@@ -47,7 +50,7 @@ public class LobbySceneController implements Controllable
     public void createMatch(ActionEvent event)
     {
         // Move to createMatch scene
-        SceneController.setRoot("/Lobby/createMatch.fxml");
+        controller.setRoot("/Lobby/createMatch.fxml");
     }
 
     /**
@@ -93,7 +96,7 @@ public class LobbySceneController implements Controllable
         {
             // Send a joinMatchCommand with the name of the selected match
             String gameName = matchesTableView.getSelectionModel().getSelectedItem().getName();
-            SceneController.sendCommand(new JoinMatchCommand(gameName));
+            controller.sendCommand(new JoinMatchCommand(gameName));
         }
     }
 }
