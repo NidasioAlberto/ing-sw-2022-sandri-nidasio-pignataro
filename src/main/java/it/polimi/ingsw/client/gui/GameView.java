@@ -92,7 +92,6 @@ public class GameView extends Application implements Visualizable
      */
     private String playerName;
 
-
     /**
      * Controller of lobby's scenes.
      */
