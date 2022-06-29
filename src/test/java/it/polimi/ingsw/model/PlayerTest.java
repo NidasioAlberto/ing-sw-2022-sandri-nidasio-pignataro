@@ -1,15 +1,11 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.model.exceptions.EndGameException;
 import it.polimi.ingsw.model.exceptions.NoSuchAssistantCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.network.Match;
 import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,14 +29,12 @@ public class PlayerTest
 
     @Test
     /**
-     * Test that Constructor throws NullPointerException when one of the three parameter is null and
-     * test the initialization of the object
+     * Test that Constructor throws NullPointerException when one of the three parameter is null and test the initialization of the object
      */
     public void constructorTest()
     {
         // Nickname can't be null
-        assertThrows(NullPointerException.class,
-                () -> new Player(null, new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC)));
+        assertThrows(NullPointerException.class, () -> new Player(null, new SchoolBoard(TowerColor.WHITE, GameMode.CLASSIC)));
 
         // Color can't be null
         assertThrows(NullPointerException.class, () -> new Player("Player1", (TowerColor) null, GameMode.CLASSIC));
@@ -104,8 +98,7 @@ public class PlayerTest
 
     @Test
     /**
-     * Test that removeCoins throws IllegalArgumentException if the parameter is negative or there
-     * aren't enough coins
+     * Test that removeCoins throws IllegalArgumentException if the parameter is negative or there aren't enough coins
      */
     public void removeCoinsTest()
     {
@@ -124,8 +117,8 @@ public class PlayerTest
 
     @Test
     /**
-     * Test that selectCard throws NullPointerException if the parameter is null and throws
-     * IllegalArgumentException if the player doesn't have the selected card
+     * Test that selectCard throws NullPointerException if the parameter is null and throws IllegalArgumentException if the player doesn't have the
+     * selected card
      */
     public void selectCardTest()
     {
@@ -151,9 +144,8 @@ public class PlayerTest
 
     @Test
     /**
-     * Test that addCard throws NullPointerException if the parameter is null and it doesn't add
-     * cards with a different wizard from the cards already present and it doesn't add cards already
-     * present
+     * Test that addCard throws NullPointerException if the parameter is null and it doesn't add cards with a different wizard from the cards already
+     * present and it doesn't add cards already present
      */
     public void addCardTest()
     {
@@ -184,8 +176,8 @@ public class PlayerTest
 
     @Test
     /**
-     * Test that removeCard throws NullPointerException if the parameter is null and
-     * IllegalArgumentException if the player doesn't have the card passed via parameter
+     * Test that removeCard throws NullPointerException if the parameter is null and IllegalArgumentException if the player doesn't have the card
+     * passed via parameter
      */
     public void removeCardTest()
     {

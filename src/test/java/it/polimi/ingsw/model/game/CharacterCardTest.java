@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.NoSelectedPlayerException;
 import it.polimi.ingsw.model.exceptions.TooManyPlayersException;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +82,7 @@ public class CharacterCardTest
         assertEquals(0, player2.getBoard().getProfessors().size());
         assertEquals(color, player1.getBoard().getProfessors().get(0).getColor());
 
-       // Move mother nature
+        // Move mother nature
         player1.selectCard(9);
         player2.selectCard(10);
         assertEquals(player1, thief.getSortedPlayerList().get(0));
@@ -103,8 +102,7 @@ public class CharacterCardTest
         assertEquals(0, game.getIslands().get(islandIndex).getTowers().size());
         thief.computeInfluence(islandIndex);
         assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
-        assertEquals(TowerColor.WHITE,
-                game.getIslands().get(islandIndex).getTowers().get(0).getColor());
+        assertEquals(TowerColor.WHITE, game.getIslands().get(islandIndex).getTowers().get(0).getColor());
         game.motherNatureIndex = Optional.of(islandIndex);
         thief.computeInfluence();
         assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
@@ -112,7 +110,8 @@ public class CharacterCardTest
         // Conquer professor
         if (color == SchoolColor.GREEN)
             thief.getPlayerTableList().get(0).getBoard().addStudentToDiningRoom(new Student(SchoolColor.PINK));
-        else thief.getPlayerTableList().get(0).getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
+        else
+            thief.getPlayerTableList().get(0).getBoard().addStudentToDiningRoom(new Student(SchoolColor.GREEN));
         thief.conquerProfessors();
         assertEquals(2, player1.getBoard().getProfessors().size());
         assertEquals(0, player2.getBoard().getProfessors().size());

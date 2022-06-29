@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Handler;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -558,8 +557,7 @@ public class GameActionHandlerTest
                 for (CharacterCard card : game.getCharacterCards())
                 {
                         // player1 tries to play a card with a wrong index, so an exception is thrown
-                        assertThrows(InvalidCharacterCardException.class,
-                                        () -> handler.handleAction(new PlayCharacterCardMessage(game.getCharacterCards().indexOf(4)), "player1"));
+                        assertThrows(InvalidCharacterCardException.class, () -> handler.handleAction(new PlayCharacterCardMessage(4), "player1"));
 
                         if (card instanceof Centaur)
                         {

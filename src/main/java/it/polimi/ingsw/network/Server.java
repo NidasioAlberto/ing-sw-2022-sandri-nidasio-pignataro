@@ -32,6 +32,12 @@ public class Server
         quiThread.start();
     }
 
+    public Server(int port)
+    {
+        this();
+        serverConnection = new ServerConnection(this, port);
+    }
+
     public void waitToQuit()
     {
         System.out.println("[Server] Type \"quit\" to exit");
@@ -244,7 +250,20 @@ public class Server
 
     public static void main(String[] args)
     {
-        Server server = new Server();
+        Server server;
+
+        if (args.length == 1)
+            try
+            {
+                server = new Server(Integer.parseInt(args[0]));
+            } catch (NumberFormatException e)
+            {
+                System.out.println("[Server] The specified port is not a valid number, falling back to the default");
+                server = new Server();
+            }
+        else
+            server = new Server();
+
         Executors.newCachedThreadPool().submit(server.serverConnection);
     }
 }

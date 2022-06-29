@@ -45,6 +45,8 @@ public class CLI implements Visualizable, Runnable
 
     private Client client;
 
+    private Scanner scanner;
+
     /**
      * Name of the player.
      */
@@ -65,7 +67,7 @@ public class CLI implements Visualizable, Runnable
 
     public void start()
     {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
 
         // Clear the screen
         PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
@@ -76,13 +78,16 @@ public class CLI implements Visualizable, Runnable
             try
             {
                 PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
-                PrintHelper.print("Insert the server's IP: ");
+                PrintHelper.print("Insert the server's IP [" + client.getIp() + "]: ");
                 String ip = scanner.nextLine();
-                PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Insert the server's port: ");
-                int port = Integer.parseInt(scanner.nextLine());
+                if (ip != "")
+                    client.setIp(ip);
 
-                client.setIp(ip);
-                client.setPort(port);
+                PrintHelper.print(PrintHelper.moveCursorRelative(0, 1) + "Insert the server's port [" + client.getPort() + "]: ");
+                String port = scanner.nextLine();
+                if (port != "")
+                    client.setPort(Integer.parseInt(port));
+
                 client.connect();
 
                 active = true;
@@ -102,6 +107,7 @@ public class CLI implements Visualizable, Runnable
     {
         active = false;
         client.stop();
+        scanner.close();
     }
 
     public synchronized boolean isActive()
@@ -676,7 +682,21 @@ public class CLI implements Visualizable, Runnable
 
     public static void main(String[] args)
     {
-        Client client = new Client();
+        Client client;
+
+        if (args.length == 1)
+            client = new Client(args[0]);
+        else if (args.length == 2)
+            try
+            {
+                client = new Client(args[0], Integer.parseInt(args[1]));
+            } catch (NumberFormatException e)
+            {
+                client = new Client();
+            }
+        else
+            client = new Client();
+
         CLI cli = new CLI(client);
         client.setVisualizer(cli);
 

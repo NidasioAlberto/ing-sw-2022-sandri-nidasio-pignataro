@@ -25,6 +25,12 @@ public class ServerConnection implements Runnable
         executor = Executors.newCachedThreadPool();
     }
 
+    ServerConnection(Server server, int port)
+    {
+        this(server);
+        this.port = port;
+    }
+
     public synchronized boolean isActive()
     {
         return active;
@@ -64,6 +70,10 @@ public class ServerConnection implements Runnable
         } catch (IOException e)
         {
             System.err.println("[ServerConnection] Error during Socket initialization, quitting...");
+            System.exit(-1);
+        } catch (IllegalArgumentException e)
+        {
+            System.err.println("[ServerConnection] The give port is not valid, quitting...");
             System.exit(-1);
         }
     }

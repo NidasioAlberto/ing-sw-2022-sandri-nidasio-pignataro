@@ -39,7 +39,6 @@ public class GameTest
         Player player2 = new Player("Player2", TowerColor.GREY, game.getGameMode());
         Player player3 = new Player("Player3", TowerColor.WHITE, game.getGameMode());
         Player player4 = new Player("Player4", TowerColor.BLACK, game.getGameMode());
-        Player player5 = new Player("Player5", TowerColor.GREY, game.getGameMode());
 
         // The game should accept 2 players
         game = new Game(2, GameMode.CLASSIC);
@@ -126,8 +125,7 @@ public class GameTest
     public void putStudentToIslandTest()
     {
         // Now there isn't a selected player
-        assertThrows(NoSuchElementException.class,
-                () -> game.putStudentToIsland(new Student(SchoolColor.BLUE)));
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToIsland(new Student(SchoolColor.BLUE)));
 
         // Create the players
         Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
@@ -138,22 +136,19 @@ public class GameTest
         assertDoesNotThrow(() -> game.addPlayer(player2));
 
         // Now there is still not a selected player
-        assertThrows(NoSuchElementException.class,
-                () -> game.putStudentToIsland(new Student(SchoolColor.GREEN)));
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToIsland(new Student(SchoolColor.GREEN)));
 
         // Select the a player
         game.selectPlayer(1);
 
         // The selected player has not selected an island
-        assertThrows(NoSuchElementException.class,
-                () -> game.putStudentToIsland(new Student(SchoolColor.RED)));
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToIsland(new Student(SchoolColor.RED)));
 
         // Select an island
         player2.selectIsland(3);
 
         // This should still fail because the game is not setup
-        assertThrows(IslandIndexOutOfBoundsException.class,
-                () -> game.putStudentToIsland(new Student(SchoolColor.YELLOW)));
+        assertThrows(IslandIndexOutOfBoundsException.class, () -> game.putStudentToIsland(new Student(SchoolColor.YELLOW)));
 
         // Setup the game
         game.setupGame();
@@ -171,8 +166,7 @@ public class GameTest
     public void putStudentToDiningTest()
     {
         // Now there isn't a selected player
-        assertThrows(NoSuchElementException.class,
-                () -> game.putStudentToIsland(new Student(SchoolColor.BLUE)));
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToIsland(new Student(SchoolColor.BLUE)));
 
         // Create the players
         Player player1 = new Player("Player1", TowerColor.BLACK, game.getGameMode());
@@ -183,8 +177,7 @@ public class GameTest
         assertDoesNotThrow(() -> game.addPlayer(player2));
 
         // Now there is still not a selected player
-        assertThrows(NoSuchElementException.class,
-                () -> game.putStudentToDining(new Student(SchoolColor.GREEN)));
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToDining(new Student(SchoolColor.GREEN)));
 
         // Select a player
         game.selectPlayer(1);
@@ -347,10 +340,8 @@ public class GameTest
 
         // This should not accept a null student and invalid island indexes
         assertThrows(NullPointerException.class, () -> game.computePlayerInfluence(null, 0));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> game.computePlayerInfluence(player1, -1));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> game.computePlayerInfluence(player2, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> game.computePlayerInfluence(player1, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> game.computePlayerInfluence(player2, 0));
 
         // The game is not set up, an exception should occur
         assertThrows(NoSuchElementException.class, () -> game.computeInfluence());
@@ -388,15 +379,14 @@ public class GameTest
         // The player should have more influence but still nothing should move
         assertDoesNotThrow(() -> game.computeInfluence());
         for (int i = 0; i < towers.size(); i++)
-            assertEquals(towers.get(i).getColor(),
-                    game.getCurrentIsland().getTowers().get(i).getColor());
+            assertEquals(towers.get(i).getColor(), game.getCurrentIsland().getTowers().get(i).getColor());
 
         // At the beginning there are 12 islands
         assertEquals(12, game.getIslands().size());
 
         // Put a tower on island next to the current one
-        Island nextIsland = game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ?
-                0 : game.getMotherNatureIndex().get() + 1);
+        Island nextIsland =
+                game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ? 0 : game.getMotherNatureIndex().get() + 1);
         nextIsland.addTower(new Tower(TowerColor.BLACK));
 
         game.computeInfluence();
@@ -477,7 +467,8 @@ public class GameTest
         // Check the position of mother nature
         if (motherIndex != 11 && motherIndex <= islandIndex)
             assertEquals(motherIndex, game.getMotherNatureIndex().get());
-        else assertEquals(motherIndex - 1, game.getMotherNatureIndex().get());
+        else
+            assertEquals(motherIndex - 1, game.getMotherNatureIndex().get());
     }
 
     @Test
@@ -525,8 +516,7 @@ public class GameTest
         assertEquals(0, game.getCloudTiles().get(1).getStudents().size());
 
         // The student must have moved to the current player's entrance
-        assertEquals(prevEntrance.size() + studentsOnTheCloudTile.size(),
-                player2.getBoard().getStudentsInEntrance().size());
+        assertEquals(prevEntrance.size() + studentsOnTheCloudTile.size(), player2.getBoard().getStudentsInEntrance().size());
     }
 
     @Test

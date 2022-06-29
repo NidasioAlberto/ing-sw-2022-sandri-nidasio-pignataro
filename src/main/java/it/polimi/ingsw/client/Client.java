@@ -193,4 +193,13 @@ public class Client implements Runnable
         this.port = port;
     }
 
+    public String getIp()
+    {
+        return ip;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
 }
