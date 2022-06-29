@@ -5,6 +5,5 @@ package it.polimi.ingsw.client.gui;
  */
 public enum ViewMode
 {
-    MODE_2D,
-    MODE_3D
+    MODE_2D, MODE_3D
 }

@@ -17,8 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Character card Centaur. Effect: When resolving a computeInfluence on an Island, Towers do not
- * count towards influence.
+ * Character card Centaur. Effect: When resolving a computeInfluence on an Island, Towers do not count towards influence.
  */
 public class Centaur extends CharacterCard
 {
@@ -66,8 +65,7 @@ public class Centaur extends CharacterCard
     }
 
     @Override
-    public int computePlayerInfluence(Player player, int island)
-            throws NoSuchElementException, IndexOutOfBoundsException
+    public int computePlayerInfluence(Player player, int island) throws NoSuchElementException, IndexOutOfBoundsException
     {
         // If the card is activated i apply the effect of this method
         if (!activated)
@@ -82,8 +80,7 @@ public class Centaur extends CharacterCard
         Island currentIsland = instance.islands.get(island);
 
         // Compute the influence of this player from students
-        int influence = player.getBoard().getProfessors().stream()
-                .map(p -> currentIsland.getStudentsByColor(p.getColor())).reduce(0, Integer::sum);
+        int influence = player.getBoard().getProfessors().stream().map(p -> currentIsland.getStudentsByColor(p.getColor())).reduce(0, Integer::sum);
 
         return influence;
     }
@@ -91,8 +88,8 @@ public class Centaur extends CharacterCard
     @Override
     public void computeInfluence() throws NoSuchElementException
     {
-        computeInfluence(instance.motherNatureIndex.orElseThrow(() -> new NoSuchElementException(
-                "[Centaur] No mother nature index, is the game initialized?")));
+        computeInfluence(instance.motherNatureIndex
+                .orElseThrow(() -> new NoSuchElementException("[Centaur] No mother nature index, is the game initialized?")));
     }
 
     @Override
@@ -115,24 +112,21 @@ public class Centaur extends CharacterCard
             // If the subscriber is present i have to notify
             if (instance.subscriber.isPresent())
             {
-                instance.subscriber.get().onNext(
-                        new IslandsUpdate(new ArrayList<Island>(instance.islands),instance.motherNatureIndex.get()));
+                instance.subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.motherNatureIndex.get()));
 
                 // I update also all the character cards payload
-                for (CharacterCard card :instance.characterCards)
+                for (CharacterCard card : instance.characterCards)
                     card.notifySubscriber();
             }
             return;
         }
 
         // Get the player with more influence, if there is any
-        List<Player> sortedPlayers = instance.players.stream().sorted(
-                        (p1, p2) -> computePlayerInfluence(p2, island) - computePlayerInfluence(p1, island))
-                .collect(Collectors.toList());
+        List<Player> sortedPlayers = instance.players.stream()
+                .sorted((p1, p2) -> computePlayerInfluence(p2, island) - computePlayerInfluence(p1, island)).collect(Collectors.toList());
 
         // Check if the first player has more influence than the second one
-        if (computePlayerInfluence(sortedPlayers.get(0),
-                island) > computePlayerInfluence(sortedPlayers.get(1), island))
+        if (computePlayerInfluence(sortedPlayers.get(0), island) > computePlayerInfluence(sortedPlayers.get(1), island))
         {
             // This player has more influence then all others
             Player influencer = sortedPlayers.get(0);
@@ -151,8 +145,8 @@ public class Centaur extends CharacterCard
             });
 
             // Move the influencer's towers to the island
-            List<Tower> towersToAdd = influencer.getBoard().getTowers().subList(0,
-                    Integer.min(towersToRemove.size(), influencer.getBoard().getTowers().size()));
+            List<Tower> towersToAdd =
+                    influencer.getBoard().getTowers().subList(0, Integer.min(towersToRemove.size(), influencer.getBoard().getTowers().size()));
 
             if (towersToAdd.size() == 0)
             {
@@ -162,8 +156,7 @@ public class Centaur extends CharacterCard
                     Tower towerToMove = influencer.getBoard().getTowers().get(0);
                     currentIsland.addTower(towerToMove);
                     influencer.getBoard().removeTower(towerToMove);
-                }
-                catch (EndGameException e)
+                } catch (EndGameException e)
                 {
                     // The exception is thrown if a player finishes the towers
                     towerFinished = true;
@@ -180,8 +173,7 @@ public class Centaur extends CharacterCard
                         // Add the tower to the island
                         currentIsland.addTower(t);
                     });
-                }
-                catch (EndGameException e)
+                } catch (EndGameException e)
                 {
                     // The exception is thrown if a player finishes the towers
                     towerFinished = true;
@@ -195,18 +187,18 @@ public class Centaur extends CharacterCard
                 Island nextIsland = instance.islands.get((i + 1) % instance.islands.size());
 
                 // Check if two consecutive islands have the same color of towers
-                if (currIsland.getTowers().size() > 0 && nextIsland.getTowers().size() > 0 &&
-                        currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0).getColor())
+                if (currIsland.getTowers().size() > 0 && nextIsland.getTowers().size() > 0
+                        && currIsland.getTowers().get(0).getColor() == nextIsland.getTowers().get(0).getColor())
                 {
                     // Mother must step back if it is placed after the current island or
                     // if it is on the last island or if the current island is the last one
-                    if (instance.motherNatureIndex.get() > instance.islands.indexOf(currIsland) ||
-                            instance.motherNatureIndex.get() == (instance.islands.size() - 1) ||
-                            instance.islands.indexOf(currIsland) == (instance.islands.size() - 1))
+                    if (instance.motherNatureIndex.get() > instance.islands.indexOf(currIsland)
+                            || instance.motherNatureIndex.get() == (instance.islands.size() - 1)
+                            || instance.islands.indexOf(currIsland) == (instance.islands.size() - 1))
                     {
                         // In case of 0 index, mother nature goes to islands.size - 2 because we will remove an island
-                        instance.motherNatureIndex = instance.getMotherNatureIndex().get() == 0 ?
-                                Optional.of(instance.islands.size() - 2) : Optional.of(instance.getMotherNatureIndex().get() - 1);
+                        instance.motherNatureIndex = instance.getMotherNatureIndex().get() == 0 ? Optional.of(instance.islands.size() - 2)
+                                : Optional.of(instance.getMotherNatureIndex().get() - 1);
                     }
 
                     // Merge the two islands and remove one
@@ -227,8 +219,7 @@ public class Centaur extends CharacterCard
                     instance.subscriber.get()
                             .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
-                instance.subscriber.get().onNext(
-                        new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.motherNatureIndex.get()));
+                instance.subscriber.get().onNext(new IslandsUpdate(new ArrayList<Island>(instance.islands), instance.motherNatureIndex.get()));
             }
 
             // If there are only 3 islands or a player has finished the towers the game ends

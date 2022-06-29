@@ -107,10 +107,10 @@ public class Thief extends CharacterCard
         }
 
         // I need to send the SchoolBoardUpdate because some students have been removed from the dining
-        if (instance.subscriber.isPresent()) {
+        if (instance.subscriber.isPresent())
+        {
             for (Player player : instance.players)
-                instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
         }
 

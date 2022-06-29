@@ -56,10 +56,8 @@ public class MushroomManTest
     public void constructorTest()
     {
         // Null pointers inside the factory method
-        assertThrows(NullPointerException.class,
-                () -> CharacterCard.createCharacterCard(null, game));
-        assertThrows(NullPointerException.class,
-                () -> CharacterCard.createCharacterCard(CharacterCardType.MUSHROOM_MAN, null));
+        assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(null, game));
+        assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(CharacterCardType.MUSHROOM_MAN, null));
 
         // Type confirmation
         assertEquals(CharacterCardType.MUSHROOM_MAN, mushroomMan.getCardType());
@@ -213,10 +211,8 @@ public class MushroomManTest
     {
         // Call the method with invalid parameters
         mushroomMan.activated = true;
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> mushroomMan.computePlayerInfluence(player1, -1));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> mushroomMan.computePlayerInfluence(player1, 20));
+        assertThrows(IndexOutOfBoundsException.class, () -> mushroomMan.computePlayerInfluence(player1, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> mushroomMan.computePlayerInfluence(player1, 20));
         assertThrows(NullPointerException.class, () -> mushroomMan.computePlayerInfluence(null, 0));
         mushroomMan.activated = false;
 
@@ -228,8 +224,7 @@ public class MushroomManTest
         // Verify that the not activated card calculates the influence as game
         for (int i = 0; i < game.islands.size(); i++)
         {
-            assertEquals(game.computePlayerInfluence(player1, i),
-                    mushroomMan.computePlayerInfluence(player1, i));
+            assertEquals(game.computePlayerInfluence(player1, i), mushroomMan.computePlayerInfluence(player1, i));
             // Add another student with different color to the islands to demonstrate that only the
             // selected color matters
             if (game.islands.get(i).getStudentsByColor(removedProfessor.getColor()) > 0)
@@ -237,8 +232,7 @@ public class MushroomManTest
                 int colorIndex;
                 // Take a different color
                 for (colorIndex = 0; colorIndex < SchoolColor.values().length
-                        && SchoolColor.values()[colorIndex] == removedProfessor
-                                .getColor(); colorIndex++);
+                        && SchoolColor.values()[colorIndex] == removedProfessor.getColor(); colorIndex++);
 
                 // Add that color to the island
                 game.islands.get(i).addStudent(new Student(SchoolColor.values()[colorIndex]));
@@ -256,13 +250,10 @@ public class MushroomManTest
         int differentInfluence = 0;
         for (int i = 0; i < game.islands.size(); i++)
         {
-            if (game.computePlayerInfluence(player1, i) != mushroomMan
-                    .computePlayerInfluence(player1, i))
+            if (game.computePlayerInfluence(player1, i) != mushroomMan.computePlayerInfluence(player1, i))
             {
-                assertEquals(game.islands.get(i).getStudents().get(0).getColor(),
-                        removedProfessor.getColor());
-                assertEquals(game.computePlayerInfluence(player1, i) - 1,
-                        mushroomMan.computePlayerInfluence(player1, i));
+                assertEquals(game.islands.get(i).getStudents().get(0).getColor(), removedProfessor.getColor());
+                assertEquals(game.computePlayerInfluence(player1, i) - 1, mushroomMan.computePlayerInfluence(player1, i));
                 differentInfluence++;
             }
         }
@@ -301,15 +292,14 @@ public class MushroomManTest
         // The player should have more influence but still nothing should move
         assertDoesNotThrow(() -> mushroomMan.computeInfluence());
         for (int i = 0; i < towers.size(); i++)
-            assertEquals(towers.get(i).getColor(),
-                    game.getCurrentIsland().getTowers().get(i).getColor());
+            assertEquals(towers.get(i).getColor(), game.getCurrentIsland().getTowers().get(i).getColor());
 
         // At the beginning there are 12 islands
         assertEquals(12, game.getIslands().size());
 
         // Put a tower on island next to the current one
-        Island nextIsland = game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ?
-                0 : game.getMotherNatureIndex().get() + 1);
+        Island nextIsland =
+                game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ? 0 : game.getMotherNatureIndex().get() + 1);
         nextIsland.addTower(new Tower(TowerColor.BLACK));
 
         mushroomMan.computeInfluence();

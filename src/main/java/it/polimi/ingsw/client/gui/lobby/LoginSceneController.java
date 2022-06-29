@@ -32,9 +32,8 @@ public class LoginSceneController implements Controllable
     }
 
     /**
-     * Method executed when the player is in the entrance scene and presses Submit button,
-     * if has inserted name, ip and port the client tries to connect to the server and send
-     * a SetNameCommand.
+     * Method executed when the player is in the entrance scene and presses Submit button, if has inserted name, ip and port the client tries to
+     * connect to the server and send a SetNameCommand.
      */
     public void submit(ActionEvent event)
     {
@@ -42,29 +41,30 @@ public class LoginSceneController implements Controllable
         if (nicknameTextField.getText().isBlank())
         {
             controller.displayError("You must insert a valid nickname");
-        }
-        else if (ipTextField.getText().isBlank())
+        } else if (ipTextField.getText().isBlank())
         {
             controller.displayError("You must insert a valid IP");
-        }
-        else if (portTextField.getText().isBlank())
+        } else if (portTextField.getText().isBlank())
         {
             controller.displayError("You must insert a valid port");
-        }
-        else {
-            try {
+        } else
+        {
+            try
+            {
                 // Set the ip and port of the client and try to connect
                 String ip = ipTextField.getText();
                 int port = Integer.parseInt(portTextField.getText());
 
-                if(controller.clientConnect(ip, port))
+                if (controller.clientConnect(ip, port))
                     // If all goes well set the name
                     controller.sendCommand(new SetNameCommand(nicknameTextField.getText()));
 
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e)
+            {
                 // If port is not a number
                 controller.displayError("You must insert a valid port");
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 controller.displayError("Connection error");
             }
         }

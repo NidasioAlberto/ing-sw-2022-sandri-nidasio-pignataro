@@ -10,8 +10,8 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
- * Character card Shaman. Effect: During this turn, you take control of any number of Professors
- * even if you have the same number of Students as the player who currently controls them
+ * Character card Shaman. Effect: During this turn, you take control of any number of Professors even if you have the same number of Students as the
+ * player who currently controls them
  */
 public class Shaman extends CharacterCard
 {
@@ -49,30 +49,30 @@ public class Shaman extends CharacterCard
     @Override
     public void applyAction()
     {
-        //I have to check if mother nature has been moved.
-        //If so i can disable the card
-        if(!activated)
+        // I have to check if mother nature has been moved.
+        // If so i can disable the card
+        if (!activated)
             return;
 
         conquerProfessors();
 
         // I need to send the SchoolBoardUpdate because of the conquerProfessors
-        if (instance.subscriber.isPresent()) {
+        if (instance.subscriber.isPresent())
+        {
             for (Player player : instance.players)
-                instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
 
         }
 
-        if(instance.motherNatureMoved)
+        if (instance.motherNatureMoved)
             this.deactivate();
     }
 
     @Override
     public void conquerProfessors() throws NoSuchElementException
     {
-        //If the card is not activated I skip this method
-        if(!activated)
+        // If the card is not activated I skip this method
+        if (!activated)
         {
             instance.conquerProfessors();
             return;
@@ -86,18 +86,15 @@ public class Shaman extends CharacterCard
             if (instance.professors.stream().filter(p -> p.getColor().equals(color)).count() > 0)
             {
                 // Get the player with more students of the current color
-                List<Player> sortedPlayers = instance.players.stream()
-                        .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color)
-                                - p1.getBoard().getStudentsNumber(color))
-                        .collect(Collectors.toList());
+                List<Player> sortedPlayers =
+                        instance.players.stream().sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color) - p1.getBoard().getStudentsNumber(color))
+                                .collect(Collectors.toList());
 
                 // The player gets the professor only if he has the majority
-                if (sortedPlayers.get(0).getBoard().getStudentsNumber(color) > sortedPlayers.get(1)
-                        .getBoard().getStudentsNumber(color))
+                if (sortedPlayers.get(0).getBoard().getStudentsNumber(color) > sortedPlayers.get(1).getBoard().getStudentsNumber(color))
                 {
                     // Remove the professor from the table
-                    Professor toMove = instance.professors.stream().filter(p -> p.getColor().equals(color))
-                            .findFirst().orElse(null);
+                    Professor toMove = instance.professors.stream().filter(p -> p.getColor().equals(color)).findFirst().orElse(null);
                     instance.professors.remove(toMove);
 
                     // Add him to the player's board
@@ -106,27 +103,22 @@ public class Shaman extends CharacterCard
             } else
             {
                 // Look for the player that has that professor
-                Player currentKing = instance.players.stream().filter(p -> p.getBoard().hasProfessor(color))
-                        .findFirst().orElse(null);
+                Player currentKing = instance.players.stream().filter(p -> p.getBoard().hasProfessor(color)).findFirst().orElse(null);
 
                 // Get the player with more students of the current color
-                Player wannaBeKing =
-                        instance.players.stream()
-                                .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color)
-                                        - p1.getBoard().getStudentsNumber(color))
-                                .findFirst().orElse(null);
+                Player wannaBeKing = instance.players.stream()
+                        .sorted((p1, p2) -> p2.getBoard().getStudentsNumber(color) - p1.getBoard().getStudentsNumber(color)).findFirst().orElse(null);
 
                 // If they are the same player there's nothing to do
                 if (currentKing != wannaBeKing)
                 {
                     // Move the professor if the wanna be king is not the current king and he has
                     // more students
-                    if (wannaBeKing.getBoard().getStudentsNumber(color) > currentKing.getBoard()
-                            .getStudentsNumber(color))
+                    if (wannaBeKing.getBoard().getStudentsNumber(color) > currentKing.getBoard().getStudentsNumber(color))
                     {
                         // I take the instance of the professor to be moved
-                        Professor professor = currentKing.getBoard().getProfessors().stream()
-                                .filter(p -> p.getColor().equals(color)).findFirst().get();
+                        Professor professor =
+                                currentKing.getBoard().getProfessors().stream().filter(p -> p.getColor().equals(color)).findFirst().get();
 
                         // Remove the professor from the current king
                         currentKing.getBoard().removeProfessor(professor);
@@ -138,14 +130,11 @@ public class Shaman extends CharacterCard
 
                 // MOVE THE PROFESSOR IF THE CURRENT KING ISN'T THE PLAYER THAT HAS PLAYED THIS CARD
                 // AND THE PLAYER THAT HAS PLAYED THIS CARD HAS THE SAME STUDENTS NUMBER OF CURRENT KING
-                if (currentKing != instance.getSelectedPlayer().orElseThrow(
-                        () -> new NoSelectedPlayerException("[Shaman]"))
-                        && instance.getSelectedPlayer().get().getBoard().getStudentsNumber(color) >=
-                        currentKing.getBoard().getStudentsNumber(color))
+                if (currentKing != instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Shaman]"))
+                        && instance.getSelectedPlayer().get().getBoard().getStudentsNumber(color) >= currentKing.getBoard().getStudentsNumber(color))
                 {
                     // I take the instance of the professor to be moved
-                    Professor professor = currentKing.getBoard().getProfessors().stream()
-                            .filter(p -> p.getColor().equals(color)).findFirst().get();
+                    Professor professor = currentKing.getBoard().getProfessors().stream().filter(p -> p.getColor().equals(color)).findFirst().get();
 
                     // Remove the professor from the current king
                     currentKing.getBoard().removeProfessor(professor);
@@ -158,12 +147,10 @@ public class Shaman extends CharacterCard
     }
 
     @Override
-    public void putStudentToDining(Student student)
-            throws NoSuchElementException, NullPointerException
+    public void putStudentToDining(Student student) throws NoSuchElementException, NullPointerException
     {
         // Move the student
-        instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Shaman]")).getBoard()
-                .addStudentToDiningRoom(student);
+        instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Shaman]")).getBoard().addStudentToDiningRoom(student);
 
         conquerProfessors();
 
@@ -172,8 +159,7 @@ public class Shaman extends CharacterCard
         if (instance.subscriber.isPresent())
         {
             for (Player player : instance.players)
-                instance.subscriber.get()
-                        .onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
+                instance.subscriber.get().onNext(new SchoolBoardUpdate(player.getBoard(), player.getNickname(), instance.players.indexOf(player)));
         }
     }
 
@@ -184,8 +170,7 @@ public class Shaman extends CharacterCard
     }
 
     /**
-     * Only for this card when it is activated I must apply immediately the action in order
-     * to call the conquerProfessor.
+     * Only for this card when it is activated I must apply immediately the action in order to call the conquerProfessor.
      */
     @Override
     public void activate()

@@ -18,15 +18,18 @@ public class MatchLine
         this.mode = mode;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public GameMode getMode() {
+    public GameMode getMode()
+    {
         return mode;
     }
 
-    public String getPlayersNumber() {
+    public String getPlayersNumber()
+    {
         return playersNumber;
     }
 }

@@ -19,8 +19,8 @@ public class CreateMatchSceneController implements Controllable
     private SceneController controller;
 
     /**
-     * Method executed when the player is in the createMatch scene and presses Create button,
-     * check that the parameter are valid, if so send a CreateMatchCommand.
+     * Method executed when the player is in the createMatch scene and presses Create button, check that the parameter are valid, if so send a
+     * CreateMatchCommand.
      */
     public void create(ActionEvent event)
     {
@@ -28,16 +28,13 @@ public class CreateMatchSceneController implements Controllable
         if (gameNameCreateTextField.getText().isBlank())
         {
             controller.displayError("You must insert a valid game name");
-        }
-        else if (!classicRbutton.isSelected() && !expertRbutton.isSelected())
+        } else if (!classicRbutton.isSelected() && !expertRbutton.isSelected())
         {
             controller.displayError("You must choose a game mode");
-        }
-        else if (!twoRbutton.isSelected() && !threeRbutton.isSelected())
+        } else if (!twoRbutton.isSelected() && !threeRbutton.isSelected())
         {
             controller.displayError("You must choose a number of players");
-        }
-        else
+        } else
         {
             // If all goes well send a create match command
             String gameName = gameNameCreateTextField.getText();

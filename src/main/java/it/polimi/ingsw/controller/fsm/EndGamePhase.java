@@ -12,8 +12,7 @@ public class EndGamePhase implements Phase
     }
 
     @Override
-    public boolean isLegitAction(GameActionHandler handler, String playerName,
-            BaseGameAction baseAction)
+    public boolean isLegitAction(GameActionHandler handler, String playerName, BaseGameAction baseAction)
     {
         // When the game is at the end, no action can be done
         return false;

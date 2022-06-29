@@ -5,11 +5,9 @@ import javafx.scene.paint.Color;
 
 public enum ProfessorType
 {
-    RED("Models/redProfessor.obj", Color.rgb(238, 50, 46)),
-    BLUE("Models/blueProfessor.obj", Color.rgb(46, 196, 243)),
-    GREEN("Models/greenProfessor.obj", Color.rgb(35, 180, 128)),
-    PINK("Models/pinkProfessor.obj", Color.rgb(218, 97, 163)),
-    YELLOW("Models/yellowProfessor.obj", Color.rgb(252, 180, 24));
+    RED("Models/redProfessor.obj", Color.rgb(238, 50, 46)), BLUE("Models/blueProfessor.obj", Color.rgb(46, 196, 243)), GREEN(
+            "Models/greenProfessor.obj", Color.rgb(35, 180, 128)), PINK("Models/pinkProfessor.obj",
+                    Color.rgb(218, 97, 163)), YELLOW("Models/yellowProfessor.obj", Color.rgb(252, 180, 24));
 
     /**
      * Object file parser
@@ -33,7 +31,13 @@ public enum ProfessorType
     /**
      * Parser getter
      */
-    public ObjectModelParser getParser() { return parser; }
+    public ObjectModelParser getParser()
+    {
+        return parser;
+    }
 
-    public Color getColor() { return color; }
+    public Color getColor()
+    {
+        return color;
+    }
 }

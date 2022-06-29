@@ -10,8 +10,7 @@ import java.io.Serial;
 import java.util.NoSuchElementException;
 
 /**
- * Character card Postman. Effect: You may move Mother Nature up to 2 additional Islands than is
- * indicated by the Assistant card you've played.
+ * Character card Postman. Effect: You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played.
  */
 public class Postman extends CharacterCard
 {
@@ -66,10 +65,8 @@ public class Postman extends CharacterCard
             return instance.isValidMotherNatureMovement(steps);
 
         // I have to check if the current player can do this movement
-        Player currentPlayer = instance.getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[Postman]"));
-        AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(
-                () -> new NoSelectedAssistantCardException("[Postman]"));
+        Player currentPlayer = instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Postman]"));
+        AssistantCard selectedCard = currentPlayer.getSelectedCard().orElseThrow(() -> new NoSelectedAssistantCardException("[Postman]"));
 
         // Here occurs the modification
         return selectedCard.getSteps() + 2 >= steps && steps >= 1;

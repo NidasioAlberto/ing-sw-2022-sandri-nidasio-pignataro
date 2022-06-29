@@ -184,16 +184,13 @@ public class CentaurTest
         }
 
         // An exception is thrown if the island index is wrong
-        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
-                () -> centaur.computePlayerInfluence(player1, -1));
+        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, () -> centaur.computePlayerInfluence(player1, -1));
         assertEquals("[Centaur] Island index out of bounds", e.getMessage());
-        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class,
-                () -> centaur.computePlayerInfluence(player1, 12));
+        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class, () -> centaur.computePlayerInfluence(player1, 12));
         assertEquals("[Centaur] Island index out of bounds", e1.getMessage());
 
         // An exception is thrown if the player is null
-        NullPointerException e2 = assertThrows(NullPointerException.class,
-                () -> centaur.computePlayerInfluence(null, 1));
+        NullPointerException e2 = assertThrows(NullPointerException.class, () -> centaur.computePlayerInfluence(null, 1));
         assertEquals("[Centaur] player null", e2.getMessage());
 
         // The player selects an island where there is already a student
@@ -203,8 +200,7 @@ public class CentaurTest
         assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
 
         // The player has the professor of the student color on the island
-        player1.getBoard().addProfessor(
-                new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
+        player1.getBoard().addProfessor(new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
 
         // The island has a tower of the color of the player1
         game.getIslands().get(islandIndex).addTower(new Tower(TowerColor.BLACK));
@@ -261,15 +257,14 @@ public class CentaurTest
         // The player should have more influence but still nothing should move
         assertDoesNotThrow(() -> centaur.computeInfluence());
         for (int i = 0; i < towers.size(); i++)
-            assertEquals(towers.get(i).getColor(),
-                    game.getCurrentIsland().getTowers().get(i).getColor());
+            assertEquals(towers.get(i).getColor(), game.getCurrentIsland().getTowers().get(i).getColor());
 
         // At the beginning there are 12 islands
         assertEquals(12, game.getIslands().size());
 
         // Put a tower on island next to the current one
-        Island nextIsland = game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ?
-                0 : game.getMotherNatureIndex().get() + 1);
+        Island nextIsland =
+                game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ? 0 : game.getMotherNatureIndex().get() + 1);
         nextIsland.addTower(new Tower(TowerColor.BLACK));
 
         centaur.computeInfluence();

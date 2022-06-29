@@ -10,6 +10,7 @@ public class SetNameAnswer extends Answer
     private static final long serialVersionUID = 1882584043643637670L;
 
     private String name;
+
     public SetNameAnswer(String name)
     {
         this.name = name;

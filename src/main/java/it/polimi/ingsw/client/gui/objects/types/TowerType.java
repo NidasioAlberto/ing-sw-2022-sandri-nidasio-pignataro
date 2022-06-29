@@ -5,9 +5,7 @@ import javafx.scene.paint.Color;
 
 public enum TowerType
 {
-    BLACK(Color.rgb(65, 68, 68)),
-    WHITE(Color.WHITE),
-    GREY(Color.rgb(113, 115, 116));
+    BLACK(Color.rgb(65, 68, 68)), WHITE(Color.WHITE), GREY(Color.rgb(113, 115, 116));
 
     /**
      * Object file parser
@@ -21,6 +19,7 @@ public enum TowerType
 
     /**
      * Constructor
+     * 
      * @param color The tower color
      */
     private TowerType(Color color)
@@ -32,6 +31,13 @@ public enum TowerType
     /**
      * Getters
      */
-    public ObjectModelParser getParser() { return parser; }
-    public Color getColor() { return color; }
+    public ObjectModelParser getParser()
+    {
+        return parser;
+    }
+
+    public Color getColor()
+    {
+        return color;
+    }
 }

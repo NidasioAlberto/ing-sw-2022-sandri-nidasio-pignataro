@@ -158,8 +158,7 @@ public class GrandmaHerbsTest
     {
         // An exception is thrown if I call the method without a selected player
         grandmaHerbs.activated = true;
-        NoSuchElementException e4 =
-                assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
+        NoSuchElementException e4 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
         assertEquals("[GrandmaHerbs] No player selected", e4.getMessage());
 
         grandmaHerbs.activated = false;
@@ -235,8 +234,7 @@ public class GrandmaHerbsTest
         }
 
         // When there aren't noEntryTiles on the card an exception is thrown
-        NoSuchElementException e3 =
-                assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
+        NoSuchElementException e3 = assertThrows(NoSuchElementException.class, () -> grandmaHerbs.applyAction());
         assertEquals("[GrandmaHerbs] No more no entry tiles", e3.getMessage());
     }
 
@@ -244,11 +242,9 @@ public class GrandmaHerbsTest
     public void computeInfluenceTest()
     {
         // An exception is thrown when the island index is wrong
-        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
-                () -> grandmaHerbs.computeInfluence(-1));
+        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, () -> grandmaHerbs.computeInfluence(-1));
         assertEquals("[Game] Island index out of bounds", e.getMessage());
-        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class,
-                () -> grandmaHerbs.computeInfluence(12));
+        IndexOutOfBoundsException e1 = assertThrows(IndexOutOfBoundsException.class, () -> grandmaHerbs.computeInfluence(12));
         assertEquals("[Game] Island index out of bounds", e1.getMessage());
 
         // Select a player
@@ -262,8 +258,7 @@ public class GrandmaHerbsTest
         player1.selectIsland(islandIndex);
 
         // Imagine the player1 owns the professor of the only student present on the selected island
-        player1.getBoard().addProfessor(
-                new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
+        player1.getBoard().addProfessor(new Professor(game.getIslands().get(islandIndex).getStudents().get(0).getColor()));
 
         // Activate the card
         try
@@ -290,7 +285,7 @@ public class GrandmaHerbsTest
         // The noEntryTile is removed from the island
         assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
         // The noEntryTile returns to the card
-        grandmaHerbs.isPlayable();  // This method updates the number of entrys
+        grandmaHerbs.isPlayable(); // This method updates the number of entrys
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
         // The influence isn't calculated
         assertEquals(0, game.getIslands().get(islandIndex).getTowers().size());
@@ -302,8 +297,7 @@ public class GrandmaHerbsTest
         assertEquals(0, game.getIslands().get(islandIndex).getNoEntryTiles());
         assertEquals(4, ((GrandmaHerbs) grandmaHerbs).getNoEntryTiles());
         assertEquals(1, game.getIslands().get(islandIndex).getTowers().size());
-        assertEquals(player1.getColor(),
-                game.getIslands().get(islandIndex).getTowers().get(0).getColor());
+        assertEquals(player1.getColor(), game.getIslands().get(islandIndex).getTowers().get(0).getColor());
         assertEquals(1, game.getIslands().get(islandIndex).getStudents().size());
     }
 }

@@ -33,8 +33,7 @@ public class LobbySceneController implements Controllable
 
     @Override
     /**
-     * Sends a GetMatchesList to the client in order to display the current available matches,
-     * otherwise displays a message.
+     * Sends a GetMatchesList to the client in order to display the current available matches, otherwise displays a message.
      */
     public void initialize(SceneController controller)
     {
@@ -44,8 +43,7 @@ public class LobbySceneController implements Controllable
     }
 
     /**
-     * Method executed when the player is in the lobby scene and presses create match button,
-     * the scene moves to createMatch.
+     * Method executed when the player is in the lobby scene and presses create match button, the scene moves to createMatch.
      */
     public void createMatch(ActionEvent event)
     {
@@ -55,6 +53,7 @@ public class LobbySceneController implements Controllable
 
     /**
      * Shows the list of the available matches.
+     * 
      * @param answer contains the list of the matches.
      */
     public void displayMatchesList(MatchesListAnswer answer)
@@ -72,8 +71,8 @@ public class LobbySceneController implements Controllable
                         answer.getNumPlayers().get(matchName) + "/" + answer.getMaxNumPlayers().get(matchName)));
 
             matchesTableView.setItems(list);
-        }
-        else matchesTableView.setPlaceholder(new Label("There aren't matches at the moment"));
+        } else
+            matchesTableView.setPlaceholder(new Label("There aren't matches at the moment"));
     }
 
     /**

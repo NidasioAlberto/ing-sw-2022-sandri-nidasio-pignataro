@@ -67,6 +67,7 @@ public class MatchesListAnswer extends Answer
 
     /**
      * toString() of a single match.
+     * 
      * @param key name of the match.
      * @return the match's string.
      */
@@ -79,6 +80,7 @@ public class MatchesListAnswer extends Answer
 
         return str;
     }
+
     @Override
     public void handleAnswer(Visualizable handler)
     {

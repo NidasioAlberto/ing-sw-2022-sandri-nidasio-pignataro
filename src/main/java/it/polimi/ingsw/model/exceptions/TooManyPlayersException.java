@@ -6,8 +6,7 @@ public class TooManyPlayersException extends Exception
 
     public TooManyPlayersException(int currentPlayersNumber)
     {
-        super("There are currently too many players, there are " + currentPlayersNumber
-                + " players");
+        super("There are currently too many players, there are " + currentPlayersNumber + " players");
         this.currentPlayersNumber = currentPlayersNumber;
     }
 

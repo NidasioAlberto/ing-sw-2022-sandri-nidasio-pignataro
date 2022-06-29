@@ -133,10 +133,11 @@ public class CloudTile implements Serializable
         String rep = "";
 
         // Previous version, doesn't work on Windows
-        /*rep += "╭────╮" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "│" + drawStudent(0) + "  " + drawStudent(1) + "│" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "│" + drawStudent(2) + "  " + drawStudent(3) + "│" + PrintHelper.moveCursorRelative(-1, -6);
-        rep += "╰────╯"; */
+        /*
+         * rep += "╭────╮" + PrintHelper.moveCursorRelative(-1, -6); rep += "│" + drawStudent(0) + "  " + drawStudent(1) + "│" +
+         * PrintHelper.moveCursorRelative(-1, -6); rep += "│" + drawStudent(2) + "  " + drawStudent(3) + "│" + PrintHelper.moveCursorRelative(-1, -6);
+         * rep += "╰────╯";
+         */
 
         rep += GamePieces.TOP_LEFT_CORNER_CURVE + "────" + GamePieces.TOP_RIGHT_CORNER_CURVE + PrintHelper.moveCursorRelative(-1, -6);
         rep += "│" + drawStudent(0) + "  " + drawStudent(1) + "│" + PrintHelper.moveCursorRelative(-1, -6);

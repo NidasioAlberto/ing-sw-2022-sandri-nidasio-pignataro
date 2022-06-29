@@ -32,8 +32,7 @@ public class ShamanTest
         {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        }
-        catch (TooManyPlayersException e)
+        } catch (TooManyPlayersException e)
         {
             e.printStackTrace();
         }
@@ -98,14 +97,14 @@ public class ShamanTest
             assertEquals(1, player1.getBoard().getCoins());
 
             // The card doesn't intercept any action, so it accepts only ACTION_BASE
-            for (ExpertGameAction action: ExpertGameAction.values())
+            for (ExpertGameAction action : ExpertGameAction.values())
             {
                 if (action == ExpertGameAction.BASE_ACTION)
                     assertTrue(shaman.isValidAction(action));
-                else assertFalse(shaman.isValidAction(action));
+                else
+                    assertFalse(shaman.isValidAction(action));
             }
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -125,8 +124,7 @@ public class ShamanTest
             player1.getBoard().addCoins(3);
             shaman.activate();
             assertEquals(1, player1.getBoard().getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -148,8 +146,7 @@ public class ShamanTest
             shaman.activate();
             assertEquals(1, player1.getBoard().getCoins());
             assertTrue(shaman.activated);
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -195,12 +192,14 @@ public class ShamanTest
         assertEquals(SchoolColor.GREEN, player2.getBoard().getProfessors().get(0).getColor());
         assertEquals(0, player1.getBoard().getProfessors().size());
 
-        try {
+        try
+        {
             // Activate the card
             shaman.activate();
             assertEquals(1, player1.getBoard().getCoins());
             assertTrue(shaman.activated);
-        } catch (NotEnoughCoinsException e) {
+        } catch (NotEnoughCoinsException e)
+        {
             e.printStackTrace();
         }
 
@@ -222,12 +221,14 @@ public class ShamanTest
         game.selectPlayer(1);
         player2.getBoard().addCoins(3);
 
-        try {
+        try
+        {
             // Activate the card
             shaman.activate();
             assertEquals(1, player2.getBoard().getCoins());
             assertTrue(shaman.activated);
-        } catch (NotEnoughCoinsException e) {
+        } catch (NotEnoughCoinsException e)
+        {
             e.printStackTrace();
         }
 
@@ -246,12 +247,14 @@ public class ShamanTest
         game.selectPlayer(1);
         player2.getBoard().addCoins(3);
 
-        try {
+        try
+        {
             // Activate the card
             shaman.activate();
             assertEquals(1, player1.getBoard().getCoins());
             assertTrue(shaman.activated);
-        } catch (NotEnoughCoinsException e) {
+        } catch (NotEnoughCoinsException e)
+        {
             e.printStackTrace();
         }
 
@@ -297,8 +300,7 @@ public class ShamanTest
     public void putStudentToDiningTest()
     {
         // Now there is still not a selected player
-        assertThrows(NoSuchElementException.class,
-                () -> game.putStudentToDining(new Student(SchoolColor.GREEN)));
+        assertThrows(NoSuchElementException.class, () -> game.putStudentToDining(new Student(SchoolColor.GREEN)));
 
         // Select a player
         shaman.selectPlayer(1);

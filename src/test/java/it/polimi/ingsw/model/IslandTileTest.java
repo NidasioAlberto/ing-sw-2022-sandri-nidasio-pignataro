@@ -17,8 +17,7 @@ public class IslandTileTest
     }
 
     /**
-     * Test that a normal student is added instead if the student is already contained or it is null
-     * nothing changes.
+     * Test that a normal student is added instead if the student is already contained or it is null nothing changes.
      */
     @Test
     public void addStudentTest()
@@ -93,8 +92,7 @@ public class IslandTileTest
     }
 
     /**
-     * Test that removeTower(Tower tower) removes the tower on the island only if is equal to the
-     * parameter.
+     * Test that removeTower(Tower tower) removes the tower on the island only if is equal to the parameter.
      */
     @Test
     public void removeTowerTest2()

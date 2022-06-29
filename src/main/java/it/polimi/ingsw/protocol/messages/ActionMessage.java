@@ -7,9 +7,8 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * This class represents a message of the Command Pattern. Depending on the arrived message, we pass
- * via parameter the object to be commanded and the message itself calls a specific function of that
- * object to execute the command. It is used to avoid non-oop style switches.
+ * This class represents a message of the Command Pattern. Depending on the arrived message, we pass via parameter the object to be commanded and the
+ * message itself calls a specific function of that object to execute the command. It is used to avoid non-oop style switches.
  */
 public abstract class ActionMessage implements Serializable
 {

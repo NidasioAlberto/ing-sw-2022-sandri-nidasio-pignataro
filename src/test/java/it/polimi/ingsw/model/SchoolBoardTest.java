@@ -128,8 +128,7 @@ public class SchoolBoardTest
         assertEquals(true, board.getProfessors().contains(secondProfessor));
 
         // Remove a different instance
-        assertThrows(NoSuchElementException.class,
-                () -> board.removeProfessor(new Professor(SchoolColor.RED)));
+        assertThrows(NoSuchElementException.class, () -> board.removeProfessor(new Professor(SchoolColor.RED)));
         assertEquals(2, board.getProfessors().size());
         assertEquals(true, board.getProfessors().contains(firstProfessor));
         assertEquals(true, board.getProfessors().contains(secondProfessor));
@@ -168,8 +167,7 @@ public class SchoolBoardTest
         assertEquals(true, board.hasProfessor(secondProfessor.getColor()));
 
         // Remove a different instance
-        assertThrows(NoSuchElementException.class,
-                () -> board.removeProfessor(new Professor(SchoolColor.RED)));
+        assertThrows(NoSuchElementException.class, () -> board.removeProfessor(new Professor(SchoolColor.RED)));
         assertEquals(2, board.getProfessors().size());
         assertEquals(true, board.hasProfessor(firstProfessor.getColor()));
         assertEquals(true, board.hasProfessor(secondProfessor.getColor()));
@@ -337,16 +335,14 @@ public class SchoolBoardTest
                 if (SchoolColor.values()[color] == students.get(i).getColor())
                 {
                     // Check if the actual increment is 1
-                    assertEquals(previousNumber[color] + 1,
-                            board.getStudentsNumber(SchoolColor.values()[color]));
+                    assertEquals(previousNumber[color] + 1, board.getStudentsNumber(SchoolColor.values()[color]));
 
                     // Increment the previous number
                     previousNumber[color]++;
                 } else
                 {
                     // Else check that the number isn't different
-                    assertEquals(previousNumber[color],
-                            board.getStudentsNumber(SchoolColor.values()[color]));
+                    assertEquals(previousNumber[color], board.getStudentsNumber(SchoolColor.values()[color]));
                 }
             }
         }
@@ -371,10 +367,8 @@ public class SchoolBoardTest
         board.addStudentToEntrance(secondStudent);
 
         // Remove null object
-        assertThrows(NullPointerException.class,
-                () -> board.removeStudentFromEntrance((Student) null));
-        assertThrows(NullPointerException.class,
-                () -> board.removeStudentFromEntrance((SchoolColor) null));
+        assertThrows(NullPointerException.class, () -> board.removeStudentFromEntrance((Student) null));
+        assertThrows(NullPointerException.class, () -> board.removeStudentFromEntrance((SchoolColor) null));
 
         // Remove a non present object
         assertThrows(NoSelectedStudentsException.class, () -> board.removeStudentFromEntrance(new Student(SchoolColor.YELLOW)));
@@ -425,15 +419,13 @@ public class SchoolBoardTest
         // Remove a student that is not present
         assertEquals(Optional.empty(), board.removeStudentFromDining(SchoolColor.YELLOW));
         for (int color = 0; color < SchoolColor.values().length; color++)
-            assertEquals(previousNumber[color],
-                    board.getStudentsNumber(SchoolColor.values()[color]));
+            assertEquals(previousNumber[color], board.getStudentsNumber(SchoolColor.values()[color]));
 
         // Remove all the students and compare them
         for (Student student : students)
         {
             Student removedStudent = board.removeStudentFromDining(student.getColor())
-                    .orElseThrow(() -> new NoSuchElementException(
-                            "[SchoolBoardTest] No student with that color"));
+                    .orElseThrow(() -> new NoSuchElementException("[SchoolBoardTest] No student with that color"));
 
             // I expect the remove student to be contained into the list, if so i remove it
             assertEquals(true, students.contains(removedStudent));
@@ -461,16 +453,13 @@ public class SchoolBoardTest
 
         // Move a null student
         assertThrows(NullPointerException.class, () -> board.moveStudentToDining((Student) null));
-        assertThrows(NullPointerException.class,
-                () -> board.moveStudentToDining((SchoolColor) null));
+        assertThrows(NullPointerException.class, () -> board.moveStudentToDining((SchoolColor) null));
         for (SchoolColor color : SchoolColor.values())
             assertEquals(0, board.getStudentsNumber(color));
 
         // Move a student that doesn't exist in entrance
-        assertThrows(NoSuchElementException.class,
-                () -> board.moveStudentToDining(new Student(SchoolColor.GREEN)));
-        assertThrows(NoSuchElementException.class,
-                () -> board.moveStudentToDining(SchoolColor.YELLOW));
+        assertThrows(NoSuchElementException.class, () -> board.moveStudentToDining(new Student(SchoolColor.GREEN)));
+        assertThrows(NoSuchElementException.class, () -> board.moveStudentToDining(SchoolColor.YELLOW));
         for (SchoolColor color : SchoolColor.values())
             assertEquals(0, board.getStudentsNumber(color));
 
@@ -484,8 +473,7 @@ public class SchoolBoardTest
         // At the end I should have the same number of colors
         for (SchoolColor color : SchoolColor.values())
         {
-            assertEquals(board.getStudentsNumber(color),
-                    students.stream().filter(s -> s.getColor() == color).count());
+            assertEquals(board.getStudentsNumber(color), students.stream().filter(s -> s.getColor() == color).count());
         }
 
         // Now the same but I use the color method (I RESET ALL FIRST)
@@ -505,8 +493,7 @@ public class SchoolBoardTest
         // At the end I should have the same number of colors
         for (SchoolColor color : SchoolColor.values())
         {
-            assertEquals(board.getStudentsNumber(color),
-                    students.stream().filter(s -> s.getColor() == color).count());
+            assertEquals(board.getStudentsNumber(color), students.stream().filter(s -> s.getColor() == color).count());
         }
 
         // Expert board

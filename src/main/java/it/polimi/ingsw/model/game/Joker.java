@@ -140,8 +140,8 @@ public class Joker extends CharacterCard
             currentPlayer.getBoard().addStudentToEntrance(entranceStudent);
             if (instance.subscriber.isPresent())
             {
-                instance.subscriber.get()
-                            .onNext(new SchoolBoardUpdate(currentPlayer.getBoard(), currentPlayer.getNickname(), instance.players.indexOf(currentPlayer)));
+                instance.subscriber.get().onNext(
+                        new SchoolBoardUpdate(currentPlayer.getBoard(), currentPlayer.getNickname(), instance.players.indexOf(currentPlayer)));
             }
             throw new NoSuchStudentOnCardException("[Joker]");
         }

@@ -20,8 +20,7 @@ public class ProfessorTest
     }
 
     /**
-     * The professor constructor should throw NullPointerException if an invalid parameter is
-     * passed.
+     * The professor constructor should throw NullPointerException if an invalid parameter is passed.
      */
     @Test
     public void nullParameterTest()

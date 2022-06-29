@@ -135,6 +135,7 @@ public class SceneController
 
     /**
      * Display an alert with the given message.
+     * 
      * @param errorMessage to display.
      */
     public void displayError(String errorMessage)
@@ -148,6 +149,7 @@ public class SceneController
 
     /**
      * Display an alert with the given message and close the game.
+     * 
      * @param errorMessage to display.
      */
     public void displayConnectionError(String errorMessage)
@@ -158,20 +160,21 @@ public class SceneController
         alert.setContentText(errorMessage);
 
         // Terminate the application if the player closes the alert
-        alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
+        alert.setOnCloseRequest(new EventHandler<DialogEvent>()
+        {
             @Override
-            public void handle(DialogEvent e) {
+            public void handle(DialogEvent e)
+            {
                 System.exit(0);
             }
         });
 
         // Terminate the application if the player presses OK
-        Platform.runLater(() ->
-                alert.showAndWait().ifPresent(response -> {
-                     if (response == ButtonType.OK) {
-                         System.exit(0);
-                     }
-                })
-        );
+        Platform.runLater(() -> alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK)
+            {
+                System.exit(0);
+            }
+        }));
     }
 }

@@ -59,10 +59,8 @@ public class KnightTest
     public void constructorTest()
     {
         // Null pointers inside the factory method
-        assertThrows(NullPointerException.class,
-                () -> CharacterCard.createCharacterCard(null, game));
-        assertThrows(NullPointerException.class,
-                () -> CharacterCard.createCharacterCard(CharacterCardType.KNIGHT, null));
+        assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(null, game));
+        assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(CharacterCardType.KNIGHT, null));
 
         // Type confirmation
         assertEquals(CharacterCardType.KNIGHT, knight.getCardType());
@@ -191,10 +189,8 @@ public class KnightTest
     public void computePlayerInfluenceTest()
     {
         // Call the method with invalid parameters
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> knight.computePlayerInfluence(player1, -1));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> knight.computePlayerInfluence(player1, 20));
+        assertThrows(IndexOutOfBoundsException.class, () -> knight.computePlayerInfluence(player1, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> knight.computePlayerInfluence(player1, 20));
         assertThrows(NullPointerException.class, () -> knight.computePlayerInfluence(null, 0));
 
         // For each island the player influence should be +2 the actual influence when the card is
@@ -203,8 +199,7 @@ public class KnightTest
         // Check the deactivated status
         for (int i = 0; i < game.islands.size(); i++)
         {
-            assertEquals(knight.computePlayerInfluence(player1, i),
-                    game.computePlayerInfluence(player1, i));
+            assertEquals(knight.computePlayerInfluence(player1, i), game.computePlayerInfluence(player1, i));
         }
 
         // Now i activate the card and check again
@@ -223,8 +218,7 @@ public class KnightTest
         // Should all be +2
         for (int i = 0; i < game.islands.size(); i++)
         {
-            assertEquals(knight.computePlayerInfluence(player1, i),
-                    game.computePlayerInfluence(player1, i) + 2);
+            assertEquals(knight.computePlayerInfluence(player1, i), game.computePlayerInfluence(player1, i) + 2);
         }
     }
 
@@ -258,15 +252,14 @@ public class KnightTest
         // The player should have more influence but still nothing should move
         assertDoesNotThrow(() -> knight.computeInfluence());
         for (int i = 0; i < towers.size(); i++)
-            assertEquals(towers.get(i).getColor(),
-                    game.getCurrentIsland().getTowers().get(i).getColor());
+            assertEquals(towers.get(i).getColor(), game.getCurrentIsland().getTowers().get(i).getColor());
 
         // At the beginning there are 12 islands
         assertEquals(12, game.getIslands().size());
 
         // Put a tower on island next to the current one
-        Island nextIsland = game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ?
-                0 : game.getMotherNatureIndex().get() + 1);
+        Island nextIsland =
+                game.getIslands().get(game.getMotherNatureIndex().get() == game.islands.size() - 1 ? 0 : game.getMotherNatureIndex().get() + 1);
         nextIsland.addTower(new Tower(TowerColor.BLACK));
 
         knight.computeInfluence();

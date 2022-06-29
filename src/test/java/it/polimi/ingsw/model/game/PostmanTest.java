@@ -180,8 +180,7 @@ public class PostmanTest
         }
 
         // An exception is thrown if the player hasn't selected a card
-        NoSuchElementException e1 = assertThrows(NoSelectedAssistantCardException.class,
-                () -> postman.isValidMotherNatureMovement(1));
+        NoSuchElementException e1 = assertThrows(NoSelectedAssistantCardException.class, () -> postman.isValidMotherNatureMovement(1));
         assertEquals("[Postman] No assistant card selected", e1.getMessage());
 
         // Select a card
@@ -203,8 +202,7 @@ public class PostmanTest
 
         // When the card is deactivated the instance's method is called
         for (int i = 0; i < 5; i++)
-            assertEquals(game.isValidMotherNatureMovement(i),
-                    postman.isValidMotherNatureMovement(i));
+            assertEquals(game.isValidMotherNatureMovement(i), postman.isValidMotherNatureMovement(i));
 
     }
 }

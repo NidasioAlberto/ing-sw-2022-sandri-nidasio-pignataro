@@ -87,8 +87,8 @@ public class IslandTest
     }
 
     /**
-     * Test that a normal tower is added on the first free tile, null or duplicates towers are not
-     * added, if there are no free tiles the tower is not added
+     * Test that a normal tower is added on the first free tile, null or duplicates towers are not added, if there are no free tiles the tower is not
+     * added
      */
     @Test
     public void addTowerTest()
@@ -129,8 +129,7 @@ public class IslandTest
         assertEquals(1, island.getTowers().size());
 
         // Add a tower of different color from the one already present
-        assertThrows(IllegalArgumentException.class,
-                () -> island.addTower(new Tower(TowerColor.WHITE)));
+        assertThrows(IllegalArgumentException.class, () -> island.addTower(new Tower(TowerColor.WHITE)));
         assertEquals(tower, island.getIslands().get(0).getTower().get());
         assertTrue(island.getIslands().get(1).getTower().isEmpty());
         assertEquals(tower, island.getTowers().get(0));
@@ -154,8 +153,8 @@ public class IslandTest
     }
 
     /**
-     * Test that a contained tower is removed accurately, if the tower to be removed is not
-     * contained, nothing changes and if a null tower is passed a NullPointerException is thrown
+     * Test that a contained tower is removed accurately, if the tower to be removed is not contained, nothing changes and if a null tower is passed a
+     * NullPointerException is thrown
      */
     @Test
     public void removeTowerTest()
@@ -241,8 +240,7 @@ public class IslandTest
     }
 
     /**
-     * Test that if the island is already contained or is null is not added Test that an island is
-     * added accurately
+     * Test that if the island is already contained or is null is not added Test that an island is added accurately
      */
     @Test
     public void mergeIslandTest()
@@ -304,8 +302,7 @@ public class IslandTest
     }
 
     /**
-     * Test that when merging islands, towers and students are merged accurately and that exceptions
-     * are thrown in the correct way
+     * Test that when merging islands, towers and students are merged accurately and that exceptions are thrown in the correct way
      */
     @Test
     public void mergeIslandTest2()

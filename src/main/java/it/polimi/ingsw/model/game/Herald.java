@@ -8,9 +8,8 @@ import java.io.Serial;
 import java.util.NoSuchElementException;
 
 /**
- * Character card Herald. Effect: Choose an Island and resolve the Island as if Mother Nature had
- * ended her movement there. Mother Nature will still move and the Island where she ends her
- * movement will also be resolved.
+ * Character card Herald. Effect: Choose an Island and resolve the Island as if Mother Nature had ended her movement there. Mother Nature will still
+ * move and the Island where she ends her movement will also be resolved.
  */
 public class Herald extends CharacterCard
 {
@@ -34,7 +33,7 @@ public class Herald extends CharacterCard
     @Override
     public boolean isPlayable()
     {
-        //This card can be played at all time
+        // This card can be played at all time
         return true;
     }
 
@@ -49,15 +48,14 @@ public class Herald extends CharacterCard
     public void applyAction() throws NoSuchElementException
     {
         // If the card is not currently activated I do nothing
-        if(!activated)
+        if (!activated)
             return;
 
-        //Compute the influence in that island
-        instance.computeInfluence(instance.getSelectedPlayer().orElseThrow(
-                () -> new NoSelectedPlayerException("[Herald]"))
-                .getSelectedIsland().orElseThrow(() -> new NoSelectedIslandException("[Herald]")));
+        // Compute the influence in that island
+        instance.computeInfluence(instance.getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[Herald]")).getSelectedIsland()
+                .orElseThrow(() -> new NoSelectedIslandException("[Herald]")));
 
-        //Disable the card
+        // Disable the card
         deactivate();
     }
 

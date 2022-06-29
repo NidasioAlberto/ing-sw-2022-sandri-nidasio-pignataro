@@ -32,8 +32,7 @@ public class MonkTest
         {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        }
-        catch (TooManyPlayersException e)
+        } catch (TooManyPlayersException e)
         {
             e.printStackTrace();
         }
@@ -89,15 +88,15 @@ public class MonkTest
             player1.getBoard().addCoins(1);
             monk.activate();
             assertEquals(0, player1.getBoard().getCoins());
-            for (ExpertGameAction action: ExpertGameAction.values())
+            for (ExpertGameAction action : ExpertGameAction.values())
             {
                 // When Monk is active the only valid action is MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND
                 if (action == ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_ISLAND)
                     assertTrue(monk.isValidAction(action));
-                else assertFalse(monk.isValidAction(action));
+                else
+                    assertFalse(monk.isValidAction(action));
             }
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -117,8 +116,7 @@ public class MonkTest
             player1.getBoard().addCoins(2);
             monk.activate();
             assertEquals(0, player1.getBoard().getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -154,9 +152,11 @@ public class MonkTest
         }
 
         // Activate the card
-        try {
+        try
+        {
             monk.activate();
-        } catch (NotEnoughCoinsException e) {
+        } catch (NotEnoughCoinsException e)
+        {
             e.printStackTrace();
         }
 
@@ -166,13 +166,16 @@ public class MonkTest
 
         // Search a student color not present on the card
         int counter;
-        for (SchoolColor color : SchoolColor.values()) {
+        for (SchoolColor color : SchoolColor.values())
+        {
             counter = 0;
-            for (Student student : ((Monk) monk).getStudents()) {
+            for (Student student : ((Monk) monk).getStudents())
+            {
                 if (student.getColor() != color)
                     counter++;
             }
-            if (counter == ((Monk) monk).getStudents().size()) {
+            if (counter == ((Monk) monk).getStudents().size())
+            {
                 player1.selectColor(color);
                 break;
             }

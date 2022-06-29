@@ -167,8 +167,7 @@ public class JokerTest
         // Theoretically if i don't perform any action, any number of swap student from character
         // card to entrance should be allowed
         for (int i = 0; i < 100; i++)
-            assertEquals(true, joker
-                    .isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD));
+            assertEquals(true, joker.isValidAction(ExpertGameAction.SWAP_STUDENT_FROM_ENTRANCE_TO_CHARACTER_CARD));
 
         // When i apply the action 3 times the card should be deactivated
         for (int i = 0; i < 3; i++)

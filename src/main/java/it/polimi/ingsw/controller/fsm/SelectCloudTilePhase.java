@@ -16,17 +16,14 @@ public class SelectCloudTilePhase implements Phase
     }
 
     @Override
-    public boolean isLegitAction(GameActionHandler handler, String playerName,
-            BaseGameAction baseAction)
+    public boolean isLegitAction(GameActionHandler handler, String playerName, BaseGameAction baseAction)
     {
         // Check if the player corresponds to the selected one in SORTED LIST
-        Player currentPlayer = handler.getGame().getSelectedPlayer()
-                .orElseThrow(() -> new NoSelectedPlayerException("[SelectCloudTilePhase]"));
+        Player currentPlayer = handler.getGame().getSelectedPlayer().orElseThrow(() -> new NoSelectedPlayerException("[SelectCloudTilePhase]"));
 
         if (!currentPlayer.getNickname().equals(playerName))
             throw new WrongPlayerException();
-        return baseAction == BaseGameAction.SELECT_CLOUD_TILE ||
-                 baseAction == BaseGameAction.CHARACTER_CARD_ACTION ||
-                 baseAction == BaseGameAction.PLAY_CHARACTER_CARD;
+        return baseAction == BaseGameAction.SELECT_CLOUD_TILE || baseAction == BaseGameAction.CHARACTER_CARD_ACTION
+                || baseAction == BaseGameAction.PLAY_CHARACTER_CARD;
     }
 }

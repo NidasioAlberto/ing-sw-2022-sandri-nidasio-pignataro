@@ -36,16 +36,18 @@ public class PrincessTest
         game = new Game();
 
         // Add the player to the game
-        try {
+        try
+        {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
 
         // Setup the game
         game.setupGame();
 
-        //Memorize the original bag
+        // Memorize the original bag
         originalBagStudents = game.getStudentBag();
 
         // Now i can instantiate the character card
@@ -63,17 +65,17 @@ public class PrincessTest
     @Test
     public void constructorTest()
     {
-        //Null pointers inside the factory method
+        // Null pointers inside the factory method
         assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(null, game));
         assertThrows(NullPointerException.class, () -> CharacterCard.createCharacterCard(CharacterCardType.KNIGHT, null));
 
-        //Type confirmation
+        // Type confirmation
         assertEquals(CharacterCardType.PRINCESS, princess.getCardType());
 
-        //Cost
+        // Cost
         assertEquals(2, princess.cost);
 
-        //Not already used
+        // Not already used
         assertEquals(false, princess.firstUsed);
         assertEquals(false, princess.isActivated());
 
@@ -145,17 +147,17 @@ public class PrincessTest
     @Test
     public void isPlayableTest()
     {
-        //This test should always be true
+        // This test should always be true
         assertEquals(true, princess.isPlayable());
     }
 
     @Test
     public void isValidActionTest()
     {
-        //This card should only allow MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING
-        for(ExpertGameAction action : ExpertGameAction.values())
+        // This card should only allow MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING
+        for (ExpertGameAction action : ExpertGameAction.values())
         {
-            if(action == ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING)
+            if (action == ExpertGameAction.MOVE_STUDENT_FROM_CHARACTER_CARD_TO_DINING)
                 assertEquals(true, princess.isValidAction(action));
             else
                 assertEquals(false, princess.isValidAction(action));
@@ -165,27 +167,22 @@ public class PrincessTest
     @Test
     public void applyActionTest()
     {
-        //If i call apply action without selecting a player, it should throw an exception
+        // If i call apply action without selecting a player, it should throw an exception
         princess.activated = true;
         assertThrows(NoSuchElementException.class, () -> princess.applyAction());
 
-        //Now i select a player but not a color
+        // Now i select a player but not a color
         game.selectPlayer(0);
 
         assertThrows(NoSuchElementException.class, () -> princess.applyAction());
 
-        //Now i look for a non-present color on the card to select
+        // Now i look for a non-present color on the card to select
         player1.selectColor(Arrays.stream(SchoolColor.values())
-                .filter(c -> studentsOnCard.stream()
-                        .filter(s -> s.getColor() == c)
-                        .findFirst()
-                        .isEmpty())
-                .findFirst()
-                .get());
+                .filter(c -> studentsOnCard.stream().filter(s -> s.getColor() == c).findFirst().isEmpty()).findFirst().get());
 
         assertThrows(NoSuchElementException.class, () -> princess.applyAction());
 
-        //Now i test the correct case
+        // Now i test the correct case
         SchoolColor selected = studentsOnCard.get(0).getColor();
 
         player1.clearSelections();
@@ -194,10 +191,10 @@ public class PrincessTest
 
         Optional<Student> removed;
         int count = 0;
-        //Verify that the student of that color was on the card
-        while((removed = player1.getBoard().removeStudentFromDining(selected)).isPresent())
+        // Verify that the student of that color was on the card
+        while ((removed = player1.getBoard().removeStudentFromDining(selected)).isPresent())
         {
-            if(studentsOnCard.contains(removed.get()))
+            if (studentsOnCard.contains(removed.get()))
                 count++;
         }
 

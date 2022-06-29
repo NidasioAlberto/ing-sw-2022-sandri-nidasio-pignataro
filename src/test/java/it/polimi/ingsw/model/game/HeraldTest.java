@@ -30,8 +30,7 @@ public class HeraldTest
         {
             game.addPlayer(player1);
             game.addPlayer(player2);
-        }
-        catch (TooManyPlayersException e)
+        } catch (TooManyPlayersException e)
         {
             e.printStackTrace();
         }
@@ -80,15 +79,15 @@ public class HeraldTest
             player1.getBoard().addCoins(3);
             herald.activate();
             assertEquals(1, player1.getBoard().getCoins());
-            for (ExpertGameAction action: ExpertGameAction.values())
+            for (ExpertGameAction action : ExpertGameAction.values())
             {
                 // When Herald is active the only valid action is SELECT_ISLAND
                 if (action == ExpertGameAction.SELECT_ISLAND)
                     assertTrue(herald.isValidAction(action));
-                else assertFalse(herald.isValidAction(action));
+                else
+                    assertFalse(herald.isValidAction(action));
             }
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -108,8 +107,7 @@ public class HeraldTest
             player1.getBoard().addCoins(4);
             herald.activate();
             assertEquals(1, player1.getBoard().getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }
@@ -139,8 +137,7 @@ public class HeraldTest
             player1.getBoard().addCoins(3);
             herald.activate();
             assertEquals(1, player1.getBoard().getCoins());
-        }
-        catch (NotEnoughCoinsException e)
+        } catch (NotEnoughCoinsException e)
         {
             e.printStackTrace();
         }

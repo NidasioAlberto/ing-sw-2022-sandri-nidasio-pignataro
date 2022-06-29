@@ -2,9 +2,7 @@ package it.polimi.ingsw.client.gui.objects.types;
 
 public enum IslandType
 {
-    ISLAND1("island1.png"),
-    ISLAND2("island2.png"),
-    ISLAND3("island3.png");
+    ISLAND1("island1.png"), ISLAND2("island2.png"), ISLAND3("island3.png");
 
     /**
      * Filename where the texture is located
@@ -13,6 +11,7 @@ public enum IslandType
 
     /**
      * Constructor
+     * 
      * @param filename file path to the texture
      */
     private IslandType(String filename)
@@ -23,5 +22,8 @@ public enum IslandType
     /**
      * Filename getter
      */
-    public String getFilename() { return filename; }
+    public String getFilename()
+    {
+        return filename;
+    }
 }

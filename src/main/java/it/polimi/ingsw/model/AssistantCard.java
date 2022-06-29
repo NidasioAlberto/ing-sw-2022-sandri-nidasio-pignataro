@@ -129,7 +129,7 @@ public class AssistantCard implements Serializable
     public String toString()
     {
         String rep = "";
-        //→
+        // →
         rep += "┌" + turnOrder + (turnOrder < 10 ? "─" : "") + "──┐" + PrintHelper.moveCursorRelative(-1, -6);
         rep += "│ " + wizard.toString() + " │" + PrintHelper.moveCursorRelative(-1, -6);
         rep += "│" + GamePieces.ARROW + steps + " │" + PrintHelper.moveCursorRelative(-1, -6);

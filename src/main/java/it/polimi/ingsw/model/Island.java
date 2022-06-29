@@ -140,8 +140,9 @@ public class Island implements Serializable
         {
             throw new NullPointerException("[Island] A null island was provided");
         } else if (island.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() == island.tiles.size()
-                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() == this.tiles.size() || island.tiles.stream().map(tile -> tile.getTower())
-                        .flatMap(Optional::stream).filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor()).count() > 0)
+                || this.tiles.stream().filter(tile -> tile.getTower().isEmpty()).count() == this.tiles.size()
+                || island.tiles.stream().map(tile -> tile.getTower()).flatMap(Optional::stream)
+                        .filter(t -> t.getColor() != this.tiles.get(0).getTower().get().getColor()).count() > 0)
         {
             // There is at least one island that has all the tiles without tower
             // or the color of towers is different on the tiles
@@ -279,11 +280,11 @@ public class Island implements Serializable
         String rep = "";
 
         rep += "  ______ " + PrintHelper.moveCursorRelative(-1, -9);
-        rep += " " + GamePieces.SLASH + drawStudentsNumber(SchoolColor.BLUE) + " " + drawStudentsNumber(SchoolColor.GREEN) + " " + GamePieces.BACKSLASH
-                + PrintHelper.moveCursorRelative(-1, -9);
-        rep += GamePieces.SLASH + drawStudentsNumber(SchoolColor.PINK) + " " + drawStudentsNumber(SchoolColor.RED) + " " + drawStudentsNumber(SchoolColor.YELLOW)
-                + GamePieces.BACKSLASH + PrintHelper.moveCursorRelative(-1, -10);
-        rep += GamePieces.BACKSLASH + drawTowers() + " " + drawNoEntryTiles() + "   "+ GamePieces.SLASH + PrintHelper.moveCursorRelative(-1, -10);
+        rep += " " + GamePieces.SLASH + drawStudentsNumber(SchoolColor.BLUE) + " " + drawStudentsNumber(SchoolColor.GREEN) + " "
+                + GamePieces.BACKSLASH + PrintHelper.moveCursorRelative(-1, -9);
+        rep += GamePieces.SLASH + drawStudentsNumber(SchoolColor.PINK) + " " + drawStudentsNumber(SchoolColor.RED) + " "
+                + drawStudentsNumber(SchoolColor.YELLOW) + GamePieces.BACKSLASH + PrintHelper.moveCursorRelative(-1, -10);
+        rep += GamePieces.BACKSLASH + drawTowers() + " " + drawNoEntryTiles() + "   " + GamePieces.SLASH + PrintHelper.moveCursorRelative(-1, -10);
         rep += " " + GamePieces.BACKSLASH + "______" + GamePieces.SLASH + " ";
 
         return rep;

@@ -22,8 +22,7 @@ public class CharacterCardActionMessage extends ActionMessage
     private Integer selectedIsland;
     private List<SchoolColor> selectedColors;
 
-    public CharacterCardActionMessage(ExpertGameAction action, Integer selectedIsland,
-            List<SchoolColor> selectedColors)
+    public CharacterCardActionMessage(ExpertGameAction action, Integer selectedIsland, List<SchoolColor> selectedColors)
     {
         if (action == null)
             throw new NullPointerException("[ActionMessage] The action is null");
@@ -35,7 +34,8 @@ public class CharacterCardActionMessage extends ActionMessage
             this.selectedColors = null;
         else if (selectedColors.contains(null))
             throw new NullPointerException("[ActionMessage] A selected color is null");
-        else this.selectedColors = new ArrayList<SchoolColor>(selectedColors);
+        else
+            this.selectedColors = new ArrayList<SchoolColor>(selectedColors);
     }
 
     public void applyAction(GameActionHandler handler)
@@ -46,11 +46,13 @@ public class CharacterCardActionMessage extends ActionMessage
 
         if (this.selectedIsland == null)
             selectedIsland = Optional.empty();
-        else selectedIsland = Optional.of(this.selectedIsland);
+        else
+            selectedIsland = Optional.of(this.selectedIsland);
 
         if (this.selectedColors == null)
             selectedColors = Optional.empty();
-        else selectedColors = Optional.of(new ArrayList<SchoolColor>(this.selectedColors));
+        else
+            selectedColors = Optional.of(new ArrayList<SchoolColor>(this.selectedColors));
 
         handler.characterCardAction(action, selectedIsland, selectedColors);
     }
