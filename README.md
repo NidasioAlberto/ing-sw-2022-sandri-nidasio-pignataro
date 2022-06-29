@@ -34,20 +34,30 @@ This project is written in Java and is built using Maven. Unit test are written 
 ## How to run
 Once your computer meets the [requirements](#Requirements) you can type on a terminal the following commands to execute either the Server, CLI or GUI:  
  - Server:   
- `java -jar Eriantys_Server_softeng-GC9.jar [port number, default:2345]`
+```
+java -jar Eriantys_Server_softeng-GC9.jar [port number, default:2345]
+```
  - CLI:   
- `java -jar Eriantys_CLI_softeng-GC9.jar [ip] [port number]`
+ ```
+ java -jar Eriantys_CLI_softeng-GC9.jar [ip] [port number]
+ ```
  - GUI:   
- `java -jar Eriantys_GUI_softeng-GC9.jar`
+ ```
+ java -jar Eriantys_GUI_softeng-GC9.jar
+ ```
  
 ## Requirements
  ### Linux and Mac Users
  The only requirement is to install a version of java jdk greater than or equal to 17. Both openjdk and java jdk are suitable for the job, feel free to run the following apt command:  
- `sudo apt update && sudo apt install openjdk-17-jdk`
+ ```
+ sudo apt update && sudo apt install openjdk-17-jdk
+ ```
 
  ### Windows users
  You need to install [java JDK](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html). You could need to set up the so called environment variables. To find out if you need to do this procedure you can type on your windows terminal the following command:  
- `java -version`
+ ```
+ java -version
+ ```
 
  if the answer is an error you most likely have to follow the environment variable procedure, else you're good to go.
  
