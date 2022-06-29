@@ -94,7 +94,7 @@ public class DrawableErrorMessage extends DrawableObject
     /**
      * Method to set the background color
      * 
-     * @param background The string formatted with "#RRGGBB" style
+     * @param color The string formatted with "#RRGGBB" style
      */
     public void setBackground(Color color)
     {

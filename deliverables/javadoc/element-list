@@ -1,0 +1,17 @@
+it.polimi.ingsw.client
+it.polimi.ingsw.client.cli
+it.polimi.ingsw.client.cli.utils
+it.polimi.ingsw.client.gui
+it.polimi.ingsw.client.gui.lobby
+it.polimi.ingsw.client.gui.objects
+it.polimi.ingsw.client.gui.objects.types
+it.polimi.ingsw.controller
+it.polimi.ingsw.controller.fsm
+it.polimi.ingsw.model
+it.polimi.ingsw.model.exceptions
+it.polimi.ingsw.model.game
+it.polimi.ingsw.network
+it.polimi.ingsw.protocol.answers
+it.polimi.ingsw.protocol.commands
+it.polimi.ingsw.protocol.messages
+it.polimi.ingsw.protocol.updates
