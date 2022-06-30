@@ -410,7 +410,13 @@ public class GameView extends Application implements Visualizable
 
         });
         // Moving to lobby which is not resizable
-        Platform.runLater(() -> stage.setResizable(false));
+
+        Platform.runLater(() ->
+        {
+            stage.setMinHeight(HEIGHT);
+            stage.setMinWidth(WIDTH);
+            stage.setResizable(false);
+        });
     }
 
     @Override
