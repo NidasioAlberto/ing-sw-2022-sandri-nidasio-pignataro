@@ -9,6 +9,9 @@ import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Publisher;
 import java.util.stream.*;
 
+/**
+ * This class represents a game played by the users.
+ */
 public class Game implements Publisher<ModelUpdate>
 {
     public static final int ISLAND_TILES_NUMBER = 12;
