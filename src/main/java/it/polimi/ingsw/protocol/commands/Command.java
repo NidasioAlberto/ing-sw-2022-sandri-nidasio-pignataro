@@ -4,6 +4,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import it.polimi.ingsw.network.PlayerConnection;
 
+/**
+ * Commands are message used from the player before the match or to quit the game.
+ */
 public abstract class Command implements Serializable
 {
     @Serial

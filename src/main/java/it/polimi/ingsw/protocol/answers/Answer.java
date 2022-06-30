@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.Visualizable;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Answers are the server's reply to the Commands. They are sent to the clients.
+ */
 public abstract class Answer implements Serializable
 {
     @Serial
