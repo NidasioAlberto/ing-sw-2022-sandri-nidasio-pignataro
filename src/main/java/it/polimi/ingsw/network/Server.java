@@ -20,6 +20,11 @@ public class Server
 
     private Map<PlayerConnection, Match> playersMapMatch;
 
+    /**
+     * Creates a new server instance.
+     * 
+     * Starts the thread that interacts with the console.
+     */
     public Server()
     {
         serverConnection = new ServerConnection(this);
@@ -32,12 +37,20 @@ public class Server
         quiThread.start();
     }
 
+    /**
+     * Creates a new server instance with the given port.
+     * 
+     * @param port Port to use for the socket.
+     */
     public Server(int port)
     {
         this();
         serverConnection = new ServerConnection(this, port);
     }
 
+    /**
+     * Whats for the terminal to receive a "quit" command, it then stops the server and exits.
+     */
     public void waitToQuit()
     {
         System.out.println("[Server] Type \"quit\" to exit");
@@ -80,6 +93,14 @@ public class Server
         return lobby;
     }
 
+    /**
+     * Creates a new match with the given information.
+     * 
+     * @param matchId Match identification string.
+     * @param playersNumber Number of players in the match.
+     * @param mode Game mode used for the match.
+     * @throws IllegalArgumentException Thrown if the match id is already used for another match.
+     */
     public void createMatch(String matchId, int playersNumber, GameMode mode) throws IllegalArgumentException
     {
         // Check if a match with the same id already exists
@@ -114,6 +135,13 @@ public class Server
         sendToLobby(new MatchesListAnswer(matches));
     }
 
+    /**
+     * Sends EndMatchAnswers to every connected players in the match and removes the match from the server.
+     * 
+     * @param match Match to remove.
+     * @param message Message to send to the players.
+     * @throws NullPointerException Thrown if the given match is null.
+     */
     public void removeMatch(Match match, String message) throws NullPointerException
     {
         if (match == null)
@@ -174,6 +202,14 @@ public class Server
         }
     }
 
+    /**
+     * Adds a player to the lobby.
+     * 
+     * This is used when a new user connects to the server. Users in the lobby receives automatic updates when a new match is creates.
+     * 
+     * @param player New player connection.
+     * @throws NullPointerException Thrown if the given player connection is null.
+     */
     public void addPlayerToLobby(PlayerConnection player) throws NullPointerException
     {
         if (player == null)
@@ -183,6 +219,13 @@ public class Server
         System.out.println("[Server] Added new player to lobby");
     }
 
+    /**
+     * Removes a player form the match he is in.
+     * 
+     * If the player isn't in any match nothing is done.
+     * 
+     * @param player Player to remove.
+     */
     public void removePlayerFromMatch(PlayerConnection player)
     {
         // If the player is part of a match remove it
@@ -207,6 +250,13 @@ public class Server
         }
     }
 
+    /**
+     * Removes the player form the entire server.
+     * 
+     * It removes the player first form the match (if he is in one) and then removes him form the lobby.
+     * 
+     * @param player Player to remove.
+     */
     public void removePlayerFromServer(PlayerConnection player)
     {
         removePlayerFromMatch(player);
@@ -215,9 +265,13 @@ public class Server
         lobby.remove(player);
     }
 
-    public void movePlayerToMatch(PlayerConnection player)
-    {}
-
+    /**
+     * Applies the given action on the match the player is in.
+     * 
+     * @param action Action to apply.
+     * @param player Player performing the action.
+     * @throws IllegalArgumentException Thrown if the player isn't in any match.
+     */
     public void applyAction(ActionMessage action, PlayerConnection player) throws IllegalArgumentException
     {
         // Check if the player is part of a match
@@ -234,6 +288,8 @@ public class Server
 
     /**
      * Send the given answer to all the players in the lobby.
+     * 
+     * @param answer Answer to send to all the players in the lobby.
      */
     public void sendToLobby(Answer answer)
     {
@@ -248,6 +304,9 @@ public class Server
         return playersMapMatch.get(player) != null;
     }
 
+    /**
+     * Starts the server by instantiating the server class and running its server connection.
+     */
     public static void main(String[] args)
     {
         Server server;

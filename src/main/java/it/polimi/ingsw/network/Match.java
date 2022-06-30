@@ -25,6 +25,7 @@ public class Match implements Subscriber<ModelUpdate>
 {
     private Server server;
 
+    // Connected players
     private List<PlayerConnection> players;
 
     // Disconnected players
@@ -34,6 +35,14 @@ public class Match implements Subscriber<ModelUpdate>
 
     private String matchId;
 
+    /**
+     * Creates a new Match object.
+     * 
+     * @param server Server instance which creates the new Match.
+     * @param matchId Match identification name.
+     * @param playersNumber Number of players in this match.
+     * @param mode Game mode for this match.
+     */
     public Match(Server server, String matchId, int playersNumber, GameMode mode)
     {
         this.server = server;
@@ -177,25 +186,36 @@ public class Match implements Subscriber<ModelUpdate>
         }
     }
 
+    /**
+     * Sends the given answer to every connected player.
+     * 
+     * @param answer Answer to send.
+     */
     public void sendAllAnswer(Answer answer)
     {
         for (PlayerConnection player : players)
             player.sendAnswer(answer);
     }
 
+    /**
+     * Sends the given error to the specified player.
+     * 
+     * @param playerName Target player's name.
+     * @param message Error message to send.
+     */
     public void sendError(String playerName, String message)
     {
-        System.out.print("[Match] Sending error, players: ");
-        for (PlayerConnection p : players)
-            System.out.print(p.getPlayerName().get() + " ");
-        System.out.println();
-
         // Find the player with the given name
         for (PlayerConnection player : players)
             if (player.getPlayerName().isPresent() && player.getPlayerName().get().equals(playerName))
                 player.sendAnswer(new ErrorAnswer(message));
     }
 
+    /**
+     * Ends the match by removing it from the server.
+     * 
+     * @param message Message to send to the players.
+     */
     public void endMatch(String message)
     {
         server.removeMatch(this, message);
@@ -203,11 +223,20 @@ public class Match implements Subscriber<ModelUpdate>
             players.remove(player);
     }
 
+    /**
+     * Applies and action by executing it on the game controller.
+     * 
+     * @param action Action to perform.
+     * @param player Player performing the action.
+     */
     public void applyAction(ActionMessage action, PlayerConnection player)
     {
         gameController.performAction(action, player.getPlayerName().get());
     }
 
+    /**
+     * Returns the total number of players registered in the match.
+     */
     public int getPlayersNumber()
     {
         return players.size() + missingPlayers.size();
@@ -218,6 +247,9 @@ public class Match implements Subscriber<ModelUpdate>
         return gameController;
     }
 
+    /**
+     * Returns the currently connected players.
+     */
     public List<PlayerConnection> getPlayers()
     {
         return players;
@@ -229,9 +261,9 @@ public class Match implements Subscriber<ModelUpdate>
     }
 
     /**
-     * This method is invoked when the model has been changed. Observer pattern
+     * This method is invoked when the model has been changed.
      * 
-     * @param update The item that has been changed
+     * @param update The item that has been changed.
      */
     @Override
     public void onNext(ModelUpdate update)
@@ -249,8 +281,6 @@ public class Match implements Subscriber<ModelUpdate>
 
     /**
      * This method is called immediately when the subscription is done.
-     * 
-     * TODO: Maybe useful, if so add it to UML.
      */
     @Override
     public void onSubscribe(Subscription subscription)
@@ -258,8 +288,6 @@ public class Match implements Subscriber<ModelUpdate>
 
     /**
      * This method is called by the model when an error occurs.
-     * 
-     * TODO: Maybe useful, if so add it to UML.
      */
     @Override
     public void onError(Throwable throwable)
@@ -267,8 +295,6 @@ public class Match implements Subscriber<ModelUpdate>
 
     /**
      * This method is called when the model knows that nothing will change in the future anymore.
-     * 
-     * TODO: Maybe useful, if so add it to UML.
      */
     @Override
     public void onComplete()

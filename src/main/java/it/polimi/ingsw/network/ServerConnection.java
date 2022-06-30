@@ -19,12 +19,18 @@ public class ServerConnection implements Runnable
 
     private boolean active = true;
 
+    /**
+     * Creates a new ServerConnection instance with the given server reference.
+     */
     ServerConnection(Server server)
     {
         this.server = server;
         executor = Executors.newCachedThreadPool();
     }
 
+    /**
+     * Creates a new ServerConnection instance with the given server reference and port.
+     */
     ServerConnection(Server server, int port)
     {
         this(server);
@@ -41,6 +47,11 @@ public class ServerConnection implements Runnable
         this.active = active;
     }
 
+    /**
+     * While active accepts new connection and creates new PlayerConnections to submit to the server.
+     * 
+     * @param serverSocket Server socket to listen on.
+     */
     public void acceptConnections(ServerSocket serverSocket)
     {
         while (isActive())
@@ -58,6 +69,9 @@ public class ServerConnection implements Runnable
         }
     }
 
+    /**
+     * Creates the server socket and listen to new connection until disabled.
+     */
     @Override
     public void run()
     {

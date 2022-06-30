@@ -32,8 +32,20 @@ public class PlayerConnection implements Runnable
 
     private boolean active = true;
 
+    /**
+     * Future used to tell if the connection times out.
+     */
     private Future<?> watchdogTask = null;
 
+    /**
+     * Creates a new PlayerConnection object.
+     * 
+     * Creates also the input and output streams used to communicate with the client.
+     * 
+     * @param server Server instance which creates the player connection.
+     * @param playerSocket Player socket created in the server.
+     * @throws IOException Thrown if an error occurs during streams creation.
+     */
     PlayerConnection(Server server, Socket playerSocket) throws IOException
     {
         this.server = server;
@@ -134,6 +146,9 @@ public class PlayerConnection implements Runnable
         }
     }
 
+    /**
+     * Restarts the watchdog timer used to tell if the connection timed out.
+     */
     public void restartWatchdog()
     {
         if (watchdogTask != null)
@@ -157,6 +172,9 @@ public class PlayerConnection implements Runnable
         return server.isPlayerInAMatch(this);
     }
 
+    /**
+     * Closes the player connection by removing it from the server and closing the socket.
+     */
     public void close()
     {
         server.removePlayerFromServer(this);
@@ -171,6 +189,9 @@ public class PlayerConnection implements Runnable
         }
     }
 
+    /**
+     * Keeps listening to the input stream and handles the messages from the user.
+     */
     @Override
     public void run()
     {
@@ -195,6 +216,13 @@ public class PlayerConnection implements Runnable
         }
     }
 
+    /**
+     * Handles a generic packet coming from the client.
+     * 
+     * If the object is recognized it is actually handles, otherwise and error is printed and nothing is done.
+     * 
+     * @param rawPacket Object coming form the client.
+     */
     public void handlePacket(Object rawPacket)
     {
         if (!(rawPacket instanceof PingCommand))
