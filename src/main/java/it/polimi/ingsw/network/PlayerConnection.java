@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * This class is used to manages a player. His socket is listened to and every message received is handled if recognized.
+ */
 public class PlayerConnection implements Runnable
 {
     private Socket playerSocket;

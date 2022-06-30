@@ -21,6 +21,9 @@ import it.polimi.ingsw.protocol.messages.ActionMessage;
 import it.polimi.ingsw.protocol.messages.EndTurnMessage;
 import it.polimi.ingsw.protocol.updates.ModelUpdate;
 
+/**
+ * Class used to manges a match. All players in the match are saved and the game controller used to play the game.
+ */
 public class Match implements Subscriber<ModelUpdate>
 {
     private Server server;

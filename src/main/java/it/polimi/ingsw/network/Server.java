@@ -10,6 +10,10 @@ import it.polimi.ingsw.protocol.answers.JoinedMatchAnswer;
 import it.polimi.ingsw.protocol.answers.MatchesListAnswer;
 import it.polimi.ingsw.protocol.messages.ActionMessage;
 
+
+/**
+ * This class is used handle the server connection and all commands coming from the clients.
+ */
 public class Server
 {
     private ServerConnection serverConnection;
