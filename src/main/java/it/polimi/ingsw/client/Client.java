@@ -49,16 +49,31 @@ public class Client implements Runnable
         this.port = port;
     }
 
+    /**
+     * Set a visualizer either a CLI or a GameView.
+     *
+     * @param visualizer to use.
+     */
     public void setVisualizer(Visualizable visualizer)
     {
         this.visualizer = visualizer;
     }
 
+    /**
+     * Set the name of the player using this client.
+     *
+     * @param playerName
+     */
     public void setPlayerName(String playerName)
     {
         this.playerName = playerName;
     }
 
+    /**
+     * Tries to connect to the server.
+     *
+     * @throws IOException if there is a problem establishing connection to server.
+     */
     public void connect() throws IOException
     {
         socket = new Socket();
@@ -68,6 +83,12 @@ public class Client implements Runnable
         inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
+    /**
+     * Send a Command to the server.
+     *
+     * @param command to send.
+     * @throws IOException if there ia a problem while sending.
+     */
     public void sendCommand(Command command) throws IOException
     {
         try
@@ -89,6 +110,12 @@ public class Client implements Runnable
         }
     }
 
+    /**
+     * Send an ActionMessage to the server.
+     *
+     * @param action to send.
+     * @throws IOException if there ia a problem while sending.
+     */
     public void sendAction(ActionMessage action) throws IOException
     {
         try
@@ -115,18 +142,33 @@ public class Client implements Runnable
         return playerName;
     }
 
+    /**
+     * Close the connection with the server closing the socket.
+     *
+     * @throws IOException
+     */
     public synchronized void stop() throws IOException
     {
         active = false;
         socket.close();
     }
 
+    /**
+     * Returns if the client is active or not.
+     *
+     * @return client status.
+     */
     public synchronized boolean isActive()
     {
         return active;
     }
 
     @Override
+    /**
+     * Starts a thread that sends PingCommand to the server every second, so that the server knows if this
+     * client is still connected.
+     * In this method the client receives messages from the server and sort Answer and ModelUpdate.
+     */
     public void run()
     {
         active = true;
@@ -183,11 +225,21 @@ public class Client implements Runnable
         }
     }
 
+    /**
+     * Set the IP address of the server.
+     *
+     * @param ip of the server.
+     */
     public void setIp(String ip)
     {
         this.ip = ip;
     }
 
+    /**
+     * Set the port of the server.
+     *
+     * @param port of the server.
+     */
     public void setPort(int port)
     {
         this.port = port;

@@ -16,6 +16,9 @@ import it.polimi.ingsw.protocol.commands.*;
 import it.polimi.ingsw.protocol.messages.*;
 import it.polimi.ingsw.protocol.updates.*;
 
+/**
+ * Implement the interface Visualizable with a CLI.
+ */
 public class CLI implements Visualizable, Runnable
 {
     ExecutorService executor;
@@ -65,6 +68,9 @@ public class CLI implements Visualizable, Runnable
         players = new HashMap<>();
     }
 
+    /**
+     * Method called when the CLI starts, asks the player to insert IP e port to connect to the server.
+     */
     public void start()
     {
         scanner = new Scanner(System.in);
@@ -103,6 +109,9 @@ public class CLI implements Visualizable, Runnable
         }
     }
 
+    /**
+     * Stop the CLI.
+     */
     public synchronized void stop() throws IOException
     {
         active = false;
@@ -110,12 +119,18 @@ public class CLI implements Visualizable, Runnable
         scanner.close();
     }
 
+    /**
+     * @return the status of the CLI.
+     */
     public synchronized boolean isActive()
     {
         return active;
     }
 
     @Override
+    /**
+     * Until the match is not started displays only commands, when the match begins display only actions.
+     */
     public void run()
     {
         Scanner scanner = new Scanner(System.in);
@@ -135,6 +150,10 @@ public class CLI implements Visualizable, Runnable
         }
     }
 
+    /**
+     * Player can choose between command or action.
+     * @param scanner to take the player decision.
+     */
     public void choosePacket(Scanner scanner) throws IOException
     {
         PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
@@ -161,6 +180,10 @@ public class CLI implements Visualizable, Runnable
         }
     }
 
+    /**
+     * Player can choose a command.
+     * @param scanner to take the player decision.
+     */
     public void chooseCommand(Scanner scanner) throws IOException
     {
         PrintHelper.printAbsolute(26, 2, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
@@ -230,6 +253,10 @@ public class CLI implements Visualizable, Runnable
         }
     }
 
+    /**
+     * Player can choose an action.
+     * @param scanner to take the player decision.
+     */
     public void chooseAction(Scanner scanner) throws IOException
     {
         PrintHelper.print(PrintHelper.ERASE_ENTIRE_SCREEN);
@@ -353,6 +380,11 @@ public class CLI implements Visualizable, Runnable
         }
     }
 
+    /**
+     * Player can choose different SchoolColor.
+     * @param scanner to take the player decision.
+     * @return the list of colors chosen.
+     */
     private List<SchoolColor> chooseSchoolColors(Scanner scanner)
     {
         List<SchoolColor> selectedColors = new ArrayList<>();
@@ -366,6 +398,11 @@ public class CLI implements Visualizable, Runnable
         return selectedColors;
     }
 
+    /**
+     * Player can choose a SchoolColor.
+     * @param scanner to take the player decision.
+     * @return the color chosen.
+     */
     private SchoolColor selectSchoolColors(Scanner scanner)
     {
         PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
@@ -378,6 +415,11 @@ public class CLI implements Visualizable, Runnable
         return SchoolColor.values()[Integer.parseInt(scanner.nextLine())];
     }
 
+    /**
+     * Player can choose a island.
+     * @param scanner to take the player decision.
+     * @return the index of the chosen island.
+     */
     private int selectIsland(Scanner scanner)
     {
         PrintHelper.printAbsolute(26, 0, PrintHelper.ERASE_FROM_CURSOR_TILL_END_OF_SCREEN);
@@ -426,6 +468,12 @@ public class CLI implements Visualizable, Runnable
     }
 
     // This version works for all OS
+
+    /**
+     * Print the title of the game.
+     * @param row to display.
+     * @param column to display.
+     */
     private void printTitle(int row, int column)
     {
         PrintHelper.printAbsoluteAndReset(row, column,
