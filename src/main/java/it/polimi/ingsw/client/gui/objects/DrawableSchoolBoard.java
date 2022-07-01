@@ -842,6 +842,18 @@ public class DrawableSchoolBoard extends DrawableObject
             dining.get(color).clear();
         }
 
+        // Professors
+        for (DrawableProfessor professor : professors)
+        {
+            professor.removeFromGroup(group);
+            professor.unsubscribeFromAmbientLight(ambientLight);
+            professor.unsubscribeFromPointLight(pointLight);
+            updater.unsubscribeObject(professor);
+        }
+
+        // Clear the professors array
+        professors.clear();
+
         // Towers
         for (DrawableTower tower : towers)
         {

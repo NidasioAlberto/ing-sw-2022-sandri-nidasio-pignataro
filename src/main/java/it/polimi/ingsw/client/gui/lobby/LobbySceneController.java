@@ -48,7 +48,7 @@ public class LobbySceneController implements Controllable
     public void createMatch(ActionEvent event)
     {
         // Move to createMatch scene
-        controller.setRoot("/Lobby/createMatch2.fxml");
+        controller.setRoot("/Lobby/createMatch.fxml");
     }
 
     /**

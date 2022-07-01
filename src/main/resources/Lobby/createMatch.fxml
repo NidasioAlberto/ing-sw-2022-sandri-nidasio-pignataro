@@ -54,7 +54,7 @@
             </VBox>
             <VBox prefHeight="68.0" prefWidth="1280.0">
                <children>
-                  <HBox prefHeight="59.0" prefWidth="1119.0">
+                  <HBox alignment="CENTER" prefHeight="59.0" prefWidth="1119.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="59.0" prefWidth="640.0">
                            <children>
@@ -85,7 +85,7 @@
             </VBox>
             <VBox prefHeight="105.0" prefWidth="1280.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1119.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0">
                            <children>
