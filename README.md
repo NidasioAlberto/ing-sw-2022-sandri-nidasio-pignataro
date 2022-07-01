@@ -60,7 +60,10 @@ java -jar Eriantys_Server_softeng-GC9.jar [port number, default:2345]
  ```
 
  if the answer is an error you most likely have to follow the environment variable procedure, else you're good to go.
- 
+
+ ### Windows users (CLI)
+ If you want to use the Command Line Interface, we recommand using an ANSI compatible terminal such as [conEmu](https://conemu.github.io/), but if you want to use the windows plain terminal, you need to run the provided .bat script to enable ANSI codes inside your terminal.
+  
  ### Windows users (Environment variables)
  To modify the environment variables you need to type in your `start` menu `Environment Variables` and click on `Edit the system environment variables` and again `Environment Variables`.
 

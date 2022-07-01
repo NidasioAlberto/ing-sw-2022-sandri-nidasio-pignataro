@@ -9,7 +9,6 @@ import it.polimi.ingsw.client.gui.objects.types.StudentType;
 import it.polimi.ingsw.protocol.answers.*;
 import it.polimi.ingsw.protocol.updates.*;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.image.Image;
@@ -405,17 +404,12 @@ public class GameView extends Application implements Visualizable
                 updatesHandler.subscribeUpdate(() -> {
                     clearAll();
                     sceneController.setRoot("/Lobby/lobby.fxml");
+                    stage.sizeToScene();
+                    stage.setResizable(false);
+                    stage.show();
                 });
             }, 10, TimeUnit.SECONDS);
 
-        });
-        // Moving to lobby which is not resizable
-
-        Platform.runLater(() ->
-        {
-            stage.setHeight(HEIGHT);
-            stage.setWidth(WIDTH);
-            stage.setResizable(false);
         });
     }
 
