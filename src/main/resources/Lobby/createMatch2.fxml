@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.lobby.CreateMatchSceneController">
+    <children>
+        <VBox prefHeight="105.0" prefWidth="1280.0">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#back" text="Back" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <VBox prefHeight="170.0" prefWidth="1280.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="104.0" prefWidth="1280.0">
+                    <children>
+                        <Label alignment="CENTER" text="Choose the game name " textAlignment="CENTER" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="964.0">
+                            <children>
+                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="680.0">
+                                    <children>
+                                        <TextField fx:id="gameNameCreateTextField" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        <VBox prefHeight="145.0" prefWidth="1280.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="85.0" prefWidth="1280.0">
+                    <children>
+                        <Label text="Choose the game mode" />
+                    </children>
+                </VBox>
+                <VBox prefHeight="68.0" prefWidth="1280.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                    <children>
+                        <HBox prefHeight="59.0" prefWidth="1119.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                            <children>
+                                <HBox alignment="CENTER" prefHeight="59.0" prefWidth="640.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                                    <children>
+                                        <RadioButton fx:id="classicRbutton" mnemonicParsing="false" text="Classic">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="gameMode" />
+                                            </toggleGroup>
+                                        </RadioButton>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER" prefHeight="59.0" prefWidth="640.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                                    <children>
+                                        <RadioButton fx:id="expertRbutton" mnemonicParsing="false" text="Expert" toggleGroup="$gameMode" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        <VBox prefHeight="125.0" prefWidth="1280.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="65.0" prefWidth="1280.0">
+                    <children>
+                        <Label text="Choose the number of players" />
+                    </children>
+                </VBox>
+                <VBox prefHeight="105.0" prefWidth="1280.0">
+                    <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0">
+                                    <children>
+                                        <RadioButton fx:id="twoRbutton" mnemonicParsing="false" text="2        ">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="playersNumer" />
+                                            </toggleGroup>
+                                        </RadioButton>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0">
+                                    <children>
+                                        <RadioButton fx:id="threeRbutton" mnemonicParsing="false" text="3        " toggleGroup="$playersNumer" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="159.0" prefWidth="1280.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#create" text="Create" />
+            </children>
+        </VBox>
+    </children>
+</VBox>
