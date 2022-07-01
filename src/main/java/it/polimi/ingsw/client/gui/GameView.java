@@ -413,8 +413,8 @@ public class GameView extends Application implements Visualizable
 
         Platform.runLater(() ->
         {
-            stage.setMinHeight(HEIGHT);
-            stage.setMinWidth(WIDTH);
+            stage.setHeight(HEIGHT);
+            stage.setWidth(WIDTH);
             stage.setResizable(false);
         });
     }

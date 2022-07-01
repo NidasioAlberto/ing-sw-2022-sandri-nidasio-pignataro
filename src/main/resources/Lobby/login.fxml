@@ -12,18 +12,16 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="400.0" />
                   <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="480.0">
                      <children>
                         <ImageView fx:id="logoImage" fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="/Eryantis.png" />
-                         </image>
-                         </ImageView>
+                           <image>
+                              <Image url="/Eryantis.png" />
+                           </image>
+                        </ImageView>
                      </children></HBox>
-                  <HBox prefHeight="100.0" prefWidth="400.0" />
                </children>
             </HBox>
          </children>
@@ -37,15 +35,13 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="400.0" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
                            <children>
                               <TextField fx:id="nicknameTextField" />
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="400.0" />
                      </children>
                   </HBox>
                </children>
@@ -61,15 +57,13 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="400.0" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
                            <children>
                               <TextField fx:id="ipTextField" />
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="400.0" />
                      </children>
                   </HBox>
                </children>
@@ -85,15 +79,13 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="400.0" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
                            <children>
                               <TextField fx:id="portTextField" onKeyPressed="#checkEnter" />
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="400.0" />
                      </children>
                   </HBox>
                </children>
@@ -102,15 +94,13 @@
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="400.0" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
                      <children>
                         <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submit" text="Submit" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="400.0" />
                </children>
             </HBox>
          </children>
