@@ -457,6 +457,8 @@ public class GameView extends Application implements Visualizable
     {
         playerName = answer.getName();
         createCollections();
+        // Setup the ground plane if nothing has already been created once (i use index but we can use every drawable object/collection)
+        setupGroundPlane();
         updatesHandler.subscribeUpdate(() -> sceneController.displaySetName(answer));
     }
 
@@ -470,10 +472,6 @@ public class GameView extends Application implements Visualizable
     {
         // Set the camera up in perspective mode
         setupCamera();
-
-        // Setup the ground plane if nothing has already been created once (i use index but we can use every drawable object/collection)
-        if (index == null)
-            setupGroundPlane();
 
         scene.setRoot(group);
 
